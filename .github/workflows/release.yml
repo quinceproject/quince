@@ -1,0 +1,84 @@
+# Release of the Quince theme.
+#
+# Pushing a tag vX.Y.Z builds the theme ZIP and attaches it to a GitHub release.
+# The tag has to match `version` in config/theme.yml, otherwise the run stops
+# before anything is published.
+#
+# The ZIP holds the theme files at its root (config/theme.yml directly inside),
+# which is what PrestaShop's theme import expects. PrestaShop names the folder
+# after `name` in theme.yml.
+
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Check the tag against theme.yml
+        id: version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          theme=$(sed -n 's/^version:[[:space:]]*//p' config/theme.yml | tr -d '"' | tr -d "'")
+          if [ "$tag" != "$theme" ]; then
+            echo "Tag version $tag does not match version $theme in config/theme.yml"
+            exit 1
+          fi
+          echo "value=$tag" >> "$GITHUB_OUTPUT"
+
+      - name: Build package
+        run: |
+          mkdir build
+          rsync -a ./ build/ \
+            --exclude '.git' --exclude '.github' --exclude '.gitignore' \
+            --exclude 'node_modules' --exclude 'build' \
+            --exclude 'assets/cache/*'
+          # The shop writes combined CSS and JS here. The folder ships empty,
+          # with the same index.php guard as the other folders.
+          mkdir -p build/assets/cache
+          cp config/index.php build/assets/cache/index.php
+
+      # The files PrestaShop's theme validator requires before it installs a theme.
+      - name: Check required files
+        run: |
+          cd build
+          missing=0
+          for f in preview.png config/theme.yml assets/js/theme.js assets/css/theme.css \
+                   templates/_partials/form-fields.tpl templates/catalog/product.tpl \
+                   templates/catalog/listing/product-list.tpl templates/checkout/cart.tpl \
+                   templates/checkout/checkout.tpl templates/index.tpl templates/page.tpl; do
+            [ -f "$f" ] || { echo "Missing $f"; missing=1; }
+          done
+          exit $missing
+
+      - name: Zip
+        run: cd build && zip -qr ../quince.zip .
+
+      # Release notes are the CHANGELOG section of this version.
+      - name: Release notes
+        run: |
+          awk -v v="${{ steps.version.outputs.value }}" '
+            $0 ~ "^## \\[" v "\\]" { on = 1; next }
+            on && /^## \[/ { exit }
+            on { print }
+          ' CHANGELOG.md > notes.md
+          test -s notes.md || { echo "CHANGELOG.md has no section for ${{ steps.version.outputs.value }}"; exit 1; }
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" quince.zip \
+            --title "Quince theme ${{ steps.version.outputs.value }}" \
+            --notes-file notes.md
