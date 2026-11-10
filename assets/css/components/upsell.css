@@ -1,0 +1,54 @@
+@layer quince.components {
+    /*
+       Dokupka w szufladzie koszyka: „Może Ci się przydać".
+
+       Reguły przepisane z makiety strony produktu (szuflada koszyka).
+       W szufladzie nie mieści się karuzela, więc podpowiedzi idą listą krótkich
+       wierszy: miniatura, nazwa z ceną i przycisk dodania. Miniatura stoi
+       w ramce pozycji koszyka, `q-cartline__media` z cart-drawer.css.
+    */
+
+    .q-upsell {
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-md);
+        border-block-start: 1px solid var(--q-border-card);
+    }
+
+    .q-upsell__title {
+        margin-block-end: var(--q-space-sm);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        text-transform: uppercase;
+        letter-spacing: .05em;
+        color: var(--q-text-muted);
+    }
+
+    /* Dokupka jest ofertą, nie pozycją koszyka, dlatego stoi w ramce, a nie
+       w tym samym rytmie co lista pozycji powyżej. */
+    .q-upsell__item {
+        display: grid;
+        grid-template-columns: 3rem minmax(0, 1fr) auto;
+        gap: var(--q-space-sm);
+        align-items: center;
+
+        padding: var(--q-space-sm);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-upsell__item + .q-upsell__item {
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-upsell__name {
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-upsell__price {
+        display: block;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+}

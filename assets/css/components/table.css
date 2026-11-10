@@ -1,0 +1,158 @@
+/* ===================================================================
+   Quince — tabela
+
+   Historia zamówień, szczegóły zamówienia, zwroty, korekty, rabaty ilościowe,
+   sklepy stacjonarne. Wszędzie tam dane mają dwa wymiary i lista ich nie zastąpi.
+
+   Klasa `.table` obok naszej: szablony PrestaShopa i modułów przychodzą z nazwami
+   z Bootstrapa, którego nie wgrywamy. Bez tego mapowania tabela w cudzym module
+   byłaby goła — a nie mamy wpływu na to, co moduł wypisze.
+
+   Tokeny komponentu (--q-table-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Wąski ekran: tabela przewija się we własnym pojemniku, a nie rozpycha
+       strony. Cena za to jest jedna — trzeba o tym pojemniku pamiętać
+       w szablonie; bez niego szeroka tabela wypchnie układ na telefonie. */
+    .q-table-wrap {
+        inline-size: 100%;
+        overflow-x: auto;
+        overscroll-behavior-x: contain;
+        border: 1px solid var(--q-table-border);
+        border-radius: var(--q-table-radius);
+    }
+
+    .q-table-wrap > .q-table,
+    .q-table-wrap > .table {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-table,
+    .table {
+        inline-size: 100%;
+        border-collapse: collapse;
+        background: var(--q-table-bg);
+        border: 1px solid var(--q-table-border);
+        border-radius: var(--q-table-radius);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-table th,
+    .table th {
+        padding: var(--q-table-pad-block) var(--q-table-pad-inline);
+        background: var(--q-table-head-bg);
+        color: var(--q-table-head-label);
+        font-weight: var(--q-weight-semibold);
+        text-align: start;
+        white-space: nowrap;
+        border-block-end: 1px solid var(--q-table-border);
+    }
+
+    .q-table td,
+    .table td {
+        padding: var(--q-table-pad-block) var(--q-table-pad-inline);
+        color: var(--q-table-cell-label);
+        border-block-end: 1px solid var(--q-table-border);
+        vertical-align: top;
+    }
+
+    .q-table tbody tr:last-child td,
+    .table tbody tr:last-child td {
+        border-block-end: 0;
+    }
+
+    /* Podświetlenie wiersza tylko tam, gdzie wiersz da się kliknąć. Na tabeli
+       do czytania wodzi wzrok za kursorem i sugeruje akcję, której nie ma. */
+    .q-table--interactive tbody tr:hover td {
+        background: var(--q-table-row-bg-hover);
+    }
+
+    .q-table--zebra tbody tr:nth-child(even) td {
+        background: var(--q-table-row-bg-zebra);
+    }
+
+    /* Wiersz podsumowania: w zamówieniu niesie kwotę do zapłaty, więc nie może
+       wyglądać jak kolejna pozycja listy. */
+    .q-table tfoot td,
+    .table tfoot td {
+        background: var(--q-table-total-bg);
+        color: var(--q-table-total-label);
+        font-weight: var(--q-weight-semibold);
+        border-block-end: 1px solid var(--q-table-border);
+    }
+
+    .q-table tfoot tr:last-child td,
+    .table tfoot tr:last-child td {
+        border-block-end: 0;
+    }
+
+    /* Kwoty i ilości do prawej, cyframi tej samej szerokości — inaczej kolumna
+       z cenami nie układa się w słupek i porównanie wymaga czytania znak po znaku. */
+    .q-table__num {
+        text-align: end;
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    .q-table__muted {
+        color: var(--q-text-muted);
+    }
+
+    .q-table--compact th,
+    .q-table--compact td {
+        padding-block: calc(var(--q-table-pad-block) - 4px);
+    }
+
+    /* --- tabela danych technicznych ---
+       Dwie kolumny: nazwa cechy i jej wartość. Nie jest odmianą `.q-table`, bo
+       tamta ma nagłówek kolumn i wiersze do porównywania między sobą, a tutaj
+       każdy wiersz to osobne pytanie i odpowiedź.
+
+       Siatka jest pełna, nie same kreski poziome: wartości bywają
+       wielolinijkowe i przy samych poziomych liniach oko gubi, gdzie kończy się
+       nazwa, a zaczyna wartość.
+
+       Szerokość ograniczona, bo wiersz „SKU: ABC-123" rozciągnięty na całą
+       szerokość karty czyta się gorzej niż ten sam wiersz w kolumnie tekstu. */
+    .q-spectable {
+        inline-size: 100%;
+        max-inline-size: 44rem;
+        border-collapse: collapse;
+        font-size: var(--q-fs-sm);
+    }
+
+    /* Siatka tej tabeli obejmuje też krawędź zewnętrzną, więc pojemnik nie
+       dokłada drugiej ramki — zostaje mu samo przewijanie na wąskim ekranie.
+       Przy `.q-table` jest odwrotnie: tam ramkę niesie pojemnik. */
+    .q-table-wrap:has(> .q-spectable) {
+        border: 0;
+        border-radius: 0;
+    }
+
+    /* Kreska z tego samego tokenu, co w pozostałych tabelach: „Siatka tabel"
+       w ustawieniach wyglądu ma znaczyć to samo w historii zamówień i tutaj.
+       Blok strony produktu podmienia ten token u siebie, więc ustawienie
+       siatki dla akordeonu też tu dochodzi. */
+    .q-spectable th,
+    .q-spectable td {
+        padding: var(--q-space-sm) var(--q-space-md);
+        border: 1px solid var(--q-table-border, var(--q-spectable-row-border));
+        text-align: start;
+        vertical-align: top;
+    }
+
+    .q-spectable th {
+        inline-size: 40%;
+        background: none;
+        font-family: var(--q-font-heading);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-spectable-label);
+    }
+
+    .q-spectable td {
+        color: var(--q-spectable-value);
+    }
+}

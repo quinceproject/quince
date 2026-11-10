@@ -1,0 +1,1432 @@
+@layer quince.components {
+    /*
+       Strona z listą produktów. Przeniesione z makiety kategorii.
+
+       Jeden arkusz na siedem stron: kategorię, markę, dostawcę, wyszukiwarkę,
+       nowości, promocje i bestsellery. Wszystkie renderuje ten sam szablon.
+
+       Trzy warianty osadzenia filtrów rozgałęziają się po `data-filters`
+       na kontenerze listingu. Wartość ustawia sklep w panelu, a szablon
+       wypisuje ją przy renderowaniu — nic nie przekłada węzłów w przeglądarce,
+       poza zejściem do szuflady na wąskim ekranie.
+    */
+
+    /* Odstęp od nagłówka strony i od stopki niesie kontener listingu, tak samo
+       jak na karcie produktu. Margines na okruszkach nie zadziała: nie ma go od
+       czego odbić, więc zlewa się z marginesem strony. */
+    .q-listing {
+        padding-block: var(--q-space-md) var(--q-space-xl);
+    }
+
+    /* Bez znaku „>": okruszki stoją wewnątrz pojemnika strefy nagłówka, który
+       rdzeń podmienia przy zawężaniu listy, więc nie są dzieckiem kontenera
+       i reguła dla dziecka bezpośredniego nigdy się nie łapała. */
+    .q-listing .q-breadcrumb {
+        margin-block-end: var(--q-space-md);
+    }
+
+    /* Odstęp niesie element, który STOI NIŻEJ, a nie ten wyżej.
+       Wcześniej odstępy siedziały na dolnych marginesach, więc gdy sklep nie
+       wpisał opisu kategorii, cała przerwa znikała razem z nim i tytuł kleił
+       się do rzędu podkategorii. Elementy tej strefy sklep włącza i wyłącza
+       w panelu, więc żaden nie może odpowiadać za przerwę pod sobą. */
+    .q-listing__title {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-h2);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-listing__intro,
+    .q-listing__modules,
+    .q-subcats {
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* Opis stoi tuż pod tytułem: to jedno zdanie o tej samej rzeczy, a nie
+       kolejny blok strony. */
+    .q-listing__title + .q-listing__intro {
+        margin-block-start: var(--q-space-xs);
+    }
+
+    /* Ostatni element nagłówka odsuwa od siebie pasek narzędzi. */
+    .q-listing__layout {
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* --- nagłówek kategorii ze zdjęciem ---
+
+       Zdjęcie kategorii po lewej, tytuł i opis po prawej. Makieta tego elementu
+       nie pokazuje; układ ustaliliśmy na osobnym podglądzie nagłówka
+       kategorii ze zdjęciem.
+
+       Szerokość kolumny zdjęcia to DOKŁADNIE jedno pole rzędu podkategorii,
+       liczone tym samym wzorem: rząd ma dwa razy tyle kolumn co siatka zajawek
+       i ten sam odstęp. Dzięki temu zdjęcie i pierwszy kafelek pod nim stoją na
+       jednej osi przy każdej szerokości strony i przy każdym ustawieniu liczby
+       kolumn, bez wpisywania pikseli. Wyrażenie w jednej linii, bo sklejarka
+       arkuszy zjada spacje wokół „+" w zapisie rozbitym na kilka linii.
+
+       Zdjęcie wyrównane do góry, nie do środka: należy do tytułu, który stoi
+       nad opisem. Przy środkowaniu długi opis spychałby je w dół, z dala od
+       nazwy. */
+    .q-listing__head {
+        --q-cover-w: calc((100% - (var(--q-grid-columns, 4) * 2 - 1) * var(--q-space-sm)) / (var(--q-grid-columns, 4) * 2));
+
+        display: grid;
+        grid-template-columns: var(--q-cover-w) minmax(0, 1fr);
+        column-gap: var(--q-space-md);
+        align-items: start;
+    }
+
+    /* Kadr kwadratowy, taki sam jak kafelek podkategorii, a zdjęcie przycięte
+       do niego. Zdjęcie kategorii w PrestaShopie ma proporcje pionowe, więc bez
+       przycięcia kolumna byłaby wyższa od kafelka i rząd pod nią przestawałby
+       się z nim wiązać. */
+    .q-listing__cover img {
+        inline-size: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: var(--q-radius-md);
+    }
+
+    /* Włączniki widoczności. Zgaszone zdjęcie oddaje kolumnę tekstowi, zamiast
+       zostawiać po sobie puste pole. */
+    @media (min-width: 768px) {
+        .q-listing__head--no-desktop {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-listing__head--no-desktop .q-listing__cover {
+            display: none;
+        }
+    }
+
+    /* Poniżej 768 px rząd podkategorii przestaje liczyć kolumny z gałki siatki
+       i układa je od minimalnej szerokości kafelka, więc wzoru nie ma czym
+       powtórzyć. Kolumna zdjęcia bierze wtedy tę samą wartość minimalną: to
+       najbliższe, co można zrobić bez zgadywania, ile kafelków wyjdzie w rzędzie. */
+    @media (max-width: 767px) {
+        .q-listing__head {
+            --q-cover-w: 7rem;
+            column-gap: var(--q-space-sm);
+        }
+
+        .q-listing__head--no-mobile {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-listing__head--no-mobile .q-listing__cover {
+            display: none;
+        }
+    }
+
+    .q-listing__outro {
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* --- układ strony --- */
+
+    /* Bez filtrów w treści lista bierze całą szerokość. */
+    .q-listing__layout {
+        display: block;
+    }
+
+    .q-listing__content {
+        min-inline-size: 0;
+    }
+
+    /* Wariant „kolumna": filtry obok listy, w karcie z własnym tłem, żeby nie
+       zlewały się z kaflami produktów stojącymi tuż obok.
+
+       Szerokość kolumny to DOKŁADNIE jedna komórka siatki zajawek, a odstęp ten
+       sam co w siatce. Przy stałej szerokości zajawka na kategorii wychodziła
+       węższa niż ta sama zajawka w karuzeli modułu, bo listing liczył kolumny
+       z tego, co zostało, a karuzela z pełnej szerokości sekcji.
+
+       `--q-listing-cols` niesie liczbę kolumn, która zostaje PRODUKTOM, czyli
+       już po oddaniu jednej filtrom. Wypisuje ją szablon, bo liczy ją silnik.
+       Pełna siatka ma więc o jedną kolumnę więcej i stąd `+ 1` we wzorze. */
+    [data-filters="column"] .q-listing__layout {
+        display: grid;
+        grid-template-columns:
+            calc((100% - var(--q-listing-cols, 3) * var(--q-space-md)) / (var(--q-listing-cols, 3) + 1))
+            minmax(0, 1fr);
+        gap: var(--q-space-md);
+        align-items: start;
+    }
+
+    /* Siatka w treści liczy się od tej chwili w kolumnach pomniejszonych o tę,
+       którą zabrały filtry. */
+    [data-filters="column"] .q-listing__content {
+        --q-grid-columns: var(--q-listing-cols, 3);
+    }
+
+    /* --- panel filtrów --- */
+
+    .q-listing__filters {
+        position: sticky;
+        inset-block-start: calc(var(--q-header-h, 4rem) + var(--q-space-md));
+    }
+
+    [data-filters="column"] .q-listing__filters {
+        padding: var(--q-listing-filters-pad, var(--q-space-md));
+        background: var(--q-listing-filters-bg, var(--q-card-bg));
+        border: var(--q-listing-filters-border, var(--q-blok-ramka, 1px solid var(--q-border-card)));
+        border-radius: var(--q-listing-filters-radius, var(--q-radius-md));
+        box-shadow: var(--q-listing-filters-shadow, var(--q-blok-cien, var(--q-shadow-sm)));
+    }
+
+    /* W pasie panel nie jest osobną kartą: siedzi w belce jako jej kolejny
+       wiersz, między przyciskiem filtrów a pigułkami wybranych zawężeń.
+       Dlatego bierze wcięcie wiersza i kreskę u góry, a nie własne tło i ramkę
+       — karta w karcie czytała się jak dwa różne bloki. */
+    /* W pasie panel siedzi w belce, więc własnego tła i ramki domyślnie nie ma:
+       karta w karcie czytałaby się jak dwa bloki. Ustawienia sklepu działają
+       tu jednak tak samo jak w kolumnie — to ten sam blok, tylko postawiony
+       gdzie indziej, i sklep ma mieć nad nim tę samą władzę. */
+    [data-filters="bar"] .q-listing__filters {
+        position: static;
+        padding: var(--q-listing-filters-pad, var(--q-space-md));
+        background: var(--q-listing-filters-bg, transparent);
+        border: var(--q-listing-filters-border, 0);
+        border-block-start: 1px solid var(--q-border-hairline);
+        border-radius: var(--q-listing-filters-radius, 0);
+        box-shadow: var(--q-listing-filters-shadow, none);
+    }
+
+    /* Pas jest zwinięty, dopóki ktoś nie kliknie „Filtry" w belce. Stale otwarty
+       przy dziesięciu grupach spychał pierwszy rząd produktów poniżej krawędzi
+       ekranu, a po to się na listing przychodzi. */
+    [data-filters="bar"] .q-listing__filters:not(.is-open) {
+        display: none;
+    }
+
+    /* Stopka panelu: wyłącznie w pasie nad listą. W kolumnie panel nie ma czego
+       zamykać, a w szufladzie zamyka ją przycisk okna. Czynność stoi po prawej,
+       tam gdzie kończy się czytanie panelu. */
+    .q-filters__foot {
+        display: none;
+    }
+
+    [data-filters="bar"] .q-filters__foot {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--q-space-md);
+
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-md);
+        border-block-start: 1px solid var(--q-border-subtle);
+    }
+
+    /* Lista bez wyników. Bez wymyślonego układu: makieta tego stanu nie
+       pokazuje, więc zostaje wyśrodkowany tekst i jedna droga wyjścia. */
+    .q-listing__empty {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+
+        padding-block: var(--q-space-xl);
+        text-align: center;
+        color: var(--q-meta-color);
+    }
+
+    .q-listing__empty-title {
+        margin: 0;
+        font-family: var(--q-font-heading);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    /* Znak nad komunikatem. Duży i wyciszony: ma powiedzieć „to jest odpowiedź
+       na twoje szukanie", a nie konkurować z nagłówkiem. */
+    .q-listing__empty-icon {
+        inline-size: 72px;
+        block-size: 72px;
+        color: var(--q-border-hairline);
+    }
+
+    .q-listing__empty-text {
+        margin: 0;
+        max-inline-size: 52ch;
+    }
+
+    /* Pole wyszukiwania pod wskazówkami: ta sama kontrolka co w nagłówku,
+       tylko węższa, bo stoi w kolumnie komunikatu, a nie przez całą stronę. */
+    .q-listing__empty-search {
+        inline-size: 100%;
+        max-inline-size: 36rem;
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Wskazówki dla klienta, który nic nie znalazł. Lista z punktorami, a nie
+       akapit: to są osobne rzeczy do sprawdzenia, a nie jedno zdanie.
+
+       Napisy wyrównane do lewej, a cała lista wyśrodkowana jako blok. Wiersze
+       wyśrodkowane każdy z osobna czytają się jak wiersz poezji, a nie jak
+       lista kroków do zrobienia. */
+    .q-listing__empty-tips {
+        margin: 0;
+        padding-inline-start: 1.25em;
+        display: grid;
+        gap: var(--q-space-xs);
+        max-inline-size: 46ch;
+        inline-size: max-content;
+        text-align: start;
+    }
+
+    /* Kategorie jako druga droga: nie część komunikatu, więc własny odstęp
+       od niego i nagłówek tej samej wagi co nagłówki sekcji w sklepie. */
+    .q-listing__empty-cats {
+        margin-block-start: var(--q-space-xl);
+        padding-block-start: var(--q-space-xl);
+        border-block-start: 1px solid var(--q-border-hairline);
+
+        /* Punkt odniesienia dla szerokości kafelka: ma wyjść dokładnie taki,
+           jak kafelek podkategorii na stronie kategorii, a ten liczy się
+           z szerokości bloku, nie okna. */
+        container-type: inline-size;
+    }
+
+    .q-listing__empty-cats-title {
+        margin: 0 0 var(--q-space-md);
+        font-family: var(--q-font-heading);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        text-align: center;
+    }
+
+    /* --- grupy zawężeń --- */
+
+    .q-filters__head {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-sm);
+    }
+
+    /* Nazwa panelu oddycha od góry i od dołu, tak jak w makiecie: w kolumnie
+       stoi nad listą grup i bez tego odstępu czytała się jak pierwsza z nich.
+       Prawy margines spycha ją do lewej krawędzi, gdy obok stanie coś jeszcze. */
+    .q-filters__title {
+        margin-block: 1rem;
+        margin-inline: 0 auto;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    /* Liczba zawężeń przy nazwie panelu, ta sama co przy przycisku w belce:
+       bez niej klient nie wie, czy patrzy na całą kategorię, czy na jej
+       wycinek. */
+    .q-filters__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-inline-size: 1.25rem;
+        padding-inline: 0.25rem;
+        margin-inline-start: var(--q-space-xs);
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-radius: var(--q-radius-pill, 99px);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* W pasie nad listą nagłówka nie ma: wiersz wyżej stoi przycisk „Filtry"
+       z tą samą liczbą zawężeń, w tym samym bloku. Dwa identyczne napisy jeden
+       pod drugim to nie hierarchia, tylko powtórzenie. */
+    [data-filters="bar"] .q-filters__head {
+        display: none;
+    }
+
+    .q-filter {
+        border-block-start: 1px solid var(--q-border-hairline);
+    }
+
+    .q-filter__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+
+        padding-block: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .q-filter__head::-webkit-details-marker {
+        display: none;
+    }
+
+    .q-filter__chev {
+        flex: none;
+        color: var(--q-meta-color);
+        transition: transform 150ms ease-out;
+    }
+
+    .q-filter[open] .q-filter__chev {
+        transform: rotate(180deg);
+    }
+
+    .q-filter__body {
+        display: grid;
+        gap: 2px;
+        padding-block-end: var(--q-space-sm);
+    }
+
+    /* Liczba przy pozycji jest częścią decyzji, nie ozdobą: bez niej klient
+       zawęża w ciemno i trafia na pustą listę. */
+    .q-filter__item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: 5px var(--q-space-xs);
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-sm);
+        cursor: pointer;
+    }
+
+    .q-filter__item:hover {
+        background: var(--q-surface-hover, var(--q-neutral-4));
+    }
+
+    /* Nazwa jest odnośnikiem, żeby zawężanie działało bez JavaScriptu, ale ma
+       wyglądać jak część wiersza, a nie jak odnośnik w treści. */
+    .q-filter__name {
+        color: inherit;
+        min-inline-size: 0;
+    }
+
+    .q-filter__item.is-active .q-filter__name {
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-filter__count {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Próbka barwy albo tekstury zamiast samej nazwy: „Grafit" nic nie mówi,
+       dopóki się go nie zobaczy. */
+    .q-filter__swatch {
+        inline-size: 1rem;
+        block-size: 1rem;
+        border: 1px solid var(--q-border-subtle);
+        border-radius: 50%;
+        background-size: cover;
+    }
+
+    /* W pasie nad listą grupy rozkładają się w rzędzie i stoją otwarte: pas ma
+       pokazywać zawężenia od razu, a nie prosić o kolejne kliknięcie. Kolumny
+       liczy `auto-fit`, bo liczba grup zależy od kategorii. */
+    [data-filters="bar"] .q-filters__groups {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+        gap: var(--q-space-md) var(--q-space-lg);
+        align-items: start;
+    }
+
+    [data-filters="bar"] .q-filter {
+        border: 0;
+    }
+
+    [data-filters="bar"] .q-filter__chev {
+        display: none;
+    }
+
+    [data-filters="bar"] .q-filter__head {
+        cursor: default;
+        pointer-events: none;
+    }
+
+    /* Grupa w pasie ma sufit wysokości, a dłuższa lista przewija się w środku.
+       W pasie grupy stoją OBOK siebie, więc najwyższa z nich wyznacza wysokość
+       całego pasa: jedna cecha z trzydziestoma wartościami rozciągała go na
+       tysiąc pikseli, a obok stały kolumny z dwiema pozycjami i resztę pasa
+       zajmowała pustka. W kolumnie i w szufladzie sufitu nie ma, bo tam grupy
+       idą jedna pod drugą i długa lista nikomu nie robi dziury obok.
+
+       Wysokość liczona z wiersza, nie wpisana w pikselach: wiersz to stopień
+       pisma razy interlinia plus jego wcięcie, a między wierszami jest odstęp
+       siatki. Dzięki temu sufit idzie za ustawieniem pisma w sklepie. Pozycja
+       z nazwą łamiącą się na dwa wiersze zajmuje dwa miejsca z tych pięciu:
+       to sufit wysokości, nie licznik pozycji. */
+    [data-filters="bar"] .q-filter__body {
+        /* Pięć wierszy i połowa szóstego. Połówka nie jest ozdobą: pasek
+           przewijania jest w tych systemach nakładkowy, nie zabiera miejsca
+           i pokazuje się dopiero w trakcie przewijania, więc przy pięciu
+           równych wierszach nic nie mówiło, że lista ma ciąg dalszy. Ucięty
+           wiersz mówi to sam, bez dokładania strzałki ani cienia. */
+        --q-filter-rows: 5.5;
+
+        /* Wysokość wiersza i odstęp między wierszami osobno, bo sklejarka
+           arkuszy zjada spacje wokół „+" w wyrażeniu rozbitym na kilka linii
+           i cała deklaracja przepada bez śladu w konsoli. Jedna linia na
+           wyrażenie. */
+        --q-filter-row-h: calc(var(--q-fs-sm) * var(--q-lh-relaxed) + 10px);
+        max-block-size: calc(var(--q-filter-rows) * var(--q-filter-row-h) + var(--q-filter-rows) * 2px);
+
+        overflow-y: auto;
+
+        /* Przewijanie kończy się na grupie: bez tego dojechanie do końca listy
+           zaczynało przewijać całą stronę i pas uciekał spod kursora. */
+        overscroll-behavior: contain;
+    }
+
+    /* --- rząd podkategorii --- */
+
+    /* Dwa razy tyle kolumn co w siatce zajawek: kafelek z samą nazwą i ikoną
+       nie potrzebuje tyle miejsca co produkt z ceną i przyciskiem. */
+    /* Widać jeden pełny wiersz, reszta jest PRZYCIĘTA, a nie zgaszona.
+       Kafelki zostają w kodzie strony i w układzie, więc wyszukiwarka czyta
+       wszystkie podkategorie — chowamy je tylko przed okiem, do kliknięcia
+       w „Pokaż wszystkie".
+
+       Pierwszy wiersz ma wysokość z treści, każdy następny zero: `grid-auto-rows`
+       dotyczy wierszy dorobionych, a pierwszy opisuje `grid-template-rows`.
+       Dzięki temu nie trzeba nigdzie wpisywać, ile kafelków mieści się w wierszu. */
+    .q-subcats {
+        display: grid;
+        grid-template-columns: repeat(calc(var(--q-grid-columns, 4) * 2), minmax(0, 1fr));
+        grid-template-rows: auto;
+        gap: var(--q-space-sm);
+        overflow: hidden;
+    }
+
+    .q-subcats:not(.is-expanded):not(.is-whole) {
+        grid-auto-rows: 0;
+    }
+
+    /* Rząd wyśrodkowany: strona bez wyników wyszukiwania.
+       Tam kategorie nie są dodatkiem do listy, tylko jedyną drogą dalej, więc
+       stoją na środku, a nie dosunięte do lewej krawędzi pustej strony.
+
+       Kolumny o stałej szerokości zamiast `1fr`: przy czterech kategoriach
+       i dziesięciu polach siatki kafelki zostawały w lewej jednej trzeciej,
+       a reszta rzędu świeciła pustką.
+
+       Szerokość bloku to pięć kolumn, więc dłuższa lista łamie się na kolejne
+       rzędy zamiast ciągnąć się przez całą stronę. Kafelek ma tę samą
+       szerokość co na stronie kategorii, bo to ten sam kafelek. */
+    .q-subcats--center {
+        --q-subcat-pole: calc(100cqi / (var(--q-grid-columns, 4) * 2) - var(--q-space-sm));
+
+        /* Flex, a nie siatka: siatka dosuwa ostatni, niepełny rząd do lewej
+           krawędzi, więc przy ośmiu kategoriach pięć stało na środku, a trzy
+           pod nimi z boku. Flex środkuje każdy rząd z osobna. */
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        max-inline-size: calc(var(--q-subcat-pole) * var(--q-subcat-w-rzedzie, 5) + var(--q-space-sm) * (var(--q-subcat-w-rzedzie, 5) - 1));
+        margin-inline: auto;
+    }
+
+    /* Szerokość z siatki zostaje: kafelek ma być ten sam, co na stronie
+       kategorii, a flex sam z siebie zwęziłby go do treści. */
+    .q-subcats--center .q-subcats__item {
+        flex: 0 0 var(--q-subcat-pole);
+    }
+
+    /* Przycisk zajmuje ostatnie pole pierwszego wiersza. Stoi w znacznikach
+       przed kafelkami, więc grid rezerwuje mu to pole, zanim zacznie układać
+       resztę. */
+    .q-subcats:not(.is-expanded) .q-subcats__more {
+        grid-row: 1;
+        grid-column: -2 / -1;
+    }
+
+    /* Po rozwinięciu wraca na koniec rzędu — `order`, bo w znacznikach jest
+       pierwszy. */
+    .q-subcats.is-expanded .q-subcats__more {
+        order: 1;
+    }
+
+    /* Kafelek jest KWADRATEM: zdjęcie ma być pierwszą rzeczą, a nie dodatkiem
+       do napisu. Przy wysokości z treści rząd zamieniał się w pas płaskich
+       prostokątów, w których obrazek ledwo się mieścił. */
+    .q-subcats__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-xs);
+
+        aspect-ratio: 1;
+        padding: var(--q-space-sm) var(--q-space-xs);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-md);
+        /* Ten sam cień co zajawka produktu: kafel działu stoi nad nią w tym
+           samym widoku i bez cienia leżał płasko na tle. */
+        box-shadow: var(--q-shadow-sm);
+
+        color: var(--q-body-color);
+        text-align: center;
+    }
+
+    .q-subcats:not(.q-subcats--no-hover) .q-subcats__item:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    .q-subcats__image {
+        inline-size: 3.25rem;
+        block-size: 3.25rem;
+        object-fit: contain;
+    }
+
+    /* Nazwa łamie się do dwóch wierszy — trzeciego już nie, bo wtedy kafelki
+       w rzędzie rosną nierówno. */
+    .q-subcats__name {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        line-height: 1.3;
+    }
+
+    /* Tryb ikony: zdjęcie jest maską malowaną barwą tekstu, a po najechaniu
+       barwą marki. Dla sklepów, które mają do kategorii jednobarwne rysunki —
+       bez tego trybu każdy zostaje w swoim kolorze i rząd nie trzyma się kupy. */
+    .q-subcats--icons .q-subcats__image {
+        background: currentColor;
+        mask: var(--q-subcat-mask) center / contain no-repeat;
+        -webkit-mask: var(--q-subcat-mask) center / contain no-repeat;
+        transition: background-color 150ms ease-out;
+    }
+
+    /* Przycisk „Pokaż wszystkie" jest kafelkiem jak każdy inny, tylko pustym:
+       rząd ma zostać równy, a nie kończyć się czymś innej wysokości. */
+    .q-subcats__more {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-xs);
+
+        aspect-ratio: 1;
+        padding: var(--q-space-sm) var(--q-space-xs);
+        background: none;
+        border: 1px dashed var(--q-border-subtle);
+        border-radius: var(--q-radius-md);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        line-height: 1.3;
+        text-align: center;
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-subcats__more:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-link-hover);
+    }
+
+    /* Ile kafelków mieści wiersz, nie stoi nigdzie wpisane: przycięcie robi
+       zerowa wysokość dorobionych wierszy, a o tym, czy przycisk jest w ogóle
+       potrzebny, decyduje skrypt, czytając wyliczoną liczbę kolumn. Progi
+       ekranu i kolumna filtrów zmieniają ją same. */
+
+    /* --- belka nad listą --- */
+
+    /* Sortowanie: podpis i pole obok siebie. Pole ma szerokość treści, nie
+       całej kolumny — najdłuższa opcja wyznacza minimum, żeby lista nie
+       skakała przy każdej zmianie kolejności. */
+    .q-listing__sort {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-listing__sort-label {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+        white-space: nowrap;
+    }
+
+    .q-listing__sort .q-select {
+        min-inline-size: 12rem;
+    }
+
+    /* Pasek narzędzi rozkłada się na dwie strony: po lewej wejście w filtry
+       i liczba wyników, po prawej sortowanie i widok. */
+    .q-toolbar .q-listing__sort {
+        margin-inline-start: auto;
+    }
+
+    /* Pasek narzędzi jako JEDEN blok. Kreskę, cień i zaokrąglenie bierze z tych
+       samych zmiennych co karta produktu i akordeon, więc reaguje na te same
+       przełączniki strony.
+
+       W środku są dwa wiersze: narzędzia i zawężenia. Zawężenia istnieją tylko
+       dlatego, że obok stoi przycisk filtrów, więc to jeden przedmiot, a nie
+       dwa paski jeden pod drugim. */
+    /* Skóra bloku z ustawień sklepu, z dotychczasową wartością jako zapasową:
+       brak ustawienia to nie brak wyglądu, tylko wygląd domyślny motywu. Tak
+       samo czytają swoje tokeny bloki strony produktu. */
+    .q-listing__bar {
+        margin-block-end: var(--q-space-md);
+
+        background: var(--q-listing-toolbar-bg, var(--q-card-bg));
+        border: var(--q-listing-toolbar-border, var(--q-blok-ramka, 1px solid var(--q-border-card)));
+        border-radius: var(--q-listing-toolbar-radius, var(--q-card-radius, var(--q-radius-md)));
+        /* Wartość zapasowa to cień karty, a nie jego brak: blok ma wyglądać jak
+           karta produktu, a `--q-blok-cien` ustawia się dopiero wtedy, gdy sklep
+           wybierze skórę bloku. Bez tego pasek leżał płasko obok kart z cieniem. */
+        box-shadow: var(--q-listing-toolbar-shadow, var(--q-blok-cien, var(--q-shadow-sm)));
+    }
+
+    /* Wiersz narzędzi nie jest osobną kartą: blok niesie już tło i kreskę,
+       więc zostaje mu samo wcięcie. Bez tego karta stała w karcie. */
+    .q-listing__bar .q-toolbar {
+        padding: var(--q-space-sm) var(--q-space-md);
+        /* Odstęp poziomy szerszy niż pionowy: w poziomie rozdziela dwie różne
+           czynności stojące obok siebie, w pionie tylko łamie wiersz. */
+        gap: var(--q-space-sm) var(--q-space-md);
+        /* Zero marginesu: komponent niesie własny odstęp od listy, bo zwykle
+           stoi sam. Tutaj odstęp trzyma już pasek, a margines zostawał
+           w środku ramki jako pusty pas pod wierszem narzędzi. */
+        margin: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .q-listing__count {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-listing__count b {
+        color: var(--q-text-strong);
+    }
+
+    /* Kreska między wierszami tylko wtedy, gdy dolny wiersz w ogóle jest —
+       przy braku zawężeń blok ma jeden wiersz i linia wisiałaby pod nim. */
+    .q-listing__pills {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs) var(--q-space-sm);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-start: 1px solid var(--q-border-hairline);
+    }
+
+    .q-listing__pills:empty,
+    .q-listing__pills--empty {
+        display: none;
+    }
+
+    /* Cofnięcie wszystkich zawężeń. Znak „×" przed napisem, ten sam co przy
+       pigułkach obok: bez niego sam napis czytał się jak podpis wiersza,
+       a nie jak coś, w co się klika. */
+    .q-listing__clear {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    /* Krzyżyk przy pigułce. Wcięcie zjedzone ujemnym marginesem: pigułka ma
+       wyglądać tak jak w makiecie, a palec musi mieć w co trafić — bez tego
+       cel dotykowy ma dwanaście pikseli i na telefonie zdjęcie zawężenia jest
+       loterią. */
+    .q-chip__x {
+        display: grid;
+        place-items: center;
+
+        padding: 6px;
+        margin: -6px -6px -6px 0;
+
+        background: none;
+        border: 0;
+        color: inherit;
+        cursor: pointer;
+    }
+
+    /* Liczba zawężeń przy przycisku: bez niej klient nie wie, czy patrzy na
+       całą kategorię, czy na jej wycinek. */
+    .q-listing__filters-count {
+        display: inline-grid;
+        place-items: center;
+
+        min-inline-size: 1.25rem;
+        block-size: 1.25rem;
+        padding-inline: 4px;
+
+        background: var(--q-fill-primary);
+        border-radius: var(--q-radius-pill, 99px);
+
+        font-size: .68rem;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-listing__filters-open svg {
+        inline-size: 15px;
+        block-size: 15px;
+    }
+
+    /* Filtry stale widoczne w kolumnie nie potrzebują przycisku otwierającego
+       szufladę: byłyby dwa wejścia do tej samej rzeczy w jednym widoku. */
+    [data-filters="column"] .q-listing__filters-open {
+        display: none;
+    }
+
+    /* --- przełącznik widoku --- */
+
+    /* Dwa przyciski w jednej ramce, bez odstępu między nimi: to jeden
+       przełącznik o dwóch położeniach, a nie dwie osobne czynności. Aktywne
+       położenie bierze barwę marki — szare na szarym nie mówi, które jest
+       włączone. */
+    .q-listing__view {
+        display: flex;
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+        overflow: clip;
+    }
+
+    .q-listing__view-btn {
+        display: grid;
+        place-items: center;
+
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        padding: 0;
+
+        background: none;
+        border: 0;
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-listing__view-btn svg {
+        inline-size: 16px;
+        block-size: 16px;
+    }
+
+    .q-listing__view-btn.is-active {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    /* --- widok listy --- */
+
+    /* Rząd zamiast kafla: kadr, kolumna treści i słupek decyzji. Wszystkie
+       rzędy równe najwyższemu, więc zapas schodzi na dół kolumn, a nie nad
+       tytuł. */
+    /* Odstęp ten sam co między kafelkami. Węższy, który stał tu wcześniej,
+       sklejał rzędy w jeden pas: kafelki odcina od siebie przerwa w dwóch
+       kierunkach, a rzędy tylko w jednym, więc przy tej samej liczbie pikseli
+       wyglądają na bliższe sobie niż kafelki, nie dalsze. */
+    .q-grid--list {
+        grid-template-columns: minmax(0, 1fr);
+        grid-auto-rows: 1fr;
+        gap: var(--q-space-md);
+    }
+
+    /* Wysokość minimalną bierze kadr: przy różnej długości opisu sąsiednie
+       rzędy różniły się o kilkadziesiąt pikseli i lista skakała. Niżej niż
+       zdjęcie rząd i tak nie zejdzie. */
+    .q-grid--list .q-pcard {
+        display: grid;
+        grid-template-columns: 16rem minmax(0, 1fr);
+        align-items: stretch;
+        min-block-size: 16rem;
+    }
+
+    /* Kadr trzyma kwadrat i stoi na ŚRODKU wysokości rzędu: przy górnej
+       krawędzi zostawiał pod sobą pas pustego miejsca tym większy, im dłuższy
+       był opis obok, a narzędzia przy dolnej krawędzi kadru lądowały wtedy
+       w połowie rzędu zamiast pod zdjęciem. */
+    /* Kadr sięga od górnej do dolnej krawędzi rzędu i do lewej — tak samo jak
+       w kafelku, gdzie zdjęcie wypełnia całe pole. Wyśrodkowany w pionie
+       zostawiał nad sobą i pod sobą pas tła karty; w prototypie tego nie było
+       widać, bo zdjęcia miały białe tło i pas zlewał się z kartą. */
+    .q-grid--list .q-pcard__media {
+        align-self: stretch;
+        display: flex;
+        flex-direction: column;
+
+        inline-size: 16rem;
+        block-size: auto;
+        aspect-ratio: auto;
+    }
+
+    /* Zdjęcie wypełnia kadr zamiast się w nim mieścić. Rząd bywa o kilkanaście
+       pikseli wyższy od szerokości kadru, więc przycięcie idzie po bokach i nie
+       rusza tego, co na zdjęciu widać. Przy `contain` w to miejsce wchodziłoby
+       tło i kadr znów nie dotykałby góry ani dołu. */
+    .q-grid--list .q-pcard__media img {
+        object-fit: cover;
+    }
+
+    /* Odnośnik bierze całą wysokość kadru, a kadr całą wysokość rzędu. Stała
+       wysokość zostawiała pod zdjęciem pas tła, gdy rząd był wyższy.
+
+       Odnośnik jest tu pojemnikiem elastycznym, a nie zwykłym blokiem: jego
+       wysokość wynika z flexa, więc `block-size: 100%` na zdjęciu nie miałoby
+       od czego liczyć procentu i zdjęcie zostawało przy swojej naturalnej
+       wysokości, kilka pikseli niższe od kadru. */
+    .q-grid--list .q-pcard__image-link {
+        flex: 1;
+        display: flex;
+        block-size: auto;
+    }
+
+    /* Między odnośnikiem a zdjęciem stoi `<picture>` z odmianami pliku. Jako
+       zwykły blok przekazywał dalej wysokość własnej zawartości, nie kadru,
+       więc zdjęcie zostawało kilka pikseli niższe. Jako pojemnik elastyczny
+       oddaje zdjęciu całą swoją wysokość. */
+    .q-grid--list .q-pcard__image-link picture {
+        display: flex;
+        inline-size: 100%;
+    }
+
+    .q-grid--list .q-pcard__image {
+        align-self: stretch;
+        inline-size: 100%;
+        block-size: auto;
+    }
+
+    /* Plakietki schodzą ze zdjęcia nad tytuł: kadr ma w rzędzie 256 px, a przy
+       kilku plakietkach naraz słupek na zdjęciu zasłania towar. Wiersz ZNIKA,
+       gdy plakietek nie ma — rezerwowany zostawiał nad tytułem pustkę, a to
+       widać bardziej niż różnicę wysokości sąsiednich pozycji. */
+    .q-grid--list .q-pcard__badges {
+        display: none;
+    }
+
+    /* Ten sam znacznik co plakietki na zdjęciu, czyli lista — stąd zdjęte
+       wcięcie i kropki, których przeglądarka dokłada 40 px z lewej. */
+    .q-grid--list .q-pcard__topline {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        margin: 0 0 var(--q-space-xs);
+        padding: 0;
+        list-style: none;
+    }
+
+    /* Plakietka w rzędzie ma ten sam stopień co w kafelku: to ta sama
+       informacja, tylko postawiona obok tytułu zamiast na zdjęciu. */
+    .q-grid--list .q-pcard__topline .q-badge {
+        padding: 3px 8px;
+        font-size: .68rem;
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .02em;
+        line-height: 1.4;
+        text-transform: uppercase;
+    }
+
+    /* Kolumna treści dzieli się na tekst i słupek zakupu. Wiersze są jawne, bo
+       słupek ma sięgać od pierwszego do ostatniego — przy rzędach domyślnych
+       `1 / -1` nie ma czego policzyć i słupek zajmuje jeden wiersz.
+
+       Wierszy jest tyle, ile najwięcej może stanąć w kolumnie treści: plakietki,
+       marka, nazwa, ocena, warianty, opis, cechy. `1 / -1` liczy się po liniach
+       JAWNYCH, więc każdy element ponad tę liczbę trafia do wiersza niejawnego,
+       którego słupek już nie obejmuje: kończył się wtedy w połowie rzędu,
+       a cena i przycisk zostawały u góry zamiast przy dolnej krawędzi. Widać to
+       było tylko na produktach z wariantami, bo one dokładają siódmy wiersz. */
+    .q-grid--list .q-pcard__body {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 17rem;
+        grid-template-rows: repeat(6, auto) 1fr;
+        row-gap: var(--q-space-xs);
+        align-content: start;
+        padding: var(--q-space-md);
+    }
+
+    .q-grid--list .q-pcard__body > * {
+        grid-column: 1;
+    }
+
+    /* Marka stoi w wierszu kodów pod opisem, więc nad nazwą jest już zbędna. */
+    .q-grid--list .q-pcard__brand {
+        display: none;
+    }
+
+    .q-grid--list .q-pcard__name {
+        -webkit-line-clamp: 2;
+        min-block-size: 0;
+        font-size: var(--q-fs-base);
+    }
+
+    /* Opis obcięty do trzech wierszy, z rezerwacją na dwa: jednozdaniowy nie
+       zaniża wtedy rzędu, a trzywierszowy dobiera z zapasu. */
+    .q-grid--list .q-pcard__description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        overflow: hidden;
+        min-block-size: calc(2 * 1lh);
+
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-base);
+        color: var(--q-meta-color);
+    }
+
+    /* ── drobny druk rzędu ──────────────────────────────────────────
+       Cechy, kody, dostępność i termin wysyłki idą JEDNĄ wielkością. Każdy
+       z tych kawałków przychodzi z własnym rozmiarem, bo osobno stoi gdzie
+       indziej: zestawienie faktów jest w kolumnie opisu na karcie produktu,
+       a komponent dostępności w panelu zakupu. Wrzucone razem w jeden słupek
+       dawały trzy różne stopnie w czterech wierszach.
+
+       Rozmiar ustawiamy więc na KAŻDYM z nich, a nie na pojemniku: pojemnik
+       przegrywa z regułą samego komponentu, bo ta jest równie szczegółowa
+       i stoi w tej samej warstwie. */
+    .q-grid--list .q-pcard__fakty,
+    .q-grid--list .q-pcard__fakty .q-facts__list,
+    .q-grid--list .q-pcard__stock,
+    .q-grid--list .q-pcard__stock .q-facts__list,
+    .q-grid--list .q-pcard__stock .q-stock {
+        font-size: var(--q-fs-xs);
+    }
+
+    /* Cechy i kody: jedno zestawienie złamane na dwie kolumny. Dziesięć wierszy
+       w jednej kolumnie podniosłoby rząd o trzysta pikseli — po to jest ta
+       szerokość, żeby czytać w poprzek, a nie w dół. */
+    .q-grid--list .q-pcard__fakty {
+        display: block;
+        columns: 2;
+        column-gap: var(--q-space-lg);
+        margin-block-start: var(--q-space-xs);
+    }
+
+    /* Wiersz nie ma prawa pęknąć między kolumnami — nazwa zostałaby na dole
+       pierwszej, a wartość na górze drugiej. */
+    .q-grid--list .q-pcard__fakty .q-facts__row {
+        break-inside: avoid;
+        padding-block: 2px;
+    }
+
+    /* Słupek zakupu. Kreska zaczyna się i kończy na wcięciu zajawki, tak jak
+       treść obok — nie dobija do krawędzi rzędu. Stąd brak ujemnych marginesów
+       pionowych: słupek stoi w polu treści karty, więc odstęp od góry i od dołu
+       bierze z jej wcięcia.
+
+       Dostępność stoi u GÓRY, a cena przy DOLE: kolejność pytań brzmi „czy
+       dostanę na czas" przed „ile to kosztuje", a przycisk ma być tuż pod
+       kwotą. */
+    .q-grid--list .q-pcard__decyzja {
+        display: flex;
+        flex-direction: column;
+
+        grid-column: 2;
+        grid-row: 1 / -1;
+
+        margin-inline-start: var(--q-space-md);
+        padding-inline-start: var(--q-space-md);
+        border-inline-start: 1px solid var(--q-border-hairline);
+    }
+
+    /* Zestawienie stanu jest węższe niż to w kolumnie treści, więc nazwa
+       dostaje mniej miejsca — inaczej „zamówienie u producenta, około
+       3 tygodni" łamie się na cztery wiersze. */
+    .q-grid--list .q-pcard__stock {
+        display: block;
+    }
+
+    .q-grid--list .q-pcard__stock .q-facts__row {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+        gap: var(--q-space-sm);
+        padding-block: 2px;
+    }
+
+
+    /* Cena odsunięta do dołu słupka, przycisk zaraz pod nią: dostępność
+       i termin czyta się na wejściu, kwotę na wyjściu — i to z niej wychodzi
+       kliknięcie. */
+    .q-grid--list .q-pcard__price {
+        margin-block-start: auto;
+        padding-block-start: var(--q-space-md);
+    }
+
+    /* Wiersz noty o najniższej cenie zostaje zarezerwowany także w rzędzie:
+       produkt bez obniżki nie ma czego w nim napisać, ale gdyby wiersz znikał,
+       rząd bez promocji byłby niższy od sąsiada z promocją. */
+    .q-grid--list .q-pcard__omnibus {
+        min-block-size: 1lh;
+    }
+
+    .q-grid--list .q-pcard__cart {
+        margin-block-start: var(--q-space-sm);
+        padding-block-start: 0;
+    }
+
+    /* W rzędzie licznik promocji jest SZCZYTEM słupka zakupu i bierze jego
+       szerokość, czyli tę samą co przycisk „Do koszyka". Termin końca promocji
+       stoi wtedy nad dostępnością i ceną — w kolejności, w jakiej się o tym
+       myśli: do kiedy, czy jest, za ile. */
+    .q-grid--list .q-pcard__countdown {
+        position: static;
+        translate: none;
+        gap: 0;
+        margin-block-end: var(--q-space-sm);
+        padding: 4px 0;
+        box-shadow: none;
+    }
+
+    /* Zegar dostaje pole RÓWNE członom, nie szerokość własnego rysunku: pasek
+       ma się dzielić na cztery jednakowe części. */
+    .q-grid--list .q-pcard__countdown .q-countdown__icon {
+        flex: 1 1 0;
+        min-inline-size: 0;
+        inline-size: auto;
+        block-size: 17px;
+        opacity: .7;
+    }
+
+    .q-grid--list .q-pcard__countdown .q-countdown__segment {
+        flex: 1;
+        min-inline-size: 0;
+        padding-inline: 0;
+        border-inline-start: 1px solid color-mix(in srgb, var(--q-on-fill-primary) 22%, transparent);
+    }
+
+    .q-grid--list .q-pcard__countdown .q-countdown__segment i {
+        font-size: .62rem;
+    }
+
+    /* Narzędzia siadają przy dolnej krawędzi zdjęcia. Kadr jest w rzędzie
+       dokładnie tak wysoki jak zdjęcie, więc wystarczy zwykłe wcięcie od dołu. */
+    .q-grid--list .q-pcard__tools {
+        inset-block-end: var(--q-space-sm);
+        inset-block-start: auto;
+    }
+
+    /* Karuzela pod listą odsunięta jak sekcja, nie jak kolejny blok listy. */
+    .q-listing .q-carousel {
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* Średni ekran: słupek zakupu węższy, kadr mniejszy — kolumna treści musi
+       zostać na tyle szeroka, żeby opis nie łamał się co trzy słowa. */
+    @media (max-width: 1199px) {
+        .q-grid--list .q-pcard {
+            grid-template-columns: 12rem minmax(0, 1fr);
+            min-block-size: 12rem;
+        }
+
+        .q-grid--list .q-pcard__body {
+            grid-template-columns: minmax(0, 1fr) 14rem;
+        }
+
+        .q-grid--list .q-pcard__media {
+            inline-size: 12rem;
+        }
+    }
+
+    /* Poniżej 992 px kolumna treści schodzi do ~340 px, więc kolumna zestawienia
+       ma 170 px i wartości łamią się po dwa słowa — nierówno, bo każdy produkt
+       ma inne. Zostają same cechy; kody wracają na szerszym ekranie. Opis
+       rezerwuje tu trzy wiersze zamiast dwóch, bo przy tej szerokości tyle
+       właśnie bierze i bez rezerwacji rzędy różniłyby się o wysokość wiersza. */
+    @media (max-width: 991px) {
+        .q-grid--list .q-pcard__fakty .q-facts__row:nth-child(n+5) {
+            display: none;
+        }
+
+        .q-grid--list .q-pcard__description {
+            min-block-size: calc(3 * 1lh);
+        }
+    }
+
+    /* Wąski ekran: słupek zakupu schodzi pod treść i idzie w poprzek obu
+       kolumn, bo trzeci tor obok zdjęcia zostawiłby nazwie pas na trzy słowa.
+       Kreska pionowa zamienia się w poziomą — oddziela to samo, tylko w drugą
+       stronę. */
+    @media (max-width: 767px) {
+        .q-grid--list .q-pcard {
+            grid-template-columns: 7.5rem minmax(0, 1fr);
+            min-block-size: 0;
+        }
+
+        .q-grid--list .q-pcard__media {
+            inline-size: 7.5rem;
+        }
+
+        /* Tu kadr NIE rozciąga się na wysokość rzędu: słupek zakupu schodzi pod
+           treść, więc rząd jest dwa razy wyższy niż szeroki i rozciągnięte
+           zdjęcie byłoby pionowym paskiem. Zostaje kwadrat przy górnej i lewej
+           krawędzi, a kadr kończy się razem ze zdjęciem — inaczej narzędzia,
+           które siedzą przy jego dolnej krawędzi, lądowały w pustym polu
+           kilkadziesiąt pikseli pod zdjęciem. */
+        .q-grid--list .q-pcard__media {
+            align-self: start;
+        }
+
+        /* `flex: none` jest konieczne, bo w kolumnie elastycznej podstawa
+           z `flex: 1` wygrywa z podaną wysokością. */
+        .q-grid--list .q-pcard__image-link {
+            flex: none;
+            block-size: 7.5rem;
+        }
+
+        .q-grid--list .q-pcard__body {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-rows: none;
+            padding: var(--q-space-sm);
+        }
+
+        /* Opis i zestawienie znikają: przy 160 px kolumny treści dziesięć
+           wierszy po dwa słowa rozciągało rząd do 650 px i lista przestawała
+           być listą. Zostaje nazwa, ocena i decyzja. */
+        .q-grid--list .q-pcard__description,
+        .q-grid--list .q-pcard__fakty {
+            display: none;
+        }
+
+        .q-grid--list .q-pcard__decyzja {
+            grid-column: 1;
+            grid-row: auto;
+            flex-direction: row;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: var(--q-space-sm);
+
+            margin-block: var(--q-space-xs) calc(var(--q-space-sm) * -1);
+            margin-inline: calc(var(--q-space-sm) * -1);
+            padding: var(--q-space-sm);
+            border-inline-start: 0;
+            border-block-start: 1px solid var(--q-border-hairline);
+        }
+
+        .q-grid--list .q-pcard__stock {
+            flex: 1 1 100%;
+        }
+
+        .q-grid--list .q-pcard__price {
+            margin-block-start: 0;
+            padding-block-start: 0;
+        }
+
+        .q-grid--list .q-pcard__cart {
+            flex: 1 1 100%;
+            margin-block-start: 0;
+        }
+
+        /* Licznik zostaje szczytem bloku decyzji, więc bierze całą szerokość. */
+        .q-grid--list .q-pcard__countdown {
+            flex: 1 1 100%;
+        }
+    }
+
+    /* Zakres ceny w filtrach: dwa pola i myślnik między nimi. */
+    .q-range {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-range__sep {
+        color: var(--q-meta-color);
+    }
+
+    /* W szufladzie panel nie przykleja się do nagłówka strony: przyklejenie
+       liczy odstęp od góry OKNA, a w szufladzie górą jest jej własny nagłówek,
+       więc panel spadał o wysokość nagłówka sklepu i zostawiał nad sobą pustą
+       przestrzeń. */
+    .q-modal .q-listing__filters {
+        position: static;
+    }
+
+    /* Nazwy panelu w szufladzie nie ma: okno ma już swój nagłówek „Filtry”
+       o wiersz wyżej. Dwa te same napisy jeden pod drugim to nie hierarchia,
+       tylko powtórzenie. */
+    .q-modal .q-filters__head {
+        display: none;
+    }
+
+    /* W szufladzie pierwsza grupa nie zaczyna się kreską: nad nią jest już
+       kreska nagłówka okna i wychodziły dwie jedna pod drugą. */
+    .q-modal .q-filter:first-of-type {
+        border-block-start: 0;
+    }
+
+    /* --- dokładanie produktów przyciskiem --- */
+
+    /* Drugi rodzaj stronicowania. Przycisk na środku, pod nim licznik: klient
+       ma wiedzieć, ile z ilu już widzi, zanim zdecyduje, czy dokładać dalej. */
+    .q-more {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-lg);
+    }
+
+    .q-more__btn {
+        min-inline-size: 16rem;
+    }
+
+    .q-more__count {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* --- miejsca promocyjne w siatce --- */
+
+    /* Na którym widoku listy miejsce jest widoczne. Rozstrzyga to arkusz, a nie
+       silnik: widok przełącza klient w przeglądarce i serwer nie wie, co ten
+       klient ma w danej chwili na ekranie. Miejsce bez ograniczenia nie dostaje
+       żadnej z tych klas i stoi w obu widokach. */
+    .q-grid--list .q-grid__slot--grid,
+    .q-grid:not(.q-grid--list) .q-grid__slot--list {
+        display: none;
+    }
+
+
+    /* Kafel promocyjny wypełnia pole siatki. Treść przynosi moduł, wygląd jest
+       tutaj, żeby każdy moduł nie wstawiał własnego. */
+    .q-promo {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-md);
+        background: var(--q-neutral-12);
+        border-radius: var(--q-card-radius, var(--q-radius-md));
+        color: var(--q-neutral-1);
+    }
+
+    .q-promo__over {
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        opacity: .7;
+    }
+
+    .q-promo__title {
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-promo__btn {
+        align-self: flex-start;
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Pole zajmujące jedną komórkę rozciąga się na wysokość rzędu, żeby nie
+       wisiało nad kreską kafli obok. */
+    .q-grid__slot--promo {
+        align-self: stretch;
+    }
+
+    .q-grid__slot--promo > * {
+        block-size: 100%;
+    }
+
+    /* Pas przez cały rząd. Sklep podaje numer RZĘDU, więc pas zawsze trafia na
+       granicę rzędu — postawiony w środku przeskakiwałby do następnego
+       i zostawiał po sobie puste komórki. */
+    .q-grid__slot--banner {
+        grid-column: 1 / -1;
+    }
+
+    /* --- wąski ekran --- */
+
+    /* Poniżej 992 px wracamy do szuflady niezależnie od wyboru sklepu: kolumna
+       zabiera wtedy pół ekranu, a pas nad listą spycha produkty poniżej
+       krawędzi. Panel jedzie do okna szuflady przeniesieniem węzła, więc
+       w treści zostaje puste miejsce i tu je gasimy. */
+    @media (max-width: 991px) {
+        [data-filters="column"] .q-listing__layout {
+            display: block;
+        }
+
+        [data-filters="column"] .q-listing__content {
+            --q-grid-columns: initial;
+        }
+
+        [data-filters="column"] .q-listing__filters,
+        [data-filters="bar"] .q-listing__filters {
+            display: none;
+        }
+
+        [data-filters="column"] .q-listing__filters-open {
+            display: inline-flex;
+        }
+    }
+
+    /* Na telefonie kafelek podkategorii przestaje być kwadratem: przy dwóch
+       kolumnach kwadrat urósłby na pół ekranu. */
+    @media (max-width: 767px) {
+        .q-subcats {
+            grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+        }
+
+        .q-subcats__item,
+        .q-subcats__more {
+            aspect-ratio: auto;
+        }
+
+        .q-subcats__image {
+            inline-size: 2.5rem;
+            block-size: 2.5rem;
+        }
+
+        /* Podpis „Sortuj:" znika, zostaje samo pole: w pasku na telefonie
+           liczy się każdy piksel, a pole mówi samo, czym jest. */
+        .q-listing__sort-label {
+            display: none;
+        }
+
+        /* Pasek układa się w dwa wiersze. Trzy kontrolki obok siebie
+           potrzebują około 400 px, więc sortowanie i tak spadało pod spód,
+           tyle że odepchnięte do prawej i w połowie szerokości paska.
+
+           Przycisk filtrów idzie w drugim wierszu i na całą szerokość:
+           wybrane zawężenia pojawiają się tuż pod paskiem, więc mają stać
+           bezpośrednio pod przyciskiem, który je otwiera. */
+        .q-toolbar .q-listing__filters-open {
+            order: 1;
+            flex: 1 0 100%;
+            justify-content: center;
+        }
+
+        .q-toolbar .q-listing__sort {
+            flex: 1;
+            min-inline-size: 0;
+            margin-inline-start: auto;
+        }
+
+        /* Pole sortowania ma na szerokim ekranie 12 rem, żeby lista nie
+           skakała przy zmianie kolejności. Na telefonie ta miara nie mieści
+           się obok liczby wyników, więc pole bierze tyle, ile zostało. */
+        .q-toolbar .q-listing__sort .q-select {
+            flex: 1;
+            min-inline-size: 0;
+        }
+
+        .q-toolbar .q-listing__sort .q-select__button {
+            inline-size: 100%;
+        }
+    }
+}

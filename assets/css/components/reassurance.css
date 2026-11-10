@@ -1,0 +1,219 @@
+@layer quince.components {
+    /*
+       Pas zapewnień pod kartą produktu.
+
+       Reguły przepisane z makiety strony produktu (klasy `q-trust*`),
+       ale postawione na strukturze `blockreassurance`, bo to ona przychodzi
+       ze sklepu: `.reassurance` → pozycja, `__image` → ikona, `__title` → napis,
+       `__desc` → opis. Moduł dostarcza treść, wygląd należy do motywu.
+
+       Makieta ma tu jeszcze rozwijanie pozycji i odnośnik „Warunki zwrotu"
+       w treści. Moduł takich pól nie ma: daje ikonę, tytuł, opis i jeden
+       odnośnik na całą pozycję. Odwzorowujemy to, co da się odwzorować.
+
+       Powierzchnia pasa (tło, kreska, cień, zaokrąglenie) należy do opakowania
+       `.q-pdp__reas` i ustawia ją sklep w panelu, przy karcie „Strip under the
+       card". Tutaj jest tylko wnętrze.
+    */
+
+    /* Pas mierzy WŁASNE miejsce, nie okno: raz stoi na szerokość dwóch kolumn
+       karty, raz na szerokość telefonu.
+
+       Kontener siedzi na opakowaniu, nie na znacznikach modułu, bo element nie
+       może pytać o własną szerokość — kwerenda działa wyłącznie na potomkach. */
+    .q-pdp__reas {
+        container-type: inline-size;
+        container-name: trust;
+    }
+
+    /* Skórę nosi sam pas, nie strefa, w której stoi. Gdyby tło siedziało na
+       opakowaniu strefy, dostałby je też każdy hook wpięty pod pasem — a to ma
+       być osobna treść, nie dalszy ciąg tej karty. */
+    .blockreassurance--product {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+
+        background: var(--q-card-bg);
+        border: var(--q-blok-ramka);
+        border-radius: var(--q-radius-md);
+        box-shadow: var(--q-shadow-sm);
+
+        /* Kreski dzielące pozycje dobiegają do krawędzi, więc zaokrąglenie musi
+           je przyciąć. */
+        overflow: hidden;
+    }
+
+    .blockreassurance--product .reassurance {
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        column-gap: var(--q-space-sm);
+
+        padding: var(--q-space-md);
+        color: inherit;
+        text-decoration: none;
+    }
+
+    /* Kreska dzieli pozycje, zamiast je obrysowywać. Cień wewnętrzny, a nie
+       obramowanie: obramowanie dokładałoby piksel do wysokości pozycji, więc
+       pierwsza i reszta miałyby różną wysokość. */
+    .blockreassurance--product .reassurance + .reassurance {
+        box-shadow: inset 0 1px 0 var(--q-border-subtle);
+    }
+
+    .blockreassurance--product .reassurance__image {
+        display: grid;
+        place-items: center;
+
+        inline-size: 2rem;
+        block-size: 2rem;
+
+        background: var(--q-surface-primary);
+        color: var(--q-text-primary);
+        border-radius: var(--q-radius-sm);
+    }
+
+    .blockreassurance--product .reassurance__image svg,
+    .blockreassurance--product .reassurance__image img {
+        inline-size: 18px;
+        block-size: 18px;
+    }
+
+    /* Barwy samej ikony tu nie ma. Moduł wpisuje ją w atrybuty `fill` swoich
+       ścieżek i ma na nią własne ustawienie (`PSR_ICON_COLOR`) — tam się ją
+       zmienia, nie nadpisuje stąd. */
+
+    .blockreassurance--product .reassurance__content {
+        display: grid;
+        align-content: start;
+    }
+
+    /* Przełamanie wiersza między tytułem a opisem przynosi moduł. Układ trzyma
+       tu siatka, więc `br` zostawiałby pusty wiersz. */
+    .blockreassurance--product .reassurance__content br {
+        display: none;
+    }
+
+    /* Wysokość napisu równa kafelkowi ikony: dzięki temu ikona stoi w osi
+       tytułu, a opis zaczyna się pod tytułem, nie obok ikony. */
+    .blockreassurance--product .reassurance__title {
+        display: flex;
+        align-items: center;
+        min-block-size: 2rem;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-strong);
+    }
+
+    .blockreassurance--product .reassurance__desc {
+        font-size: var(--q-fs-xs);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-meta-color);
+    }
+
+    .blockreassurance--product .reassurance__desc p {
+        margin: 0;
+    }
+
+    /* Pozycja z odnośnikiem jest klikalna w całości, więc pod kursorem
+       podświetla się cała, a nie sam napis. */
+    .blockreassurance--product a.reassurance:hover {
+        background: var(--q-surface-hover);
+    }
+
+    /* Od 42 rem miejsca pozycje stają obok siebie, a kreska dzieląca przenosi
+       się z góry na bok. Próg z makiety. */
+    @container trust (min-width: 42rem) {
+        .blockreassurance--product {
+            grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+        }
+
+        .blockreassurance--product .reassurance + .reassurance {
+            box-shadow: inset 1px 0 0 var(--q-border-subtle);
+        }
+    }
+
+    /* Pas pod podsumowaniem koszyka. Makieta koszyka nie przewidywała
+       opisu przy pozycji, tylko ikonę i nagłówek — moduł daje też opis, więc
+       pas przejmuje wygląd pasa ze strony produktu (ikona, tytuł, opis).
+       Kolumna boczna koszyka jest wąska jak telefon, więc zostaje tu zawsze
+       układ jednokolumnowy, bez progu `@container` z wariantu produktowego. */
+    .blockreassurance--cart {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+
+        background: var(--q-card-bg);
+        border: var(--q-blok-ramka);
+        border-radius: var(--q-radius-md);
+        box-shadow: var(--q-shadow-sm);
+
+        overflow: hidden;
+    }
+
+    .blockreassurance--cart .reassurance {
+        display: grid;
+        grid-template-columns: 2rem 1fr;
+        column-gap: var(--q-space-sm);
+
+        padding: var(--q-space-md);
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .blockreassurance--cart .reassurance + .reassurance {
+        box-shadow: inset 0 1px 0 var(--q-border-subtle);
+    }
+
+    .blockreassurance--cart .reassurance__image {
+        display: grid;
+        place-items: center;
+
+        inline-size: 2rem;
+        block-size: 2rem;
+
+        background: var(--q-surface-primary);
+        color: var(--q-text-primary);
+        border-radius: var(--q-radius-sm);
+    }
+
+    .blockreassurance--cart .reassurance__image svg,
+    .blockreassurance--cart .reassurance__image img {
+        inline-size: 18px;
+        block-size: 18px;
+    }
+
+    .blockreassurance--cart .reassurance__content {
+        display: grid;
+        align-content: start;
+    }
+
+    .blockreassurance--cart .reassurance__content br {
+        display: none;
+    }
+
+    .blockreassurance--cart .reassurance__title {
+        display: flex;
+        align-items: center;
+        min-block-size: 2rem;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-strong);
+    }
+
+    .blockreassurance--cart .reassurance__desc {
+        font-size: var(--q-fs-xs);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-meta-color);
+    }
+
+    .blockreassurance--cart .reassurance__desc p {
+        margin: 0;
+    }
+
+    .blockreassurance--cart a.reassurance:hover {
+        background: var(--q-surface-hover);
+    }
+}

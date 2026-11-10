@@ -1,0 +1,139 @@
+/* ===================================================================
+   Quince — alert
+
+   Komunikat o wyniku działania: dodano do koszyka, kod rabatowy nieaktualny,
+   zamówienie przyjęte, brak dostawy pod wskazany adres.
+
+   Występuje w 32 szablonach motywu i modułów. Klasy `.alert` i `.alert-*`
+   są stylowane obok naszych, bo szablony PrestaShopa i modułów przychodzą
+   z nazwami z Bootstrapa, którego nie wgrywamy — bez tego mapowania komunikat
+   z cudzego modułu byłby gołym tekstem.
+
+   Kolor nie jest jedynym nośnikiem znaczenia: obok koloru stoi ikona i treść.
+   Dla części klientów kolor jest nieczytelny, a komunikat o błędzie płatności
+   musi dotrzeć do wszystkich.
+
+   Tokeny komponentu (--q-alert-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-alert,
+    .alert {
+        --alert-bg: var(--q-alert-info-bg);
+        --alert-border: var(--q-alert-info-border);
+        --alert-text: var(--q-alert-info-text);
+        --alert-icon: var(--q-alert-info-icon);
+
+        display: flex;
+        align-items: flex-start;
+        gap: var(--q-alert-gap);
+
+        padding: var(--q-alert-pad-block) var(--q-alert-pad-inline);
+        margin-block-end: var(--q-space-md);
+
+        background: var(--alert-bg);
+        border: 1px solid var(--alert-border);
+
+        /* Pasek przy krawędzi początkowej niesie ten sam sygnał co tło, ale
+           przetrwa druk i tryb wysokiego kontrastu, w których tło znika. */
+        border-inline-start: var(--q-alert-bar) solid var(--alert-icon);
+        border-radius: var(--q-alert-radius);
+
+        color: var(--alert-text);
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-normal);
+    }
+
+    .q-alert__icon,
+    .alert > .material-icons {
+        inline-size: 18px;
+        block-size: 18px;
+        flex: none;
+
+        /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku —
+           przy komunikacie na trzy linie ikona przy środku wygląda jak zgubiona. */
+        margin-block-start: 1px;
+        color: var(--alert-icon);
+    }
+
+    .q-alert__title {
+        display: block;
+        margin-block-end: 2px;
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-alert__body {
+        min-inline-size: 0;
+    }
+
+    .q-alert__body :last-child {
+        margin-block-end: 0;
+    }
+
+    .q-alert a,
+    .alert a,
+    .alert-link {
+        color: inherit;
+        font-weight: var(--q-weight-semibold);
+        text-decoration: underline;
+    }
+
+    /* --- odmiany --- */
+
+    .q-alert--success,
+    .alert-success {
+        --alert-bg: var(--q-alert-success-bg);
+        --alert-border: var(--q-alert-success-border);
+        --alert-text: var(--q-alert-success-text);
+        --alert-icon: var(--q-alert-success-icon);
+    }
+
+    .q-alert--warning,
+    .alert-warning {
+        --alert-bg: var(--q-alert-warning-bg);
+        --alert-border: var(--q-alert-warning-border);
+        --alert-text: var(--q-alert-warning-text);
+        --alert-icon: var(--q-alert-warning-icon);
+    }
+
+    .q-alert--danger,
+    .alert-danger {
+        --alert-bg: var(--q-alert-danger-bg);
+        --alert-border: var(--q-alert-danger-border);
+        --alert-text: var(--q-alert-danger-text);
+        --alert-icon: var(--q-alert-danger-icon);
+    }
+
+    .q-alert--info,
+    .alert-info {
+        --alert-bg: var(--q-alert-info-bg);
+        --alert-border: var(--q-alert-info-border);
+        --alert-text: var(--q-alert-info-text);
+        --alert-icon: var(--q-alert-info-icon);
+    }
+
+    /* Przycisk zamknięcia. Odsunięty od treści marginesem automatycznym,
+       żeby stał przy krawędzi niezależnie od długości komunikatu. */
+    .q-alert__close {
+        margin-inline-start: auto;
+        flex: none;
+
+        inline-size: 24px;
+        block-size: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        border: 0;
+        background: none;
+        color: inherit;
+        opacity: .6;
+        cursor: pointer;
+    }
+
+    .q-alert__close:hover {
+        opacity: 1;
+    }
+}

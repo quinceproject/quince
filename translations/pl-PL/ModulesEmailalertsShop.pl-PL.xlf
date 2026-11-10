@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+
+      <!-- Strona „Moje powiadomienia” (mailalerts-account.tpl) — rdzeń nie
+           tłumaczy tego konkretnego napisu w tej domenie. -->
+
+      <trans-unit id="quince.emailalerts.no_alerts" resname="You do not have any mail alerts.">
+        <source>You do not have any mail alerts.</source>
+        <target>Nie masz żadnych powiadomień e-mail.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.emailalerts.intro" resname="Manage your mail alerts to stay informed about product availability and updates.">
+        <source>Manage your mail alerts to stay informed about product availability and updates.</source>
+        <target>Zarządzaj powiadomieniami e-mail, aby być na bieżąco z dostępnością produktów.</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

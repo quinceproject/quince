@@ -1,0 +1,796 @@
+@layer quince.components {
+    /*
+       Panel zakupu na karcie produktu.
+
+       Reguły przepisane z makiety strony produktu. Panel składa się
+       z bloków, które sklep przestawia z panelu administracyjnego, więc odstępy
+       między nimi ustawia wyłącznie opakowanie bloku — nigdy sam blok.
+    */
+
+    /* ── odstęp między blokami ───────────────────────────────────────────
+       ODSTĘP USTAWIA WYŁĄCZNIE SLOT. Żaden blok nie podaje własnego marginesu
+       zewnętrznego: kolejność bloków przestawia się z panelu sklepu, a margines
+       schowany w bloku zamieniłby każde przestawienie w loterię.
+
+       Odstęp wisi na sąsiedztwie, a nie na pierwszym dziecku jak w makiecie:
+       formularz zakupu zaczyna się od pól ukrytych, więc `:first-child` nigdy
+       nie trafiłby w blok i pierwszy blok dostawałby odstęp znikąd. */
+    /* Odstęp niesie sąsiedztwo, więc wiersz z dwoma elementami obok siebie
+       (`q-buy__row`) liczy się w nim tak samo jak pojedynczy blok. */
+    :is(.q-buy__slot, .q-buy__row) + :is(.q-buy__slot, .q-buy__row) {
+        margin-block-start: var(--q-space-md);
+    }
+
+    /* ── pas promocji ────────────────────────────────────────────────────
+       Pas jest zegarem: stoi tylko wtedy, gdy promocja ma termin końca.
+
+       Pas spina panel zakupu OD ZEWNĄTRZ. Nie jest blokiem w jego środku ani
+       drugą ramką pod jego ramką: jest górną krawędzią samego panelu, więc
+       wychodzi poza jego wcięcie na pełną szerokość i przejmuje jego górne rogi.
+
+       Kreska panelu przechodzi wtedy w barwę marki. Pas i obrys są jedną
+       obwódką, tylko na górze grubszą i podpisaną — sam pas bez domknięcia
+       wyglądałby jak urwany. */
+
+    /* Zakładka: o tyle biała powierzchnia wjeżdża na pas. Równa się jej
+       zaokrągleniu, bo ma nachodzić dokładnie tyle, ile trzeba, żeby jej górne
+       rogi były widoczne w całości. Przy wyłączonych zaokrągleniach schodzi do
+       zera i biel styka się z pasem płasko — nie ma już rogów do pokazania. */
+    .q-pdp__aside:has(.q-buy__pas) {
+        --q-buy-zakladka: var(--q-radius-lg);
+
+        /* Wcięcie przejmuje pudełko w środku: pas i biel mają sięgać krawędzi
+           panelu, a nie stać w jego marginesie. */
+        padding: 0;
+
+        /* Kreska NIE słucha przełącznika obramowań: nie jest ramką bloku, tylko
+           domknięciem pasa. Sam pas bez niej wyglądałby jak urwany. */
+        border: 1px solid var(--q-fill-primary);
+    }
+
+    .q-buy__pas {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+
+        /* U dołu wcięcie powiększone o zakładkę: biel wjeżdża na pas i bez tego
+           zapasu przykryłaby napis. */
+        padding: var(--q-space-sm) var(--q-space-md)
+                 calc(var(--q-space-sm) + var(--q-buy-zakladka));
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+
+        /* Rogi pudełka pomniejszone o jego kreskę: pas leży w środku obrysu,
+           więc z pełnym promieniem wystawałby zza niego rogiem.
+
+           Wartość zapasowa jest konieczna: promień panelu zakupu istnieje tylko
+           w kolumnie zakupu, a ten sam pas stoi też w szybkim podglądzie i na
+           słupku z ceną zestawu — tam bez zapasu zostawał bez zaokrągleń. */
+        border-radius:
+            calc(var(--q-pdp-radius, var(--q-radius-md)) - 1px)
+            calc(var(--q-pdp-radius, var(--q-radius-md)) - 1px) 0 0;
+    }
+
+    /* Biała powierzchnia panelu przy pasie. Bez pasa pudełko nie ma wyglądu
+       i powierzchnię niesie sam panel, tak jak wszędzie indziej. */
+    .q-pdp__aside:has(.q-buy__pas) .q-buy__karta {
+        position: relative;
+        margin-block-start: calc(var(--q-buy-zakladka) * -1);
+        padding: var(--q-pdp-pad);
+
+        background: var(--q-pdp-bg);
+
+        /* U góry własne rogi, widoczne na pasie. U dołu rogi PANELU pomniejszone
+           o jego kreskę: biel sięga krawędzi, więc z kwadratowym dołem zamalowała
+           swoim narożnikiem żółty obrys panelu. */
+        border-radius:
+            var(--q-radius-lg) var(--q-radius-lg)
+            calc(var(--q-pdp-radius) - 1px) calc(var(--q-pdp-radius) - 1px);
+    }
+
+    .q-buy__pas-napis {
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Pas rozpina napis i licznik do krawędzi tylko wtedy, gdy oba mieszczą się
+       w jednym wierszu. W węższej kolumnie licznik schodzi pod napis i przy
+       rozpięciu do krawędzi oba lądują przy lewej: wygląda to jak przypadek,
+       a nie jak układ.
+
+       Rozstrzyga szerokość SAMEJ KOLUMNY, nie okna: kolumna bywa wąska także na
+       szerokim ekranie, gdy sklep ustawi węższy podział. */
+    .q-pdp__aside {
+        container-type: inline-size;
+        container-name: panel;
+    }
+
+    @container panel (max-width: 25rem) {
+        .q-buy__pas {
+            justify-content: center;
+            text-align: center;
+        }
+    }
+
+    /* Licznik leży już na barwie marki, więc własnego pola nie potrzebuje. */
+    .q-buy__pas .q-countdown {
+        padding: 0;
+        background: none;
+        border-radius: 0;
+    }
+
+    /* Cyfry tabelaryczne i stała szerokość członu: bez tego licznik drga
+       w poziomie przy każdym przejściu z „09" na „10". */
+    .q-countdown {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: 5px var(--q-space-sm) 6px;
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-radius: var(--q-radius-md);
+
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    /* Wszystko tu jest jedną barwą tekstu na jednym tle: nie ma białych kafli
+       ani drugiej płaszczyzny. Rozróżnienie niesie WAGA I ROZMIAR, więc podpis
+       nie konkuruje z liczbą, choć stoi tuż pod nią. */
+    .q-countdown__segment {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        min-inline-size: 2.5rem;
+    }
+
+    .q-countdown__segment + .q-countdown__segment {
+        padding-inline-start: var(--q-space-sm);
+        border-inline-start: 1px solid color-mix(in srgb, var(--q-on-fill-primary) 20%, transparent);
+    }
+
+    .q-countdown__segment b {
+        font-size: var(--q-fs-h6);
+        font-weight: var(--q-weight-bold);
+        line-height: 1.15;
+        letter-spacing: -.01em;
+    }
+
+    .q-countdown__segment i {
+        font-size: .56rem;
+        font-style: normal;
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .08em;
+        line-height: 1.2;
+        text-transform: uppercase;
+        opacity: .62;
+    }
+
+    /* Zegar, nie klepsydra. Klepsydra przy 15 px zlewa się w plamkę: jej dwa
+       trójkąty mają zbyt cienkie przewężenie, żeby przetrwać taki rozmiar.
+
+       Kreska, nie wypełnienie: kółko wypełnione na barwie marki byłoby kropką. */
+    .q-countdown__icon {
+        inline-size: 15px;
+        block-size: 15px;
+        flex: none;
+        opacity: .55;
+    }
+
+    /* ── cena ────────────────────────────────────────────────────────────
+       Kto wszedł na kartę produktu, zna już nazwę — szuka kwoty. Dlatego cena
+       jest o stopień większa od tytułu i idzie krojem nagłówkowym: to liczba
+       do rzucenia okiem, nie zdanie do przeczytania. */
+
+    .q-buy__slot--price .q-price__current {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h2);
+        font-weight: 800;
+        letter-spacing: -.01em;
+    }
+
+    /* Netto stoi NAD brutto, we własnym wierszu. */
+    .q-buy__net {
+        flex-basis: 100%;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-buy__price-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+    }
+
+    .q-buy__gross-note {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Trzy części jednej informacji w jednym wierszu: od ile, o ile w procentach,
+       o ile w złotych. Każda z osobna zmuszała do szukania punktu odniesienia
+       gdzie indziej w bloku. */
+    .q-buy__promo-row {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-sm);
+
+        inline-size: 100%;
+        margin-block-start: var(--q-space-xs);
+    }
+
+    /* Plakietka z procentem. Barwy tu NIE ma: idzie z tokenu plakietki, wspólnego
+       z zajawkami — wpisana z ręki rozjeżdżała tę samą plakietkę w panelu zakupu
+       i na karcie produktu w karuzeli. */
+    .q-buy__promo-row .q-badge {
+        padding: 2px 8px;
+        font-size: .72rem;
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* Pigułka, nie goły tekst: to jedyna liczba w bloku, która mówi o zysku,
+       a wśród czterech innych kwot sam kolor jej nie wyróżnia. */
+    .q-buy__savings-pill {
+        display: inline-flex;
+        align-items: center;
+
+        padding: 2px var(--q-space-sm);
+        background: var(--q-surface-success);
+        border-radius: var(--q-radius-pill);
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-success);
+    }
+
+    /* ── rabaty ilościowe ────────────────────────────────────────────────
+       Pełna szerokość i barwa marki, bo to oferta, a nie odsyłacz: klient ma
+       zobaczyć, że przy większym zamówieniu płaci mniej, jeszcze zanim dojdzie
+       do licznika ilości. Trzy poziomy treści w jednym wierszu, hasło, konkret
+       i strzałka do szczegółów, więc element mówi wszystko, co potrzebne do
+       decyzji, a szuflada służy dopiero sprawdzaniu. */
+
+    .q-tier {
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-tier__panel {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-surface-primary);
+        border: 1px solid var(--q-primary-6);
+        border-radius: var(--q-radius-md);
+
+        font: inherit;
+        color: var(--q-text-strong);
+        text-align: start;
+        cursor: pointer;
+    }
+
+    .q-tier__panel:hover {
+        background: var(--q-primary-3);
+        border-color: var(--q-fill-primary);
+    }
+
+    .q-tier__panel:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    .q-tier__icon {
+        display: grid;
+        place-items: center;
+
+        inline-size: 2rem;
+        block-size: 2rem;
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-radius: var(--q-radius-sm);
+    }
+
+    .q-tier__tagline {
+        display: block;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-tier__tiers {
+        display: block;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-tier__chev {
+        flex: none;
+        color: var(--q-meta-color);
+    }
+
+    /* Od osiągniętego progu wiersz w panelu przestaje kusić i zaczyna
+       potwierdzać: dostaje pełne wypełnienie marki, bo to już nie zapowiedź,
+       tylko stan. */
+    .q-tier__panel.has-discount {
+        background: var(--q-fill-primary);
+        border-color: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-tier__panel.has-discount .q-tier__icon {
+        background: var(--q-on-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    .q-tier__panel.has-discount .q-tier__tiers,
+    .q-tier__panel.has-discount .q-tier__chev {
+        color: inherit;
+        opacity: .75;
+    }
+
+    /* ── szuflada progów ─────────────────────────────────────────────────
+       Zdanie wprowadzające mówi, po co tu klient przyszedł i co da mu klik
+       w próg. */
+    .q-tier__lead {
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-secondary-color);
+    }
+
+    /* Próg jest przyciskiem, nie wierszem tabeli: klik ustawia tę ilość
+       w liczniku, żeby klient nie przepisywał liczby ręcznie po zamknięciu. */
+    .q-tiers__row {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto auto;
+        gap: var(--q-space-sm);
+        align-items: baseline;
+        inline-size: 100%;
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        background: none;
+        border: 0;
+        border-block-end: 1px solid var(--q-border-card);
+        border-radius: var(--q-radius-sm);
+
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-color);
+        text-align: start;
+        cursor: pointer;
+    }
+
+    .q-tiers__row:hover {
+        background: var(--q-surface-hover);
+    }
+
+    /* Próg osiągnięty bieżącą ilością. Rdzeń podaje progi, ale niczego nie
+       podświetla, więc zestawienie było cennikiem do liczenia w pamięci. */
+    .q-tiers__row.is-active {
+        background: var(--q-surface-primary);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-tiers__price {
+        font-weight: var(--q-weight-semibold);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-tiers__savings {
+        inline-size: 5.5rem;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-success);
+        text-align: end;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-tiers__status {
+        margin-block-start: var(--q-space-md);
+        margin-block-end: 0;
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+        font-size: var(--q-fs-sm);
+    }
+
+    /* ── warianty ──────────────────────────────────────────────────────── */
+
+    /* Zestaw pól bez ramki przeglądarki: `fieldset` niesie tu wyłącznie
+       powiązanie nazwy grupy z jej opcjami dla czytnika ekranu. */
+    .q-variants__group {
+        margin: 0;
+        padding: 0;
+        border: 0;
+    }
+
+    .q-variants__group + .q-variants__group {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-variants__label {
+        display: block;
+        padding: 0;
+        margin-block-end: var(--q-space-xs);
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-variants__label span {
+        font-weight: var(--q-weight-regular);
+        color: var(--q-meta-color);
+    }
+
+    .q-variants__list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+    }
+
+    /* Drobniejszy napis w wyższym kafelku i kreska 2 px. Przy 1 px i większym
+       napisie rząd pięciu opcji wyglądał jak pasek zakładek, a nie jak wybór. */
+    .q-variant {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        min-inline-size: 3rem;
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-card-bg);
+        color: var(--q-text-body);
+        border: 2px solid var(--q-field-border);
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        cursor: pointer;
+    }
+
+    .q-variant:hover {
+        background: var(--q-surface-hover);
+    }
+
+    /* Wybrany kafelek wypełniony barwą marki. Delikatny odcień gubił się przy
+       pięciu opcjach w rzędzie: trzeba było szukać, który jest wybrany, zamiast
+       to zobaczyć. */
+    .q-variant.is-active,
+    .q-variant:has(input:checked) {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-color: var(--q-fill-primary);
+    }
+
+    .q-variant:has(input:focus-visible) {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Kropka w barwie wariantu. Kadr tekstury skalowany do koła, bo obrazek tła
+       w oryginalnym rozmiarze pokazywałby jego lewy górny róg. */
+    .q-variant__dot {
+        inline-size: .875rem;
+        block-size: .875rem;
+        flex: none;
+
+        border: 1px solid var(--q-border-subtle);
+        border-radius: 50%;
+        background-size: cover;
+        background-position: center;
+    }
+
+    /* ── personalizacja ──────────────────────────────────────────────────
+       Jedyny blok panelu z własnym tłem, bo jest formularzem do wypełnienia,
+       a nie informacją do przeczytania, i PrestaShop blokuje bez niej dodanie
+       do koszyka. */
+
+    .q-personalizacja {
+        padding: var(--q-space-md);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-personalizacja__title {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        margin-block-end: var(--q-space-sm);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-personalizacja__next {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-personalizacja__save {
+        display: flex;
+        justify-content: flex-end;
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-personalizacja__saved {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-personalizacja__image {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-personalizacja__image img {
+        inline-size: 3rem;
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* `.q-upload` (wgrywanie pliku na etykiecie) przeniesione do `field.css`:
+       drugi konsument poza personalizacją produktu to załącznik w formularzu
+       kontaktowym, a to już nie jest sprawa samego panelu zakupu. */
+
+    /* Dwa elementy panelu obok siebie — tak, jak ustawił je sklep w panelu
+       strony produktu. Tory są równe, bo to para równorzędnych wezwań
+       („Pobierz ofertę" i „Zapytaj specjalistę"), a nie główne i poboczne.
+       Odstęp pionowy niesie wiersz, więc slot w środku go nie dokłada. */
+    .q-buy__row {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-sm);
+    }
+
+    .q-buy__row > .q-buy__slot {
+        margin-block-start: 0;
+    }
+
+    /* Na telefonie tor jest jeden: dwa przyciski obok siebie zostawiają na napis
+       po połowie wąskiej kolumny. */
+    @media (max-width: 575px) {
+        .q-buy__row {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    /* ── wiersz zakupu ─────────────────────────────────────────────────── */
+
+    .q-buy__actions {
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    /* Wiersz MUSI umieć się zawinąć. Element flexa domyślnie nie schodzi poniżej
+       szerokości własnej treści, a napis na przycisku nie łamie wierszy, więc
+       licznik i przycisk trzymałyby sztywną szerokość niezależnie od okna i to
+       one rozpychałyby całą stronę na telefonie. Przy wąskim ekranie przycisk
+       schodzi pod licznik zamiast się zgniatać z uciętym napisem. */
+    .q-buy__cta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-sm);
+    }
+
+    /* Granica szerokości wiersza zakupu. Panel bierze tyle szerokości strony,
+       ile ustawi sklep, a przy połowie strony ma około 640 px: „Kup teraz" na
+       całą tę szerokość przestaje wyglądać na przycisk, a licznik ilości
+       i „Do koszyka" rozjeżdżają się na dwa odległe końce.
+
+       30 rem to szerokość wiersza przy najszerszym dotychczasowym panelu, więc
+       węższe panele nie zmieniają się wcale. Przyciski zostają przy lewej
+       krawędzi, w jednej linii z ceną i wariantami. */
+    .q-buy__cta,
+    .q-buy__buy-row {
+        max-inline-size: 30rem;
+    }
+
+    .q-buy__cta .q-btn {
+        flex: 1 1 10rem;
+        min-inline-size: 0;
+    }
+
+    .q-buy__actions .q-btn--lg {
+        block-size: 2.875rem;
+        min-block-size: 2.875rem;
+        font-size: var(--q-fs-base);
+    }
+
+    /* Przycisk zastępujący wiersz zakupu, gdy produktu nie da się zamówić.
+       Niższy od „Do koszyka", bo to nie jest zakup, tylko prośba o wiadomość. */
+    .q-buy__actions .q-btn--block {
+        block-size: 2.75rem;
+        min-block-size: 2.75rem;
+        font-size: var(--q-fs-sm);
+    }
+
+    /* Moduł list życzeń wstawia w wiersz zakupu swój pusty punkt zaczepienia
+       i buduje w nim przycisk aplikacją, której Quince nie wgrywa. Pusty
+       zabierał wiersz siatki i rozpychał odstęp do przycisków pod spodem. */
+    .q-buy__actions .wishlist-button:empty {
+        display: none;
+    }
+
+    /* Ulubione i „Kup teraz" domykają wiersz zakupu i czyta się je razem z nim,
+       więc stoją bliżej niż osobne bloki panelu. Sąsiedztwo w selektorze, bo
+       inaczej reguła odstępu między blokami ma większą wagę i wygrywa. */
+    .q-buy__slot + .q-buy__slot--buy_now {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Licznik ilości: przyciski mają własne, wyciszone tło i dopiero pod kursorem
+       przechodzą w barwę marki. Bez tła wyglądały jak dwa znaki wpisane w ramkę,
+       a najechanie nie dawało żadnej odpowiedzi. */
+    .q-buy__cta .q-qty {
+        block-size: 2.875rem;
+        flex: none;
+    }
+
+    .q-buy__cta .q-qty__btn {
+        inline-size: 2.5rem;
+        block-size: 100%;
+        min-block-size: 0;
+        padding: 0;
+
+        background: var(--q-surface-sunken);
+        color: var(--q-text-strong);
+    }
+
+    .q-buy__cta .q-qty__btn:hover:not(:disabled) {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-buy__cta .q-qty__input {
+        inline-size: 3.5rem;
+        block-size: 100%;
+        min-block-size: 0;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        text-align: center;
+    }
+
+    /* Strzałki przeglądarki przy polu liczbowym: mamy własne przyciski po obu
+       stronach, a dwie pary naraz to dwa różne sposoby na to samo. */
+    .q-qty__input::-webkit-outer-spin-button,
+    .q-qty__input::-webkit-inner-spin-button {
+        appearance: none;
+        margin: 0;
+    }
+
+    .q-qty__input {
+        appearance: textfield;
+    }
+
+    .q-buy__minimal {
+        margin: 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* ── ulubione i „Kup teraz" ────────────────────────────────────────── */
+
+    .q-buy__buy-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+    }
+
+    .q-buy__buy-row .q-btn {
+        flex: 1 1 8rem;
+        min-inline-size: 0;
+    }
+
+    /* Napis w jednym wierszu, a przy tłumaczeniu dłuższym niż miejsce — ucięty
+       wielokropkiem. Bez tego napis, który nie łamie się z założenia, rozpychał
+       wiersz, panel i całą stronę w bok. */
+    .q-buy__buy-row .q-btn__label {
+        min-inline-size: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Drugie wezwanie zakupu wypełnione atramentem, nie konturem: prowadzi prosto
+       do kasy, więc ma wyglądać na przycisk równie realny co „Do koszyka", tylko
+       o innym ciężarze. */
+    .q-btn--atrament {
+        --btn-bg: var(--q-text-strong);
+        --btn-label: var(--q-surface-raised);
+        --btn-border: var(--q-text-strong);
+    }
+
+    .q-btn--atrament:hover {
+        --btn-bg: var(--q-neutral-11);
+        --btn-label: var(--q-surface-raised);
+        --btn-border: var(--q-neutral-11);
+    }
+
+    /* Serce nie stoi na wariantach `q-btn` i to jest decyzja, nie niedopatrzenie:
+       warianty ustawiają barwę napisu z warstwy nadpisań, a warstwa bije
+       swoistość, więc reguła stanu `aria-pressed` nie miałaby szans wygrać
+       i serce po dodaniu do ulubionych zostawałoby szare. */
+    .q-buy__wish {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        flex: none;
+
+        /* Równa wysokość z przyciskiem obok bierze się z rozciągnięcia, a nie
+           z wpisanej liczby: przycisk zmienia wysokość razem z krojem i skalą
+           pisma sklepu, a wpisana liczba by za nim nie poszła. */
+        align-self: stretch;
+        inline-size: 2.75rem;
+
+        /* Bez przycisku obok rozciąganie nie ma za czym iść i serce zostaje
+           wysokości własnej ikony. Miara najmniejsza trzyma wtedy kwadrat. */
+        min-block-size: 2.75rem;
+        padding: 0;
+
+        background: none;
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+
+        font: inherit;
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-buy__wish:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    .q-buy__wish:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Na liście życzeń serce jest wypełnione: stan musi być widoczny bez
+       najeżdżania. Dwa rysunki, po jednym na stan, bo wypełnienia obrysu nie da
+       się zrobić stylem: to inny kształt, a nie inna barwa. */
+    .q-buy__wish-filled {
+        display: none;
+    }
+
+    .q-buy__wish[aria-pressed="true"] {
+        color: var(--q-fill-promo);
+        border-color: var(--q-fill-promo);
+    }
+
+    .q-buy__wish[aria-pressed="true"] .q-buy__wish-outline {
+        display: none;
+    }
+
+    .q-buy__wish[aria-pressed="true"] .q-buy__wish-filled {
+        display: inline;
+    }
+
+    /* Podpis zostaje w drzewie, ale nie na ekranie: to on jest nazwą przycisku
+       dla czytnika ekranu. `display: none` odebrałoby przyciskowi nazwę. */
+    .q-buy__wish-label {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+}

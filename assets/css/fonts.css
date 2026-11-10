@@ -1,0 +1,144 @@
+/* ===================================================================
+   Quince — kroje pisma
+
+   Sklep serwuje własne pliki, a nie odsyła do Google Fonts. Trzy powody:
+   strona ładuje się bez rozmowy z cudzym serwerem, wygląd nie zależy od tego,
+   co odwiedzający ma zainstalowane, a przepisy o danych osobowych nie mają
+   tu czego pilnować.
+
+   Wszystkie kroje z listy w panelu są tu zadeklarowane naraz i to NIE kosztuje
+   nic: przeglądarka pobiera plik dopiero wtedy, gdy któryś tekst faktycznie
+   o niego prosi. Wybór z panelu podstawia nazwę do `--q-font-heading`
+   i `--q-font-body`, a reszta dzieje się sama.
+
+   Pliki Lexend i Nunito Sans pochodzą z makiet projektu, żeby sklep i makieta
+   miały te same metryki pionowe. Bez nich przeglądarka podstawiała krój
+   o innym stosunku wydłużeń górnych do dolnych i tekst w plakietkach siadał
+   o dwa piksele za nisko.
+
+   Dołożenie kroju: plik `.woff2` do `assets/fonts/quince/`, deklaracja niżej
+   i nazwa do listy w panelu (`views/templates/admin/appearance.html.twig`).
+   =================================================================== */
+
+/* ── Lexend ──────────────────────────────────────────────────────────
+   Krój nagłówkowy projektu. Cztery grubości, bo cena w panelu zakupu idzie
+   w 800, nagłówki w 700, a napisy pomocnicze w 600. */
+
+@font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/quince/lexend-400.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(../fonts/quince/lexend-600.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../fonts/quince/lexend-700.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Lexend';
+    font-style: normal;
+    font-weight: 800;
+    font-display: swap;
+    src: url(../fonts/quince/lexend-800.woff2) format('woff2');
+}
+
+/* ── Nunito Sans ─────────────────────────────────────────────────────
+   Krój tekstowy projektu. */
+
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/quince/nunito-sans-400.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(../fonts/quince/nunito-sans-600.woff2) format('woff2');
+}
+
+@font-face {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../fonts/quince/nunito-sans-700.woff2) format('woff2');
+}
+
+/* ── Inter ───────────────────────────────────────────────────────────
+   Pliki zostały w motywie po Hummingbirdzie i są rozbite na podzbiory znaków.
+   Bierzemy dwa: łaciński podstawowy i rozszerzony — ten drugi niesie polskie
+   znaki diakrytyczne. Zakres znaków przy każdej deklaracji jest po to, żeby
+   przeglądarka pobrała plik z ogonkami dopiero wtedy, gdy tekst ich potrzebuje. */
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/inter-latin-400-normal-eca1e21531598d5db58f.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(../fonts/inter-latin-ext-400-normal-210fb826cb25acbd4094.woff2) format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(../fonts/inter-latin-600-normal-69a8d1d484967aba2389.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 600;
+    font-display: swap;
+    src: url(../fonts/inter-latin-ext-600-normal-8148c3ae14dfaefc62ca.woff2) format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../fonts/inter-latin-700-normal-084676038be5b1c38324.woff2) format('woff2');
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url(../fonts/inter-latin-ext-700-normal-be70ab2888339fe67ac5.woff2) format('woff2');
+    unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}

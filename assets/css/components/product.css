@@ -1,0 +1,711 @@
+/* ===================================================================
+   Quince — strona produktu
+
+   Jedna siatka o DWÓCH torach: lewy tor i panel zakupu. Trzeci tor byłby
+   fikcją — podział na galerię i opis należy do lewego toru, nie do strony.
+   Dzięki temu proporcja strony jest jedną liczbą: ile zabiera panel zakupu,
+   a silnik wypisuje ją tokenem.
+
+   Układy różni wyłącznie ZAWARTOŚĆ lewego toru:
+   - trzykolumnowy: karta z tytułem, galerią i opisem (`.q-pdp__main`),
+   - dwukolumnowy: sama galeria, a opis wchodzi do panelu zakupu.
+
+   Projekt: makiety strony produktu (dwa warianty).
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-pdp {
+        padding-block: var(--q-space-md) var(--q-space-xl);
+    }
+
+    .q-pdp > .q-breadcrumb {
+        margin-block-end: var(--q-space-md);
+    }
+
+    /* Strefa zestawów pod siatką karty. Odstęp niesie strefa, a nie jej
+       poprzednik: akordeon nie wie, co stoi pod nim, a pusta strefa w ogóle
+       się nie wypisuje. Pozycje strefy dzieli ten sam odstęp, bo każda jest
+       osobną sekcją strony. */
+    .q-pdp__zestawy,
+    .q-pdp__dol {
+        display: grid;
+        gap: var(--q-space-xl);
+        margin-block-start: var(--q-space-xl);
+    }
+
+    .q-pdp__grid {
+        display: grid;
+
+        /* Panel zakupu ma dolną granicę szerokości, bo udział procentowy sam
+           z siebie jej nie pilnuje. Przy stronie 1520 px trzydzieści procent to
+           432 px i wszystko gra, ale przy 1000 px to już 272 px, czyli mniej,
+           niż potrzebuje wiersz „ilość plus Do koszyka" (około 290 px).
+           Poniżej tej granicy panel przestaje być panelem, a zaczyna być
+           ściśniętą kolumną z łamiącym się przyciskiem.
+
+           `min(100%, …)` jest konieczne: bez niego granica trzymałaby tor
+           szerszy niż cała siatka na wąskim ekranie, zanim układ zdąży zejść
+           do jednej kolumny. Nadwyżkę oddaje lewy tor, bo on znosi zwężenie
+           bez straty czytelności. */
+        grid-template-columns:
+            minmax(0, var(--q-pdp-glowna, 2fr))
+            minmax(min(100%, var(--q-pdp-panel-min, 19rem)), var(--q-pdp-panel, 1fr));
+        grid-template-areas:
+            'glowna      panel'
+            'zapewnienia panel'
+            'sekcje      panel';
+
+        /* Pierwszy wiersz mierzy się lewym torem, drugi bierze resztę. Bez tego
+           panel — rozciągnięty na oba wiersze — rozdzielałby swoją nadwyżkę
+           wysokości między nie po równo i zwinięty akordeon odjeżdżał od galerii,
+           zawieszony w pustce. */
+        grid-template-rows: auto auto 1fr;
+
+        /* Odstęp między kolumnami jest ustawieniem, nie stałą. */
+        gap: var(--q-space-lg) var(--q-pdp-gap, var(--q-space-lg));
+        align-items: start;
+    }
+
+    .q-pdp__main { grid-area: glowna; }
+    /* Układ dwukolumnowy: nagłówek i galeria stoją w jednym torze. Odstęp
+       między pozycjami ustawia opakowanie, tak samo jak w karcie
+       trzykolumnowej. */
+    .q-pdp__gallery {
+        grid-area: glowna;
+        display: grid;
+        gap: var(--q-space-sm);
+        align-content: start;
+
+        /* Ten tor jest tą samą kartą, co blok główny przy trzech kolumnach:
+           w makiecie galeria stoi na białej karcie z zaokrągleniem, a nie
+           bezpośrednio na tle strony. Wygląd czyta te same ustawienia panelu,
+           więc „Blok główny" w panelu rządzi nim w obu układach. */
+        padding: var(--q-pdp-karta-pad, var(--q-space-md));
+        background: var(--q-pdp-karta-bg, var(--q-surface-raised));
+        border: var(--q-pdp-karta-border, var(--q-blok-ramka));
+        box-shadow: var(--q-pdp-karta-shadow, var(--q-shadow-sm));
+        border-radius: var(--q-pdp-karta-radius, var(--q-radius-lg, var(--q-radius-md)));
+
+        --q-card-bg: var(--q-surface-raised);
+        --q-surface-sunken: var(--q-surface-hover);
+        --q-field-border: var(--q-pdp-karta-pole-kreska, var(--q-border-input));
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-pdp-karta-tabela-kreska, var(--q-border-table));
+    }
+
+    .q-pdp__aside { grid-area: panel; }
+    .q-pdp__reas { grid-area: zapewnienia; }
+
+    /* --- wygląd bloków strony produktu ---
+
+       Każdy blok czyta swoje ustawienie z panelu, a gdy sklep go nie ruszył,
+       bierze wartość domyślną wynikającą z tego, czym ten blok jest.
+
+       Kartami są: blok główny, panel po prawej i akordeon — one dostają tło,
+       kreskę spod przełącznika „Obramowania bloków" i cień spod przełącznika
+       „Cienie". Kartami NIE są: sam panel zakupu wewnątrz kolumny i pas
+       zapewnień — makieta mówi wprost, że panel to ciąg odrębnych informacji,
+       przez które klient schodzi po kolei, a rytm niosą cienkie linie między
+       nimi, nie ściana wokół całości. */
+    .q-pdp__aside,
+    .q-pdp__sections {
+        padding: var(--q-pdp-pad, 0);
+        background: var(--q-pdp-bg, var(--q-surface-raised));
+        border: var(--q-pdp-border, var(--q-blok-ramka));
+        border-radius: var(--q-pdp-radius, var(--q-card-radius));
+        box-shadow: var(--q-pdp-shadow, var(--q-shadow-sm));
+    }
+
+    /* Kreski liczone od tła TEGO bloku.
+       Silnik wypisuje je razem z tłem: zna stopień, na który sklep ustawił blok,
+       i dokłada przeskok wskazany w Wyglądzie. Dzięki temu pole w białej karcie
+       i pole w szarym panelu mają kreskę tak samo widoczną, a nie tę samą barwę
+       co ich własne tło. Bez ustawionego tła bloku zostają wartości globalne.
+
+       Obwódka pola wyboru idzie za kreską pól i musi być przepisana w tym samym
+       bloku: zmienna ustawiona wyżej ma już policzoną wartość z poziomu strony
+       i nie zobaczyłaby kreski tego bloku. */
+    .q-pdp__main {
+        --q-field-border: var(--q-pdp-karta-pole-kreska, var(--q-border-input));
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-pdp-karta-tabela-kreska, var(--q-border-table));
+    }
+
+    .q-pdp__aside {
+        --q-field-border: var(--q-pdp-zakup-pole-kreska, var(--q-border-input));
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-pdp-zakup-tabela-kreska, var(--q-border-table));
+        --q-pdp-pad: var(--q-pdp-zakup-pad, var(--q-space-md));
+        --q-pdp-bg: var(--q-pdp-zakup-bg, var(--q-surface-raised));
+        --q-pdp-border: var(--q-pdp-zakup-border, var(--q-blok-ramka));
+        --q-pdp-radius: var(--q-pdp-zakup-radius, var(--q-card-radius));
+        --q-pdp-shadow: var(--q-pdp-zakup-shadow, var(--q-shadow-sm));
+    }
+
+    .q-pdp__sections {
+        --q-field-border: var(--q-pdp-akordeon-pole-kreska, var(--q-border-input));
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-pdp-akordeon-tabela-kreska, var(--q-border-table));
+        --q-pdp-pad: var(--q-pdp-akordeon-pad, 0);
+        /* Akordeon jest kartą, tak jak blok główny i panel zakupu: w makiecie
+           stoi na białym tle, a nie na tle strony. Wcześniejsza przezroczystość
+           zostawiała same kreski wiszące nad podłożem strony. */
+        --q-pdp-bg: var(--q-pdp-akordeon-bg, var(--q-card-bg));
+        --q-pdp-border: var(--q-pdp-akordeon-border, var(--q-blok-ramka));
+        --q-pdp-radius: var(--q-pdp-akordeon-radius, var(--q-accordion-radius));
+        --q-pdp-shadow: var(--q-pdp-akordeon-shadow, var(--q-shadow-sm));
+    }
+
+    /* Pas zapewnień: skórę dostaje wyłącznie wtedy, gdy sklep świadomie ją ustawi.
+
+       Odstęp między pozycjami strefy ustawia opakowanie, nie sama pozycja — tak
+       samo jak w nagłówku i w galerii. Bez tego hook wpięty pod pasem przylegał
+       do niego bez prześwitu. */
+    .q-pdp__reas {
+        display: grid;
+        gap: var(--q-space-md);
+
+        --q-field-border: var(--q-pdp-zapewnienia-pole-kreska, var(--q-border-input));
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-pdp-zapewnienia-tabela-kreska, var(--q-border-table));
+        padding: var(--q-pdp-zapewnienia-pad, 0);
+        background: var(--q-pdp-zapewnienia-bg, transparent);
+        border: var(--q-pdp-zapewnienia-border, 1px solid transparent);
+        border-radius: var(--q-pdp-zapewnienia-radius, 0);
+        box-shadow: var(--q-pdp-zapewnienia-shadow, none);
+    }
+    .q-pdp__sections { grid-area: sekcje; }
+
+    /* Kreska dzieląca pozycje akordeonu.
+       Sekcja ze szczegółami jedzie w opakowaniu, którego wymaga skrypt produktu
+       PrestaShopa, więc przestaje być rodzeństwem pozostałych pozycji i reguła
+       `item + item` do niej nie dociera. Dlatego kreskę dostaje tu każda
+       pozycja, a traci ją tylko ta, która renderuje się pierwsza — niezależnie
+       od tego, czy leży w akordeonie wprost, czy w opakowaniu. */
+    .q-pdp__sections .q-accordion__item {
+        border-block-start: 1px solid var(--q-accordion-border);
+    }
+
+    .q-pdp__sections > .q-accordion__item:first-child,
+    .q-pdp__sections > :first-child > .q-accordion__item:first-child {
+        border-block-start: 0;
+    }
+
+    /* Tabela w akordeonie to czysta siatka: kreski rysują komórki i na tym koniec.
+       Wypełniony nagłówek narzuca strukturę „pierwsza kolumna to etykieta",
+       której tabela dopasowania, porównania czy wymiarów wcale nie ma. Nagłówek
+       waży tu krojem i grubością, nie płaszczyzną — tak jak w specyfikacji.
+
+       Opakowanie odpowiada wyłącznie za przewijanie w poziomie na wąskim
+       ekranie, więc nie rysuje drugiego obrysu wokół tabeli. Reguła obejmuje
+       każdą tabelę w akordeonie, także przyniesioną przez moduł: z punktu
+       widzenia czytającego to ta sama rzecz co specyfikacja. */
+    .q-pdp__sections .q-table-wrap {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-pdp__sections .q-table,
+    .q-pdp__sections .table {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-pdp__sections .q-table th,
+    .q-pdp__sections .q-table td,
+    .q-pdp__sections .table th,
+    .q-pdp__sections .table td {
+        border: 1px solid var(--q-table-border);
+    }
+
+    /* Ostatni wiersz też ma dolną kreskę. Komponent ją zdejmuje, bo w jego
+       wyglądzie obrys tabeli rysuje opakowanie i druga linia tuż przy nim
+       dublowałaby kreskę. Tutaj opakowanie nie rysuje nic, więc bez tej reguły
+       siatka kończy się w powietrzu. */
+    .q-pdp__sections .q-table tbody tr:last-child td,
+    .q-pdp__sections .table tbody tr:last-child td {
+        border-block-end: 1px solid var(--q-table-border);
+    }
+
+    .q-pdp__sections .q-table th,
+    .q-pdp__sections .table th {
+        background: none;
+        font-family: var(--q-font-heading);
+        color: var(--q-spectable-label);
+    }
+
+    /* --- lewy tor w układzie trzykolumnowym ---
+       Karta z tytułem przez obie kolumny, pod nim galeria i opis obok siebie. */
+
+    .q-pdp__main {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-areas:
+            'tytul   tytul'
+            'galeria info';
+        gap: var(--q-space-md) var(--q-pdp-gap, var(--q-space-lg));
+        align-items: start;
+
+        /* Wygląd bloku: ustawienie z panelu, a gdy sklep go nie ruszył — wartość
+           domyślna tego bloku. Blok główny jest kartą od zawsze, więc dziedziczy
+           tło uniesionej powierzchni, kreskę spod przełącznika „Obramowania
+           bloków" i cień spod przełącznika „Cienie". */
+        padding: var(--q-pdp-karta-pad, var(--q-space-md));
+        background: var(--q-pdp-karta-bg, var(--q-surface-raised));
+        border: var(--q-pdp-karta-border, var(--q-blok-ramka));
+        box-shadow: var(--q-pdp-karta-shadow, var(--q-shadow-sm));
+        border-radius: var(--q-pdp-karta-radius, var(--q-radius-lg, var(--q-radius-md)));
+
+        /* Powierzchnie wewnątrz karty liczą się od jej tła, nie od tła strony —
+           inaczej element „wpuszczony" byłby jaśniejszy od podłoża. */
+        --q-card-bg: var(--q-surface-raised);
+        --q-surface-sunken: var(--q-surface-hover);
+    }
+
+    /* Odstęp między pozycjami nagłówka ustawia opakowanie, nie sama pozycja.
+       Wcześniej niósł go margines oceny, więc każdy element dołożony niżej —
+       hook ze sklepu — przyklejał się do gwiazdek. */
+    .q-pdp__intro {
+        grid-area: tytul;
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    /* Pas pod galerią i opisem, na szerokość obu kolumn. Treść przynosi hook
+       wpięty z panelu, więc żadnego własnego wyglądu tu nie ma: opakowanie
+       wyznacza tylko miejsce w siatce.
+
+       Wiersz jest niejawny, a nie wypisany w `grid-template-areas`. Wiersz
+       wypisany istnieje zawsze, także pusty, i wtedy odstęp przed nim zostawiał
+       martwe miejsce na dole karty przy każdym produkcie bez wpiętego hooka. */
+    .q-pdp__outro { grid-column: 1 / -1; }
+
+    /* Nazwa produktu: stopień z makiety, a nie domyślny dla `h1`.
+       Znacznik jest pierwszym nagłówkiem strony i tak ma zostać, bo tym jest
+       dla wyszukiwarki i dla czytnika ekranu, ale 37 px zabierało pierwszy ekran
+       samą nazwą. W makiecie ma 28 px, a na telefonie 21 px: przy 28 px nazwa
+       łamała się tam na cztery wiersze i zjadała ćwierć ekranu przed zdjęciem. */
+    .q-pdp__name {
+        margin: 0;
+        font-size: var(--q-fs-h3);
+        line-height: var(--q-lh-snug);
+    }
+
+    @media (max-width: 767px) {
+        .q-pdp__name {
+            font-size: var(--q-fs-h5);
+        }
+    }
+    /* Odstęp między pozycjami strefy galerii ustawia opakowanie, nie sama
+       pozycja — tak samo jak w nagłówku i w kolumnie opisu. Bez tego hook
+       wpięty pod pasek miniatur przylegał do niego bez prześwitu.
+
+       Zawężone do `.q-pdp__main .q-pdp__gallery` naumyślnie: ten sam znacznik
+       w układzie dwukolumnowym stoi SAM w torze `glowna` siatki `.q-pdp__grid`
+       (reguła wyżej, `grid-area: glowna`) — ta siatka nie ma obszaru o nazwie
+       `galeria` w ogóle. Bez zawężenia ta reguła (niżej w pliku, więc wygrywała
+       w kaskadzie — oba selektory to zwykła, pojedyncza klasa, ta sama
+       specyficzność) nadpisywała `grid-area` na nieistniejącą nazwę i rozwalała
+       całą siatkę dwukolumnową: pusta kolumna panelu, galeria uciekała w dół
+       strony o tysiące pikseli. Padding/tło/ramka/cień zerowane tu z tego
+       samego powodu — w trzykolumnowym galeria stoi w karcie `.q-pdp__main`,
+       która już JEST kartą (te same tokeny `--q-pdp-karta-*`), więc własna
+       karta galerii dawała kartę w karcie. W dwukolumnowym własna karta
+       zostaje (reguła wyżej, `.q-pdp__gallery` bez zawężenia). */
+    .q-pdp__main .q-pdp__gallery {
+        grid-area: galeria;
+        display: grid;
+        gap: var(--q-space-md);
+        align-content: start;
+
+        padding: 0;
+        background: none;
+        border: 0;
+        box-shadow: none;
+        border-radius: 0;
+    }
+    /* Kolumna opisu jest siatką o dwóch torach, choć prawie wszystko zajmuje
+       oba: dzięki temu para przycisków („Pobierz ofertę" i „Zapytaj specjalistę")
+       staje w jednym wierszu, każdy w swoim torze, i oba mają tę samą szerokość
+       bez liczenia procentów. Rytm bloków daje odstęp siatki, a nie margines
+       sąsiedztwa, więc wiersz z dwoma elementami nie dostaje go podwójnie. */
+    .q-pdp__info {
+        grid-area: info;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-md);
+        align-content: start;
+    }
+
+    .q-pdp__info > .q-pdp__slot {
+        grid-column: 1 / -1;
+    }
+
+    .q-pdp__info > .q-pdp__slot + .q-pdp__slot {
+        margin-block-start: 0;
+    }
+
+    /* Odstęp między blokami kolumny opisu ustawia slot, nie blok. Bez tego
+       plakietki, cechy i blok dodatkowy stały jeden na drugim bez prześwitu:
+       elementy strefy renderowały się bez opakowania, a więc bez rytmu, który
+       w panelu zakupu daje `.q-buy__slot`.
+
+       Reguła sąsiedztwa, żeby pierwszy blok nie odsuwał się od górnej krawędzi
+       kolumny, gdzie odstęp należy do siatki strony, a nie do bloku. */
+    .q-pdp__slot + .q-pdp__slot { margin-block-start: var(--q-space-md); }
+
+    /* Panel jedzie z treścią: przyklejony pod nagłówkiem przez całą długość
+       strony, żeby cena i przycisk zakupu zostały na widoku, gdy klient czyta
+       specyfikację na dole. */
+    .q-pdp__aside {
+        align-self: start;
+        position: sticky;
+        inset-block-start: calc(var(--q-header-h, 4rem) + var(--q-space-md));
+    }
+
+    /* Panel wyższy niż okno — przyklejenie się wyłącza i panel jedzie z treścią.
+       Przyklejony zatrzymywałby się z przyciskiem zakupu pod dolną krawędzią
+       ekranu i nie dało by się do niego dojechać: produkt z ośmioma wariantami
+       i dostosowaniem potrafi przerosnąć niski ekran.
+
+       Klasę przestawia `assets/js/islands/buybox.js`, bo o tym, czy panel się
+       mieści, rozstrzyga zmierzona wysokość, a nie szerokość okna. */
+    .q-pdp__grid.is-tall .q-pdp__aside {
+        position: static;
+    }
+
+    /* --- tablet ---
+       Trzy kolumny nie mieszczą się w czytelnych szerokościach: przy 1000 px
+       każda miałaby po 300 px, czyli za mało i na kwadrat galerii, i na wiersz
+       „ilość + przycisk". Galeria z opisem schodzą pod siebie w lewym torze,
+       panel zostaje obok. */
+    @media (max-width: 1199px) {
+        .q-pdp__main {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-areas:
+                'tytul'
+                'galeria'
+                'info';
+        }
+    }
+
+    /* --- poniżej 992 px ---
+       Panel schodzi pod treść. Dwa tory trzymają się dopóty, dopóki prawy ma
+       sens: przy 768 px zostawało mu 224 px, a sam wiersz „ilość + Do koszyka"
+       potrzebuje około 290. Węższy panel nie jest panelem, tylko ściśniętą
+       kolumną, w której przycisk się łamie. */
+    @media (max-width: 991px) {
+        .q-pdp__grid {
+            grid-template-columns: minmax(0, 1fr);
+            grid-template-areas:
+                'glowna'
+                'zapewnienia'
+                'panel'
+                'sekcje';
+        }
+
+        .q-pdp__aside {
+            position: static;
+        }
+    }
+
+    /* --- telefon ---
+       Panel wchodzi za zapewnieniami, przed akordeonem: cena pod całą
+       specyfikacją byłaby poza zasięgiem kciuka. Dojście do niej z każdego
+       miejsca strony trzyma pasek przy dolnej krawędzi. */
+    @media (max-width: 767px) {
+        .q-pdp__main {
+            padding: var(--q-space-sm);
+        }
+    }
+
+    /* --- krótki opis ---
+       Zdanie wprowadzające, nie treść główna: mniejsze i wyciszone, żeby nie
+       konkurowało z nazwą produktu ani z ceną. Bez własnej reguły dziedziczyło
+       zwykły tekst strony — pełny rozmiar i pełną czerń pisma — przez co czytało
+       się jak akapit opisu, choć jest podpisem pod tytułem.
+
+       Wartości z makiety (`.q-buy__lead`). */
+    .q-pdp__short {
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-body-secondary-color);
+    }
+
+    .q-facts__more {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        margin-block-start: var(--q-space-sm);
+        font-size: var(--q-fs-xs);
+        color: var(--q-link);
+    }
+
+    /* Linie po bokach odnośnika biorą kreskę bloków: to jest ta sama rzecz co
+       obramowanie karty, tylko poprowadzona w poprzek treści, a sklep ustawia
+       ją raz, w sekcji „Obramowania". */
+    .q-facts__more::before,
+    .q-facts__more::after {
+        content: "";
+        flex: 1;
+        block-size: 1px;
+        background: var(--q-border-card);
+    }
+
+    .q-facts__more span {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    /* --- stan magazynu w zestawieniu ---
+       Kropka i słowo, oba w barwie stanu. Kropka jest skrótem dla oka, słowo
+       niesie tę samą treść bez patrzenia na kolor, więc daltonista czyta to
+       samo co reszta. */
+    .q-stock {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-stock__dot {
+        inline-size: 7px;
+        block-size: 7px;
+        border-radius: 50%;
+        background: currentColor;
+        flex: none;
+    }
+
+    .q-stock--in { color: var(--q-stock-in-text); }
+    .q-stock--low { color: var(--q-stock-low-text); }
+    .q-stock--out { color: var(--q-stock-out-text); }
+
+    /* Zapis na powiadomienie przy stanie: cichy odnośnik, nie przycisk.
+       Oprawa przycisku obok słowa stanu wyglądała jak druga czynność główna
+       w wierszu, w którym wszystko inne jest tekstem. */
+    /* Wygląd odnośnika w treści, ten sam co w opisach: pismo takie jak tekst
+       obok, kreska w barwie marki, a pod kursorem całe słowo dostaje tło marki.
+       Deklaracje przepisane z reguły `.q-prose a` w theme.css, żeby oba miejsca
+       nie rozjechały się przy zmianie. Grubszy krój idzie razem z kreską: sama
+       żółta kreska ma na białym 1,43:1 i jest ledwo widoczna. */
+    .q-stock__notify {
+        margin-inline-start: var(--q-space-sm);
+        padding: 0;
+        border: 0;
+        background: none;
+
+        font: inherit;
+        font-weight: var(--q-weight-semibold);
+        color: inherit;
+        cursor: pointer;
+
+        /* Kreska rysowana tłem, a nie podkreśleniem. Podkreślenie ma stałą
+           grubość i nie da się go rozciągnąć, a tutaj to ta sama plama ma
+           urosnąć w górę i stać się tłem napisu. */
+        background-image: linear-gradient(var(--q-fill-primary), var(--q-fill-primary));
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        background-size: 100% 2px;
+
+        transition: background-size 160ms ease-out, color 160ms ease-out;
+    }
+
+    /* Plama rośnie od kreski w górę i na tym koniec. Odsunięcie od napisu
+       robił wcześniej cień o zerowym rozmyciu, ale on obejmuje całą wysokość
+       pola od razu, więc zanim tło doszło do góry, wokół niedomalowanej plamy
+       stała ramka. */
+    .q-stock__notify:hover {
+        color: var(--q-on-fill-primary);
+        background-size: 100% 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-stock__notify {
+            transition: none;
+        }
+    }
+
+    /* --- powiadomienie o dostępności ---
+       Blok modułu `ps_emailalerts` na karcie produktu. Moduł daje treść
+       i zachowanie, motyw daje układ: tytuł, zdanie, pole i przycisk jeden
+       pod drugim, z tym samym rytmem co reszta kolumny. */
+    .q-alerts__title {
+        margin: 0;
+        font-size: var(--q-fs-md);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-heading-color);
+    }
+
+    .q-alerts__note {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-secondary-color);
+    }
+
+    /* Pole i przycisk w jednym wierszu: to jedna czynność, a rozbite na dwa
+       wiersze zabierały w kolumnie tyle miejsca co cały blok cech. Siatka,
+       a nie `flex`, bo tytuł i zdanie nad nimi mają iść przez całą szerokość
+       i zostać tam, gdzie są. */
+    .ps-emailalerts__content {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: var(--q-space-sm);
+        align-items: start;
+    }
+
+    .q-alerts__title,
+    .q-alerts__note,
+    .q-alerts__consent {
+        grid-column: 1 / -1;
+    }
+
+    /* Zdanie stoi tuż pod tytułem, więc odstęp bierze się z siatki, a nie
+       z własnego marginesu. */
+    .q-alerts__note {
+        margin: 0;
+    }
+
+    /* Na wąskim ekranie przycisk z długim napisem nie zmieści się obok pola,
+       więc wraca pod nie. To samo w szufladzie: tam kolumna jest wąska, a miejsca
+       w pionie pod dostatkiem, więc jeden wiersz zostawiał polu 45 px. */
+    @media (max-width: 575px) {
+        .ps-emailalerts__content {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    .q-modal .ps-emailalerts__content {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    /* Tytuł modułu w szufladzie odpada: to samo zdanie stoi już w nagłówku okna,
+       a dwa razy pod sobą wygląda jak usterka. */
+    .q-modal .q-alerts__title {
+        display: none;
+    }
+
+    .q-alerts__message {
+        grid-column: 1 / -1;
+        margin-block-end: 0;
+    }
+
+    /* Etykieta pola siedzi na jego górnej kresce, więc połowa napisu wychodzi
+       ponad pole i zjada odstęp od zdania wyżej. Wiersz z polem dostaje własny
+       odstęp, żeby napis nie stykał się ze zdaniem nad formularzem. */
+    .q-alerts__field {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Uwaga o samym polu stoi pod nim, a nie w pasku pod przyciskiem: dotyczy
+       tego pola, więc ma być tam, gdzie klient właśnie patrzy, i ma rozmiar
+       przypisu, a nie komunikatu o wyniku wysyłki. */
+    .q-alerts__hint {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-field-border-invalid);
+    }
+
+    .q-alerts__consent {
+        margin-block-start: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Logotyp marki w wierszu kodów. Wysokość jednego wiersza tekstu była za mała:
+       logotyp jest znakiem firmowym, a nie ikoną, i przy 28 px nie dawał się
+       rozpoznać. Ograniczamy go wysokością i szerokością kolumny wartości,
+       żeby sklep z dużym plikiem nie rozepchnął zestawienia. */
+    .q-facts__logo {
+        display: block;
+        max-block-size: 2.75rem;
+        max-inline-size: 100%;
+        inline-size: auto;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    /* Kreska bez odnośnika: ta sama linia, którą rysuje odnośnik, w tym samym
+       miejscu i o tej samej wadze. Blok cech kończy się tak samo niezależnie
+       od tego, czy jest dokąd prowadzić. */
+    .q-facts__kreska {
+        margin-block-start: var(--q-space-sm);
+        block-size: 1px;
+
+        /* Ta sama barwa, co linie przy odnośniku obok. `--q-border-hairline`
+           istnieje tylko w makiecie, w sklepie silnik go nie wypisuje, więc
+           kreska była przezroczysta. */
+        background: var(--q-border-card);
+    }
+
+    .q-facts__more:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* Strzałka w DÓŁ, nie w bok: ten odnośnik nie prowadzi na inną stronę, tylko
+       przewija do sekcji niżej na tej samej. Strzałka w bok obiecywałaby przejście,
+       a klient wróciłby zdziwiony, że nadal jest na karcie produktu. */
+    .q-facts__chev {
+        inline-size: 12px;
+        block-size: 12px;
+        flex: none;
+    }
+
+    /* --- nota o najniższej cenie ---
+       Osobny wiersz pod blokiem ceny. Drobny druk w barwie tekstu pomocniczego:
+       to informacja wymagana przepisem, a nie argument sprzedażowy — ma być
+       do przeczytania, a nie do zauważenia przed ceną. */
+    .q-buy__omnibus {
+        margin-block-start: var(--q-space-xs);
+        margin-block-end: 0;
+
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Ikona z wyjaśnieniem i procent dochodzą tylko wtedy, gdy sklep je włączy —
+       po instalacji nota jest samym wierszem tekstu. */
+    .q-omnibus__icon {
+        display: inline-flex;
+        vertical-align: -2px;
+        inline-size: 1em;
+        block-size: 1em;
+        color: var(--q-meta-color);
+    }
+
+    .q-omnibus__svg {
+        inline-size: 100%;
+        block-size: 100%;
+    }
+
+    /* Wyzwalacz wykresu — cokolwiek nim jest — ma wyglądać na klikalne. */
+    .q-buy__omnibus[role="button"],
+    .q-omnibus__icon[role="button"] {
+        cursor: pointer;
+    }
+
+    .q-buy__omnibus[role="button"]:hover,
+    .q-omnibus__icon[role="button"]:hover {
+        color: var(--q-body-color);
+    }
+
+    .q-omnibus__procent {
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Okno wykresu: płótno musi mieć wysokość, bo Chart.js liczy ją z rodzica,
+       a pusty dialog nie ma żadnej. */
+    .q-modal__body > canvas {
+        inline-size: 100%;
+        block-size: 260px;
+    }
+
+    .q-omnibus__pusto {
+        margin: 0;
+        padding-block: var(--q-space-lg);
+        text-align: center;
+        color: var(--q-meta-color);
+    }
+}

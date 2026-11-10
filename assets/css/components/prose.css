@@ -1,0 +1,95 @@
+@layer quince.components {
+    /*
+       Treść redakcyjna: opis produktu i wszystko, co sprzedawca wpisuje
+       edytorem. Znaczniki przychodzą z edytora, więc styl musi siedzieć na
+       samych elementach, a nie na klasach — sprzedawca wpisze `<h3>`, `<ul>`
+       i `<table>`, i nie doda do nich niczego.
+
+       Przeniesione z makiety strony produktu (`.q-prose`). Bez granicy
+       szerokości wiersza z makiety: o długość wiersza decyduje tu układ strony,
+       czyli szerokość strony i podział galeria/panel zakupu ustawiony w panelu,
+       a narzucanie własnej granicy zostawiałoby pustą kolumnę po prawej, tak jak
+       przy tabelach w akordeonie.
+    */
+
+    .q-prose {
+        font-size: var(--q-fs-base);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-body-color);
+    }
+
+    /* Nagłówki w treści obejmują h3 i h4: poziom w znacznikach wynika z konspektu
+       strony (pod h2 sekcji musi iść h3), a wygląd ma zostać ten sam niezależnie
+       od poziomu. Treść wpisuje sprzedawca i nie ma powodu, żeby wybór poziomu
+       zmieniał mu skalę pisma. Bez tej reguły h3 brało 28 px ze skali strony,
+       czyli prawie dwa razy więcej niż tytuł sekcji, w której stoi. */
+    .q-prose :is(h2, h3, h4, h5, h6) {
+        font-size: var(--q-fs-h6);
+        margin-block: var(--q-space-md) var(--q-space-xs);
+    }
+
+    /* Nagłówek na początku treści nie odsuwa się od góry: odstęp nad nim
+       niesie wtedy ciało sekcji, a podwójny robi dziurę pod tytułem. */
+    .q-prose > :first-child {
+        margin-block-start: 0;
+    }
+
+    .q-prose > :last-child {
+        margin-block-end: 0;
+    }
+
+    .q-prose :is(ul, ol) {
+        margin-block: var(--q-space-sm);
+        padding-inline-start: var(--q-space-lg);
+    }
+
+    .q-prose li + li {
+        margin-block-start: 2px;
+    }
+
+    /* Tabela wpisana w opis dostaje tę samą czystą siatkę co specyfikacja:
+       kreski rysują komórki i na tym koniec. Wypełniony nagłówek narzucałby
+       strukturę „pierwsza kolumna to etykieta", której tabela w opisie wcale
+       nie musi mieć. */
+    .q-prose table {
+        inline-size: 100%;
+        border-collapse: collapse;
+        margin-block: var(--q-space-md);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-prose :is(th, td) {
+        padding: var(--q-space-sm) var(--q-space-md);
+        border: 1px solid var(--q-table-border);
+        text-align: start;
+        vertical-align: top;
+    }
+
+    .q-prose th {
+        background: none;
+        font-family: var(--q-font-heading);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-spectable-label);
+    }
+
+    /* Cytat blokowy: kreska w barwie marki z boku i wcięcie. Sprzedawca ma go
+       w edytorze i używa do ostrzeżeń oraz do zdań wyjętych z opisu, a bez
+       żadnego znaku czytał się jak kolejny akapit.
+
+       Kreska, a nie tło ani cudzysłów: tło robiłoby z akapitu drugi blok
+       i konkurowało z kartami sekcji, a znak cudzysłowu przy ostrzeżeniu
+       („Praca bez środków ochrony grozi urazem") sugerowałby czyjąś wypowiedź. */
+    .q-prose blockquote {
+        margin-block: var(--q-space-md);
+        margin-inline: 0;
+        padding-inline-start: var(--q-space-md);
+        border-inline-start: 2px solid var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    /* Obraz w treści nie wychodzi poza kolumnę i nie przykleja się do tekstu. */
+    .q-prose img {
+        margin-block: var(--q-space-md);
+        border-radius: var(--q-radius-md);
+    }
+}

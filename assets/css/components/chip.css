@@ -1,0 +1,87 @@
+/* ===================================================================
+   Quince — chip filtra
+
+   Wybrana wartość filtra na listingu oraz przełącznik w panelu filtrów.
+   Pięć ról z mapy: tło, tło stanu aktywnego, napis, napis aktywny, obramowanie.
+
+   Chip aktywny niesie informację także kształtem i krzyżykiem do usunięcia,
+   nie wyłącznie kolorem — inaczej osoba nierozróżniająca barw nie wie,
+   które filtry są włączone.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        /* Stała wysokość, nie wynikająca z wielkości pisma: pigułka jest celem
+           do kliknięcia i ma wszędzie ten sam wzrost, niezależnie od tego, czy
+           niesie jedno słowo, czy zakres cen. */
+        min-block-size: 32px;
+        padding: 3px var(--q-space-sm);
+
+        /* Zakres ceny („500 - 2 000 zł") to jedna wartość i ma się nie łamać
+           w połowie na wąskiej belce. */
+        white-space: nowrap;
+
+        background: var(--q-chip-bg);
+        /* Bez obrysu: pigułka odcina się samą barwą wypełnienia, tak jak
+           w makiecie. Kreska wokół jasnego wypełnienia dawała drugi kontur
+           tuż obok krawędzi tła i pigułka czytała się jak mały przycisk. */
+        border: 0;
+        border-radius: var(--q-radius-pill);
+
+        color: var(--q-chip-label);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-tight);
+    }
+
+    /* Bez obrysu (`border: 0` wyżej) kreska na hover nic nie dawała — sama
+       zmiana koloru obramowania na przezroczystej krawędzi jest niewidoczna.
+       Przyciemnienie tła, o stopień ciemniejszy niż `--q-chip-bg`, daje
+       realną, widoczną reakcję. */
+    .q-chip:hover {
+        background: var(--q-surface-primary-active);
+    }
+
+    .q-chip[aria-pressed="true"],
+    .q-chip--active {
+        background: var(--q-chip-bg-active);
+        border-color: var(--q-chip-bg-active);
+        color: var(--q-chip-label-active);
+    }
+
+    .q-chip:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Krzyżyk usuwający filtr. Osobny cel dotykowy wewnątrz chipa. */
+    .q-chip__remove {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: 20px;
+        block-size: 20px;
+
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: currentColor;
+        cursor: pointer;
+        opacity: 0.7;
+    }
+
+    .q-chip__remove:hover {
+        opacity: 1;
+    }
+
+    .q-chip__count {
+        color: currentColor;
+        opacity: 0.7;
+        font-variant-numeric: tabular-nums;
+    }
+}

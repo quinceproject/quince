@@ -1,0 +1,209 @@
+@layer quince.components {
+    /*
+       Karuzela zajawek produktu: akcesoria, ostatnio oglądane, polecane.
+
+       Przewijana taśma, nie siatka: na wąskim ekranie karty nie mają układać
+       się jedna pod drugą (to już robi listing), tylko jechać w bok,
+       z podpowiedzią w postaci ucinanej karty na krawędzi.
+
+       Reguły przepisane z makiety strony produktu, a ta jest portem
+       pasa zajawek z dzisiejszego sklepu.
+    */
+
+    /* Szerokość karty liczy się od SEKCJI, nie od taśmy: taśma bywa węższa,
+       kiedy dzieli miejsce z przypiętym banerem, a ten sam produkt ma mieć
+       wszędzie tę samą szerokość. */
+    .q-carousel {
+        container-type: inline-size;
+
+        /* Odstęp od tego, co stoi wyżej, niesie sama sekcja: strona główna
+           i karta produktu stawiają te bloki w różnych opakowaniach, a każdy
+           z nich może zniknąć. */
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* W strefach karty produktu odstęp między sekcjami daje siatka strefy,
+       więc sekcja oddaje jej swój margines. */
+    .q-pdp__dol > .q-carousel,
+    .q-pdp__zestawy > .q-carousel {
+        margin-block-start: 0;
+    }
+
+    .q-carousel__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+    }
+
+    /* Tytuł karuzeli jest nagłówkiem sekcji i ma ten sam stopień co nagłówek
+       zestawów: rzeczy tej samej rangi wyglądają tak samo. Odstęp pod nim
+       niesie rząd z tytułem i strzałkami, więc sam tytuł go oddaje. */
+    .q-carousel__title {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        margin: 0;
+        font-size: var(--q-fs-h4);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-carousel__title .q-section-title__ico {
+        inline-size: 1.25rem;
+        block-size: 1.25rem;
+        flex: none;
+        color: var(--q-fill-primary);
+    }
+
+    /* Odnośnik do pełnej listy i strzałki trzymają się razem przy prawej
+       krawędzi nagłówka. */
+    .q-carousel__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-md);
+        flex: none;
+    }
+
+    /* Wyjście do pełnej listy jest cichym odnośnikiem, nie przyciskiem: stało
+       dotąd pod taśmą jako przycisk konturowy i ważyło tyle, co zakup. */
+    .q-carousel__link {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-meta-color);
+        white-space: nowrap;
+    }
+
+    .q-carousel__link:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* Napis nagłówka jako odnośnik wygląda jak nagłówek, a pod kursorem
+       zmienia barwę. Podkreśleń w projekcie nie ma. */
+    .q-carousel__title-link {
+        color: inherit;
+    }
+
+    .q-carousel__title-link:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* Telefon: odnośnik do pełnej listy znika, bo zabierał połowę wiersza
+       nagłówka. Jego rolę przejmuje napis nagłówka. */
+    @media (max-width: 767px) {
+        .q-carousel__link {
+            display: none;
+        }
+    }
+
+    .q-carousel__nav {
+        display: flex;
+        gap: var(--q-space-xs);
+    }
+
+    /* Zdanie pod nagłówkiem, np. ile brakuje do darmowej dostawy. Stoi między
+       nagłówkiem a taśmą i zabiera odstęp nagłówka, żeby oba razem trzymały
+       ten sam rytm, co sam nagłówek. */
+    .q-carousel__note {
+        margin: calc(var(--q-space-sm) * -1) 0 var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-secondary-color);
+    }
+
+    /* Strzałki gasną na krańcach taśmy: inaczej klika się w martwy przycisk
+       i nie wiadomo, czy taśma się zacięła, czy skończyła. */
+    .q-carousel__arrow {
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        display: grid;
+        place-items: center;
+        padding: 0;
+
+        background: var(--q-surface-raised);
+        color: var(--q-text-body);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+        cursor: pointer;
+    }
+
+    .q-carousel__arrow:hover:not(:disabled) {
+        border-color: var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    .q-carousel__arrow:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    .q-carousel__arrow:disabled {
+        opacity: .35;
+        cursor: default;
+    }
+
+    .q-carousel__track {
+        display: flex;
+        gap: var(--q-space-md);
+
+        overflow-x: auto;
+        scroll-snap-type: inline mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+
+        /* Zapas w pionie na cień kart, zdjęty z powrotem ujemnym marginesem.
+           `overflow-x: auto` nie przycina tylko w poziomie: gdy jedna oś
+           przestaje być `visible`, druga też. Tor ścinał więc cień dokładnie
+           na obrysie karty.
+
+           To samo w poziomie, dla pierwszej i ostatniej karty. Zapas równa się
+           wcięciu pojemnika strony, więc tor sięga dokładnie tam, gdzie kończy
+           się margines strony. `scroll-padding-inline` liczy przyciąganie kart
+           od wewnętrznej krawędzi toru, nie od jego pudełka. */
+        padding-block: var(--q-space-md);
+        margin-block: calc(var(--q-space-md) * -1);
+        padding-inline: var(--q-space-md);
+        margin-inline: calc(var(--q-space-md) * -1);
+        scroll-padding-inline: var(--q-space-md);
+    }
+
+    .q-carousel__track::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Szerokość pozycji liczona z tej samej gałki, co siatka kategorii:
+       karuzela ma pokazywać tyle zajawek, ile listing, inaczej ten sam produkt
+       ma na dwóch stronach dwa różne rozmiary. Wzór to podział szerokości
+       sekcji na N części pomniejszony o przerwy między nimi. */
+    .q-carousel__item {
+        --q-kol: var(--q-grid-columns, 4);
+
+        flex: 0 0 calc(100cqi / var(--q-kol)
+                       - var(--q-space-md) * (var(--q-kol) - 1) / var(--q-kol));
+        min-inline-size: 0;
+        scroll-snap-align: start;
+    }
+
+    @media (max-width: 1199px) {
+        .q-carousel__item {
+            flex-basis: calc(33.333cqi - var(--q-space-md) * 0.67);
+        }
+    }
+
+    /* Telefon: karta zajmuje dwie trzecie ekranu, a kawałek następnej wystaje
+       zza krawędzi i mówi, że taśma jedzie dalej. Strzałki znikają, bo taśmę
+       przesuwa się palcem. */
+    @media (max-width: 767px) {
+        .q-carousel__item {
+            flex-basis: 68%;
+        }
+
+        .q-carousel__nav {
+            display: none;
+        }
+    }
+}

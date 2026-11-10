@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+
+      <!-- Panel klienta (my-account.tpl): napisy dopisane przez Quince przy
+           budowie pulpitu — powitanie, kafle statystyk, opisy kart, sekcja
+           ostatnich zamówień. Reszta domeny (Orders, Addresses, Details…)
+           jest już w rdzeniu. -->
+
+      <trans-unit id="quince.account.welcome" resname="Welcome, %firstname%!">
+        <source>Welcome, %firstname%!</source>
+        <target>Witaj, %firstname%!</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.my_account" resname="My account">
+        <source>My account</source>
+        <target>Moje konto</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.active_vouchers" resname="Active vouchers">
+        <source>Active vouchers</source>
+        <target>Aktywne kupony</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.order_history_desc" resname="Order history, package tracking">
+        <source>Order history, package tracking</source>
+        <target>Historia zamówień, śledzenie paczek</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.identity_desc" resname="Name, e-mail, password">
+        <source>Name, e-mail, password</source>
+        <target>Imię, e-mail, hasło</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.addresses_desc" resname="Shipping and billing addresses">
+        <source>Shipping and billing addresses</source>
+        <target>Adresy dostawy i faktury</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.vouchers_desc" resname="Your discount codes">
+        <source>Your discount codes</source>
+        <target>Twoje kody rabatowe</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.returns_desc" resname="Report a product return">
+        <source>Report a product return</source>
+        <target>Zgłoś zwrot produktu</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.order_slip_desc" resname="Downloadable credit slip documents">
+        <source>Downloadable credit slip documents</source>
+        <target>Dokumenty korekt do pobrania</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.recent_orders" resname="Recent orders">
+        <source>Recent orders</source>
+        <target>Ostatnie zamówienia</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.view_all" resname="View all">
+        <source>View all</source>
+        <target>Zobacz wszystkie</target>
+      </trans-unit>
+
+      <!-- Podpisy pod odnośnikami modułów (lista życzeń, RODO, powiadomienia)
+           w siatce kart panelu — ten sam styl co opisy pozostałych kart. -->
+
+      <trans-unit id="quince.account.wishlist_desc" resname="Products saved for later">
+        <source>Products saved for later</source>
+        <target>Produkty zapisane na później</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.gdpr_desc" resname="Request a copy of your personal data">
+        <source>Request a copy of your personal data</source>
+        <target>Pobierz swoje dane osobowe</target>
+      </trans-unit>
+
+      <trans-unit id="quince.account.emailalerts_desc" resname="Product availability notifications">
+        <source>Product availability notifications</source>
+        <target>Powiadomienia o dostępności produktów</target>
+      </trans-unit>
+
+      <!-- Podgląd zamówienia (order-detail.tpl): nagłówek, pasek informacji,
+           sekcje boczne. Reszta domeny (Date, Payment, Status, Total,
+           Quantity, Order reference, Order history, Reorder, Messages,
+           Order status…) jest już w rdzeniu pod tą samą domeną. -->
+
+      <trans-unit id="quince.order.title" resname="Order %reference%">
+        <source>Order %reference%</source>
+        <target>Zamówienie %reference%</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.products_count" resname="Products (%count%)">
+        <source>Products (%count%)</source>
+        <target>Produkty (%count%)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.download_invoice" resname="Download invoice">
+        <source>Download invoice</source>
+        <target>Pobierz fakturę</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.delivery_address" resname="Delivery address">
+        <source>Delivery address</source>
+        <target>Adres dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.invoice_address" resname="Invoice address">
+        <source>Invoice address</source>
+        <target>Adres faktury</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.shipment_tracking" resname="Shipment tracking details">
+        <source>Shipment tracking details</source>
+        <target>Śledzenie przesyłki</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.track_with" resname="Track with %carrier_name%">
+        <source>Track with %carrier_name%</source>
+        <target>Śledź na %carrier_name%</target>
+      </trans-unit>
+
+      <trans-unit id="quince.order.message_placeholder" resname="Write a message to the seller...">
+        <source>Write a message to the seller...</source>
+        <target>Napisz wiadomość do sprzedawcy...</target>
+      </trans-unit>
+
+      <!-- Historia zamówień (history.tpl): podpowiedź pod tabelą. -->
+
+      <trans-unit id="quince.history.reorder_hint" resname="To reorder the same products, open the order details and click &quot;Reorder&quot;.">
+        <source>To reorder the same products, open the order details and click "Reorder".</source>
+        <target>Aby ponownie zamówić te same produkty, otwórz szczegóły zamówienia i kliknij „Zamów ponownie”.</target>
+      </trans-unit>
+
+      <!-- Dane osobowe (customer-form.tpl, sekcje na stronie identity): -->
+
+      <trans-unit id="quince.identity.basic_info" resname="Basic information">
+        <source>Basic information</source>
+        <target>Informacje podstawowe</target>
+      </trans-unit>
+
+      <trans-unit id="quince.identity.preferences" resname="Preferences">
+        <source>Preferences</source>
+        <target>Preferencje</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

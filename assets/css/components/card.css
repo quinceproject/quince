@@ -1,0 +1,48 @@
+/* ===================================================================
+   Quince — karta
+
+   Powierzchnia zbiorcza dla treści: blok w kolumnie bocznej, sekcja konta
+   klienta, podsumowanie koszyka. Cztery role z mapy.
+
+   Karta produktu ma własny arkusz, bo poza powierzchnią ma też zachowania
+   listingowe — obszar zdjęcia, plakietki, reakcję na szerokość kontenera.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-card {
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+    }
+
+    .q-card__header {
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-card__title {
+        margin: 0;
+        font-size: var(--q-fs-h6);
+    }
+
+    .q-card__body {
+        padding: var(--q-space-md);
+    }
+
+    .q-card__footer {
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* Karta klikalna w całości — np. kafel kategorii. Cień pojawia się
+       dopiero pod kursorem, żeby lista kart nie wyglądała jak stos. */
+    .q-card--interactive {
+        transition: box-shadow 200ms ease-out;
+    }
+
+    .q-card--interactive:hover {
+        background: var(--q-card-bg-hover);
+        box-shadow: var(--q-shadow-md);
+    }
+}

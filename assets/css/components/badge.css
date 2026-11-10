@@ -1,0 +1,85 @@
+/* ===================================================================
+   Quince — plakietki produktu
+
+   Pięć rodzajów z mapy: rabat, nowość, bestseller, zestaw, wyprzedaż.
+   Każdy ma parę tło + napis, liczoną przez silnik z gwarantowanym
+   kontrastem — plakietka nigdy nie wyjdzie nieczytelna, niezależnie od
+   koloru marki i promocji.
+
+   PrestaShop 9.2 rozszerzył stany produktu do sześciu: new, used,
+   refurbished oraz nowe open_box, damaged, new_with_defects. Stan produktu
+   to co innego niż plakietka handlowa, więc dostaje własny, neutralny
+   wariant — nie konkuruje o uwagę z rabatem.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        padding-inline: var(--q-space-sm);
+        padding-block: 2px;
+
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-card);
+        white-space: nowrap;
+    }
+
+    /* Plakietki na stronie produktu: wiersz w kolumnie obok zdjęcia, zawijany.
+       Na kafelku ta sama lista leży NA zdjęciu i ma własną klasę — patrz
+       `.q-pcard__badges` w product-card.css.
+
+       Bez własnego odsunięcia: kolumna z plakietkami i kadr zdjęcia zaczynają
+       się na tej samej wysokości, więc równają się same. */
+    .q-pdp__badges {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-badge--discount {
+        background: var(--q-badge-discount-bg);
+        color: var(--q-badge-discount-label);
+    }
+
+    .q-badge--new {
+        background: var(--q-badge-new-bg);
+        color: var(--q-badge-new-label);
+    }
+
+    .q-badge--bestseller {
+        background: var(--q-badge-bestseller-bg);
+        color: var(--q-badge-bestseller-label);
+    }
+
+    .q-badge--bundle {
+        background: var(--q-badge-bundle-bg);
+        color: var(--q-badge-bundle-label);
+    }
+
+    .q-badge--sale {
+        background: var(--q-badge-sale-bg);
+        color: var(--q-badge-sale-label);
+    }
+
+    /* --- stan produktu ---
+       Sześć wartości z PrestaShopa 9.2. Celowo neutralne: to informacja
+       o towarze, nie zachęta handlowa. Sprzedawca sprzętu używanego ma
+       oznaczyć stan, nie krzyczeć nim. */
+    .q-badge--condition {
+        background: var(--q-surface-sunken);
+        color: var(--q-text-muted);
+        border: 1px solid var(--q-border-subtle);
+        font-weight: var(--q-weight-medium);
+    }
+}

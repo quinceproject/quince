@@ -1,0 +1,911 @@
+/* ===================================================================
+   Quince — nagłówek
+
+   Znak firmowy, wyszukiwanie i akcje klienta. Projekt: widok nagłówka.
+
+   Stylistyka przeniesiona z Flavora (style nagłówka i listy rozwijanej)
+   i wyrażona tokenami: tam wartości stoją wpisane w arkuszu, tutaj każda wskazuje
+   rolę, więc zmienia się razem z ustawieniami sklepu — także tam, gdzie pas
+   nagłówka jest ciemny albo w barwie marki, czego Flavor nie przewidywał.
+
+   Kolejność elementów w kodzie jest ustalona raz: znak firmowy, wyszukiwanie,
+   akcje. Tą kolejnością idzie tabulator i czytnik ekranu.
+
+   Tokeny komponentu (--q-header-*, --q-action-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Nagłówek stoi WYŻEJ niż pas nawigacji, choć jest nad nim w kodzie: panel
+       konta wysuwa się poniżej nagłówka i musi zakryć pas, a nie chować się pod
+       nim. Na telefonie kolejność się odwraca — patrz próg 767 px. */
+    .q-header {
+        position: relative;
+        z-index: 42;
+        background: var(--q-header-bg);
+        color: var(--q-header-label);
+    }
+
+    /* Nagłówek zostający przy górnej krawędzi. Sklep decyduje o tym w ustawieniach,
+       bo cena jest realna: na telefonie to pas ekranu zabrany treści. */
+    .q-header--sticky {
+        position: sticky;
+        inset-block-start: 0;
+    }
+
+    .q-header__inner {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-md);
+
+        inline-size: 100%;
+        max-inline-size: var(--q-container);
+        margin-inline: auto;
+        /* Ten sam gutter-tylko-gdy-trzeba co `.q-container` w theme.css —
+           inaczej margines z wyśrodkowania i ten padding doliczałyby się
+           do siebie, gdy okno jest szersze od pojemnika. */
+        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        padding-block: var(--q-header-pad-block);
+    }
+
+    /* --- znak firmowy --- */
+
+    .q-header__logo {
+        display: inline-flex;
+        align-items: center;
+        flex: none;
+
+        font-family: var(--q-font-heading);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        color: var(--q-header-label);
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    /* Wysokość znaku firmowego jest ustawieniem sklepu — nagłówek wpisuje ją
+       w token przy elemencie, a szerokość wynika z pliku. */
+    .q-header__logo img {
+        display: block;
+        block-size: var(--q-header-logo-h);
+        inline-size: auto;
+        max-inline-size: 100%;
+    }
+
+    /* Na stronie głównej znak firmowy jest nagłówkiem pierwszego stopnia — to
+       wymóg struktury dokumentu, nie decyzja o wyglądzie, więc h1 nie wnosi
+       tu żadnych własnych odstępów ani rozmiaru. */
+    .q-header__logo-h1 {
+        display: flex;
+        flex: none;
+        margin: 0;
+        font-size: inherit;
+        line-height: inherit;
+    }
+
+    /* --- wyszukiwanie ---
+       Pole stoi pośrodku wolnej przestrzeni, a nie przy znaku firmowym: odstępy
+       automatyczne po obu stronach dzielą nadmiar po równo, więc zostaje na środku
+       niezależnie od tego, jak szeroki jest znak i ile jest akcji. Powyżej 600 px
+       pole nie mieści więcej frazy, a tylko rozciąga nagłówek. */
+    .q-header__search {
+        flex: 1;
+        min-inline-size: 0;
+        max-inline-size: var(--q-header-search-max);
+        margin-inline: auto;
+    }
+
+    .q-search {
+        position: relative;
+        display: flex;
+        align-items: stretch;
+        inline-size: 100%;
+        block-size: var(--q-header-control-h);
+
+        background: var(--q-search-bg);
+        border: 1px solid var(--q-search-border);
+        border-radius: var(--q-field-radius);
+    }
+
+    .q-search__input {
+        flex: 1;
+        min-inline-size: 0;
+        padding-inline: var(--q-field-pad-inline);
+        border: 0;
+        background: none;
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        color: var(--q-search-fg);
+    }
+
+    /* Krzyżyk czyszczący i ozdobniki, które przeglądarka sama dokłada do pola
+       typu `search`. Rysuje je silnik przeglądarki własną barwą — niebieską,
+       niezależnie od ustawień sklepu — i nie da się ich pomalować. Wchodzą
+       w pole dopiero po wpisaniu znaku, więc pokazują się w chwili, gdy nikt
+       ich nie zamawiał. Zdejmujemy je: w polu nie ma stać znak spoza projektu. */
+    .q-search__input::-webkit-search-cancel-button,
+    .q-search__input::-webkit-search-decoration,
+    .q-search__input::-webkit-search-results-button {
+        appearance: none;
+    }
+
+    .q-search__input::placeholder {
+        color: var(--q-search-placeholder);
+    }
+
+    .q-search__input:focus-visible {
+        outline: none;
+    }
+
+    /* Obwódka ogniska na całej kontrolce, nie na samym polu: klient widzi
+       zaznaczone to, co obsługuje, a nie jego wycinek. */
+    .q-search:has(.q-search__input:focus-visible) {
+        border-color: var(--q-field-border-focus);
+        outline: 2px solid var(--q-field-border-focus);
+        outline-offset: -1px;
+    }
+
+    /* Zakres stoi między polem a lupą. Po lewej zabierałby pierwsze miejsce
+       w kontrolce, a klient zaczyna od pisania, nie od wybierania gdzie.
+
+       Lista otwiera się względem samego zakresu, a nie całej kontrolki: wychodzi
+       spod przycisku, który ją rozwinął, i jego prawą krawędzią jest zakończona.
+       Liczona od kontrolki kończyłaby się pod lupą, czyli pod czymś, co z listą
+       nie ma nic wspólnego. */
+    .q-search__scope-wrap {
+        position: relative;
+        display: flex;
+        flex: none;
+    }
+
+    /* Zakres stoi w środku ramki pola, więc jego dół wypada o grubość tej ramki
+       wyżej niż dół całej kontrolki. Bez tej poprawki lista zaczynałaby się nad
+       dolną krawędzią pola i zasłaniała ją; z nią styka się z nią dokładnie tak
+       jak lista podpowiedzi, która wisi wprost na kontrolce. */
+    .q-search__scope-wrap .q-dropdown {
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+        inset-block-start: calc(100% + 1px);
+    }
+
+    /* Szerokość zablokowana na najdłuższej pozycji listy — wylicza ją wyspa
+       header.js. Bez tego wybór dłuższej nazwy zwęża pole wyszukiwania
+       i kontrolka skacze pod kursorem. */
+    .q-search__scope {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 6px;
+
+        min-inline-size: var(--q-search-scope-w, auto);
+        padding-inline: var(--q-space-sm);
+
+        border: 0;
+        border-inline-start: 1px solid var(--q-search-border);
+        /* Zakres stoi wewnątrz pola i ma własne tło o jeden krok od kartki —
+           tyle, żeby było widać, że to osobna kontrolka, a nie miejsce do pisania. */
+        background: var(--q-search-sunken);
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        color: var(--q-search-placeholder);
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .q-search__scope:hover {
+        color: var(--q-search-fg);
+    }
+
+    /* Lupa domyka kontrolkę, więc bierze jej zaokrąglenie od strony końca. */
+    .q-search__submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: var(--q-header-control-h);
+        flex: none;
+
+        border: 0;
+        border-start-end-radius: var(--q-field-radius);
+        border-end-end-radius: var(--q-field-radius);
+        /* Wyróżnienie pasa, tak samo jak koszyk i katalog. Lupa stoi wprawdzie
+           w białym polu, ale jest przyciskiem tego samego nagłówka — na pasie
+           w barwie marki reszta przycisków robi się ciemna i sama lupa zostawała
+           wtedy jedyną żółtą bryłą w wierszu. */
+        background: var(--q-header-solid);
+        color: var(--q-header-on-solid);
+        cursor: pointer;
+    }
+
+    .q-search__submit:hover {
+        background: var(--q-header-solid-hover);
+        color: var(--q-header-on-solid-hover);
+    }
+
+    /* --- akcje klienta --- */
+
+    .q-header__actions {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        flex: none;
+    }
+
+    .q-action {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+
+        block-size: var(--q-action-h);
+        padding-inline: var(--q-space-sm);
+        border: 0;
+        border-radius: var(--q-action-radius);
+        background: none;
+
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-header-label);
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    /* Tło pod kursorem budowane z barw samego pasa, a nie z powierzchni strony:
+       nagłówek bywa jasny, ciemny albo w barwie marki, a jasne tło działałoby
+       tylko w pierwszym przypadku. */
+    .q-action:hover {
+        background: var(--q-header-hover);
+        color: var(--q-header-label-hover);
+    }
+
+    .q-action__icon {
+        inline-size: 21px;
+        block-size: 21px;
+        flex: none;
+    }
+
+    /* Podpis przy ikonie znika pierwszy przy zwężaniu — ikona koszyka jest
+       rozpoznawalna, a nazwa zabiera miejsce potrzebne wyszukiwarce. */
+    .q-action__label {
+        white-space: nowrap;
+    }
+
+    /* Licznik stoi za podpisem, a nie nad ikoną. Nad ikoną ma sens dopiero wtedy,
+       gdy podpisu nie ma — inaczej ląduje na literach sąsiedniej akcji. */
+    .q-action__count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        min-inline-size: 17px;
+        block-size: 17px;
+        padding-inline: 5px;
+        margin-inline-start: 2px;
+
+        /* Licznik leży wprost na pasie, więc bierze wyróżnienie pasa. Barwa marki
+           wpisana wprost znikała na nagłówku ustawionym w tej samej barwie.
+           Wyjątkiem jest licznik w koszyku — ten stoi na przycisku, nie na pasie,
+           i ma własną regułę niżej. */
+        background: var(--q-header-solid);
+        color: var(--q-header-on-solid);
+        border-radius: var(--q-radius-pill);
+        font-size: 11px;
+        font-weight: var(--q-weight-bold);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Pusty licznik znika: kółko z zerem przy pustym koszyku niczego nie mówi,
+       a element musi zostać w kodzie, bo skrypt wpisuje w niego liczbę po
+       dodaniu produktu. */
+    .q-action__count:empty {
+        display: none;
+    }
+
+    /* Akcja z rozwijaną listą — konto. Panel wisi pod przyciskiem, więc kontener
+       musi być punktem odniesienia. Nic poza tym: o odstęp między panelem a polem
+       wyszukiwania dba różnica wysokości, nie pozycjonowanie. */
+    /* Licznik siedzi NA ikonie, nie za podpisem: w wierszu rozpychał akcję i
+       czytał się jak część nazwy. Kreska w barwie pasa odcina krążek od ikony
+       pod nim — bez niej cyfra zlewa się z kreską ikony. */
+    .q-header__actions .q-action .q-action__count {
+        position: absolute;
+        inset-block-start: 4px;
+        inset-inline-start: calc(var(--q-space-sm) + 10px);
+        margin-inline-start: 0;
+
+        min-inline-size: 18px;
+        block-size: 18px;
+        padding-inline: 3px;
+
+        border: 2px solid var(--q-band-header-bg);
+        font-size: 10px;
+        line-height: 1;
+    }
+
+    .q-action-wrap {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .q-action-wrap .q-dropdown {
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+
+        /* Karta zaczyna się w połowie odstępu między dnem wiersza a pasem
+           nawigacji — tam kończy się rozciągnięty przycisk konta (patrz jego
+           ujemny odstęp). Do dna wiersza przyklejałaby się do wyszukiwarki,
+           do dna pasa — do pasa nawigacji; pół odstępu odsuwa ją od obu. */
+        inset-block-start: calc(100% + var(--q-header-pad-block) / 2);
+    }
+
+    /* Rozciągnięcie musi objąć cały łańcuch: pas akcji i opakowanie akcji są
+       dziećmi wiersza wyśrodkowanego w pionie, więc bez `stretch` na każdym z nich
+       przycisk nie ma do czego urosnąć. Dzieci zostają wyśrodkowane, bo oba mają
+       własne `align-items: center` — rośnie pudełko, nie zawartość. */
+    .q-header__actions,
+    .q-action-wrap {
+        align-self: stretch;
+    }
+
+    .q-action[aria-expanded="true"] {
+        align-self: stretch;
+
+        /* Akcje mają wysokość podaną na sztywno (--q-action-h), a podana wysokość
+           wygrywa z rozciąganiem. */
+        block-size: auto;
+
+        /* `stretch` sięga tylko do dna wiersza, a wiersz kończy się nad dnem pasa —
+           o odstęp nagłówka. Przycisk schodzi więc o połowę tego odstępu i karta
+           zaczyna się w połowie drogi między wyszukiwarką a pasem nawigacji,
+           zamiast przyklejać się do jednego albo drugiego. */
+        margin-block-end: calc(-1 * var(--q-header-pad-block) / 2);
+
+        /* Głowa rozwiniętego panelu stoi na pasie i ma się z niego wybijać —
+           to ta sama rola co przycisk koszyka i katalogu. */
+        background: var(--q-header-solid);
+        color: var(--q-header-on-solid);
+        border-radius: var(--q-action-radius) var(--q-action-radius) 0 0;
+        z-index: 41;
+    }
+
+    /* --- koszyk ---
+       Jedyna akcja, która kończy zakupy, więc jako jedyna wygląda na przycisk.
+       Reszta ikon jest równa sobie i cichsza. */
+    .q-action--cart {
+        padding-inline: var(--q-space-md);
+        background: var(--q-header-solid);
+        color: var(--q-header-on-solid);
+        border-radius: var(--q-action-cart-radius);
+        font-weight: var(--q-weight-bold);
+    }
+
+    .q-action--cart:hover {
+        background: var(--q-header-solid-hover);
+        color: var(--q-header-on-solid-hover);
+    }
+
+    /* Na wypełnieniu z barwy marki licznik w tej samej barwie byłby niewidoczny,
+       a to jest liczba, którą klient sprawdza jednym spojrzeniem. */
+    .q-action--cart .q-action__count {
+        background: var(--q-fill-danger);
+        color: var(--q-on-fill-danger);
+    }
+
+    /* Plakietka stoi przy prawej krawędzi ikony, liczona od wcięcia przycisku.
+       Koszyk ma na szerokim ekranie większe wcięcie niż pozostałe akcje, więc
+       odstęp wzięty z nich stawiał jego plakietkę na środku ikony zamiast przy
+       jej prawym brzegu, jak przy sercu. Poniżej 1200 px koszyk wraca do
+       zwykłego wcięcia i reguła ogólna trafia sama. */
+    @media (min-width: 1200px) {
+        .q-header__actions .q-action--cart .q-action__count {
+            inset-inline-start: calc(var(--q-space-md) + 10px);
+        }
+    }
+
+    /* --- do 1199 px ---
+       Podpisy przy ikonach znikają pierwsze — ikona konta i serca są rozpoznawalne,
+       a miejsce jest potrzebne na to, co niesie treść. */
+    @media (max-width: 1199px) {
+        .q-action__label { display: none; }
+
+        /* Bez podpisu zostaje sama ikona i akcja robi się wąskim, wysokim
+           prostokątem — a to ma być pole do dotknięcia, więc szerokość musi
+           dorównać wysokości. */
+        .q-action {
+            min-inline-size: var(--q-touch-target);
+            justify-content: center;
+            padding-inline: var(--q-space-xs);
+        }
+
+        .q-action__count {
+            position: absolute;
+            inset-block-start: 2px;
+            inset-inline-start: 22px;
+            margin-inline-start: 0;
+        }
+
+        /* Koszyk zostaje przyciskiem z podpisem — tam podpis niesie kwotę,
+           a nie powtarza ikonę. */
+        .q-action--cart .q-action__label { display: inline; }
+
+        .q-action--cart {
+            justify-content: flex-start;
+            padding-inline: var(--q-space-sm);
+        }
+
+        .q-action--cart .q-action__count {
+            position: static;
+            margin-inline-start: 2px;
+        }
+    }
+
+    /* --- podpowiedzi w wyszukiwarce ---
+
+       Pudełko listy to wspólny komponent (.q-dropdown z wariantami --wide,
+       --attached, --scroll), więc podpowiedzi wyglądają tak samo jak każda inna
+       lista w sklepie. Nowy jest wyłącznie WIERSZ: miniatura, nazwa, kategoria
+       i cena nie mieszczą się w jednolinijkowej pozycji listy. */
+
+    .q-suggest {
+        /* Lista wychodzi spod pola i ma być nad wszystkim, co pod nią stoi —
+           także nad pasem menu, który leży zaraz poniżej nagłówka. */
+        z-index: 41;
+    }
+
+    .q-suggest__item {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-sm) var(--q-dropdown-option-pad-inline);
+        color: var(--q-text-body);
+        text-decoration: none;
+    }
+
+    .q-suggest__item + .q-suggest__item {
+        border-block-start: 1px solid var(--q-border-subtle);
+    }
+
+    /* Najechanie i zaznaczenie strzałką znaczą to samo — jedna pozycja czeka
+       na wybór — więc wyglądają tak samo. */
+    .q-suggest__item:hover,
+    .q-suggest__item.is-current {
+        background: var(--q-dropdown-option-bg-hover);
+    }
+
+    .q-suggest__thumb {
+        inline-size: 48px;
+        block-size: 48px;
+        flex: none;
+
+        border-radius: var(--q-radius-sm);
+        background: var(--q-surface-sunken);
+        object-fit: contain;
+    }
+
+    .q-suggest__body {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-inline-size: 0;
+    }
+
+    /* Nazwa łamana do dwóch wierszy: pełne nazwy produktów bywają dłuższe niż
+       pole, a ucięcie po jednym wierszu gubi to, co je odróżnia. */
+    .q-suggest__name {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        color: var(--q-dropdown-option-label);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-suggest__cat {
+        overflow: hidden;
+        color: var(--q-text-muted);
+        font-size: var(--q-fs-sm);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
+    .q-suggest__price {
+        display: flex;
+        align-items: baseline;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-suggest__price-now {
+        color: var(--q-text-strong);
+        font-weight: var(--q-weight-bold);
+    }
+
+    .q-suggest__price-now.is-reduced {
+        color: var(--q-price-promo);
+    }
+
+    .q-suggest__price-was {
+        color: var(--q-text-muted);
+        text-decoration: line-through;
+    }
+
+    /* Ostatnia pozycja: przejście na stronę wyników. Trzyma się dołu listy nawet
+       przy przewijaniu, bo to wyjście z niej, a nie jeszcze jedno trafienie. */
+    .q-suggest__all {
+        position: sticky;
+        inset-block-end: 0;
+
+        inline-size: 100%;
+        padding: var(--q-space-sm) var(--q-dropdown-option-pad-inline);
+
+        border: 0;
+        border-block-start: 1px solid var(--q-border-subtle);
+        background: var(--q-dropdown-bg);
+        color: var(--q-text-primary);
+
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .q-suggest__all:hover,
+    .q-suggest__all.is-current {
+        background: var(--q-dropdown-option-bg-hover);
+    }
+
+    .q-suggest__empty {
+        padding: var(--q-space-md) var(--q-dropdown-option-pad-inline);
+        color: var(--q-text-muted);
+        font-size: var(--q-fs-sm);
+        text-align: center;
+    }
+
+    /* --- katalog w przyklejonym nagłówku ---
+
+       Pas menu odjeżdża razem ze stroną i zabiera ze sobą jedyne dojście do
+       katalogu. Nagłówek, który został, przejmuje je na siebie: przycisk wsuwa
+       się przed znakiem firmowym dokładnie wtedy, gdy pasa menu nie widać,
+       i znika, kiedy pas wraca. Dwa przyciski katalogu naraz to dwa razy to samo
+       w jednym widoku.
+
+       Klasę `is-stuck` dokłada wyspa navbar.js. */
+
+    .q-header__cats {
+        display: none;
+        align-items: center;
+        gap: var(--q-space-xs);
+        flex: none;
+
+        block-size: var(--q-action-h);
+        padding-inline: var(--q-space-md);
+
+        border: 0;
+        border-radius: var(--q-action-radius);
+        background: var(--q-header-solid);
+        color: var(--q-header-on-solid);
+
+        font-family: var(--q-font-heading);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        text-transform: uppercase;
+        letter-spacing: .02em;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .q-header.is-stuck .q-header__cats {
+        display: inline-flex;
+    }
+
+    .q-header__cats:hover {
+        background: var(--q-header-solid-hover);
+        color: var(--q-header-on-solid-hover);
+    }
+
+    /* Pełna nazwa dostaje szerokość przycisku z pasa menu, bo panel wychodzi spod
+       niego tak samo: kolumna działów ma się kończyć dokładnie tam, gdzie przycisk,
+       który ją otworzył. Krótsza nazwa i sama ikona tego nie robią — sklep wybrał
+       je właśnie po to, żeby zająć mniej. */
+    .q-header__cats--full {
+        min-inline-size: var(--q-navbar-trigger-w);
+        justify-content: space-between;
+    }
+
+    .q-header__cats--icon {
+        min-inline-size: var(--q-touch-target);
+        justify-content: center;
+        padding-inline: var(--q-space-sm);
+    }
+
+    .q-header__cats-ico {
+        inline-size: 15px;
+        block-size: 15px;
+        opacity: .8;
+    }
+
+    .q-header__cats-chev {
+        margin-inline-start: var(--q-space-xs);
+        transition: transform 120ms ease;
+    }
+
+    .q-header__cats[aria-expanded="true"] .q-header__cats-chev {
+        transform: rotate(180deg);
+    }
+
+    /* Wsunięcie zamiast wyskoku: przycisk dokłada się do wiersza, który klient ma
+       przed oczami, więc zmiana ma być czytelna jako ruch, a nie jako przeskok
+       całego nagłówka. */
+    @media (prefers-reduced-motion: no-preference) {
+        .q-header__cats {
+            opacity: 0;
+            translate: -8px 0;
+            transition: opacity 140ms ease, translate 140ms ease, display 140ms allow-discrete;
+        }
+
+        .q-header.is-stuck .q-header__cats {
+            opacity: 1;
+            translate: 0 0;
+
+            @starting-style {
+                opacity: 0;
+                translate: -8px 0;
+            }
+        }
+    }
+
+    /* Cień dopiero w locie: nagłówek na swoim miejscu jest częścią strony,
+       nagłówek przyklejony leży NAD treścią i musi to pokazać. */
+    .q-header--sticky.is-stuck {
+        box-shadow: var(--q-shadow-md);
+    }
+
+    /* Przyklejony nagłówek ma własne tło — ustawienie sklepu. Podmieniamy tokeny
+       komponentu, a nie poszczególne reguły: wszystko, co rysuje nagłówek, czyta
+       z nich i tak. Przy tym samym wyborze w obu polach nie zmienia się nic. */
+    /* Logo po przewinięciu: obróbka pliku, bo plik jest jeden, a pas bywa wtedy
+       innej barwy niż zwykle. Bez ustawienia nie dzieje się nic. */
+    .q-header.is-stuck .q-header__logo img {
+        filter: var(--q-header-logo-stuck-filter, none);
+    }
+
+    .q-header.is-stuck {
+        --q-header-solid:          var(--q-band-header-stuck-solid);
+        --q-header-on-solid:       var(--q-band-header-stuck-on-solid);
+        --q-header-solid-hover:    var(--q-band-header-stuck-solid-hover);
+        --q-header-on-solid-hover: var(--q-band-header-stuck-on-solid-hover);
+        --q-search-sunken:      var(--q-band-header-stuck-field-sunken);
+        --q-search-bg:          var(--q-band-header-stuck-field);
+        --q-search-fg:          var(--q-band-header-stuck-field-fg);
+        --q-search-placeholder: var(--q-band-header-stuck-field-placeholder);
+        --q-search-border:      var(--q-band-header-stuck-field-border);
+        --q-header-bg:          var(--q-band-header-stuck-bg);
+        --q-header-label:       var(--q-band-header-stuck-fg);
+        --q-header-border:      var(--q-band-header-stuck-border);
+
+        /* Rola pasa PRZYKLEJONEGO, liczona względem jego własnego tła: po
+           przewinięciu nagłówek bywa ciemny, choć u góry był jasny, więc hover
+           musi iść za tą zmianą, a nie za pasem sprzed przewinięcia. */
+        --q-header-hover:       var(--q-band-header-stuck-hover);
+        --q-header-label-hover: var(--q-band-header-stuck-hover-fg);
+    }
+
+    /* Akcje zwinięte do ikon w przyklejonym nagłówku.
+
+       W locie dochodzi przycisk katalogu, a szerokość nagłówka się nie zmienia —
+       coś musi ustąpić. Podpisy kont i ulubionych ustępują pierwsze, bo ikona
+       osoby i serce są rozpoznawalne same z siebie. Koszyk podpis zachowuje:
+       tam podpis niesie kwotę, a nie powtarza ikonę.
+
+       Zwężenie jest ustawieniem sklepu — sklep, w którym klient loguje się do
+       swojego konta, może woleć trzymać jego imię na widoku. */
+    .q-header--scroll-icons.is-stuck .q-action:not(.q-action--cart) .q-action__label {
+        display: none;
+    }
+
+    .q-header--scroll-icons.is-stuck .q-action:not(.q-action--cart) {
+        min-inline-size: var(--q-touch-target);
+        justify-content: center;
+        padding-inline: var(--q-space-xs);
+    }
+
+    /* Poniżej 1200 px zostaje sama ikona, cokolwiek sklep wybrał — na tym samym
+       progu znikają podpisy akcji po prawej. Nazwa katalogu zajmuje tu tyle, co
+       pole wyszukiwania, a pole jest w nagłówku ważniejsze. */
+    @media (max-width: 1199px) {
+        .q-header__cats {
+            min-inline-size: var(--q-touch-target);
+            justify-content: center;
+            padding-inline: var(--q-space-sm);
+        }
+
+        .q-header__cats-label,
+        .q-header__cats-chev {
+            display: none;
+        }
+    }
+
+    /* Na telefonie pasa menu nie ma w ogóle, a katalog stoi pod hamburgerem
+       we własnym wierszu nagłówka — drugi przycisk nie miałby czego dokładać. */
+    @media (max-width: 767px) {
+        .q-header.is-stuck .q-header__cats {
+            display: none;
+        }
+    }
+
+    /* --- pas menu zwinięty, bo pozycje się nie mieszczą ---
+       Te same zmiany nawigacji co na telefonie, ale włączane pomiarem, a nie
+       szerokością ekranu (klasę stawia navbar.js). Pas znika, więc wyszukiwanie
+       schodzi z wiersza ze znakiem firmowym do ciemnego wiersza z hamburgerem.
+       Wysokość nagłówka zostaje prawie ta sama: ciemny pas z pozycjami zamienia
+       się na ciemny wiersz z hamburgerem i polem.
+
+       Przenosimy WYŁĄCZNIE reguły nawigacji. Mniejszy znak firmowy, koszyk bez
+       podpisu i przestawiona karta konta dotyczą rozmiaru telefonu, a na tablecie
+       jest na nie miejsce.
+
+       Przycisk katalogu w przyklejonym nagłówku znika: otwiera panel z pasa,
+       a pasa nie ma. Katalog prowadzi przez hamburger. */
+    :root.is-nav-collapsed .q-header__search {
+        display: none;
+    }
+
+    :root.is-nav-collapsed .q-header__actions {
+        margin-inline-start: auto;
+    }
+
+    :root.is-nav-collapsed .q-header__mobile-search {
+        display: flex;
+    }
+
+    :root.is-nav-collapsed .q-header.is-stuck .q-header__cats {
+        display: none;
+    }
+
+    /* Wiersz wyszukiwania na telefonie. Nosi barwy pasa nawigacji, bo należy do
+       nawigacji, a nie do nagłówka — hamburger i pole prowadzą do tego samego.
+       Pole jest tu płaskie: bez ramki i bez własnego tła, wtopione w pas. */
+    .q-header__mobile-search {
+        display: none;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding-inline: var(--q-space-md);
+        background: var(--q-navbar-bg);
+        color: var(--q-navbar-label);
+        min-block-size: var(--q-navbar-height);
+    }
+
+    .q-burger {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        inline-size: var(--q-touch-target);
+        block-size: var(--q-touch-target);
+        flex: none;
+        margin-inline-start: calc(var(--q-space-sm) * -1);
+
+        border: 0;
+        background: none;
+        color: var(--q-navbar-label);
+        cursor: pointer;
+    }
+
+    .q-burger:hover {
+        color: var(--q-navbar-link);
+    }
+
+    .q-header__mobile-search .q-search {
+        flex: 1;
+        min-inline-size: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-header__mobile-search .q-search__input {
+        color: var(--q-navbar-label);
+        padding-inline-start: 0;
+    }
+
+    .q-header__mobile-search .q-search__input::placeholder {
+        color: var(--q-navbar-label-muted);
+    }
+
+    /* Szukanie jest tu samą ikoną, a nie przyciskiem w barwie marki. Pole obok
+       nie ma ani ramki, ani własnego tła, więc wypełniony prostokąt na jego końcu
+       byłby jedyną bryłą w całym pasie i przeciągał na siebie wzrok — a to nie
+       on jest tu celem, tylko wpisanie frazy. Symetrycznie do hamburgera: po obu
+       stronach wiersza stoi goła ikona w barwach pasa. */
+    .q-header__mobile-search .q-search__submit {
+        inline-size: var(--q-touch-target);
+        block-size: var(--q-touch-target);
+        margin-inline-end: calc(var(--q-space-sm) * -1);
+
+        border-radius: 0;
+        background: none;
+        color: var(--q-navbar-label);
+    }
+
+    .q-header__mobile-search .q-search__submit:hover {
+        color: var(--q-navbar-link);
+    }
+
+    /* --- telefon ---
+       Wyszukiwanie schodzi z nagłówka do pasa nawigacji: pole zmieszczone
+       w wierszu ze znakiem firmowym byłoby węższe od wpisywanej frazy. */
+    @media (max-width: 767px) {
+        .q-header__inner {
+            gap: 0;
+
+            /* Przez zmienną, nie wprost: odstęp wiersza jest tą samą miarą,
+               o którą otwarty przycisk konta wychodzi poniżej wiersza. Wpisany
+               tu na sztywno rozjechałby się z nią przy pierwszej zmianie. */
+            --q-header-pad-block: 8px;
+        }
+
+        .q-header__logo { font-size: var(--q-fs-base); }
+
+        /* Znak firmowy ustępuje pierwszy: w tym wierszu stoją obok niego trzy
+           akcje, a one prowadzą dalej niż powrót na stronę główną. */
+        .q-header__logo img {
+            block-size: auto;
+            max-block-size: 32px;
+            max-inline-size: 140px;
+        }
+
+        /* Razem z polem znikają jego odstępy automatyczne, które trzymały akcje
+           przy prawej krawędzi — dlatego przejmuje to opakowanie akcji. */
+        .q-header__search { display: none; }
+
+        .q-header__actions { margin-inline-start: auto; }
+
+        /* Karta konta zostaje kartą, ale przestaje wisieć pod samym przyciskiem.
+           Ma 300 px i prawą krawędź przy przycisku, a przycisk stoi jako pierwszy
+           z trzech akcji — jej lewy bok wychodził poza ekran, na węższym telefonie
+           razem z treścią.
+
+           Prawą krawędź bierze więc od całego pasa akcji, czyli od prawego
+           marginesu nagłówka, i nie może być szersza niż ekran bez marginesów.
+           Dzięki temu nie ma czego przycinać przy żadnej szerokości, a karta dalej
+           wychodzi spod przycisku — jest szersza niż pas akcji, więc jej górna
+           krawędź i tak biegnie pod nim. */
+        .q-header__actions { position: relative; }
+
+        .q-action-wrap { position: static; }
+
+        .q-action-wrap .q-dropdown--panel {
+            max-inline-size: calc(100vw - 2 * var(--q-space-md));
+        }
+
+        .q-header__mobile-search { display: flex; }
+
+        /* Koszyk traci podpis tak samo jak reszta: kwota zajmuje w tym wierszu
+           więcej miejsca niż znak firmowy, a liczba nad ikoną mówi to, co trzeba
+           wiedzieć przed wejściem do koszyka. */
+        .q-action--cart .q-action__label { display: none; }
+
+        .q-action--cart {
+            justify-content: center;
+            padding-inline: var(--q-space-sm);
+        }
+
+        .q-action--cart .q-action__count {
+            position: absolute;
+            inset-block-start: 2px;
+            inset-inline-start: 22px;
+            margin-inline-start: 0;
+        }
+    }
+}

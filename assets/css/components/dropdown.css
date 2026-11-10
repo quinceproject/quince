@@ -1,0 +1,224 @@
+/* ===================================================================
+   Quince — lista rozwijana
+
+   Jedna lista dla wszystkiego, co się otwiera: wybór języka i waluty w sekcji
+   górnej, select w formularzu, sortowanie na listingu, kraj dostawy,
+   podpowiedzi wyszukiwarki.
+
+   Różni je wyłącznie przycisk, który je otwiera — sama lista wygląda wszędzie
+   tak samo i ma jeden zestaw tokenów, a nie jeden na komponent.
+
+   Przyciski otwierające:
+     .q-picker__button — w sekcji górnej, bez ramki, barwy sekcji (picker.css)
+     .q-select__button — w formularzu, wygląda jak pole tekstowe (field.css)
+
+   Tokeny komponentu (--q-dropdown-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-dropdown {
+        position: absolute;
+        inset-block-start: calc(100% + 4px);
+        inset-inline-start: 0;
+        z-index: 40;
+
+        /* Szerokość z treści — lista pokazująca kody walut nie ma powodu być
+           szersza od najdłuższego z nich. Odmiana --wide bierze szerokość
+           przycisku, bo tam pozycje są zdaniami, nie skrótami. */
+        min-inline-size: max-content;
+
+        background: var(--q-dropdown-bg);
+        border: 1px solid var(--q-dropdown-border);
+        border-radius: var(--q-dropdown-radius);
+        box-shadow: var(--q-dropdown-shadow);
+
+        /* Bez odstępu wewnętrznego: pierwsza i ostatnia pozycja dotykają ramki.
+           Odstęp zostawiał przy zaokrąglonym rogu szparę, która czytała się jak
+           niedopasowanie. Przycinanie jest tu konieczne, nie kosmetyczne —
+           inaczej prostokątne podświetlenie pozycji wystaje poza zaokrąglony róg. */
+        overflow: hidden;
+    }
+
+    /* Lista zwinięta znika z dokumentu, a nie tylko z widoku: schowana przez
+       widoczność zostawiłaby odnośniki w kolejności tabulatora i w czytniku ekranu. */
+    .q-dropdown[hidden] {
+        display: none;
+    }
+
+    /* Przy przycisku stojącym przy prawej krawędzi ekranu lista otwiera się
+       w lewo, żeby nie wyjść poza stronę. */
+    .q-dropdown--end {
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+    }
+
+    .q-dropdown--wide {
+        inline-size: 100%;
+    }
+
+    /* Lista wysunięta wprost z kontrolki, a nie wisząca pod nią.
+       Kiedy lista należy do pola albo do przycisku z ramką, odstęp między nimi
+       czyta się jak dwa osobne prostokąty — a to jest jedna kontrolka w dwóch
+       stanach. Zaokrąglenie od strony kontrolki znika, żeby krawędzie się zeszły.
+
+       Ramka nachodzi o piksel na ramkę kontrolki: dwie linie stykające się
+       krawędziami dają jedną grubą kreskę w miejscu styku. */
+    .q-dropdown--attached {
+        inset-block-start: 100%;
+        margin-block-start: -1px;
+        border-start-start-radius: 0;
+        border-start-end-radius: 0;
+
+        /* Rozpięta od krawędzi do krawędzi kontrolki, z której wychodzi. Sama
+           treść bywa krótsza niż pole: przy sortowaniu lista schodziła do
+           szerokości najdłuższej opcji i kończyła się kilkanaście pikseli przed
+           prawą krawędzią pola, więc dwa stany tej samej kontrolki miały dwie
+           różne szerokości. Dłuższa opcja nadal rozpycha listę poza tę
+           szerokość, bo `min-inline-size: max-content` z reguły podstawowej
+           wygrywa z szerokością wyliczoną z krawędzi. */
+        inset-inline: 0;
+    }
+
+    /* Razem z `--end`: kontrolka stoi przy prawej krawędzi paska narzędzi
+       (sortowanie), więc lista ma rosnąć w lewo, a nie w prawo poza ekran.
+       `min-inline-size: max-content` z reguły podstawowej i tak przebija
+       wyliczoną szerokość przy długiej opcji — chodzi tu wyłącznie o to, od
+       której krawędzi kontrolki ten nadmiar rośnie. */
+    .q-dropdown--attached.q-dropdown--end {
+        inset-inline-start: auto;
+        inset-inline-end: 0;
+    }
+
+    .q-dropdown--scroll {
+        max-block-size: 280px;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+    }
+
+    /* Pismo zwykłej wagi, nie średniej: waga miała mówić, że pozycja jest
+       klikalna — mówi to już kursor i podświetlenie, a wszystkie pozycje
+       pogrubione naraz nie wyróżniają żadnej. Pogrubiona zostaje tylko bieżąca. */
+    .q-dropdown__option {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+        padding-block: var(--q-dropdown-option-pad-block);
+        padding-inline: var(--q-dropdown-option-pad-inline);
+
+        border: 0;
+        background: none;
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-regular);
+        line-height: var(--q-lh-snug);
+        color: var(--q-dropdown-option-label);
+        text-align: start;
+        text-decoration: none;
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    /* Pod kursorem zmienia się wyłącznie barwa. Przesunięcie tekstu, choćby o kilka
+       pikseli, rusza całą pozycją i lista sprawia wrażenie skaczącej. */
+    .q-dropdown__option:hover {
+        background: var(--q-dropdown-option-bg-hover);
+        color: var(--q-dropdown-option-label);
+    }
+
+    /* Ikona przy pozycji: przygaszona, barwi się dopiero pod kursorem. */
+    .q-dropdown__ico {
+        inline-size: 16px;
+        block-size: 16px;
+        flex: none;
+        color: var(--q-text-muted);
+    }
+
+    .q-dropdown__option:hover .q-dropdown__ico {
+        color: var(--q-text-primary);
+    }
+
+    .q-dropdown__option:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: -2px;
+    }
+
+    /* Pozycja bieżąca poznaje się po kolorze marki i grubszym piśmie. Znacznik
+       obok byłby trzecim sygnałem tego samego. */
+    .q-dropdown__option[aria-current="true"] {
+        font-weight: var(--q-weight-bold);
+        color: var(--q-dropdown-option-label-current);
+    }
+
+    .q-dropdown__option:disabled,
+    .q-dropdown__option[aria-disabled="true"] {
+        color: var(--q-field-text-disabled);
+        cursor: not-allowed;
+    }
+
+    /* --- panel z trzema strefami ---
+       Odmiana dla konta: powitanie w barwie marki, pozycje, przyciski na
+       przygaszonym. Panel NIE ma jednej ramki dookoła — kreska biegnąca przez
+       strefę w barwie marki odcinałaby ją od przycisku, z którego panel wychodzi,
+       a to ma być jeden kształt. Każda strefa nosi więc własną: górna w swojej
+       barwie, czyli niewidoczną, reszta cichą kreską. */
+    .q-dropdown--panel {
+        min-inline-size: 300px;
+        border: 0;
+        box-shadow: var(--q-shadow-lg);
+    }
+
+    /* Prosty jest wyłącznie ten róg, którym panel styka się z przyciskiem;
+       drugi zostaje zaokrąglony, bo panel jest szerszy i wychodzi poza przycisk. */
+    .q-dropdown--panel.q-dropdown--attached {
+        border-start-start-radius: var(--q-dropdown-radius);
+    }
+
+    .q-dropdown--panel .q-dropdown__option {
+        background: var(--q-surface-raised);
+        border-inline: 1px solid var(--q-dropdown-border);
+    }
+
+    .q-dropdown__head {
+        padding: 14px var(--q-dropdown-option-pad-inline);
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border: 1px solid var(--q-fill-primary);
+        border-block-end: 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-dropdown__head strong {
+        font-family: var(--q-font-heading);
+        color: inherit;
+    }
+
+    .q-dropdown__foot {
+        display: flex;
+        gap: var(--q-space-xs);
+        padding: 12px var(--q-dropdown-option-pad-inline);
+        background: var(--q-surface-sunken);
+        border: 1px solid var(--q-dropdown-border);
+    }
+
+    .q-dropdown__foot .q-btn {
+        flex: 1;
+    }
+
+    /* Nagłówek grupy w długiej liście — kraje w regionach, kategorie w działach. */
+    .q-dropdown__group {
+        padding-block: 6px;
+        padding-inline: var(--q-dropdown-option-pad-inline);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+        border-block-start: 1px solid var(--q-dropdown-border);
+    }
+
+    .q-dropdown__group:first-child {
+        border-block-start: 0;
+    }
+}

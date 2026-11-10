@@ -1,0 +1,194 @@
+@layer quince.components {
+    /*
+       Zapytanie do specjalisty: przycisk na karcie produktu i szuflada z kartą
+       człowieka.
+
+       Treść przynosi moduł `quince_contacts`, wygląd jest tutaj — moduł bez
+       motywu ma wyglądać jak reszta sklepu, a nie jak wtrącona wyspa.
+    */
+
+    /* Para przycisków: „Pobierz ofertę" i „Zapytaj specjalistę" stoją w jednym
+       wierszu, każdy w swoim torze siatki kolumny opisu, więc mają tę samą
+       szerokość i razem wypełniają kolumnę. Na wąskim ekranie tor jest jeden
+       i przyciski układają się jeden pod drugim. */
+    .q-pdp__info > .q-pdp__slot--offer,
+    .q-pdp__info > .q-pdp__slot--ask_expert {
+        grid-column: span 1;
+    }
+
+    /* Metryka dotyczy samych przycisków otwierających, po ich zaczepie, a nie
+       wszystkiego, co stoi w slocie: znaczniki szuflady leżą w tym samym slocie
+       i drobne pismo schodziło wcześniej także na przyciski w jej stopce. */
+    [data-q-offer-open],
+    [data-q-expert-open] {
+        inline-size: 100%;
+        min-block-size: var(--q-touch-target);
+        padding: var(--q-space-sm) var(--q-space-md);
+        font-size: var(--q-fs-xs);
+    }
+
+    @media (max-width: 575px) {
+        .q-pdp__info > .q-pdp__slot--offer,
+        .q-pdp__info > .q-pdp__slot--ask_expert {
+            grid-column: 1 / -1;
+        }
+    }
+
+    /* ── człowiek ───────────────────────────────────────────────────────
+       Układ z makiety: wszystko wyśrodkowane, awatar okrągły. Nazwisko jest tu
+       ważniejsze niż jakikolwiek nagłówek, więc stoi pod zdjęciem, a nie obok. */
+
+    .q-expert__person {
+        margin-block-end: var(--q-space-md);
+        text-align: center;
+    }
+
+    .q-expert__avatar {
+        display: grid;
+        place-items: center;
+
+        inline-size: 5rem;
+        block-size: 5rem;
+        margin-inline: auto;
+        margin-block-end: var(--q-space-sm);
+        overflow: hidden;
+
+        background: var(--q-surface-sunken);
+        border-radius: 50%;
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-expert__avatar img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+    }
+
+    .q-expert__name {
+        margin-block-start: var(--q-space-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-expert__role {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* ── telefon i adres ────────────────────────────────────────────────
+       Kafle, a nie przyciski. Numer i adres są w nich WYPISANE, więc da się je
+       przeczytać, przepisać albo podyktować, a przy okazji jest w co trafić
+       palcem. Pełna metryka przycisku, którą miały wcześniej, przykrywała
+       formularz stojący pod nimi — a to on jest w tej szufladzie treścią.
+
+       Miary z makiety strony produktu, klasa `q-drawer__kontakt`. */
+
+    .q-expert__contacts {
+        display: grid;
+        gap: var(--q-space-xs);
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-expert__contact {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-sm);
+
+        min-block-size: var(--q-touch-target);
+        padding-inline: var(--q-space-sm);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-md);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-strong);
+        text-decoration: none;
+
+        transition: border-color 120ms ease-out;
+    }
+
+    /* Pod kursorem zapala się sama kreska. Napis zostaje atramentowy, bo to
+       numer i adres — mają być czytelne w każdym stanie. */
+    .q-expert__contact:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    /* Ikona w barwie marki odróżnia telefon od poczty bez czytania. */
+    .q-expert__contact-icon {
+        flex: none;
+        inline-size: 16px;
+        block-size: 16px;
+        color: var(--q-fill-primary);
+    }
+
+    /* Napis z kreską po obu stronach. Kreski są przejściami tonalnymi elementu,
+       więc napis może być dowolnie długi i linie same się dopasują. */
+    .q-expert__divider {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block: var(--q-space-md);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-expert__divider::before,
+    .q-expert__divider::after {
+        content: "";
+        flex: 1;
+        block-size: 1px;
+        background: var(--q-border-card);
+    }
+
+    /* ── formularz ──────────────────────────────────────────────────────── */
+
+    /* Etykieta siedzi na górnej kresce pola, więc wiersz potrzebuje odstępu,
+       żeby napis nie stykał się z tym, co stoi wyżej. */
+    .q-expert__field {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-expert__hint {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-field-border-invalid);
+    }
+
+    .q-expert__actions {
+        display: grid;
+        gap: var(--q-space-xs);
+    }
+
+    /* ── potwierdzenie ──────────────────────────────────────────────────── */
+
+    .q-expert__done {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+    }
+
+    .q-expert__done-icon {
+        inline-size: 3rem;
+        block-size: 3rem;
+        color: var(--q-fill-primary);
+    }
+
+    .q-expert__done-title {
+        margin: 0;
+        font-size: var(--q-fs-h6);
+    }
+
+    .q-expert__done-text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+}

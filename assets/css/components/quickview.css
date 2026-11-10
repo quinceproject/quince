@@ -1,0 +1,220 @@
+@layer quince.components {
+    /*
+       Szybki podgląd produktu: szuflada otwierana okiem na zajawce.
+
+       Reguły przepisane z makiety strony produktu (szuflada
+       „podglad"). Sama szuflada jest zwykłym panelem z `modal.css`, tu stoi
+       tylko to, czym podgląd różni się od pozostałych paneli.
+    */
+
+    .q-modal--quickview {
+        inline-size: min(480px, 92vw);
+    }
+
+    /* Odstęp między blokami niesie rodzic, a nie każdy blok z osobna: przy
+       kilkunastu marginesach dobieranych po kolei zawsze któryś zostaje inny. */
+    .q-modal--quickview .q-modal__body > * + * {
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* --- galeria --- */
+
+    /* Kadr bez ramki i bez wcięcia, tak jak na zajawkach i w galerii karty:
+       zdjęcia w sklepie mają własny margines wpisany w plik. */
+    .q-quickview__frame {
+        position: relative;
+    }
+
+    /* Zdjęcie zmienia się przenikaniem, nie cięciem: podmiana adresu w gołym
+       obrazku wygląda jak przeskok klatki i oko nie wiąże starego ujęcia
+       z nowym. */
+    .q-quickview__photo {
+        inline-size: 100%;
+        block-size: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+
+        transition: opacity 150ms ease-out;
+    }
+
+    .q-quickview__photo.is-zmiana {
+        opacity: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-quickview__photo {
+            transition: none;
+        }
+    }
+
+    .q-quickview__badges {
+        position: absolute;
+        inset-block-start: var(--q-space-sm);
+        inset-inline-start: var(--q-space-sm);
+        z-index: 2;
+
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    /* Miniatury: ten sam komponent, co w galerii karty produktu, tylko niższe.
+       W oknie liczy się wysokość, a miniatura ma tu rozpoznawać ujęcie, nie
+       pokazywać szczegóły. */
+    .q-quickview__thumbnails {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-quickview__thumbnails .q-gallery__thumb {
+        inline-size: 3.25rem;
+    }
+
+    /* Kropki pokazują się dokładnie tam, gdzie znikają miniatury: obie reguły
+       opisują tę samą zamianę. */
+    .q-quickview__dots {
+        display: none;
+        margin-block-start: var(--q-space-sm);
+    }
+
+    @media (max-width: 767px) {
+        .q-quickview__dots {
+            display: flex;
+        }
+    }
+
+    /* --- nazwa, ocena, opis --- */
+
+    .q-quickview__head > * {
+        margin-block: 0;
+    }
+
+    .q-quickview__head > * + * {
+        margin-block-start: var(--q-space-xs);
+    }
+
+    /* Opis odsuwa się od oceny mocniej niż ocena od nazwy: nazwa i gwiazdki to
+       jedna informacja, opis jest już następną. */
+    .q-quickview__head > .q-quickview__description {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-quickview__name {
+        font-size: var(--q-fs-h6);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-quickview__description {
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-body-color);
+    }
+
+    /* --- ceny ---
+       Moduł cen dostaje obrys i nagłówek: ten sam pas z zegarem, co w panelu
+       zakupu. Pudełko wjeżdża na dolną krawędź pasa o wysokość zakładki. */
+    .q-quickview__prices {
+        --q-buy-zakladka: var(--q-radius-md);
+    }
+
+    .q-quickview__prices-content {
+        position: relative;
+        margin-block-start: calc(var(--q-buy-zakladka) * -1);
+        padding: var(--q-space-md);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-fill-primary);
+        border-radius: var(--q-radius-md);
+    }
+
+    /* Bez obniżki nie ma pasa, więc nie ma czego domykać: pudełko traci obrys
+       i wcięcie, a ceny wracają do zwykłego bloku tekstu. */
+    .q-quickview__prices:not(:has(.q-buy__pas)) .q-quickview__prices-content {
+        margin-block-start: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+    }
+
+    /* Na telefonie podpis i zegar nie mieszczą się obok siebie. Odpada ikona,
+       nie wcięcie: zegarek powtarza to, co mówi podpis obok. */
+    @media (max-width: 767px) {
+        .q-quickview__prices .q-countdown__icon {
+            display: none;
+        }
+
+        .q-quickview__prices .q-buy__pas {
+            justify-content: center;
+        }
+    }
+
+    /* --- dane --- */
+
+    .q-quickview__data > * {
+        margin-block: 0;
+    }
+
+    /* Dane w jednej linii, łamane w miarę potrzeby. Kropki rozdzielające są
+       ukryte przed czytnikiem ekranu: on rozdziela pozycje pauzą. */
+    .q-quickview__row {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs) var(--q-space-sm);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-quickview__row + .q-quickview__row,
+    .q-quickview__data > * + * {
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-quickview__dot {
+        opacity: .6;
+    }
+
+    .q-quickview__brand {
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* --- zakup ---
+       Ilość i „Do koszyka" w jednym rzędzie, pod spodem wiersz z sercem
+       i „Kup teraz": układ z panelu zakupu. */
+    .q-quickview__actions > * + * {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-quickview__buy {
+        display: flex;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-quickview__buy .q-btn {
+        flex: 1;
+        min-inline-size: 0;
+    }
+
+    /* Te same wymiary, co w panelu zakupu: 2,875 rem na wierszu „ilość
+       i koszyk". Odmiana `--lg` daje 52 px i o tyle podgląd był wyższy od
+       kolumny zakupu, choć pokazuje to samo. */
+    .q-quickview__buy .q-btn--lg,
+    .q-quickview__buy .q-qty {
+        min-block-size: 2.875rem;
+        block-size: 2.875rem;
+        font-size: var(--q-fs-base);
+    }
+
+    /* Przy produkcie z wersjami podgląd nie udaje, że da się go kupić jednym
+       kliknięciem: mówi, dlaczego prowadzi na kartę. */
+    .q-quickview__select-info {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+}

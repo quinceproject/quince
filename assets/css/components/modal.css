@@ -1,0 +1,427 @@
+/* ===================================================================
+   Quince — okno modalne
+
+   Szybki podgląd produktu, koszyk po dodaniu, lista życzeń, tabela rozmiarów,
+   wybór adresu. 29 szablonów motywu i modułów.
+
+   Zbudowane na <dialog>, nie na własnym mechanizmie: przeglądarka daje za darmo
+   przyciemnienie tła, zamknięcie klawiszem Escape, uwięzienie ogniska wewnątrz
+   okna i odcięcie reszty strony od czytnika ekranu. Własny mechanizm musiałby
+   to wszystko odtworzyć, a najczęściej odtwarza połowę.
+
+   Klasa `.modal` stylowana obok naszej, bo szablony modułów przychodzą
+   z nazwami z Bootstrapa, którego nie wgrywamy.
+
+   Tokeny komponentu (--q-modal-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* --- `.modal` Bootstrapa ---
+       Moduły (lista życzeń, komentarze produktu…) renderują własne okna tym
+       mechanizmem, nie przez `<dialog>` jak `.q-modal` — JS modułu przełącza
+       widoczność klasą `.show` i stylem inline, nie atrybutem `open`, a tło
+       przyciemnienia to osobny element (`.modal-backdrop`), nie `::backdrop`.
+       Dwa różne silniki, ten sam wygląd: te same tokeny `--q-modal-*`.
+
+       Liczby z-index trzymają się konwencji Bootstrapa (tło 1040, okno
+       1050) celowo: `wishlist.css` modułu (plik modułu, nie owinięty naszą
+       warstwą — wygrywa z regułą niżej niezależnie od specyficzności) ma
+       własną, dokładniejszą regułę `.wishlist-modal.show { z-index: 1051 }`.
+       Backdrop musi zostać wyraźnie PONIŻEJ tej wartości, inaczej przechwytuje
+       kliknięcia nad oknem zamiast przepuszczać je do treści w środku. */
+    .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1050;
+        overflow-y: auto;
+    }
+
+    .modal.show { display: block; }
+
+    /* Jak `.modal` wyżej: domyślnie schowane. Moduły trzymają po jednym
+       takim tle na KAŻDE okno w znacznikach (tworzenie, udostępnianie,
+       zmiana nazwy...), niezależnie od tego, czy akurat otwarte — bez tego
+       ukrycia trzy półprzezroczyste tła nałożone na siebie przyciemniały
+       całą stronę na stałe, nawet gdy żaden modal nie był otwarty. */
+    .modal-backdrop {
+        display: none;
+        position: fixed;
+        inset: 0;
+        z-index: 1040;
+        background: rgb(0 0 0 / .5);
+    }
+
+    .modal-backdrop.show { display: block; }
+
+    .modal-dialog {
+        position: relative;
+        margin: var(--q-space-lg) auto;
+    }
+
+    .modal-dialog-centered {
+        display: flex;
+        align-items: center;
+        min-block-size: calc(100% - 2 * var(--q-space-lg));
+    }
+
+    .modal-content {
+        inline-size: 100%;
+        background: var(--q-modal-bg);
+        border: 0;
+        border-radius: var(--q-modal-radius);
+        box-shadow: var(--q-modal-shadow);
+        color: var(--q-modal-body-label);
+        overflow: hidden;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        border-block-end: 1px solid var(--q-modal-border);
+    }
+
+    .modal-title {
+        margin: 0;
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-tight);
+        color: var(--q-modal-title);
+    }
+
+    .modal-body {
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        line-height: var(--q-lh-relaxed);
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--q-space-sm);
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        background: var(--q-modal-foot-bg);
+        border-block-start: 1px solid var(--q-modal-border);
+    }
+
+    /* Pusty przycisk bez znaczników — moduł nie rysuje w nim SVG jak nasz
+       `.q-modal__close`, więc krzyżyk idzie przez maskę tym samym rysunkiem
+       (`_partials/navbar-mobile.tpl`), kolorowaną `background-color`. */
+    .btn-close {
+        inline-size: var(--q-touch-target);
+        block-size: var(--q-touch-target);
+        margin: calc(var(--q-modal-pad-block) * -1 + 4px) calc(var(--q-modal-pad-inline) * -1 + 4px) 0 0;
+        flex: none;
+        padding: 0;
+        border: 0;
+        background-color: var(--q-text-muted);
+        cursor: pointer;
+
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/%3E%3C/svg%3E");
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 16px;
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z'/%3E%3C/svg%3E");
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        -webkit-mask-size: 16px;
+    }
+
+    .btn-close:hover { background-color: var(--q-text-strong); }
+
+    .q-modal {
+        inline-size: min(var(--q-modal-width), calc(100vw - 2 * var(--q-space-md)));
+        max-block-size: calc(100vh - 2 * var(--q-space-lg));
+        padding: 0;
+
+        background: var(--q-modal-bg);
+        border: 0;
+        border-radius: var(--q-modal-radius);
+        box-shadow: var(--q-modal-shadow);
+        color: var(--q-modal-body-label);
+
+        /* Okno jest kolumną: nagłówek i stopka zostają na miejscu, przewija się
+           wyłącznie treść. Inaczej przy długiej liście rozmiarów przycisk
+           „Dodaj do koszyka" ucieka poza ekran. */
+        overflow: hidden;
+    }
+
+    /* Kierunek kolumny stoi POZA stanem otwartym. W chwili zamykania okno traci
+       `open`, ale przez czas animacji wyjścia przeglądarka trzyma mu jeszcze
+       `display: flex`; kierunek przypisany tylko do stanu otwartego wracał
+       wtedy do rzędu i nagłówek, treść oraz stopka stawały obok siebie
+       w trakcie wysuwania. Zamkniętemu, niewidocznemu oknu kierunek niczego
+       nie zmienia. */
+    .q-modal {
+        flex-direction: column;
+    }
+
+    .q-modal[open] {
+        display: flex;
+    }
+
+    .q-modal::backdrop {
+        /* Przyciemnienie musi być ciemne niezależnie od palety sklepu — to nie
+           jest powierzchnia motywu, tylko odcięcie od reszty strony. */
+        background: rgb(0 0 0 / .5);
+    }
+
+    .q-modal--lg {
+        inline-size: min(var(--q-modal-width-lg), calc(100vw - 2 * var(--q-space-md)));
+    }
+
+    .q-modal__head {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--q-space-md);
+
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        border-block-end: 1px solid var(--q-modal-border);
+        flex: none;
+    }
+
+    /* Okno stoi na powierzchni globalnej, a nie na tej, w której leży w znacznikach.
+       Bez tego szuflada wstawiona wewnątrz karty produktu dziedziczyła po niej
+       kreskę pól liczoną od TAMTEGO tła, a własne tło brała z ustawienia
+       globalnego, więc kreska wypadała w kolorze tła okna i znikała. */
+    .q-modal {
+        --q-field-border: var(--q-border-input);
+        --q-choice-border: var(--q-field-border);
+        --q-table-border: var(--q-border-table);
+    }
+
+    .q-modal__title {
+        flex: 1;
+        min-inline-size: 0;
+        margin: 0;
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-tight);
+        color: var(--q-modal-title);
+
+        /* Ikona stoi w tytule, a nie obok niego: wtedy skaluje się razem z nim
+           i nie trzeba jej ustawiać w pionie osobno. Projekt: makiety szuflad. */
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-modal__icon {
+        inline-size: 1em;
+        block-size: 1em;
+        flex: none;
+        color: var(--q-fill-primary);
+    }
+
+    .q-modal__close {
+        inline-size: var(--q-touch-target);
+        block-size: var(--q-touch-target);
+        margin: calc(var(--q-modal-pad-block) * -1 + 4px) calc(var(--q-modal-pad-inline) * -1 + 4px) 0 0;
+        flex: none;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+        background: none;
+        color: var(--q-text-muted);
+        cursor: pointer;
+    }
+
+    /* Ciało panelu bierze ognisko po otwarciu, żeby czytnik ekranu zaczął od
+       treści, a nie od przycisku zamknięcia. Pierścień jest tu zbędny: wejść
+       tabulatorem na ten element się nie da. */
+    .q-modal__body:focus {
+        outline: none;
+    }
+
+    .q-modal__close:hover {
+        color: var(--q-text-strong);
+    }
+
+    .q-modal__close:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: -2px;
+    }
+
+    .q-modal__body {
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        line-height: var(--q-lh-relaxed);
+    }
+
+    /* Treść szuflady rozpycha się na całą wysokość, więc stopka siada przy
+       dolnej krawędzi ekranu, tak jak w projekcie. Bez tego przyciski wiszą tuż
+       pod ostatnim polem, w połowie ekranu, i wyglądają jak część formularza,
+       a nie jak czynność kończąca. */
+    .q-modal--drawer .q-modal__body {
+        flex: 1 1 auto;
+    }
+
+    .q-modal__body > :first-child { margin-block-start: 0; }
+    .q-modal__body > :last-child  { margin-block-end: 0; }
+
+    /* Stopka: akcje wyrównane do prawej, potwierdzenie ostatnie. Na telefonie
+       jedna pod drugą i na całą szerokość, z potwierdzeniem u góry — kciuk
+       sięga tam najłatwiej, a to jest akcja, po którą klient przyszedł. */
+    .q-modal__foot {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-modal-pad-block) var(--q-modal-pad-inline);
+        background: var(--q-modal-foot-bg);
+        border-block-start: 1px solid var(--q-modal-border);
+        flex: none;
+    }
+
+
+    /* --- panel wysuwany od krawędzi ---
+       Koszyk po dodaniu produktu, menu na telefonie, filtry na listingu.
+
+       To nie jest okno na środku w innym kształcie, tylko inna obietnica: okno
+       przerywa i żąda decyzji, panel dokłada się z boku i zostawia widoczne to,
+       co klient robił. Po dodaniu do koszyka lista produktów zostaje na ekranie
+       i zakupy da się prowadzić dalej — dlatego koszyk jest panelem, a nie oknem.
+
+       Wysuwa się od krawędzi końcowej, czyli w polskim układzie od prawej,
+       a w językach pisanych od prawej do lewej — od lewej. */
+    .q-modal--drawer {
+        inline-size: min(var(--q-drawer-width), 100vw);
+        max-inline-size: none;
+        block-size: 100dvh;
+        max-block-size: none;
+
+        /* Zerowanie marginesów okna: <dialog> domyślnie centruje się w obu osiach,
+           a panel ma dotykać krawędzi ekranu.
+
+           Bez zaokrągleń: panel dosunięty do krawędzi nie ma rogów, bo róg
+           pośrodku ekranu czyta się jak niedomknięte okno. Dotyczy wszystkich
+           paneli — menu, koszyka i filtrów — na każdej szerokości. */
+        margin: 0 0 0 auto;
+        border-radius: 0;
+
+        translate: 100% 0;
+        transition:
+            translate 220ms ease-out,
+            overlay 220ms ease-out allow-discrete,
+            display 220ms ease-out allow-discrete;
+    }
+
+    .q-modal--drawer[open] {
+        translate: 0 0;
+    }
+
+    /* Stan początkowy animacji wejścia. Bez tego panel pojawia się od razu
+       na miejscu i wysuwa się wyłącznie przy zamykaniu. */
+    @starting-style {
+        .q-modal--drawer[open] {
+            translate: 100% 0;
+        }
+    }
+
+    /* --- odmiana: panel od krawędzi POCZĄTKOWEJ ---
+       Menu na telefonie wychodzi od lewej, bo po lewej stoi przycisk, który je
+       otwiera — panel ma wyjeżdżać z miejsca, w które klient dotknął.
+
+       Stoi PO regule podstawowej, bo ją nadpisuje przy tej samej szczegółowości:
+       zerowanie prawego marginesu, zaokrąglenie po stronie przeciwnej i wejście
+       zza lewej krawędzi. */
+    .q-modal--drawer-start {
+        margin-inline: 0 auto;
+        translate: -100% 0;
+    }
+
+    @starting-style {
+        .q-modal--drawer-start[open] {
+            translate: -100% 0;
+        }
+    }
+
+    /* Na telefonie panel zajmuje CAŁĄ szerokość. Wcześniej zostawiał z boku
+       skrawek strony jako znak, że to nakładka — ale w panelu staje podgląd
+       koszyka z listą produktów i każdy piksel szerokości idzie na nazwy
+       i kwoty. O tym, że to nakładka, mówi nagłówek z przyciskiem zamknięcia
+       i ruch wysuwania.
+
+       Próg obejmuje też telefon w poziomie i mały tablet: przy 600 px panel
+       miałby 420 px i zostawiał pas strony szeroki na prawie jedną trzecią. */
+    @media (max-width: 767px) {
+        .q-modal--drawer {
+            inline-size: 100%;
+        }
+    }
+
+    /* --- odmiana: panel szeroki ---
+       Lista z kilkoma kolumnami, np. składniki zestawu. W zwykłej szerokości
+       nazwa łamała się na trzy wiersze, a cena spadała pod nią. Szerokość dużego
+       okna, bo to ta sama miara treści tabelarycznej. Na telefonie panel i tak
+       bierze cały ekran, więc odmiana działa od tabletu.
+
+       W stopce podsumowanie i przycisk stoją w jednym rzędzie, przycisk na
+       prawo: na całą szerokość takiego panelu byłby pasem, a nie przyciskiem.
+       Reguły stopki mają obie klasy panelu, bo ogólna stopka panelu stoi niżej
+       w arkuszu i przy tej samej sile wygrywałaby kolejnością. */
+    @media (min-width: 768px) {
+        .q-modal--drawer.q-modal--wide {
+            inline-size: min(var(--q-modal-width-lg), 100vw);
+        }
+
+        .q-modal--drawer.q-modal--wide .q-modal__foot {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .q-modal--drawer.q-modal--wide .q-modal__foot .q-btn {
+            inline-size: auto;
+            margin-inline-start: auto;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-modal--drawer {
+            transition: none !important;
+        }
+    }
+
+    /* Stopka panelu jest przyklejona do dołu i niesie kwotę oraz przejście
+       do kasy — w koszyku to jedyne, po co klient tu zagląda. */
+    .q-modal__summary {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-sm);
+        font-size: var(--q-fs-base);
+        color: var(--q-modal-title);
+    }
+
+    .q-modal__summary strong {
+        font-size: var(--q-fs-h6);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-modal--drawer .q-modal__foot {
+        flex-direction: column;
+    }
+
+    .q-modal--drawer .q-modal__foot .q-btn {
+        inline-size: 100%;
+        justify-content: center;
+    }
+
+    @media (max-width: 575px) {
+        .q-modal__foot {
+            flex-direction: column-reverse;
+        }
+
+        .q-modal__foot .q-btn {
+            inline-size: 100%;
+            justify-content: center;
+        }
+    }
+}

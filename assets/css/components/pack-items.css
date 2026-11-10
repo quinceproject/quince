@@ -1,0 +1,319 @@
+@layer quince.components {
+    /*
+       Składniki zestawu w panelu zakupu: jeden wiersz z podglądem i szuflada
+       z pełną listą.
+
+       Reguły przepisane z makiety strony produktu (przełącznik
+       „produkt jest zestawem"). Szeroka odmiana szuflady stoi w `modal.css`.
+    */
+
+    /* ── wiersz w panelu ─────────────────────────────────────────────────
+       Wiersz jest informacją, nie ofertą, więc stoi na neutralnej powierzchni.
+       W barwie marki konkurowałby z progami rabatowymi tuż nad nim. */
+    .q-packlist__panel {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: var(--q-space-sm);
+        align-items: center;
+        inline-size: 100%;
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        background: var(--q-surface-sunken);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-md);
+
+        font: inherit;
+        color: var(--q-text-strong);
+        text-align: start;
+        cursor: pointer;
+    }
+
+    .q-packlist__panel:hover {
+        border-color: var(--q-neutral-7);
+    }
+
+    .q-packlist__panel:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Miniatury zachodzą na siebie: to podgląd, nie lista. Obwódka w barwie tła
+       wiersza oddziela jedną od drugiej bez rysowania ramek. Liczby pozycji
+       podgląd nie dopisuje, bo mówi ją tytuł obok. */
+    .q-packlist__thumbs {
+        display: flex;
+    }
+
+    .q-packlist__thumbs > img {
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        flex: none;
+
+        background: var(--q-card-bg);
+        border-radius: var(--q-radius-sm);
+        box-shadow: 0 0 0 2px var(--q-surface-sunken);
+        object-fit: contain;
+    }
+
+    .q-packlist__thumbs > img + img {
+        margin-inline-start: -.625rem;
+    }
+
+    /* Na telefonie dwie miniatury, żeby tytuł mieścił się w jednej linii. */
+    @media (max-width: 575px) {
+        .q-packlist__thumbs > img:nth-child(n+3) {
+            display: none;
+        }
+    }
+
+    .q-packlist__text {
+        min-inline-size: 0;
+    }
+
+    .q-packlist__title {
+        display: block;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+    }
+
+    /* Nazwy składników w jednej linii, ucięte: wiersz mówi, co mniej więcej
+       jest w środku, a pełne nazwy są w szufladzie. */
+    .q-packlist__names {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    .q-packlist__chev {
+        color: var(--q-meta-color);
+    }
+
+    /* ── pasek zaznaczania ───────────────────────────────────────────────
+       Między nagłówkiem szuflady a listą, poza przewijaną treścią. Przycisk
+       na prawo, licznik tuż przed nim. */
+    .q-packlist__toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0 var(--q-space-md);
+        flex: none;
+
+        padding: 0 var(--q-modal-pad-inline);
+        border-block-end: 1px solid var(--q-modal-border);
+    }
+
+    .q-packlist__count {
+        margin-inline-start: auto;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    /* ── lista ───────────────────────────────────────────────────────────
+       Każdy składnik jest kartą we własnej ramce, z odstępem od sąsiada. Same
+       kreski między wierszami zlewały się z tłem i przy długich nazwach nie
+       dało się odróżnić jednej pozycji od drugiej.
+
+       Ramka w stopniu szarości `neutral-7`: kreski bloków są na białym prawie
+       niewidoczne. Tabela zostaje tabelą, a ramkę rysują komórki; odstęp między
+       wierszami daje `border-spacing`, zdjęty ujemnym marginesem na zewnątrz. */
+    .q-packlist__table {
+        inline-size: 100%;
+        border-collapse: separate;
+        border-spacing: 0 var(--q-space-sm);
+        margin-block: calc(var(--q-space-sm) * -1);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-packlist__table th {
+        padding: 0 var(--q-space-sm);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .05em;
+        text-align: start;
+        text-transform: uppercase;
+        white-space: nowrap;
+        color: var(--q-meta-color);
+    }
+
+    .q-packlist__table td {
+        padding: var(--q-space-sm);
+        border-block: 1px solid var(--q-neutral-7);
+        vertical-align: middle;
+    }
+
+    .q-packlist__table th:first-child,
+    .q-packlist__table td:first-child {
+        padding-inline-start: var(--q-space-md);
+    }
+
+    .q-packlist__table th:last-child,
+    .q-packlist__table td:last-child {
+        padding-inline-end: var(--q-space-md);
+    }
+
+    .q-packlist__table td:first-child {
+        border-inline-start: 1px solid var(--q-neutral-7);
+        border-start-start-radius: var(--q-radius-md);
+        border-end-start-radius: var(--q-radius-md);
+    }
+
+    .q-packlist__table td:last-child {
+        border-inline-end: 1px solid var(--q-neutral-7);
+        border-start-end-radius: var(--q-radius-md);
+        border-end-end-radius: var(--q-radius-md);
+    }
+
+    .q-packlist__table .q-packlist__num,
+    .q-packlist__price,
+    .q-packlist__qty {
+        text-align: end;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-packlist__check {
+        inline-size: 1.5rem;
+    }
+
+    .q-packlist__img {
+        inline-size: 3.5rem;
+    }
+
+    .q-packlist__img img {
+        display: block;
+        inline-size: 3.5rem;
+        block-size: 3.5rem;
+        object-fit: contain;
+    }
+
+    .q-packlist__name {
+        display: block;
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-strong);
+    }
+
+    a.q-packlist__name:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* Numer i dostępność w jednej linii pod nazwą. Osobne kolumny zabierały
+       nazwie szerokość, a nazwa z hurtowni bywa trzy razy dłuższa od zwykłej.
+       Bez kropki między nimi: stan ma własną kolorową kropkę. */
+    .q-packlist__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 0 var(--q-space-md);
+        margin-block-start: 2px;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-packlist__price {
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-packlist__qty {
+        color: var(--q-text-muted);
+    }
+
+    /* Składnika bez towaru nie da się kupić osobno, ale w zestawie nadal jest:
+       wiersz zostaje, przygaszony, z nieaktywnym polem wyboru. */
+    .q-packlist__row.is-out .q-packlist__img img,
+    .q-packlist__row.is-out .q-packlist__name {
+        opacity: .55;
+    }
+
+    /* ── stopka ──────────────────────────────────────────────────────────
+       Suma składników kupowanych osobno przy cenie zestawu. */
+    .q-packlist__summary {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs) var(--q-space-md);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-packlist__summary s {
+        color: var(--q-meta-color);
+    }
+
+    .q-packlist__summary strong {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h6);
+        color: var(--q-text-strong);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-packlist__save {
+        padding: var(--q-space-xs) var(--q-space-sm);
+        background: var(--q-surface-success);
+        border-radius: var(--q-radius-pill, 99px);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-success);
+    }
+
+    /* ── telefon ─────────────────────────────────────────────────────────
+       Tabela przechodzi w karty: pole wyboru i miniatura trzymają lewą
+       krawędź, nazwa idzie obok, a pod nią cena i ilość. */
+    @media (max-width: 767px) {
+        .q-packlist__table,
+        .q-packlist__table tbody {
+            display: block;
+            margin-block: 0;
+        }
+
+        .q-packlist__table thead {
+            display: none;
+        }
+
+        .q-packlist__row {
+            display: grid;
+            grid-template-columns: auto auto minmax(0, 1fr) auto;
+            grid-template-areas:
+                'check img product product'
+                'check img price   qty';
+            column-gap: var(--q-space-sm);
+            row-gap: var(--q-space-xs);
+            align-items: center;
+
+            padding: var(--q-space-sm);
+            border: 1px solid var(--q-neutral-7);
+            border-radius: var(--q-radius-md);
+        }
+
+        .q-packlist__row + .q-packlist__row {
+            margin-block-start: var(--q-space-sm);
+        }
+
+        .q-packlist__table .q-packlist__row td {
+            padding: 0;
+            border: 0;
+        }
+
+        .q-packlist__check { grid-area: check; align-self: start; }
+        .q-packlist__img { grid-area: img; align-self: start; }
+        .q-packlist__product { grid-area: product; }
+        .q-packlist__qty { grid-area: qty; }
+        .q-packlist__price { grid-area: price; text-align: start; }
+
+        /* Przycisk zbiorczy schodzi pod licznik, na całą szerokość: obok
+           „Zaznacz wszystkie" i licznika nie mieści się jego napis. */
+        .q-packlist__toolbar .q-btn {
+            inline-size: 100%;
+            justify-content: center;
+            margin-block-end: var(--q-space-sm);
+        }
+    }
+}

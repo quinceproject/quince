@@ -1,0 +1,34 @@
+/* ===================================================================
+   Quince — pasek narzędzi listingu
+
+   Sortowanie, liczba wyników, chipy aktywnych filtrów. Cztery role z mapy.
+
+   Pasek ma własną powierzchnię (stopień 2), a nie tło strony — inaczej
+   przestaje być czytelny jako osobny obszar i sortowanie wygląda, jakby
+   wisiało w powietrzu nad listą produktów.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+
+        background: var(--q-toolbar-bg);
+        border: 1px solid var(--q-toolbar-border);
+        border-radius: var(--q-toolbar-radius);
+    }
+
+    /* Wnętrze paska: liczba wyników, sortowanie i pigułki zawężeń stoją
+       w `components/listing.css` pod swoimi klasami `q-listing__*`. Były tu
+       kiedyś reguły `q-toolbar__count`, `q-toolbar__sort` i `q-toolbar__filters`,
+       ale takich klas znaczniki nie wystawiają i te reguły nie działały.
+       Jedna z nich miała układać pasek na telefonie i właśnie dlatego
+       sortowanie zjeżdżało tam w prawo zamiast wypełnić wiersz. */
+
+}

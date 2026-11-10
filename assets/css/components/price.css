@@ -1,0 +1,73 @@
+/* ===================================================================
+   Quince — ceny
+
+   Cztery role z mapy: cena bieżąca, cena przekreślona, cena promocyjna
+   i komunikat o oszczędności.
+
+   Rozdział cen jest celowy i wynika z ustaleń: kolor promocji steruje
+   WYŁĄCZNIE ceną po obniżce i plakietką rabatu. Cena przekreślona zawsze
+   zostaje wygaszonym szarym tekstem z neutralnej skali — inaczej sklep
+   krzyczy dwoma kolorami naraz i klient nie wie, która liczba się liczy.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-price {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+    }
+
+    /* Cena bieżąca — bez promocji. */
+    .q-price__current {
+        font-size: var(--q-fs-h6);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        color: var(--q-price-current);
+
+        /* Cyfry o równej szerokości: ceny w kolumnie ustawiają się w pionie,
+           a zmiana wartości przy odświeżaniu koszyka nie przesuwa sąsiadów. */
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Cena po obniżce — jedyne miejsce poza plakietką, gdzie wchodzi kolor promocji. */
+    .q-price__current--promo {
+        color: var(--q-price-promo);
+    }
+
+    .q-price__old {
+        font-size: var(--q-fs-sm);
+        color: var(--q-price-old);
+        text-decoration: line-through;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-price__save {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-price-save);
+    }
+
+    /* Cena jednostkowa i informacja podatkowa — drobny druk pod ceną główną. */
+    .q-price__note {
+        inline-size: 100%;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* --- wariant dla karty produktu ---
+       Na listingu cena musi zmieścić się w wąskiej karcie, więc przy braku
+       miejsca elementy przechodzą do kolejnego wiersza zamiast wychodzić poza
+       obrys. Wysokość bloku jest zarezerwowana, żeby produkt bez promocji stał
+       w rzędzie równo z promowanym — to jeden z zadeklarowanych stanów
+       brzegowych. */
+    .q-pcard .q-price {
+        min-block-size: calc(var(--q-fs-h6) * 1.2 + var(--q-fs-sm) * 1.4);
+        align-content: flex-end;
+    }
+
+    .q-pcard .q-price__current {
+        font-size: var(--q-fs-base);
+    }
+}

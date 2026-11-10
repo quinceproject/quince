@@ -1,0 +1,429 @@
+/* ===================================================================
+   Quince — stopka
+
+   Cztery kolumny: pierwsza szersza, bo mieści dane firmy i kontakt,
+   pozostałe to listy odnośników wstawiane przez moduły.
+
+   Barwy biorą się z ról pasa stopki, więc jej tło ustawia się tam, gdzie
+   ustawia się pozostałe pasy — a nie osobnym kolorem tylko dla niej.
+
+   Projekt: makieta strony produktu.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* ---- pasek nad stopką ----
+       Miejsce dla modułu tuż przed stopką. „Przez całą szerokość" znaczy tło
+       od krawędzi do krawędzi; treść i tak zostaje w kontenerze, żeby nie
+       rozjeżdżała się z kolumnami pod nią. */
+    .q-footer-strip {
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* Tło niesie kontener, więc kończy się tam, gdzie kolumny stopki pod nim. */
+    .q-footer-strip > .q-container {
+        padding-block: var(--q-space-lg);
+
+        background: var(--q-band-footer-strip-bg);
+        color: var(--q-band-footer-strip-fg);
+    }
+
+    /* Przez całą szerokość: tło przechodzi na pasek, a treść i tak zostaje
+       w kontenerze — inaczej rozjechałaby się z kolumnami pod nią. */
+    .q-footer-strip--full {
+        background: var(--q-band-footer-strip-bg);
+        color: var(--q-band-footer-strip-fg);
+    }
+
+    .q-footer-strip--full > .q-container {
+        background: none;
+    }
+
+    .q-footer-strip a {
+        color: var(--q-band-footer-strip-link);
+    }
+
+    .q-footer-strip a:hover {
+        color: var(--q-band-footer-strip-link-hover);
+    }
+
+    .q-footer-strip :is(h1, h2, h3, h4, h5, h6) {
+        color: inherit;
+    }
+
+    /* Pasek stoi tuż nad stopką: drugi odstęp między nimi rozrywałby je na
+       dwa osobne kawałki strony. */
+    .q-footer-strip + .q-footer {
+        margin-block-start: 0;
+    }
+
+    .q-footer {
+        margin-block-start: var(--q-space-xl);
+        background: var(--q-band-footer-bg);
+        color: var(--q-band-footer-fg);
+    }
+
+    .q-footer > .q-container {
+        padding-block: var(--q-space-xl) var(--q-space-lg);
+    }
+
+    /* Pierwsza kolumna jest szersza, bo mieści dane firmy i kontakt. Pozostałe
+       powstają tyle razy, ile ich jest: sklep z trzema kolumnami nie zostawia
+       pustego miejsca, a sklep z pięcioma nie spycha piątej do drugiego rzędu
+       z cudzą szerokością. */
+    .q-footer__cols {
+        display: grid;
+        grid-template-columns: 1.2fr;
+        grid-auto-flow: column;
+        grid-auto-columns: minmax(0, 1fr);
+        gap: var(--q-space-lg);
+    }
+
+    .q-footer__title {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: var(--q-band-footer-heading, var(--q-band-footer-fg));
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-footer__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* Odnośnik bierze kolor tekstu pasa: na ciemnej stopce biały, na jasnej
+       ciemny, na stopce w barwie marki ten, który daje kontrast — na żółci
+       czarny. Barwa marki zostaje na stan pod kursorem, gdzie dotyczy jednej
+       pozycji naraz, a nie całej kolumny. */
+    .q-footer__link {
+        display: block;
+        font-size: var(--q-fs-sm);
+        color: var(--q-band-footer-fg);
+        padding-block: 3px;
+    }
+
+    .q-footer__link:hover {
+        color: var(--q-band-footer-link-hover);
+    }
+
+    .q-footer__text {
+        margin-block: 0 var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-band-footer-fg-muted);
+        line-height: var(--q-lh-relaxed);
+    }
+
+    .q-footer__contact {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-sm);
+    }
+
+    .q-footer__contact-item {
+        display: grid;
+        grid-template-columns: 1.125rem minmax(0, 1fr);
+        gap: var(--q-space-sm);
+        align-items: start;
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-band-footer-fg-muted);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-footer__contact-item svg {
+        inline-size: 1rem;
+        block-size: 1rem;
+        margin-block-start: 1px;
+        color: var(--q-fill-primary);
+    }
+
+    .q-footer__contact-item a {
+        color: var(--q-band-footer-link);
+    }
+
+    .q-footer__contact-item a:hover {
+        color: var(--q-band-footer-link-hover);
+    }
+
+    .q-footer__bar {
+        background: var(--q-band-footer-bar-bg);
+        color: var(--q-band-footer-bar-fg);
+        padding-block: var(--q-space-md);
+    }
+
+    /* Skrajne strefy dostają po jednej części wolnego miejsca, więc prawa
+       autorskie stoją na środku pasa, a nie na środku tego, co zostało. */
+    .q-footer__bar-inner {
+        display: grid;
+        grid-template-columns: 1fr auto 1fr;
+        align-items: center;
+        gap: var(--q-space-md);
+
+        font-size: var(--q-fs-xs);
+        color: var(--q-band-footer-bar-fg-muted);
+    }
+
+    .q-footer__bar-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-md);
+    }
+
+    .q-footer__bar-text {
+        text-align: center;
+    }
+
+    .q-footer__bar-inner a {
+        color: var(--q-band-footer-bar-link);
+    }
+
+    .q-footer__bar-inner a:hover {
+        color: var(--q-band-footer-bar-link-hover);
+    }
+
+    .q-footer__pay {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        gap: var(--q-space-xs);
+    }
+
+    .q-footer__pay span {
+        padding: 2px var(--q-space-sm);
+        border: 1px solid color-mix(in oklab, var(--q-band-footer-bar-fg) 55%, transparent);
+        border-radius: var(--q-radius-sm);
+        color: var(--q-band-footer-bar-fg);
+    }
+
+    /* Cztery kolumny mieszczą się do 992 px; niżej dwie, a na telefonie jedna —
+       kolumna węższa niż nazwa działu przestaje być kolumną. */
+    @media (max-width: 991px) {
+        .q-footer__cols {
+            grid-auto-flow: row;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+    @media (max-width: 767px) {
+        .q-footer__cols {
+            grid-auto-flow: row;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+        }
+
+        /* Kolumna z danymi firmy nie składa się, więc zostaje jej odstęp
+           od pierwszej złożonej sekcji. */
+        .q-footer__col--wide {
+            margin-block-end: var(--q-space-lg);
+        }
+    }
+
+    /* Trzy strefy nie mieszczą się w wierszu na telefonie i zbijają się w jeden
+       ciąg — ustawiamy je wtedy jedna pod drugą, wyśrodkowane. */
+    @media (max-width: 767px) {
+        .q-footer__bar-inner {
+            grid-template-columns: minmax(0, 1fr);
+            justify-items: center;
+            gap: var(--q-space-sm);
+        }
+
+        .q-footer__bar-links,
+        .q-footer__pay {
+            justify-content: center;
+        }
+    }
+
+    /* ---- składanie sekcji ----
+       Klasę nadaje wyspa dopiero wtedy, gdy ekran jest wąski: bez niej stopka
+       zostaje rozwinięta, tak samo jak przy wyłączonym JavaScripcie. */
+    .q-footer--folded .q-footer__sect {
+        border-block-end: 1px solid var(--q-band-footer-border);
+    }
+
+    .q-footer--folded .q-footer__sect-trigger {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+
+        margin: 0;
+        padding-block: var(--q-space-md);
+        cursor: pointer;
+    }
+
+    .q-footer--folded .q-footer__sect-trigger::after {
+        content: '';
+        flex: none;
+
+        inline-size: 7px;
+        block-size: 7px;
+
+        border-inline-end: 1.5px solid currentColor;
+        border-block-end: 1.5px solid currentColor;
+
+        /* Chevron w prawo przy sekcji zwiniętej, w dół przy rozwiniętej —
+           obrót zamiast drugiego znaku, żeby ruch był ciągły. */
+        transform: rotate(-45deg);
+        opacity: .55;
+        transition: transform .2s ease;
+    }
+
+    .q-footer--folded .q-footer__sect.is-open > .q-footer__sect-trigger::after {
+        transform: rotate(45deg);
+    }
+
+    .q-footer--folded .q-footer__nav > * + * {
+        margin-block-start: 0;
+    }
+
+    .q-footer--folded .q-footer__fold {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .3s ease;
+    }
+
+    .q-footer--folded .q-footer__sect.is-open > .q-footer__fold {
+        padding-block-end: var(--q-space-md);
+    }
+
+    /* ---- treść z modułów ----
+       Kolumny wypełniają moduły, każdy własnym znacznikiem. Ubieramy to, co
+       przyjdzie, zamiast wymagać od modułów naszych klas. */
+    .q-footer__nav :is(h1, h2, h3, h4, h5, h6),
+    .q-footer__nav :is(.h1, .h2, .h3, .h4, .h5, .h6, .block-title, .footer-block__title) {
+        margin: 0 0 var(--q-space-sm);
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: var(--q-band-footer-fg);
+    }
+
+    .q-footer__nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .q-footer__nav a {
+        display: block;
+        padding-block: 3px;
+        font-size: var(--q-fs-sm);
+        color: var(--q-band-footer-fg);
+    }
+
+    /* Znaczki z kroju PrestaShopa: Quince go nie ładuje, więc każdy rysowałby
+       się pustym kwadratem — przy nazwie działu, przy telefonie, przy adresie. */
+    .q-footer__nav .material-icons {
+        display: none;
+    }
+
+    /* Przycisk zwijania kolumny, doklejany przez moduły na wąskie ekrany: nasza
+       stopka zwija kolumny inaczej, więc zostałby sam obok nazwy. */
+    .q-footer__nav .footer-block__title button {
+        display: none;
+    }
+
+    /* Bloki stopki przychodzą z klasami siatki Bootstrapa — chcą być ćwiartką
+       szerokości ekranu. Kolumnę wyznacza tutaj stopka, więc blok zajmuje ją
+       całą i nie odsuwa się od jej krawędzi. */
+    .q-footer__nav [class*="col-"] {
+        inline-size: auto;
+        max-inline-size: none;
+        flex: none;
+        padding-inline: 0;
+    }
+
+    .q-footer__nav a:hover,
+    .q-footer__link:hover {
+        color: var(--q-band-footer-link);
+    }
+
+    /* Moduł może przynieść kilka bloków do jednej kolumny — oddziela je odstęp,
+       nie kreska: kolumna z kreskami czyta się jak tabela. */
+    .q-footer__nav > * + * {
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* ---- ikony społecznościowe ---- */
+    .q-footer__socials {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-footer__social {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        inline-size: 36px;
+        block-size: 36px;
+
+        border: 1px solid var(--q-band-footer-border);
+        border-radius: var(--q-radius-sm);
+        color: var(--q-band-footer-fg);
+    }
+
+    .q-footer__social:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    .q-footer__social svg {
+        inline-size: 18px;
+        block-size: 18px;
+    }
+
+    /* ---- powrót na górę ----
+       Przycisk pokazuje się po przewinięciu strony i wraca na jej początek.
+       Sprzedawca może go wyłączyć — sklep działa wtedy tak samo, tylko bez
+       skrótu. Projekt: makieta kategorii. */
+    .q-totop {
+        position: fixed;
+        inset-block-end: var(--q-space-md);
+        inset-inline-end: var(--q-space-md);
+        z-index: 30;
+
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        display: grid;
+        place-items: center;
+        padding: 0;
+
+        background: var(--q-surface-raised);
+        color: var(--q-text-body);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: 50%;
+        box-shadow: var(--q-shadow-md);
+        cursor: pointer;
+
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity .16s ease, visibility .16s ease;
+    }
+
+    .q-totop.is-shown {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .q-totop:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    /* Na wąskim ekranie niżej czeka pasek zakupu — przycisk siada nad nim,
+       zamiast go zasłaniać. */
+    @media (max-width: 991px) {
+        .q-totop {
+            inset-block-end: calc(var(--q-space-md) + 4rem);
+        }
+    }
+}

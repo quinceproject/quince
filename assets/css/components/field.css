@@ -1,0 +1,562 @@
+/* ===================================================================
+   Quince — pola formularza
+
+   Jeden komplet dla całego sklepu: logowanie, rejestracja, adres, kontakt,
+   newsletter, kod rabatowy, dostawa i płatność w kasie, warianty
+   i personalizacja produktu, filtry, zwroty, wiadomości do zamówienia.
+
+   Co tu jest:
+     .q-field          pole tekstowe, e-mail, hasło, obszar tekstowy
+     .q-field-label    etykieta nad polem
+     .q-field-help     podpowiedź pod polem, także w odmianie błędu
+     .q-select         select — przycisk w kształcie pola + lista z dropdown.css
+     .q-choice         pole wyboru i wybór jednokrotny
+     .q-switch         przełącznik dwustanowy
+     .q-qty            licznik ilości
+
+   Klasy `.form-control` i `.form-select` stylowane obok naszych, bo szablony
+   PrestaShopa i modułów przychodzą z nazwami z Bootstrapa, którego nie wgrywamy.
+
+   Tokeny komponentu (--q-field-*, --q-select-*, --q-choice-*, --q-switch-*)
+   definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* --- etykieta i podpowiedź --- */
+
+    .q-field-label {
+        display: block;
+        margin-block-end: 6px;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+        color: var(--q-field-label);
+    }
+
+    /* Gwiazdka przy polu wymaganym nie wystarcza sama — obok formularza stoi
+       zdanie wyjaśniające, co ona znaczy. Kolor nie niesie tu treści. */
+    .q-field-label__required {
+        color: var(--q-text-danger);
+    }
+
+    .q-field-help {
+        margin-block-start: 6px;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-normal);
+        color: var(--q-text-muted);
+    }
+
+    .q-field-help--invalid {
+        color: var(--q-field-help-invalid);
+    }
+
+    /* --- pole tekstowe --- */
+
+    .q-field,
+    .form-control {
+        inline-size: 100%;
+        block-size: var(--q-field-height);
+        padding-inline: var(--q-field-pad-inline);
+
+        background: var(--q-field-bg);
+        border: 1px solid var(--q-field-border);
+        border-radius: var(--q-field-radius);
+
+        font: inherit;
+        font-size: var(--q-fs-base);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-body);
+    }
+
+    .q-field::placeholder,
+    .form-control::placeholder {
+        color: var(--q-field-placeholder);
+    }
+
+    /* Pole wypełnione przez przeglądarkę.
+
+       Chrome maluje wtedy własne tło (u nas wpada niebieskawe) i własną barwę
+       pisma, i nie oddaje ich zwykłemu `background`. Oddaje je natomiast cieniowi
+       wewnętrznemu, więc kładziemy nieprzezroczysty cień na całą wysokość pola
+       w barwie pola i podajemy barwę pisma osobną właściwością.
+
+       `transition` z absurdalnie długim czasem to jedyny sposób, żeby to samo
+       zadziałało w chwili wypełnienia: przeglądarka animuje wtedy przejście do
+       swojego tła, a tak długi czas nie pozwala mu dojść do końca. */
+    .q-field:-webkit-autofill,
+    .form-control:-webkit-autofill,
+    .q-field:-webkit-autofill:hover,
+    .form-control:-webkit-autofill:hover,
+    .q-field:-webkit-autofill:focus,
+    .form-control:-webkit-autofill:focus,
+    .q-field:autofill,
+    .form-control:autofill {
+        box-shadow: 0 0 0 100px var(--q-field-bg) inset;
+        /* Firefox nie maluje tam tła, tylko przepuszcza pole przez filtr.
+           Cień jego nie dotyczy, więc kasujemy filtr osobno. */
+        filter: none;
+        -webkit-text-fill-color: var(--q-text-body);
+        caret-color: var(--q-text-body);
+        transition: background-color 100000s ease-in-out 0s;
+    }
+
+    /* Chwila, w której klient wodzi po liście podpowiedzi przeglądarki, a ta
+       pokazuje w polu podgląd wartości. Chrome przełącza wtedy pole na wygląd
+       przycisku listy systemowej (`appearance: menulist-button` w jego własnym
+       arkuszu) i to cofamy, żeby krawędź pola nie zmieniała się w locie.
+
+       Czego cofnąć NIE można: pisma tego podglądu. Chrome rysuje go w osobnym
+       elemencie wewnętrznym z zapisem `font: -webkit-small-control !important`,
+       a ważne reguły przeglądarki stoją w kaskadzie ponad wszystkim, co może
+       napisać strona. Dlatego podgląd jest drobniejszy od wartości, która
+       zostaje w polu po wybraniu, i nie jest to nasza usterka.
+
+       Reguła stoi osobno, a nie w liście wyżej: te dwa zapisy są wewnętrzne
+       dla Chrome i przeglądarka, która ich nie zna, odrzuca CAŁĄ regułę,
+       w której się znajdą. Osobno odrzuci tylko tę. */
+    .q-field:-internal-autofill-previewed,
+    .form-control:-internal-autofill-previewed,
+    .q-field:-internal-autofill-selected,
+    .form-control:-internal-autofill-selected {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    .q-field:hover:not(:disabled),
+    .form-control:hover:not(:disabled),
+    .form-select:hover:not(:disabled) {
+        border-color: var(--q-field-border-hover);
+    }
+
+    .q-field:focus-visible,
+    .form-control:focus-visible,
+    .form-select:focus-visible {
+        outline: 2px solid var(--q-field-border-focus);
+        outline-offset: -1px;
+        border-color: var(--q-field-border-focus);
+    }
+
+    /* Wada oznaczona atrybutem, nie klasą: ten sam atrybut czyta czytnik ekranu,
+       więc kolor ramki i komunikat dla asystenta nie mogą się rozjechać. */
+    .q-field[aria-invalid="true"],
+    .form-control[aria-invalid="true"] {
+        border-color: var(--q-field-border-invalid);
+    }
+
+    .q-field:disabled,
+    .form-control:disabled {
+        background: var(--q-field-bg-disabled);
+        color: var(--q-field-text-disabled);
+        cursor: not-allowed;
+    }
+
+    textarea.q-field,
+    textarea.form-control {
+        block-size: auto;
+        min-block-size: 96px;
+        padding-block: var(--q-field-pad-block);
+        line-height: var(--q-lh-relaxed);
+        resize: vertical;
+    }
+
+    /* --- plik ---
+       Przeniesione z `buybox.css`: ten sam komponent co przy personalizacji
+       produktu (wgrywanie zdjęcia), teraz drugi konsument (załącznik
+       w formularzu kontaktowym). Etykieta, nie goły `input type=file` —
+       przeglądarka rysuje na nim własny przycisk z własnym, nieprzetłuma-
+       czalnym napisem, którego nie da się ostylować. Znaczniki:
+       `catalog/_partials/product-customization.tpl`.
+       Zachowanie: assets/js/islands/buybox.js (personalizacja produktu),
+       assets/js/islands/upload.js (załącznik w kontakcie). */
+    .q-upload {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+        block-size: var(--q-field-height);
+        padding-inline: var(--q-field-pad-inline);
+
+        background: var(--q-field-bg);
+        color: var(--q-field-placeholder);
+        border: 1px dashed var(--q-field-border);
+        border-radius: var(--q-field-radius);
+        cursor: pointer;
+    }
+
+    .q-upload:hover {
+        border-color: var(--q-fill-primary);
+    }
+
+    /* Po wybraniu pliku kreska przestaje być przerywana, a nazwa dostaje wagę
+       tekstu: inaczej pole wygląda tak samo pełne i puste. */
+    .q-upload.ma-plik {
+        border-style: solid;
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-body);
+        font-weight: var(--q-weight-medium);
+    }
+
+    .q-upload > span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* --- select --- */
+
+    .q-select {
+        position: relative;
+        display: block;
+    }
+
+    .q-select__button,
+    .form-select {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+        block-size: var(--q-select-height);
+        padding-inline: var(--q-field-pad-inline);
+
+        background: var(--q-select-bg);
+        border: 1px solid var(--q-select-border);
+        border-radius: var(--q-select-radius);
+
+        font: inherit;
+        font-size: var(--q-fs-base);
+        color: var(--q-select-label);
+        text-align: start;
+        cursor: pointer;
+    }
+
+    /* Prawdziwy `<select>` bez komponentu-zastępcy (`q-select__button`):
+       domyślna strzałka przeglądarki stoi tuż przy krawędzi i nie da się jej
+       przesunąć ani pomalować, więc zdejmujemy ją i rysujemy tę samą
+       strzałkę co w `q-select__chev`, odsuniętą o wyściółkę pola. */
+    select.form-select {
+        appearance: none;
+        -webkit-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none' stroke='%23616161' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right var(--q-field-pad-inline) center;
+        background-size: 12px;
+        padding-inline-end: calc(var(--q-field-pad-inline) + 18px);
+    }
+
+    /* Wybrana opcja bywa długim zdaniem (sortowanie listingu). Bez tego
+       przycisk zawijał tekst na kilka wierszy i puchł, rozwalając pasek
+       narzędzi na wąskim ekranie — jak każdy zwykły select, ma zostać jednej,
+       stałej wysokości, a nadmiar ucina się wielokropkiem. */
+    .q-select__button [data-q-select-label] {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        min-inline-size: 0;
+    }
+
+    .q-select__button:hover:not(:disabled) {
+        border-color: var(--q-field-border-hover);
+    }
+
+    .q-select__button:focus-visible {
+        outline: 2px solid var(--q-field-border-focus);
+        outline-offset: -1px;
+        border-color: var(--q-field-border-focus);
+    }
+
+    .q-select__button:disabled {
+        background: var(--q-field-bg-disabled);
+        color: var(--q-field-text-disabled);
+        cursor: not-allowed;
+    }
+
+    /* Strzałka odsunięta na koniec wiersza niezależnie od długości napisu. */
+    .q-select__chev {
+        inline-size: 12px;
+        block-size: 12px;
+        flex: none;
+        margin-inline-start: auto;
+        opacity: .6;
+        transition: transform 120ms ease-out;
+    }
+
+    .q-select__button[aria-expanded="true"] .q-select__chev {
+        transform: rotate(180deg);
+    }
+
+    /* --- pole wyboru i wybór jednokrotny --- */
+
+    .q-choice,
+    .form-check {
+        display: inline-flex;
+        align-items: flex-start;
+        gap: var(--q-choice-gap);
+
+        /* Cały wiersz z napisem jest celem kliknięcia, nie sam kwadracik —
+           dwadzieścia pikseli to za mało, żeby trafić w niego na telefonie. */
+        min-block-size: var(--q-touch-target);
+        padding-block: calc((var(--q-touch-target) - var(--q-choice-size)) / 2);
+        cursor: pointer;
+    }
+
+    .q-choice__input,
+    .form-check-input {
+        appearance: none;
+        margin: 0;
+        flex: none;
+
+        inline-size: var(--q-choice-size);
+        block-size: var(--q-choice-size);
+
+        background: var(--q-field-bg);
+        border: 1px solid var(--q-choice-border);
+        border-radius: var(--q-choice-radius);
+        cursor: inherit;
+    }
+
+    .q-choice__input[type="radio"],
+    .form-check-input[type="radio"],
+    .form-check-input[type="radio"] {
+        border-radius: 50%;
+    }
+
+    .q-choice__input:checked,
+    .form-check-input:checked,
+    .form-check-input:checked {
+        background: var(--q-choice-fill-checked);
+        border-color: var(--q-choice-fill-checked);
+    }
+
+    /* Znak wyboru to ptaszek wycięty maską z rysunku i malowany barwą znaku.
+       Nie znak z fontu, bo font zastępczy potrafi podstawić własny kształt,
+       i nie dwa przejścia tonalne, bo z nich wychodził gruby, krzywy znak. */
+    .q-choice__input[type="checkbox"],
+    .form-check-input[type="checkbox"] {
+        display: inline-grid;
+        place-content: center;
+    }
+
+    .q-choice__input[type="checkbox"]::before,
+    .form-check-input[type="checkbox"]::before,
+    .form-check-input[type="checkbox"]::before {
+        content: "";
+        inline-size: 12px;
+        block-size: 12px;
+        background: var(--q-choice-mark);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 4.8' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+        transform: scale(0);
+    }
+
+    .q-choice__input[type="checkbox"]:checked::before,
+    .form-check-input[type="checkbox"]:checked::before,
+    .form-check-input[type="checkbox"]:checked::before {
+        transform: scale(1);
+    }
+
+    .q-choice__input[type="radio"]:checked,
+    .form-check-input[type="radio"]:checked,
+    .form-check-input[type="radio"]:checked {
+        background-image: radial-gradient(var(--q-choice-mark) 0 34%, transparent 36%);
+    }
+
+    .q-choice__input:focus-visible,
+    .form-check-input:focus-visible,
+    .form-check-input:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    .q-choice__input:disabled,
+    .form-check-input:disabled,
+    .form-check-input:disabled {
+        background: var(--q-choice-disabled);
+        border-color: var(--q-choice-disabled);
+        cursor: not-allowed;
+    }
+
+    .q-choice__label,
+    .form-check-label {
+        font-size: var(--q-fs-base);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-body);
+    }
+
+    .q-choice__input:disabled + .q-choice__label {
+        color: var(--q-field-text-disabled);
+    }
+
+    /* --- przełącznik --- */
+
+    .q-switch {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-choice-gap);
+        min-block-size: var(--q-touch-target);
+        cursor: pointer;
+    }
+
+    .q-switch__input {
+        appearance: none;
+        margin: 0;
+        flex: none;
+
+        inline-size: var(--q-switch-width);
+        block-size: var(--q-switch-height);
+        border-radius: var(--q-radius-pill);
+        background: var(--q-switch-track);
+        cursor: inherit;
+        transition: background 120ms ease-out;
+    }
+
+    .q-switch__input::after {
+        content: "";
+        display: block;
+        inline-size: calc(var(--q-switch-height) - 4px);
+        block-size: calc(var(--q-switch-height) - 4px);
+        margin: 2px;
+        border-radius: 50%;
+        background: var(--q-switch-knob);
+        transition: transform 120ms ease-out;
+    }
+
+    .q-switch__input:checked {
+        background: var(--q-choice-fill-checked);
+    }
+
+    .q-switch__input:checked::after {
+        transform: translateX(calc(var(--q-switch-width) - var(--q-switch-height)));
+    }
+
+    .q-switch__input:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    .q-switch__input:disabled {
+        background: var(--q-choice-disabled);
+        cursor: not-allowed;
+    }
+
+    /* --- licznik ilości --- */
+
+    .q-qty {
+        display: inline-flex;
+        align-items: stretch;
+        border: 1px solid var(--q-field-border);
+        border-radius: var(--q-field-radius);
+        overflow: hidden;
+        background: var(--q-field-bg);
+    }
+
+    .q-qty__btn {
+        inline-size: var(--q-field-height);
+        block-size: var(--q-field-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        border: 0;
+        background: none;
+        color: var(--q-text-body);
+        font-size: var(--q-fs-base);
+        cursor: pointer;
+    }
+
+    .q-qty__btn:hover:not(:disabled) {
+        background: var(--q-surface-hover);
+    }
+
+    .q-qty__btn:disabled {
+        color: var(--q-field-text-disabled);
+        cursor: not-allowed;
+    }
+
+    .q-qty__input {
+        inline-size: 52px;
+        border: 0;
+        border-inline: 1px solid var(--q-field-border);
+        background: none;
+        text-align: center;
+        font: inherit;
+        font-size: var(--q-fs-base);
+        font-variant-numeric: tabular-nums;
+        color: var(--q-text-body);
+
+        /* Strzałki przeglądarki zabierają miejsce i dublują nasze przyciski. */
+        appearance: textfield;
+    }
+
+    .q-qty__input::-webkit-outer-spin-button,
+    .q-qty__input::-webkit-inner-spin-button {
+        appearance: none;
+        margin: 0;
+    }
+
+    .q-qty__input:focus-visible {
+        outline: 2px solid var(--q-field-border-focus);
+        outline-offset: -2px;
+    }
+
+    /* --- grupa pól --- */
+
+    .q-field-group {
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-field-row {
+        display: grid;
+        gap: var(--q-space-md);
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    /* ── nazwy z Bootstrapa, których rdzeń używa, a my nie wgrywamy ──────
+       Oba napisy przychodzą z `_partials/form-fields.tpl` i z szablonów
+       modułów. Bez nich podpowiedź pod polem miała rozmiar zwykłego tekstu,
+       a przycisk pokazania hasła stawał pod polem zamiast w jego prawym
+       końcu. */
+
+    .form-text {
+        display: block;
+        margin-block-start: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-snug);
+        color: var(--q-meta-color);
+    }
+
+    /* Pole z przyciskiem doklejonym od końca: hasło z okiem, kod rabatowy,
+       wyszukiwanie. Przycisk dziedziczy wysokość pola, a stykające się rogi
+       są wyprostowane, żeby oba czytały się jako jedna kontrolka. */
+    .input-group {
+        display: flex;
+        align-items: stretch;
+        inline-size: 100%;
+    }
+
+    .input-group > .form-control,
+    .input-group > .form-select {
+        flex: 1;
+        min-inline-size: 0;
+        border-start-end-radius: 0;
+        border-end-end-radius: 0;
+    }
+
+    .input-group > .btn {
+        flex: none;
+        border-start-start-radius: 0;
+        border-end-start-radius: 0;
+        margin-inline-start: -1px;
+    }
+
+    /* Odstęp pod polem. Rdzeń i moduły zawijają każde pole w `mb-3`, czyli
+       nazwę odstępu z Bootstrapa, którego nie wgrywamy — bez tego pola stały
+       jedno przy drugim, bez przerwy. */
+    .mb-3 { margin-block-end: var(--q-space-md); }
+    .mb-2 { margin-block-end: var(--q-space-sm); }
+    .mt-3 { margin-block-start: var(--q-space-md); }
+    .mt-2 { margin-block-start: var(--q-space-sm); }
+    .my-2 { margin-block: var(--q-space-sm); }
+    .mb-4 { margin-block-end: var(--q-space-lg); }
+}

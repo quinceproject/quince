@@ -1,0 +1,226 @@
+@layer quince.components {
+    /*
+       Pływająca etykieta pola.
+
+       Napis startuje w środku pola i udaje podpowiedź. Po kliknięciu albo po
+       wpisaniu treści przesuwa się do górnej krawędzi i tam zostaje, a wpisana
+       wartość stoi pod nim. Placeholder znika przy pisaniu i po wypełnieniu
+       formularza nie wiadomo już, co jest w którym polu; etykieta zostaje, więc
+       pole daje się przeczytać także po wypełnieniu.
+
+       Napis zostaje W POLU. Poprzednia wersja wycinała go w obramowaniu, ale
+       wymagała tła dopasowanego do powierzchni pod polem: na szarym pasie
+       zostawała biała łata, bo token tła bierze barwę POLA, nie powierzchni
+       pod nim. Wariant z napisem w środku nie ma tego kłopotu i lepiej znosi
+       długie napisy.
+
+       Znaczniki zostają w kolejności etykieta, potem pole: tak czyta je czytnik
+       ekranu i tak działa kliknięcie w napis. Stan pola rozpoznajemy selektorem
+       `:has()` na rodzicu, zamiast przestawiać znaczniki pod CSS.
+
+       Nazwy elementów przyjmujemy dwojakie. Własne znaczniki motywu piszą
+       `q-float__label` i `q-float__input`; formularze generowane przez rdzeń
+       i szablony modułów przychodzą z nazwami Bootstrapa, `form-label`
+       i `form-control`, których nie wgrywamy, ale które musimy obsłużyć.
+    */
+
+    .q-float {
+        position: relative;
+        display: block;
+    }
+
+    /* Pole ma wyściółkę od góry na etykietę także w spoczynku: inaczej wpisana
+       treść przeskakiwałaby w dół w chwili uniesienia napisu. */
+    .q-float > .q-float__input,
+    .q-float > .form-control,
+    .q-float > .form-select,
+    .q-float > .input-group > .form-control {
+        block-size: var(--q-float-height);
+        padding-block: var(--q-float-pad-top) var(--q-float-pad-bottom);
+        line-height: 1.25;
+    }
+
+    .q-float > textarea.form-control,
+    .q-float > textarea.q-float__input {
+        block-size: auto;
+    }
+
+    /* Stan spoczynkowy: napis pośrodku pola, w rozmiarze wartości i w barwie
+       zwykłego tekstu. Barwa podpowiedzi nie wchodzi w grę — napis czytałby się
+       jak wpisana już wartość, a jej kontrast jest poniżej 4,5:1. */
+    .q-float > .q-float__label,
+    .q-float > .form-label {
+        position: absolute;
+        /* Połowa WYSOKOŚCI POLA, nie połowa opakowania: opakowanie mieści też
+           komunikat błędu i podpowiedź pod polem, więc bywa od niego wyższe
+           i napis zjeżdżałby pod spodnią krawędź. */
+        inset-block-start: calc(var(--q-float-height) / 2);
+        inset-inline-start: var(--q-field-pad-inline);
+        z-index: 1;
+
+        margin: 0;
+        transform: translateY(-50%);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-regular);
+        line-height: 1.25;
+        color: var(--q-field-label);
+        pointer-events: none;
+
+        transition:
+            inset-block-start 130ms ease,
+            font-size 130ms ease,
+            transform 130ms ease;
+    }
+
+    /* Napis uniesiony. Trzy stany go podnoszą: ognisko, wpisana wartość
+       i autouzupełnienie przeglądarki. Bez tego ostatniego napis kładzie się
+       na wartości wstawionej przez przeglądarkę — to najczęstszy błąd wdrożeń
+       pływającej etykiety. */
+    .q-float:has(> .q-float__input:focus) > .q-float__label,
+    .q-float:has(> .q-float__input:not(:placeholder-shown)) > .q-float__label,
+    .q-float:has(> .q-float__input:-webkit-autofill) > .q-float__label,
+    .q-float:has(> .form-control:focus) > .form-label,
+    .q-float:has(> .form-control:not(:placeholder-shown)) > .form-label,
+    .q-float:has(> .form-control:-webkit-autofill) > .form-label,
+    .q-float:has(> .input-group > .form-control:focus) > .form-label,
+    .q-float:has(> .input-group > .form-control:not(:placeholder-shown)) > .form-label,
+    .q-float:has(> .input-group > .form-control:-webkit-autofill) > .form-label,
+    .q-float--stale > .q-float__label,
+    .q-float--stale > .form-label {
+        inset-block-start: var(--q-float-top);
+        transform: none;
+        font-size: var(--q-fs-xs);
+    }
+
+    /* Kontrolka wewnątrz pola, np. przycisk pobrania danych przy NIP-ie albo
+       pokazanie hasła. Napis i wartość dostają z prawej tyle miejsca, ile ona
+       zajmuje, żeby pod nią nie wchodziły. */
+    .q-float--action > .q-float__input,
+    .q-float--action > .form-control {
+        padding-inline-end: var(--q-float-action, 9rem);
+    }
+
+    .q-float--action > .q-float__label,
+    .q-float--action > .form-label {
+        inset-inline-end: var(--q-float-action, 9rem);
+    }
+
+    .q-float__action {
+        position: absolute;
+        /* Połowa WYSOKOŚCI POLA, nie połowa opakowania: pod polem stoi jeszcze
+           podpowiedź i komunikat, więc opakowanie bywa wyższe, a przycisk
+           zjeżdżałby pod spodnią krawędź pola. Tak samo jak etykieta. */
+        inset-block-start: calc(var(--q-float-height) / 2);
+        inset-inline-end: var(--q-space-xs);
+        transform: translateY(-50%);
+        z-index: 2;
+    }
+
+    /* Listy rozwijane i pola dat pokazują wartość od początku, więc napis stoi
+       uniesiony zawsze. Odmianę `--stale` dokłada szablon. */
+
+    /* Pole wieloliniowe zostaje ze zwykłym napisem NAD polem: pływający przy
+       przewijanym tekście rozjeżdża się względem treści. */
+    .q-float--multiline { position: static; }
+
+    .q-float--multiline > .q-float__label,
+    .q-float--multiline > .form-label {
+        position: static;
+        transform: none;
+        display: block;
+        margin-block-end: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Pole z błędem: kreska w barwie błędu, ale napis zostaje w barwie tekstu.
+       Dwa czerwone napisy pod rząd — etykieta i komunikat — czytają się jak
+       dwa osobne błędy. */
+    .q-float.has-error > .q-float__label,
+    .q-float.has-error > .form-label {
+        color: var(--q-field-label);
+    }
+
+    /* Gwiazdka pola wymaganego stoi przy napisie, nie w osobnym wierszu. */
+    .q-float > .q-float__label.required::after,
+    .q-float > .form-label.required::after {
+        content: " *";
+        color: var(--q-field-border-invalid);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-float > .q-float__label,
+        .q-float > .form-label { transition: none; }
+    }
+}
+
+@layer quince.components {
+
+    /* ── podgląd hasła ────────────────────────────────────────────────────
+       Znak stoi W POLU, przy prawym końcu. Rezerwa na niego jest mniejsza
+       niż przy przycisku z napisem, więc odmiana nadpisuje szerokość, którą
+       `q-float--action` liczy dla tamtego. */
+
+    .q-float--eye { --q-float-action: 2.75rem; }
+
+    .q-float__eye {
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        display: grid;
+        place-items: center;
+
+        padding: 0;
+        border: 0;
+        background: none;
+        border-radius: var(--q-radius-sm);
+        cursor: pointer;
+        color: var(--q-field-label);
+    }
+
+    .q-float__eye:hover { color: var(--q-text); }
+
+    /* `display` z klasy bije `[hidden]` z arkusza przegladarki, bo arkusz
+       autora wygrywa z arkuszem przegladarki. Bez tego przycisk stoi widoczny
+       takze tam, gdzie skrypt nie wystartowal i nic nie przelacza. */
+    .q-float__eye[hidden] { display: none; }
+
+    .q-float__eye svg { display: block; }
+
+    /* Dwa znaki w jednym przycisku: widoczne jest to, co kliknięcie zrobi.
+       Hasło zasłonięte — oko. Hasło odsłonięte — oko przekreślone. */
+    .q-float__eye .q-float__eye-off { display: none; }
+    .q-float__eye--on .q-float__eye-on { display: none; }
+    .q-float__eye--on .q-float__eye-off { display: block; }
+}
+
+@layer quince.components {
+
+    /* ── pole z błędem ────────────────────────────────────────────────────
+       Z prototypu checkoutu: ramka grubsza i w barwie
+       błędu, tło lekko podbarwione, a pod polem jedno zdanie mówiące, co
+       poprawić. Przeglądarka pokazuje w tym miejscu własny dymek, który
+       znika po chwili i wygląda jak komunikat systemu, a nie strony —
+       dlatego formularze dostają `novalidate`, a sprawdzanie robi wyspa. */
+
+    .q-float.has-error > .form-control,
+    .q-float.has-error > .form-select,
+    .q-float.has-error > .input-group > .form-control {
+        border-width: 2px;
+        border-color: var(--q-field-border-invalid);
+        background: var(--q-surface-danger-soft, #FBEDEC);
+    }
+
+    /* Zgoda z błędem: czerwony kwadracik, bo pola tekstowego z ramką tu nie
+       ma, a sam komunikat pod spodem nie pokazuje, czego dotyczy. */
+    .has-error > .form-check > .form-check-input,
+    .has-error > .q-choice > .q-choice__input { border-color: var(--q-field-border-invalid); }
+
+    .q-fld-err {
+        margin-block-start: 6px;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+        color: var(--q-field-border-invalid);
+    }
+
+    .q-fld-err span { display: block; }
+}

@@ -1,0 +1,66 @@
+/* ===================================================================
+   Quince — stronicowanie
+
+   Przeniesione z makiety kategorii (`.q-strony`).
+
+   Jeden rząd pól o równej wysokości: numery, wielokropek w miejscu
+   przeskoku i „Następna" z nazwą. Strona bieżąca ma `aria-current="page"`
+   — sam kolor nie wystarczy, czytnik ekranu musi wiedzieć, gdzie stoi
+   użytkownik.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-pagination {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* Pole kwadratowe co najmniej 2,5 rem: mniejsze trudno trafić palcem,
+       a numery dwucyfrowe rozpychają je same. */
+    .q-pagination__page,
+    .q-pagination__next {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-xs);
+
+        min-inline-size: 2.5rem;
+        min-block-size: 2.5rem;
+        padding-inline: var(--q-space-sm);
+
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-color);
+    }
+
+    .q-pagination__page:hover,
+    .q-pagination__next:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    .q-pagination__page.is-active {
+        background: var(--q-fill-primary);
+        border-color: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-pagination__gap {
+        padding-inline: var(--q-space-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-pagination__page:focus-visible,
+    .q-pagination__next:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+}

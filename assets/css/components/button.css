@@ -1,0 +1,281 @@
+/* ===================================================================
+   Quince — przycisk
+
+   Wzorzec dla wszystkich komponentów motywu:
+
+   1. Cały arkusz siedzi w warstwie `quince.components` — dzięki temu
+      wygrywa ze stylami modułów bez ani jednego `!important`.
+   2. Sięga WYŁĄCZNIE po tokeny `--q-btn-*` z tokens.css. Zero wartości
+      hex, zero odwołań do stopni skali, zero liczb wziętych z powietrza.
+      Brakuje czegoś — rozbudowujemy kontrakt tokenów, nie ten plik.
+   3. Odstępy i wymiary w jednostkach logicznych (`inline-size`,
+      `padding-inline`) — układ odwraca się dla języków pisanych od prawej
+      bez osobnego arkusza RTL.
+
+   Warianty: primary, secondary, ghost, destructive, link.
+   Stany: rest, hover, active, focus, disabled, loading.
+   =================================================================== */
+
+/* Nazwy z Bootstrapa (`btn`, `btn-primary`, `btn-outline-primary`...) stoja
+   obok naszych, bo przychodza z szablonow rdzenia i modulow, a Bootstrapa nie
+   wgrywamy. Bez tego 88 przyciskow w 55 szablonach renderowalo sie jako gola
+   ramka przegladarki: „Zaloz konto", „Zapisz adres", przyciski w oknach listy
+   zyczen i w formularzu kontaktowym.
+
+   To samo podejscie, co w `field.css` dla `form-control` i `form-select`. */
+
+@layer quince.components {
+
+    .q-btn,
+    .btn,
+    .wishlist-add-to-new {
+        /* Zmienne lokalne — wariant nadpisuje je i nie dotyka reguł niżej.
+           Ten sam mechanizm co w Bootstrapie 5.3, tylko na naszych tokenach. */
+        --btn-bg: transparent;
+        --btn-label: var(--q-body-color);
+        --btn-border: transparent;
+        --btn-ring: var(--q-btn-focus-ring);
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-xs);
+
+        /* Wysokość i szerokość celu dotykowego wymagane przez WCAG 2.1.
+           To nie jest ustawienie sprzedawcy — to warunek dostępności. */
+        min-block-size: var(--q-btn-height);
+        min-inline-size: var(--q-btn-height);
+        padding-inline: var(--q-space-md);
+        padding-block: 0;
+
+        border: 1px solid var(--btn-border);
+        border-radius: var(--q-btn-radius);
+        background: var(--btn-bg);
+        color: var(--btn-label);
+
+        font-family: inherit;
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-tight);
+        text-align: center;
+        text-decoration: none;
+        white-space: nowrap;
+
+        cursor: pointer;
+        transition:
+            background-color 120ms ease-out,
+            border-color 120ms ease-out,
+            color 120ms ease-out;
+    }
+
+    .q-btn:focus-visible {
+        outline: 2px solid var(--btn-ring);
+        outline-offset: 2px;
+    }
+
+    /* --- primary: jedna główna akcja na widok --- */
+    .q-btn--primary,
+    .btn-primary {
+        --btn-bg: var(--q-btn-primary-bg);
+        --btn-label: var(--q-btn-primary-label);
+        --btn-border: var(--q-btn-primary-bg);
+    }
+
+    /* Napis idzie za stanem, bo stan zmienia tło. Wzięty raz, od koloru spoczynku,
+       potrafi spaść poniżej progu czytelności — i spadał: żółte wypełnienie po
+       wciśnięciu dawało z ciemnym napisem 3,71 zamiast wymaganych 4,5. */
+    .q-btn--primary:hover {
+        --btn-bg: var(--q-btn-primary-bg-hover);
+        --btn-label: var(--q-btn-primary-label-hover);
+        --btn-border: var(--q-btn-primary-bg-hover);
+    }
+
+    .q-btn--primary:active {
+        --btn-bg: var(--q-btn-primary-bg-active);
+        --btn-label: var(--q-btn-primary-label-active);
+        --btn-border: var(--q-btn-primary-bg-active);
+    }
+
+    /* --- secondary: akcja drugorzędna, kontur zamiast wypełnienia --- */
+    .q-btn--secondary,
+    .btn-secondary,
+    .btn-outline-primary,
+    .btn-outline-tertiary,
+    .wishlist-add-to-new {
+        --btn-bg: var(--q-btn-secondary-bg);
+        --btn-label: var(--q-btn-secondary-label);
+        --btn-border: var(--q-btn-secondary-border);
+    }
+
+    .q-btn--secondary:hover,
+    .wishlist-add-to-new:hover {
+        --btn-bg: var(--q-btn-secondary-bg-hover);
+    }
+
+    /* --- quiet: akcja poboczna, która nie ma konkurować z zakupem ---
+       Wyciszony napis i włosowa kreska. Pod kursorem zapala się sama kreska
+       i napis, bez wypełnienia: przycisk stoi obok formularza i pełna płaszczyzna
+       w barwie marki przykrywała to, po co klient tam przyszedł.
+
+       Barwy idą przez zmienne komponentu (`--btn-*`), tak jak w pozostałych
+       odmianach, więc odmiany nie biją się o pierwszeństwo. */
+    .q-btn--quiet,
+    .btn-basic {
+        --btn-label: var(--q-text-muted);
+        --btn-border: var(--q-border-subtle);
+        font-weight: var(--q-weight-medium);
+    }
+
+    .q-btn--quiet:hover {
+        --btn-bg: transparent;
+        --btn-label: var(--q-fill-primary);
+        --btn-border: var(--q-fill-primary);
+    }
+
+    /* --- ghost: akcja w karcie, najmniej wyróżniona --- */
+    .q-btn--ghost {
+        --btn-label: var(--q-btn-ghost-label);
+    }
+
+    .q-btn--ghost:hover {
+        --btn-bg: var(--q-btn-ghost-bg-hover);
+    }
+
+    /* --- destructive: usunięcie, anulowanie --- */
+    .q-btn--destructive {
+        --btn-bg: var(--q-btn-destructive-bg);
+        --btn-label: var(--q-btn-destructive-label);
+        --btn-border: var(--q-btn-destructive-bg);
+
+        /* Pierścień focusu w kolorze intencji, nie marki. Żółta obwódka wokół
+           czerwonego przycisku „Usuń" myli sygnał — kolor ma ostrzegać także
+           wtedy, gdy element jest wybrany klawiaturą. */
+        --btn-ring: var(--q-btn-destructive-focus-ring);
+    }
+
+    .q-btn--destructive:hover {
+        --btn-bg: var(--q-btn-destructive-bg-hover);
+        --btn-label: var(--q-btn-destructive-label-hover);
+        --btn-border: var(--q-btn-destructive-bg-hover);
+    }
+
+    /* --- link: akcja w ciągu tekstu --- */
+    .q-btn--link,
+    .btn-link {
+        --btn-label: var(--q-btn-link-label);
+
+        min-block-size: auto;
+        min-inline-size: auto;
+        padding-inline: 0;
+        border: 0;
+        font-weight: inherit;
+    }
+
+    .q-btn--link:hover {
+        --btn-label: var(--q-btn-link-label-hover);
+        text-decoration: none;
+    }
+
+    /* --- stan wyłączony ---
+       `pointer-events` celowo NIE jest wyłączone: element bez zdarzeń nie
+       pokazuje kursora „niedozwolone" i nie da się do niego przypiąć
+       podpowiedzi wyjaśniającej, dlaczego akcja jest niedostępna. */
+    .q-btn:disabled,
+    .q-btn[aria-disabled="true"] {
+        --btn-bg: var(--q-btn-disabled-bg);
+        --btn-label: var(--q-btn-disabled-label);
+        --btn-border: var(--q-btn-disabled-bg);
+
+        cursor: not-allowed;
+    }
+
+    /* --- stan ładowania ---
+       Sygnał, że kliknięcie zadziałało. Bez niego klient klika „Zamawiam"
+       drugi raz, bo przez dwie sekundy nic się nie dzieje — i sklep dostaje
+       zdublowane zamówienie. Napis zostaje na miejscu, żeby przycisk nie
+       zmienił szerokości i nie przesunął sąsiadów. */
+    .q-btn[data-loading="true"] {
+        cursor: progress;
+        pointer-events: none;
+    }
+
+    .q-btn[data-loading="true"] .q-btn__label {
+        opacity: 0.35;
+    }
+
+    .q-btn[data-loading="true"]::after {
+        content: "";
+        position: absolute;
+        inline-size: 1em;
+        block-size: 1em;
+        border: 2px solid currentColor;
+        border-block-start-color: transparent;
+        border-radius: 50%;
+        animation: q-btn-spin 600ms linear infinite;
+    }
+
+    .q-btn[data-loading="true"] {
+        position: relative;
+    }
+
+    @keyframes q-btn-spin {
+        to { transform: rotate(360deg); }
+    }
+
+    /* --- ikona w przycisku ---
+       Rozmiar wiązany z pismem, nie z pikselami: przy większym rozmiarze
+       podstawowym w ustawieniach ikona rośnie razem z napisem, zamiast zostawać
+       w tyle jak znaczek doklejony z boku. */
+    .q-btn__icon {
+        inline-size: 1.15em;
+        block-size: 1.15em;
+        flex: none;
+    }
+
+    /* Ikona sama w sobie nic nie mówi czytnikowi ekranu, więc przy przycisku
+       ikonowym napis nie znika — chowa się wyłącznie dla oka. */
+    .q-btn--icon .q-btn__label {
+        position: absolute;
+        inline-size: 1px;
+        block-size: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+    }
+
+    /* --- rozmiary --- */
+    /* Mały przycisk stoi tam, gdzie nie jest głównym działaniem strony: w liście
+       rozwijanej, w karcie, w wierszu tabeli. Cel dotykowy 44 px go tam nie
+       obowiązuje, bo obok stoi większy odpowiednik tej samej akcji — a przycisk
+       tej wysokości w panelu wygląda na wciśnięty na siłę.
+       Zaokrąglenie mniejsze niż w dużym: przy niskiej wysokości to samo
+       zaokrąglenie zjada róg i robi z przycisku pigułkę. */
+    .q-btn--sm,
+    .btn-sm,
+    .wishlist-add-to-new {
+        min-block-size: 30px;
+        min-inline-size: 0;
+        padding-inline: 14px;
+        border-radius: var(--q-btn-radius-sm);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-btn--lg {
+        min-block-size: 52px;
+        padding-inline: var(--q-space-lg);
+    }
+
+    /* Przycisk na całą szerokość — na telefonie standard w koszyku i kasie. */
+    .q-btn--block {
+        display: flex;
+        inline-size: 100%;
+    }
+
+    /* Przycisk ikonowy: kwadrat o boku celu dotykowego. Wymaga aria-label,
+       bo nie ma treści tekstowej. */
+    .q-btn--icon,
+    .btn-square {
+        padding-inline: 0;
+        inline-size: var(--q-btn-height);
+    }
+}

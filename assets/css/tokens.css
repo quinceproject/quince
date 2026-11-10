@@ -1,0 +1,523 @@
+/* ===================================================================
+   Quince — tokeny motywu
+
+   Warstwa druga i trzecia systemu. Warstwę pierwszą — role kolorystyczne
+   i wartości bazowe — wypisuje silnik do <head> sklepu, bo zależą od ustawień
+   sprzedawcy i zmieniają się bez przebudowy plików.
+
+   Zawartość odwzorowuje mapę tokenów projektu — komplet, nie wybór.
+
+   ŻADEN komponent motywu nie ma prawa użyć wartości spoza tego pliku.
+   Brakuje czegoś — rozbudowujemy kontrakt tutaj, nie dopisujemy liczby
+   w arkuszu komponentu.
+
+   PLIK JEST GENEROWANY. Zmiany ręczne przepadną przy kolejnym przebudowaniu.
+   =================================================================== */
+
+@layer quince.tokens {
+  :root {
+
+    /* --- pochodne wartości bazowych ---
+       Liczone w CSS, nie w PHP: przeglądarka przelicza je sama po zmianie
+       zmiennej bazowej, więc podmiana rozmiaru tekstu przestawia całą
+       hierarchię nagłówków bez udziału serwera. */
+    --q-radius-sm:           calc(var(--q-radius-base) * 0.6);
+    --q-radius-md:           var(--q-radius-base);
+    --q-radius-lg:           calc(var(--q-radius-base) * 1.6);
+    --q-space-xs:            calc(var(--q-space-unit) * 0.25);
+    --q-space-sm:            calc(var(--q-space-unit) * 0.5);
+    --q-space-md:            var(--q-space-unit);
+    --q-space-lg:            calc(var(--q-space-unit) * 2);
+    --q-space-xl:            calc(var(--q-space-unit) * 3);
+    /* Skala pisma siada na pełnych pikselach.
+       Stopnie liczą się mnożeniem, więc bez zaokrąglenia wychodziły wartości
+       w rodzaju 13,913 px czy 18,4 px — sklep pokazywał wtedy ułamki, których
+       nikt nie zamawiał, a sąsiadujące stopnie różniły się o ułamek piksela
+       i wyglądały na przypadkowe.
+
+       Każdy stopień liczy się od rozmiaru bazowego, a nie od stopnia obok:
+       przy łańcuchu zaokrągleń błąd narastałby z każdym krokiem. Sposób
+       zapisu zostaje ten sam, więc zmiana rozmiaru bazowego albo iloraz skali
+       dalej przestawia całą hierarchię bez udziału serwera. */
+    --q-fs-base:             var(--q-base-size);
+    --q-fs-sm:               round(calc(var(--q-base-size) / var(--q-scale)), 1px);
+    --q-fs-xs:               round(calc(var(--q-base-size) / var(--q-scale) / var(--q-scale)), 1px);
+    --q-fs-h6:               round(calc(var(--q-base-size) * var(--q-scale)), 1px);
+    --q-fs-h5:               round(calc(var(--q-base-size) * var(--q-scale) * var(--q-scale)), 1px);
+    --q-fs-h4:               round(calc(var(--q-base-size) * var(--q-scale) * var(--q-scale) * var(--q-scale)), 1px);
+    --q-fs-h3:               round(calc(var(--q-base-size) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale)), 1px);
+    --q-fs-h2:               round(calc(var(--q-base-size) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale)), 1px);
+    --q-fs-h1:               round(calc(var(--q-base-size) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale) * var(--q-scale)), 1px);
+    --q-heading-font:        var(--q-font-heading);
+    --q-body-font:           var(--q-font-body);
+    --q-container-width:     var(--q-container);
+
+    /* --- accordion --- */
+    --q-accordion-border:    var(--q-blok-ramka-barwa, var(--q-border-card));
+    --q-accordion-radius:    var(--q-radius-panel);
+    --q-accordion-header-label: var(--q-text-strong);
+    --q-accordion-header-bg-hover: var(--q-surface-hover);
+    --q-accordion-icon:      var(--q-text-muted);
+    --q-accordion-body-label: var(--q-text-body);
+    --q-accordion-pad-block: 14px;
+    --q-accordion-pad-inline: 16px;
+
+    /* --- action --- */
+    --q-action-h:            var(--q-touch-target);
+    --q-action-radius:       var(--q-radius-md);
+    --q-action-cart-radius:  var(--q-radius-md);
+
+    /* --- Alerty i komunikaty w treści --- */
+    --q-alert-success-bg:    var(--q-surface-success);
+    --q-alert-success-border: var(--q-border-success);
+    --q-alert-success-text:  var(--q-text-success);
+    --q-alert-success-icon:  var(--q-fill-success);
+    --q-alert-warning-bg:    var(--q-surface-warning);
+    --q-alert-warning-border: var(--q-border-warning);
+    --q-alert-warning-text:  var(--q-text-warning);
+    --q-alert-warning-icon:  var(--q-fill-warning);
+    --q-alert-danger-bg:     var(--q-surface-danger);
+    --q-alert-danger-border: var(--q-border-danger);
+    --q-alert-danger-text:   var(--q-text-danger);
+    --q-alert-danger-icon:   var(--q-fill-danger);
+    --q-alert-info-bg:       var(--q-surface-info);
+    --q-alert-info-border:   var(--q-border-info);
+    --q-alert-info-text:     var(--q-text-info);
+    --q-alert-info-icon:     var(--q-fill-info);
+    --q-alert-radius:        var(--q-radius-panel);
+    --q-alert-pad-block:     12px;
+    --q-alert-pad-inline:    14px;
+    --q-alert-gap:           10px;
+    --q-alert-bar:           3px;
+
+    /* --- Załączniki --- */
+    /* Znaczek typu pliku w barwie atramentu, nie w barwie błędu. Czerwień
+       znaczyłaby to samo co komunikat o błędzie, a rozszerzenie pliku niczego
+       nie zgłasza. Atrament zostawia też barwę marki ramce, która zapala się
+       pod kursorem — dwa akcenty naraz zniosłyby ten sygnał. */
+    --q-attach-badge-bg:     var(--q-neutral-12);
+    --q-attach-badge-label:  #ffffff;
+
+    /* --- Plakietki produktu --- */
+    /* Plakietki mają WŁASNE role w silniku i własną kartę w panelu — to je
+       sklep ustawia ołówkiem. Wcześniej brały tu kolory STATUSÓW: nowość barwę
+       informacji, bestseller barwę ostrzeżenia, wyprzedaż barwę błędu. Karta
+       w panelu nie robiła więc nic, a plakietka niosła znaczenie, którego nie
+       ma — „Pakiet" wyglądał jak komunikat systemu. */
+    --q-badge-discount-bg:   var(--q-badge-promo);
+    --q-badge-discount-label: var(--q-on-badge-promo);
+    --q-badge-new-bg:        var(--q-badge-new);
+    --q-badge-new-label:     var(--q-on-badge-new);
+    --q-badge-bestseller-bg: var(--q-badge-bestseller);
+    --q-badge-bestseller-label: var(--q-on-badge-bestseller);
+    --q-badge-bundle-bg:     var(--q-badge-pack);
+    --q-badge-bundle-label:  var(--q-on-badge-pack);
+    --q-badge-sale-bg:       var(--q-badge-sale);
+    --q-badge-sale-label:    var(--q-on-badge-sale);
+
+    /* --- Tekst strony --- */
+    --q-body-color:          var(--q-text-strong);
+    --q-body-secondary-color: var(--q-text-muted);
+
+    /* --- Kreska włosowa ---
+       Najcichsza linia w motywie: rozdziela wiersze WEWNĄTRZ jednego bloku,
+       a nie bloki od siebie. Wiersz narzędzi od pigułek zawężeń, grupy filtrów,
+       słupek zakupu od treści w widoku listy. `--q-border-subtle` jest na to
+       za mocna — obrysowuje bloki i przy kilku liniach w jednej karcie robiła
+       z niej kratkę. */
+    --q-border-hairline:     var(--q-neutral-5);
+
+    /* --- Okruszki --- */
+    --q-breadcrumb-link:     var(--q-text-muted);
+    --q-breadcrumb-link-hover: var(--q-text-primary);
+    --q-breadcrumb-current:  var(--q-text-strong);
+    --q-breadcrumb-separator: var(--q-neutral-6);
+
+    /* --- Przyciski --- */
+    --q-btn-primary-bg:      var(--q-fill-primary);
+    --q-btn-primary-bg-hover: var(--q-fill-primary-hover);
+    --q-btn-primary-bg-active: var(--q-fill-primary-active);
+    --q-btn-primary-label:   var(--q-on-fill-primary);
+    --q-btn-secondary-bg:    transparent;
+    --q-btn-secondary-border: var(--q-border);
+    --q-btn-secondary-label: var(--q-text-strong);
+    --q-btn-secondary-bg-hover: var(--q-surface-sunken);
+    --q-btn-ghost-label:     var(--q-text-strong);
+    --q-btn-ghost-bg-hover:  var(--q-surface-sunken);
+    --q-btn-destructive-bg:  var(--q-fill-danger);
+    --q-btn-destructive-bg-hover: var(--q-fill-danger-hover);
+    --q-btn-destructive-label: var(--q-on-fill-danger);
+    --q-btn-destructive-focus-ring: var(--q-danger-9);
+    --q-btn-link-label:      var(--q-text-primary);
+    --q-btn-link-label-hover: var(--q-fill-primary-hover);
+    --q-btn-disabled-bg:     var(--q-neutral-5);
+    --q-btn-disabled-label:  var(--q-neutral-10);
+    --q-btn-focus-ring:      var(--q-focus-ring);
+    --q-btn-radius:          var(--q-radius-md);
+    --q-btn-height:          44px;
+    --q-btn-radius-sm:       var(--q-radius-sm);
+    --q-btn-primary-label-hover: var(--q-on-fill-primary-hover);
+    --q-btn-primary-label-active: var(--q-on-fill-primary-active);
+    --q-btn-destructive-label-hover: var(--q-on-fill-danger-hover);
+
+    /* --- Karta --- */
+    --q-card-bg:             var(--q-surface-raised);
+    --q-card-bg-hover:       var(--q-surface-hover);
+    --q-card-border:         var(--q-blok-ramka-barwa, var(--q-border-card));
+    --q-card-radius:         var(--q-radius-panel);
+
+    /* --- Chip filtra --- */
+    --q-chip-bg:             var(--q-surface-primary);
+    --q-chip-bg-active:      var(--q-fill-primary);
+    --q-chip-label:          var(--q-on-fill-primary);
+    --q-chip-label-active:   var(--q-on-fill-primary);
+    --q-chip-border:         transparent;
+
+    /* --- Checkbox, radio, przełącznik --- */
+    --q-choice-border:       var(--q-field-border);
+    --q-choice-fill-checked: var(--q-fill-primary);
+    --q-choice-mark:         var(--q-on-fill-primary);
+    --q-choice-disabled:     var(--q-neutral-4);
+    --q-choice-size:         20px;
+    --q-choice-radius:       var(--q-radius-md);
+    --q-choice-gap:          10px;
+
+    /* --- Powierzchnie ciemne --- */
+    --q-dark-link:           #8fa6d8;
+    --q-dark-link-hover:     #aebfe2;
+
+    /* --- drawer --- */
+    --q-drawer-width:        420px;
+
+    /* --- dropdown --- */
+    --q-dropdown-bg:         var(--q-surface-raised);
+    --q-dropdown-border:     var(--q-border-subtle);
+    --q-dropdown-radius:     var(--q-radius-panel);
+    --q-dropdown-shadow:     var(--q-shadow-sm);
+    --q-dropdown-option-label: var(--q-text-strong);
+    --q-dropdown-option-label-current: var(--q-text-primary);
+    --q-dropdown-option-bg-hover: var(--q-surface-hover);
+    --q-dropdown-option-pad-block: 10px;
+    --q-dropdown-option-pad-inline: 18px;
+
+    /* --- Pusty stan --- */
+    --q-empty-icon:          var(--q-neutral-6);
+    --q-empty-text:          var(--q-text-muted);
+
+    /* --- Pola formularza --- */
+    /* Pole jest tą samą powierzchnią co karta: leży na niej i przyjmuje treść.
+       Biel wpisana wprost robiła w kremowej karcie jarzącą się dziurę.
+
+       Kreska pola jest zwykłą kreską skali, mocniejszą od kreski bloków, ale nie
+       dociąganą do progu kontrastu.
+
+       DECYZJA WŁAŚCICIELA: kreska licząca 3:1 wobec tła (rola `--q-border-field`,
+       u nas ~#8e8d89) wygląda na karcie jak ciemna ramka wokół każdego pola.
+       Duże sklepy tego progu nie trzymają: Komputronik ma #eef3f8, euro.com.pl
+       #e5e5e5. Stopień skali wskazuje sklep w panelu, w sekcji „Obramowania".
+
+       Co to znaczy przy audycie: WCAG 1.4.11 wymaga 3:1 dla obramowania, które
+       jest jedynym znakiem, że to kontrolka. Ta kreska tego nie daje (około 1,3:1).
+       Ognisko ma własny pierścień, więc obsługa klawiaturą jest widoczna.
+       Rola `--q-border-field` zostaje w palecie i wystarczy tu wrócić jednym
+       słowem, gdyby audyt to podniósł. */
+    --q-field-bg:            var(--q-surface-raised);
+    --q-field-border:        var(--q-border-input);
+    /* Kursor i ognisko: barwy z silnika, bo o tym, czy pole odpowiada
+       atramentem, czy barwą marki, decyduje sklep w „Obramowaniach". Wartości
+       zapasowe zostają na wypadek arkusza wczytanego bez tokenów silnika. */
+    --q-field-border-hover:  var(--q-field-hover, var(--q-border-hover));
+    --q-field-border-focus:  var(--q-field-focus, var(--q-focus-ring));
+    --q-field-border-invalid: var(--q-fill-danger);
+    --q-field-label:         var(--q-text-strong);
+    --q-field-placeholder:   var(--q-neutral-7);
+    --q-field-bg-disabled:   var(--q-neutral-2);
+    --q-field-text-disabled: var(--q-neutral-7);
+    --q-field-help-invalid:  var(--q-text-danger);
+    --q-field-radius:        var(--q-radius-md);
+    --q-field-height:        var(--q-touch-target);
+
+    /* Pole z pływającą etykietą ma własną wysokość, bo mieści dwa wiersze:
+       uniesiony napis i wartość. Osobny token, a nie podniesione
+       `--q-field-height`, bo od tamtego liczą się też kontrolki interfejsu:
+       wysokość listy rozwijanej, kontrolek w nagłówku sklepu, pola ilości
+       w buyboksie i kwadratu wyboru koloru. Formularz ma urośnąć, nagłówek nie. */
+    --q-float-height:        3.5rem;
+    --q-float-top:           0.5rem;
+    --q-float-pad-top:       1.375rem;
+    --q-float-pad-bottom:    0.375rem;
+    --q-float-action:        9rem;
+    --q-field-pad-inline:    12px;
+    --q-field-pad-block:     10px;
+
+    /* --- header --- */
+    --q-header-logo-h:       40px;
+    --q-header-search-max:   600px;
+    --q-header-control-h:    calc(var(--q-field-height) + 2px);
+    --q-header-pad-block:    14px;
+    /* Najechanie bierze rolę pasa. Na jasnym nagłówku jest to welon w barwie
+       pisma, na ciemnym barwa marki — rozstrzyga silnik, bo tylko on zna ton
+       tła pasa, a CSS nie umie się po nim rozgałęzić. */
+    --q-header-hover:        var(--q-band-header-hover);
+    --q-header-bg:           var(--q-band-header-bg);
+    --q-header-label:        var(--q-band-header-fg);
+    --q-header-label-hover:  var(--q-band-header-hover-fg);
+    --q-header-border:       var(--q-band-header-border);
+
+    /* Kreska pola wyszukiwania należy do pasa, w którym pole stoi: na jasnym
+       nagłówku jest jasna, na ciemnym ciemna. Globalna rola dawała na ciemnym
+       pasie szarą obwódkę. */
+    /* Wyszukiwarka leży na pasie nagłówka, więc bierze barwy pasa, a nie karty.
+       Pas bywa jasny, ciemny albo w barwie marki i zmienia się po przewinięciu —
+       tło karty pasowałoby do jednego z trzech przypadków, a przy okazji
+       ustawienie „Tło kart" przemalowywałoby wyszukiwarkę. */
+    /* Wypełnienie przycisków stojących na pasie: katalog i koszyk. Barwa marki
+       przestaje być wyróżnieniem, gdy pas sam ją nosi — wtedy silnik podstawia
+       kolor ciemny sklepu. Dlatego rola pasa, a nie `--q-fill-primary`. */
+    --q-header-solid:        var(--q-band-header-solid);
+    --q-header-on-solid:     var(--q-band-header-on-solid);
+    --q-header-solid-hover:  var(--q-band-header-solid-hover);
+    --q-header-on-solid-hover: var(--q-band-header-on-solid-hover);
+
+    --q-search-bg:           var(--q-band-header-field);
+    --q-search-sunken:       var(--q-band-header-field-sunken);
+    --q-search-fg:           var(--q-band-header-field-fg);
+    --q-search-placeholder:  var(--q-band-header-field-placeholder);
+    --q-search-border:       var(--q-band-header-field-border);
+
+    /* --- Nagłówki --- */
+    --q-heading-color:       var(--q-text-strong);
+
+    /* --- lh --- */
+    --q-lh-tight:            1.2;
+    --q-lh-snug:             1.35;
+    --q-lh-normal:           1.5;
+    --q-lh-card:             1.4;
+    --q-lh-relaxed:          1.6;
+
+    /* --- Metadane --- */
+    /* Drobne dopiski obok treści: marka na zajawce, numer katalogowy, nota
+       o najniższej cenie. Na stopniu ósmym dawały 2,44:1 na białym, czyli
+       poniżej progu czytelności — stąd stopień jedenasty. */
+    --q-meta-color:          var(--q-neutral-11);
+
+    /* --- modal --- */
+    --q-modal-bg:            var(--q-surface-raised);
+    --q-modal-radius:        var(--q-radius-panel);
+    --q-modal-shadow:        var(--q-shadow-lg);
+    --q-modal-border:        var(--q-border-subtle);
+    --q-modal-title:         var(--q-text-strong);
+    --q-modal-body-label:    var(--q-text-body);
+    --q-modal-foot-bg:       var(--q-surface-sunken);
+    --q-modal-pad-block:     16px;
+    --q-modal-pad-inline:    20px;
+    --q-modal-width:         560px;
+    --q-modal-width-lg:      860px;
+
+    /* --- navbar --- */
+    --q-navbar-height:       46px;
+    --q-navbar-trigger-w:    240px;
+    --q-navbar-bg:           var(--q-band-nav-bg);
+    --q-navbar-label:        var(--q-band-nav-fg);
+    --q-navbar-label-muted:  var(--q-band-nav-fg-muted);
+    --q-navbar-link:         var(--q-band-nav-link);
+    --q-navbar-hover:        var(--q-band-nav-hover);
+    /* Napis na tle najechania idzie z TEJ SAMEJ pary co tło. Barwa odnośnika
+       jest dobrana pod tło pasa, nie pod tło najechania — na pasie ciemnym obie
+       wychodziły barwą marki i napis znikał w prostokącie pod sobą. */
+    --q-navbar-hover-label:  var(--q-band-nav-hover-fg);
+    --q-navbar-border:       var(--q-band-nav-border);
+    --q-navbar-solid:        var(--q-band-nav-solid);
+    --q-navbar-on-solid:     var(--q-band-nav-on-solid);
+    --q-navbar-solid-hover:  var(--q-band-nav-solid-hover);
+
+    /* --- Paginacja --- */
+    --q-pagination-fill-active: var(--q-fill-primary);
+    --q-pagination-label-active: var(--q-on-fill-primary);
+    --q-pagination-label:    var(--q-text-strong);
+    --q-pagination-label-disabled: var(--q-neutral-6);
+
+    /* --- Karta produktu --- */
+    /* Kadr zajawki bez szarej obwódki: przy szarym tle kadru i zdjęciu wpisanym
+       w kadr dookoła zostawał pasek innej barwy niż karta. Zdjęcia w sklepie
+       i tak mają własny margines wpisany w plik. */
+    --q-pcard-media-bg:      var(--q-surface-sunken);
+    --q-pcard-media-placeholder: var(--q-neutral-7);
+    /* Zdjęcie wypełnia kadr. Zajawki w rzędzie mają wtedy jednakowe,
+       pełne kadry zamiast obrazków różnej wielkości pływających w pustym
+       polu — a że kadr jest kwadratowy, zdjęcie traci tylko brzegi. */
+    --q-pcard-media-fit:     cover;
+
+    /* --- picker --- */
+    --q-picker-label:        var(--q-band-topbar-fg-muted);
+    --q-picker-label-hover:  var(--q-band-topbar-fg);
+    --q-picker-focus:        var(--q-band-topbar-fg);
+    --q-picker-flag-bg:      var(--q-band-topbar-fg-muted);
+
+    /* --- Ceny --- */
+    --q-price-current:       var(--q-text-strong);
+    --q-price-old:           var(--q-text-muted);
+    --q-price-promo:         var(--q-promo-10);
+    --q-price-save:          var(--q-text-success);
+
+    /* --- Pasek komunikatu --- */
+    --q-promobar-bg:         var(--q-band-promobar-bg);
+    --q-promobar-label:      var(--q-band-promobar-fg);
+    --q-promobar-link:       var(--q-band-promobar-link);
+    --q-promobar-height:     28px;
+
+    /* --- radius --- */
+    --q-radius-panel:        min(var(--q-radius-lg), 16px);
+
+    /* --- search --- */
+    --q-search-scope-w:      auto;
+
+    /* --- select --- */
+    --q-select-bg:           var(--q-field-bg);
+    --q-select-border:       var(--q-field-border);
+    --q-select-radius:       var(--q-field-radius);
+    --q-select-label:        var(--q-text-body);
+    --q-select-height:       var(--q-field-height);
+
+    /* --- Pasek darmowej dostawy --- */
+    --q-shipping-track-bg:   var(--q-neutral-5);
+    --q-shipping-fill:       var(--q-fill-primary);
+    --q-shipping-label:      var(--q-text-strong);
+
+    /* --- skiplink --- */
+    --q-skiplink-radius:     var(--q-radius-md);
+
+    /* --- Slajder --- */
+    /* Promień slajdera w odmianie stojącej w pojemniku strony. Przez całą
+       szerokość okna slajder rogów nie ma — nie ma czego zaokrąglać. */
+    --q-slider-radius:       var(--q-radius-panel);
+    /* Tło pod ramką filmu: widać je, zanim serwis wczyta odtwarzacz, i w rogach,
+       gdyby plakat miał inne proporcje niż pas. */
+    --q-slider-video-bg:     var(--q-neutral-12);
+    /* Zasłona na całym kadrze zdjęcia albo filmu. Osobno od wtapiania krawędzi,
+       bo odpowiada na inny kłopot: jasny środek kadru pod tekstem. */
+    --q-slider-shade:        rgb(0 0 0 / .45);
+    /* Cień pod napisem leżącym na materiale. Zasłona radzi sobie z ciemnym
+       kadrem, ale nie z jasnym fragmentem pod jedną linijką — wtedy znika sam
+       napis, nie cały blok. Cień działa punktowo i nie przyciemnia materiału. */
+    --q-slider-text-shadow:  0 1px 3px rgb(0 0 0 / .85), 0 0 18px rgb(0 0 0 / .55);
+    /* Pigułka cechy na slajdzie. Na jasnym tle powierzchnia wklęsła, na ciemnym
+       welon w barwie napisu: pełna biel robiłaby z trzech cech trzy plamy
+       mocniejsze od tytułu nad nimi. */
+    --q-slider-spec-bg:      var(--q-neutral-5);
+    --q-slider-spec-bg-dark: rgb(255 255 255 / .14);
+    /* Napis na materiale i na powierzchni ciemnej. Stopień pierwszy, nie biel
+       wprost: przy palecie z odcieniem biel wychodziła zimniejsza od reszty
+       sklepu. */
+    --q-slider-on-dark:      var(--q-neutral-1);
+    /* Przycisk drugorzędny na ciemnym: welon i kreska w barwie napisu. Wartości
+       półprzezroczyste, a nie stopień skali, bo pod przyciskiem bywa zdjęcie
+       i kreska musi się trzymać niezależnie od tego, co pod nią leży. */
+    --q-slider-action-bg:        rgb(255 255 255 / .12);
+    --q-slider-action-bg-hover:  rgb(255 255 255 / .22);
+    --q-slider-action-border:    rgb(255 255 255 / .55);
+    --q-slider-arrow-size:   2rem;
+    /* Podkład rzędu kropek: ten sam rząd stoi raz na zdjęciu, raz na jasnej
+       powierzchni slajdu dwukolumnowego. */
+    --q-slider-dots-bg:      rgb(0 0 0 / .35);
+    --q-slider-dot:          rgb(255 255 255 / .60);
+    --q-slider-dot-active:   var(--q-fill-primary);
+    --q-slider-dot-size:     9px;
+    --q-slider-dot-size-active: 26px;
+    /* Wysokość pasa. Niższy nie mieści tytułu, zdania i dwóch przycisków bez
+       ścisku, wyższy zabiera miejsce pierwszej sekcji pod slajderem. */
+    --q-slider-height:       30rem;
+    --q-slider-height-sm:    24rem;
+    --q-slider-photo-h-sm:   14rem;
+    --q-slider-content-max:  44rem;
+    --q-slider-text-max:     52ch;
+
+    /* --- Tabela specyfikacji --- */
+    --q-spectable-header-bg: var(--q-surface-sunken);
+    --q-spectable-header-text: var(--q-text-strong);
+    --q-spectable-row-border: var(--q-neutral-4);
+    --q-spectable-label:     var(--q-text-muted);
+    --q-spectable-value:     var(--q-text-strong);
+
+    /* --- Gwiazdki oceny --- */
+    --q-star-fill:           var(--q-star);
+    --q-star-empty:          var(--q-neutral-5);
+
+    /* --- Dostępność --- */
+    --q-stock-in-dot:        var(--q-fill-success);
+    --q-stock-low-dot:       var(--q-fill-warning);
+    --q-stock-out-dot:       var(--q-neutral-7);
+    --q-stock-in-text:       var(--q-text-success);
+    --q-stock-low-text:      var(--q-text-warning);
+    --q-stock-out-text:      var(--q-text-muted);
+
+    /* --- switch --- */
+    --q-switch-width:        40px;
+    --q-switch-height:       22px;
+    --q-switch-track:        var(--q-neutral-6);
+    --q-switch-knob:         var(--q-neutral-3);
+
+    /* --- Zakładki --- */
+    --q-tab-label:           var(--q-text-muted);
+    --q-tab-label-active:    var(--q-text-primary);
+    --q-tab-underline-active: var(--q-primary-9);
+    --q-tab-label-hover:     var(--q-text-strong);
+
+    /* --- table --- */
+    --q-table-bg:            var(--q-surface-raised);
+    --q-table-border:        var(--q-border-table);
+    --q-table-radius:        var(--q-radius-panel);
+    --q-table-head-bg:       var(--q-surface-sunken);
+    --q-table-head-label:    var(--q-text-muted);
+    --q-table-cell-label:    var(--q-text-body);
+    --q-table-row-bg-hover:  var(--q-surface-hover);
+    --q-table-row-bg-zebra:  var(--q-surface-sunken);
+    --q-table-total-bg:      var(--q-surface-sunken);
+    --q-table-total-label:   var(--q-text-strong);
+    --q-table-pad-block:     11px;
+    --q-table-pad-inline:    14px;
+
+    /* --- Toast --- */
+    --q-toast-bg:            var(--q-neutral-12);
+    --q-toast-text:          #ffffff;
+
+    /* Rodzaj komunikatu niesie znacznik przy krawędzi i ikona, nie tło:
+       tło jest jedno, więc cztery komunikaty obok siebie czytają się jako
+       jedna kolumna, a nie jako cztery różne pudełka. */
+    --q-toast-accent-success: var(--q-fill-success);
+    --q-toast-accent-warning: var(--q-fill-warning);
+    --q-toast-accent-danger:  var(--q-fill-danger);
+    --q-toast-accent-info:    var(--q-fill-info);
+    --q-toast-bar:           3px;
+    --q-toast-radius:        var(--q-radius-md);
+    --q-toast-pad-block:     12px;
+    --q-toast-pad-inline:    14px;
+    --q-toast-gap:           10px;
+
+    /* --- Pasek narzędzi listingu --- */
+    --q-toolbar-bg:          var(--q-surface-sunken);
+    --q-toolbar-border:      var(--q-blok-ramka-barwa, var(--q-border-card));
+    --q-toolbar-label:       var(--q-text-muted);
+    --q-toolbar-count:       var(--q-text-muted);
+    --q-toolbar-radius:      var(--q-radius-panel);
+
+    /* --- Topbar --- */
+    --q-topbar-bg:           var(--q-band-topbar-bg);
+    --q-topbar-label:        var(--q-band-topbar-fg);
+    --q-topbar-label-muted:  var(--q-band-topbar-fg-muted);
+    --q-topbar-link:         var(--q-band-topbar-link);
+    --q-topbar-link-hover:   var(--q-band-topbar-link-hover);
+    --q-topbar-border:       var(--q-band-topbar-border);
+    --q-topbar-height:       36px;
+
+    /* --- Komponenty zaufania --- */
+    --q-trust-icon:          var(--q-neutral-9);
+    --q-trust-label:         var(--q-text-muted);
+
+    /* --- weight --- */
+    --q-weight-regular:      400;
+    --q-weight-medium:       500;
+    --q-weight-semibold:     600;
+    --q-weight-bold:         700;
+  }
+}

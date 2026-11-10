@@ -1,0 +1,439 @@
+@layer quince.components {
+    /*
+       Pasek zakupu na telefonie i warstwa z panelem.
+
+       Reguły przepisane z makiety strony produktu.
+
+       WSPÓŁISTNIENIE, nie zastąpienie. Panel zakupu stoi w treści strony, tam
+       gdzie klient go szuka, przewijając kartę. Pasek u dołu potrafi go
+       dodatkowo rozwinąć z dowolnego miejsca, dla kogoś, kto jest w połowie
+       opisu i nie chce nigdzie jechać.
+    */
+
+    /* ── pasek ───────────────────────────────────────────────────────────
+       SIATKA, nie rząd. Trzy kolumny: kwota, nisza, przycisk. Nisza ma własny
+       tor, więc przycisk nigdy na nią nie wjedzie, niezależnie od długości
+       napisu i języka. Kwota bierze tyle, ile potrzebuje: przy `minmax(0, 1fr)`
+       potrafiła zwęzić się poniżej swojej treści i kwota łamała się w środku
+       liczby na dwa wiersze. */
+
+    .q-mobilebar {
+        position: fixed;
+        inset-inline: 0;
+        inset-block-end: 0;
+        z-index: 40;
+
+        display: none;
+
+        /* Boczne kolumny dzielą resztę po równo, więc nisza stoi dokładnie na
+           środku paska niezależnie od długości kwoty i napisu. Kwota ma przy
+           tym podłogę na swojej treści: przy długiej kwocie na wąskim ekranie
+           to nisza przesuwa się w prawo, a nie kwota łamie się w środku liczby.
+           Ustępuje zawsze przycisk. */
+        grid-template-columns: minmax(max-content, 1fr) auto minmax(0, 1fr);
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        background: var(--q-card-bg);
+        border-block-start: 1px solid var(--q-border);
+        box-shadow: var(--q-shadow-lg);
+
+        /* Schowany pasek NIE ZNIKA całkiem — zostaje samo koło z uchwytem,
+           wystające ponad dolną krawędź. Dzięki temu rozwinięcie panelu jest
+           w zasięgu kciuka na każdej wysokości strony, także wtedy, gdy pasek
+           nie ma czego pokazywać, bo cenę widać obok. */
+        --q-mobilebar-wystaje: 23px;
+
+        transform: translateY(calc(100% - var(--q-mobilebar-wystaje)));
+        transition: transform .18s ease;
+    }
+
+    .q-mobilebar.is-shown {
+        transform: none;
+    }
+
+    /* W szparze ma być SAMO koło. Kwota i przycisk gasną razem ze zjazdem paska:
+       bez tego w 23-pikselowej szczelinie widać ich górne krawędzie, ścięty
+       wiersz cyfr i obciętą górę guzika, co czyta się jak błąd rysowania.
+
+       `visibility`, nie `display`: pola zachowują swoje tory w siatce, więc koło
+       nie przeskakuje w bok przy chowaniu i pokazywaniu. */
+    .q-mobilebar__price,
+    .q-mobilebar > .q-btn {
+        transition: opacity .12s ease;
+    }
+
+    .q-mobilebar:not(.is-shown) .q-mobilebar__price,
+    .q-mobilebar:not(.is-shown) > .q-btn {
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    /* Kwota przed obniżką POD bieżącą, nie obok: obok blok ceny zabiera 187 px,
+       a przycisk potrzebuje 146. Pod spodem blok jest zawsze wąski i pasek ma
+       zapas na każdej szerokości telefonu. */
+    .q-mobilebar__price {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+
+        min-inline-size: 0;
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-mobilebar__price .q-price__current {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h6);
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .q-mobilebar__price .q-price__old {
+        font-size: var(--q-fs-xs);
+    }
+
+    /* Kwoty nie łamią się nigdy: ani między słowami, ani w środku liczby. */
+    .q-mobilebar__price .q-price__current,
+    .q-mobilebar__price .q-price__old {
+        white-space: nowrap;
+    }
+
+    /* Przycisk nie wychodzi poza swoją kolumnę. Wyrównany do prawej, a szerszy
+       od kolumny, wystawał w lewo i wchodził na uchwyt. Ograniczenie szerokości
+       zmusza napis do skrócenia wielokropkiem, zamiast pchać przycisk na koło. */
+    .q-mobilebar .q-btn {
+        gap: var(--q-space-xs);
+        min-inline-size: 0;
+        max-inline-size: 100%;
+        justify-self: end;
+    }
+
+    .q-mobilebar .q-btn svg {
+        inline-size: 15px;
+        block-size: 15px;
+        flex: none;
+    }
+
+    /* Napis ustępuje, gdy tłumaczenie jest długie: lepiej skrócić go
+       wielokropkiem, niż pozwolić, żeby rozpychał pasek albo wjechał na koło. */
+    .q-mobilebar .q-btn__label {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Poniżej 360 px na napis nie ma już miejsca po oddaniu kwocie tego, czego
+       potrzebuje. Napis schodzi z ekranu, ale ZOSTAJE w drzewie: to on jest
+       nazwą przycisku dla czytnika ekranu. Torba jest czytelna sama. */
+    @media (max-width: 359px) {
+        .q-mobilebar .q-btn__label {
+            position: absolute;
+            inline-size: 1px;
+            block-size: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip-path: inset(50%);
+            white-space: nowrap;
+        }
+    }
+
+    /* ── nisza z uchwytem ────────────────────────────────────────────────
+       Komórka rezerwuje miejsce w POZIOMIE i nic w pionie. To jest cała
+       sztuczka: nisza musi trzymać swoją szerokość, żeby przycisk zakupu nigdy
+       na nią nie wjechał, ale nie może podnosić paska, bo nad paskiem stoi
+       jeszcze przyklejony nagłówek. Dlatego komórka jest pusta, a łuk wisi nad
+       nią osobno. */
+
+    .q-mobilebar__nisza {
+        position: relative;
+        align-self: stretch;
+        inline-size: 3.5rem;
+    }
+
+    /* Łuk: tło i kreska paska wygięte do góry. Liczony od górnej krawędzi
+       komórki plus jej wcięcie, więc styka się z kreską paska niezależnie od
+       tego, jak wysoki pasek wyjdzie przy dłuższej kwocie. */
+    .q-mobilebar__luk {
+        position: absolute;
+        inset-inline: 0;
+
+        /* Zachodzi na pasek o piksel: bez tego między łukiem a paskiem widać
+           szew złożony z ich stykających się krawędzi. */
+        inset-block-end: calc(100% + var(--q-space-sm) - 2px);
+
+        /* PÓŁKOLE: wysokość równa połowie szerokości, więc łuk kończy się
+           dokładnie tam, gdzie zaczyna się prosta. */
+        block-size: 1.75rem;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-border);
+        border-block-end: 0;
+        border-radius: 999px 999px 0 0;
+    }
+
+    /* Koło środkiem na PODSTAWIE łuku: górna połowa siedzi w łuku, dolna
+       w pasku. Wyżej łuk czytałby się jak kołnierzyk doklejony do kółka,
+       a nie jak nisza, w której kółko siedzi. */
+    .q-mobilebar__uchwyt,
+    .q-sheet__chwyt {
+        position: absolute;
+        inset-block-end: 0;
+        inset-inline-start: 50%;
+        translate: -50% 50%;
+
+        display: grid;
+        place-items: center;
+
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+        padding: 0;
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .q-mobilebar__uchwyt:hover,
+    .q-sheet__chwyt:hover {
+        background: var(--q-fill-primary-hover);
+        color: var(--q-on-fill-primary-hover);
+    }
+
+    .q-mobilebar__uchwyt:focus-visible,
+    .q-sheet__chwyt:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Grubsza kreska i większy znak: przy 18 px i wadze 2 strzałka ginęła.
+       Na kole ma być czytelna z odległości ręki. */
+    .q-mobilebar__chev,
+    .q-sheet__chwyt svg {
+        inline-size: 20px;
+        block-size: 20px;
+        stroke-width: 2.5;
+    }
+
+    .q-mobilebar__chev {
+        transition: transform 200ms ease-out;
+    }
+
+    .q-mobilebar__uchwyt[aria-expanded="true"] .q-mobilebar__chev {
+        transform: rotate(180deg);
+    }
+
+    /* ── warstwa z panelem ───────────────────────────────────────────────
+       Wysuwa się od dołu, bo stamtąd ją otwierano: ruch od krawędzi, przy której
+       stoi przycisk, czyta się jako rozwinięcie tego przycisku, a nie jako nowe
+       okno znikąd.
+
+       Sięga najwyżej do dolnej krawędzi przyklejonego nagłówka i ani piksela
+       wyżej. Nagłówek zostaje dostępny, więc klient nie jest w warstwie
+       uwięziony: wyszukiwarka, koszyk i menu działają z nią otwartą. */
+
+    .q-modal--sheet {
+        inline-size: 100%;
+        max-inline-size: none;
+        max-block-size: calc(100dvh - var(--q-header-h, 4rem));
+
+        margin: auto auto 0;
+        padding: 0;
+        border: 0;
+        border-radius: var(--q-radius-lg) var(--q-radius-lg) 0 0;
+
+        background: var(--q-card-bg);
+
+        /* `visible`, nie `hidden`: nisza wystaje ponad górną krawędź warstwy
+           i zostałaby ścięta. Przewijanie należy do samej treści. */
+        overflow: visible;
+
+        /* Cień tylko w bok, zero rozmycia w górę: cień wzdłuż górnej krawędzi
+           przechodził także pod łukiem i dawał tam ciemną kreskę, która czytała
+           się jak obramowanie podstawy łuku. */
+        box-shadow: 0 0 24px rgb(16 24 40 / .1);
+
+        /* Zwinięta warstwa nie znika za dolną krawędzią ekranu, tylko chowa się
+           w pasek: jej górna krawędź zatrzymuje się tam, gdzie zaczyna się
+           widoczna część paska, a jej koło ląduje na kole paska. Zjeżdżając
+           za ekran, mijała po drodze pasek i odsłaniała go na końcu, więc
+           wyglądało to jak dwa różne panele, a nie jeden zwijany.
+
+           Ile paska widać — cały albo samo koło — mierzy skrypt w chwili
+           otwierania i zamykania. Ta sama wartość jest punktem startu przy
+           rozwijaniu, więc warstwa wyrasta z paska. */
+        translate: 0 calc(100% - var(--q-sheet-start, 0px));
+        transition:
+            translate 220ms ease-out,
+            overlay 220ms ease-out allow-discrete,
+            display 220ms ease-out allow-discrete;
+    }
+
+    /* Kierunek kolumny stoi POZA stanem otwartym. W chwili zwijania okno traci
+       `open`, ale przez czas animacji przeglądarka trzyma mu jeszcze
+       `display: flex`; kierunek przypisany tylko do stanu otwartego wracał
+       wtedy do rzędu, nagłówek i panel stawały obok siebie, treść wydłużała się
+       o połowę i warstwa podskakiwała o 175 px, zanim zaczęła zjeżdżać.
+       Zamkniętemu, niewidocznemu oknu kierunek niczego nie zmienia. */
+    .q-modal--sheet {
+        flex-direction: column;
+    }
+
+    .q-modal--sheet[open] {
+        display: flex;
+        translate: 0 0;
+    }
+
+    @starting-style {
+        .q-modal--sheet[open] {
+            translate: 0 calc(100% - var(--q-sheet-start, 0px));
+        }
+    }
+
+    /* Ta sama nisza co na pasku, tylko wyciągnięta z krawędzi warstwy. Jeden
+       kształt po obu stronach gestu: klient widzi, że zwija to, co rozwinął,
+       a nie że trafił na inny przycisk. */
+    .q-sheet__nisza {
+        position: absolute;
+        inset-inline-start: 50%;
+
+        /* Piksel zakładki na warstwę, żeby nie było szwu w miejscu styku. */
+        inset-block-end: calc(100% - 1px);
+        translate: -50% 0;
+
+        inline-size: 3.5rem;
+        block-size: 1.75rem;
+    }
+
+    .q-sheet__luk {
+        position: absolute;
+        inset: 0;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-border);
+        border-block-end: 0;
+        border-radius: 999px 999px 0 0;
+    }
+
+    /* Miniatura i nazwa to PARA przy lewej krawędzi, nie dwa końce wiersza. */
+    .q-sheet__head {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        flex: none;
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-border);
+    }
+
+    /* Kwadrat z tłem kadru, żeby zdjęcie na przezroczystym tle nie wisiało
+       w bieli nagłówka. */
+    .q-sheet__thumb {
+        flex: none;
+        inline-size: 2.5rem;
+        block-size: 2.5rem;
+        object-fit: contain;
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* Nazwa w jednym wierszu, reszta wielokropkiem. Nagłówek warstwy mówi tylko,
+       czego dotyczy panel — pełną nazwę klient ma na stronie pod spodem, a dwa
+       wiersze nazwy zabierały miejsce cenie i przyciskowi na niskim ekranie. */
+    .q-sheet__title {
+        flex: 1;
+        min-inline-size: 0;
+        margin: 0;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        font-size: var(--q-fs-base);
+        line-height: var(--q-lh-snug);
+    }
+
+    /* Przewija się SAMA treść, nagłówek stoi. Przy produkcie z wariantami
+       i personalizacją panel jest wyższy niż ekran, a wtedy przewijanie całej
+       warstwy zabrałoby nagłówek poza kadr. */
+    .q-sheet__body {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: var(--q-space-md);
+    }
+
+    /* ── panel w warstwie ────────────────────────────────────────────────
+       Warstwa JEST kartą, więc panel nie potrzebuje własnej. Druga rama
+       w środku pierwszej to pudełko w pudełku. */
+
+    [data-q-sheet] .q-buy__karta {
+        margin-block-start: 0;
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: 0;
+    }
+
+    /* Pas promocji obejmuje w warstwie WYŁĄCZNIE blok cen, bo tylko jego dotyczy
+       termin. Zakładka działa tak samo jak w kolumnie: blok cen wjeżdża na pas
+       i pokazuje na nim swoje górne rogi. */
+    [data-q-sheet] .q-buy {
+        --q-buy-zakladka: var(--q-radius-md);
+    }
+
+    /* Ramka istnieje tylko po to, żeby domknąć pas. Bez pasa nie ma czego
+       domykać: blok cen zostaje zwykłym blokiem tekstu, bez obrysu i wcięcia.
+       Warunkiem jest sam pas, a nie obniżka — promocja bez terminu końca też
+       go nie ma. */
+    [data-q-sheet] .q-buy:has(.q-buy__pas) .q-buy__slot--price {
+        position: relative;
+        margin-block-start: calc(var(--q-buy-zakladka) * -1);
+        padding: var(--q-space-md);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-fill-primary);
+        border-radius: var(--q-radius-md);
+    }
+
+    /* ── ekran telefonu ──────────────────────────────────────────────────
+       Pasek leży NA treści, więc strona musi oddać mu tyle miejsca u dołu, ile
+       sam zajmuje: inaczej przykrywa ostatni fragment stopki. Wysokość wpisuje
+       skrypt, bo zależy od kroju pisma i długości kwoty. */
+
+    @media (max-width: 991px) {
+        .q-mobilebar {
+            display: grid;
+        }
+
+        body {
+            padding-block-end: var(--q-mobilebar-h, 0px);
+        }
+    }
+
+    @media (max-width: 767px) {
+        /* Na wąskim pasie podpis i zegar stoją WYŚRODKOWANE jako para, nie
+           rozpięte do krawędzi: przy rozpięciu zawinięty zegar ląduje przy lewej
+           krawędzi i wygląda jak zsunięty. */
+        [data-q-sheet] .q-buy__pas {
+            justify-content: center;
+        }
+
+        /* Ikona zegarka odpada, nie wcięcie i nie odstęp: zegarek jest w liczniku
+           po to, żeby dało się go zrozumieć BEZ podpisu. Tutaj podpis stoi obok,
+           więc ikona powtarza to, co już powiedziane. */
+        [data-q-sheet] .q-countdown__icon {
+            display: none;
+        }
+
+        /* Kolumna znika TYLKO na czas, w którym panel jest pożyczony przez
+           warstwę. Poza tym stoi w treści strony jak na każdej karcie. */
+        .q-pdp__aside:not(:has(.q-buy)):not([data-pozyczony]) {
+            display: none;
+        }
+    }
+}

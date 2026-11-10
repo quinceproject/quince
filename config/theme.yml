@@ -1,0 +1,626 @@
+name: quince
+display_name: Quince
+version: 0.1.0
+author:
+  name: "Quince Project"
+  email: "quinceproject@proton.me"
+  url: "https://github.com/quinceproject"
+
+meta:
+  compatibility:
+    from: 9.2.0
+    to: ~9.9.9
+    # Szkielet szablonów pochodzi z Hummingbirda, ale warstwa prezentacji jest własna:
+    # zero Bootstrapa, tokeny w zmiennych CSS wypisywanych przez quince_engine.
+    framework: none
+
+  available_layouts:
+    layout-full-width:
+      name: Full Width
+      description: No side columns, ideal for distraction-free pages such as product pages.
+    layout-both-columns:
+      name: Three Columns
+      description: One large central column and 2 side columns.
+    layout-left-column:
+      name: Two Columns, small left column
+      description: Two columns with a small left column
+    layout-right-column:
+      name: Two Columns, small right column
+      description: Two columns with a small right column
+
+global_settings:
+  configuration:
+    PS_IMAGE_QUALITY: png
+    HOME_FEATURED_NBR: 4
+    NEW_PRODUCTS_NBR: 4
+    BLOCKSPECIALS_SPECIALS_NBR: 4
+    PS_BLOCK_BESTSELLERS_TO_DISPLAY: 4
+    PRODUCTS_VIEWED_NBR: 4
+    CATEGORYPRODUCTS_DISPLAY_PRODUCTS: 4
+    PSR_ICON_COLOR: "#0b69f6"
+    PSR_TEXT_COLOR: "#212529"
+  modules:
+    to_disable:
+      # blockwishlist zostaje: jego tabele i model prowadzą listę życzeń, a my
+      # podmieniamy tylko warstwę widoczną. Wyłączony zabierałby miejsce, w którym
+      # zapisują się produkty.
+      - ps_brandlist
+      - ps_supplierlist
+  hooks:
+    modules_to_unhook:
+      displayFooter:
+        - ps_socialfollow
+      displaySearch:
+        - ps_searchbar
+      # Ocena pod nazwą produktu jest elementem silnika i liczy ją on sam.
+      # Moduł opinii dokładał w tym samym miejscu swoją, drugą, w innym kształcie.
+      displayProductAdditionalInfo:
+        - productcomments
+    modules_to_hook:
+      displayAfterBodyOpeningTag:
+        - blockreassurance
+        # Keep existing hooks and append them after
+        - ~
+      displayNav1:
+        - ps_contactinfo
+        # Keep existing hooks and append them after
+        - ~
+      # Konto i koszyk stoją w nagłówku Quince i biorą się z ustawień silnika,
+      # nie z modułów PrestaShopa — w sekcji górnej nie mają czego szukać.
+      displayNav2:
+        - ps_languageselector
+        - ps_currencyselector
+        # Keep existing hooks and append them after
+        - ~
+      displayNavFullWidth:
+        - blockreassurance
+        # Keep existing hooks and append them after
+        - ~
+      # Nagłówek Quince nie wywołuje displayTop: o tym, co w nim stoi, decyduje
+      # silnik. Wyszukiwarka jest jego częścią, więc ps_searchbar nic tu nie dokłada.
+      displayTop:
+        - ps_mainmenu
+        # Keep existing hooks and append them after
+        - ~
+      displayHome:
+        - ps_imageslider
+        - ps_customtext
+        - ps_featuredproducts
+        - ps_banner
+        - ps_newproducts
+        - ps_bestsellers
+        # Keep existing hooks and append them after
+        - ~
+      displayFooterBefore:
+        - ps_socialfollow
+        - ps_emailsubscription
+        - blockreassurance
+        # Keep existing hooks and append them after
+        - ~
+      displayFooter:
+        - ps_linklist
+        - ps_customeraccountlinks
+        - ps_contactinfo
+        # Keep existing hooks and append them after
+        - ~
+      displayFooterAfter:
+        - blockreassurance
+        # Keep existing hooks and append them after
+        - ~
+      displayLeftColumn:
+        - ps_categorytree
+        - ps_facetedsearch
+        # Keep existing hooks and append them after
+        - ~
+      displayContactLeftColumn:
+        - ps_contactinfo
+        # Keep existing hooks and append them after
+        - ~
+      displayContactRightColumn:
+        - ps_contactinfo
+        # Keep existing hooks and append them after
+        - ~
+      displayContactContent:
+        - contactform
+        # Keep existing hooks and append them after
+        - ~
+      displayProductAdditionalInfo:
+        - ps_sharebuttons
+        - productcomments
+        - ps_emailalerts
+        - ps_viewedproduct
+        # Keep existing hooks and append them after
+        - ~
+      displayProductListReviews:
+        - productcomments
+        # Keep existing hooks and append them after
+        - ~
+      displayFooterProduct:
+        - productcomments
+        - ps_categoryproducts
+        - ps_viewedproduct
+        # Keep existing hooks and append them after
+        - ~
+      displayCrossSellingShoppingCart:
+        - ps_featuredproducts
+        # Keep existing hooks and append them after
+        - ~
+      displayOrderConfirmation2:
+        - ps_featuredproducts
+        # Keep existing hooks and append them after
+        - ~
+      displayReassurance:
+        - blockreassurance
+        # Keep existing hooks and append them after
+        - ~
+      displayCustomerAccount:
+        - ps_emailalerts
+        - psgdpr
+        # Keep existing hooks and append them after
+        - ~
+      displayGDPRConsent:
+        - psgdpr
+        # Keep existing hooks and append them after
+        - ~
+
+  image_types:
+    cart_default:
+      width: 125
+      height: 125
+      scope: [products]
+    small_default:
+      width: 98
+      height: 98
+      scope: [products, categories, manufacturers, suppliers]
+    medium_default:
+      width: 452
+      height: 452
+      scope: [products, manufacturers, suppliers]
+    large_default:
+      width: 800
+      height: 800
+      scope: [products, manufacturers, suppliers]
+    home_default:
+      width: 250
+      height: 250
+      scope: [products]
+    category_default:
+      width: 180
+      height: 180
+      scope: [categories]
+    stores_default:
+      width: 287
+      height: 160
+      scope: [stores]
+
+assets:
+  css:
+    all:
+      # Kroje pisma przed wszystkim innym: deklaracje `@font-face` muszą stać
+      # w arkuszu, zanim cokolwiek o krój poprosi. Sklep serwuje własne pliki,
+      # a nie odsyła do Google Fonts.
+      - id: quince-fonts
+        path: assets/css/fonts.css
+        media: all
+        priority: 5
+      # theme.css jako pierwszy: deklaruje kolejność warstw kaskady, od której
+      # zależy, czy nasze reguły wygrywają ze stylami modułów.
+      - id: quince-theme
+        path: assets/css/theme.css
+        media: all
+        priority: 10
+      - id: quince-tokens
+        path: assets/css/tokens.css
+        media: all
+        priority: 20
+      - id: quince-components
+        path: assets/css/components.css
+        media: all
+        priority: 30
+      # Karuzele zajawek stoją nie tylko na karcie produktu: polecane, nowości
+      # i bestsellery są na stronie głównej, a dokupka w koszyku.
+      - id: quince-carousel
+        path: assets/css/components/carousel.css
+        media: all
+        priority: 40
+      # Szuflada koszyka: otwiera ją nagłówek i każde dodanie do koszyka.
+      - id: quince-cart-drawer
+        path: assets/css/components/cart-drawer.css
+        media: all
+        priority: 40
+      # Dokupka w szufladzie koszyka. Szuflada jest dostępna z każdej strony.
+      - id: quince-upsell
+        path: assets/css/components/upsell.css
+        media: all
+        priority: 40
+      # Szybki podgląd otwiera się z każdej zajawki, więc i z listingu.
+      - id: quince-quickview
+        path: assets/css/components/quickview.css
+        media: all
+        priority: 40
+      # Galeria i panel zakupu jadą ze wszystkimi stronami, a nie tylko z kartą
+      # produktu: szybki podgląd otwierany z listingu składa się z tych samych
+      # kawałków (miniatury, ceny, pas z zegarem, wiersz zakupu), a zegar stoi
+      # też na kafelku produktu.
+      - id: quince-gallery
+        path: assets/css/components/gallery.css
+        media: all
+        priority: 40
+      - id: quince-buybox
+        path: assets/css/components/buybox.css
+        media: all
+        priority: 40
+      # Pas zapewnień na strukturze blockreassurance. Jedzie ze wszystkimi
+      # stronami: karta produktu ma odmianę `blockreassurance--product`,
+      # koszyk ma `blockreassurance--cart`.
+      - id: quince-reassurance
+        path: assets/css/components/reassurance.css
+        media: all
+        priority: 40
+      # Zajawki bloga (quince_blog) osadzają się hookiem na dowolnej stronie —
+      # stronie głównej, karcie produktu, gdziekolwiek — więc arkusz jedzie
+      # globalnie, tak jak karuzele i dokupka.
+      - id: quince-blog
+        path: assets/css/components/blog.css
+        media: all
+        priority: 40
+
+    # Klucz strony odpowiada polu `php_self` kontrolera. Te dwa arkusze obsługują
+    # wyłącznie kartę produktu, więc nie jadą z listingiem ani z kasą.
+    product:
+      - id: quince-product
+        path: assets/css/components/product.css
+        media: all
+        priority: 40
+      # Pasek zakupu na telefonie i warstwa, do której wjeżdża panel.
+      - id: quince-mobilebar
+        path: assets/css/components/mobilebar.css
+        media: all
+        priority: 40
+      # Oferta PDF: przycisk i szuflada. Arkusz jedzie z kartą produktu, bo
+      # tylko tam moduł wstawia swoje znaczniki.
+      - id: quince-offer
+        path: assets/css/components/offer.css
+        media: all
+        priority: 40
+      # Zapytanie do specjalisty: przycisk w parze z ofertą i szuflada z kartą osoby.
+      - id: quince-expert
+        path: assets/css/components/expert.css
+        media: all
+        priority: 40
+      # Opinie: podsumowanie ocen i lista w akordeonie.
+      - id: quince-reviews
+        path: assets/css/components/reviews.css
+        media: all
+        priority: 40
+      # Pytania o produkt: pary pytanie-odpowiedź w akordeonie i szuflada.
+      - id: quince-qa
+        path: assets/css/components/qa.css
+        media: all
+        priority: 40
+      # Treść redakcyjna: opis produktu wpisany edytorem, z nagłówkami,
+      # listami i tabelami.
+      - id: quince-prose
+        path: assets/css/components/prose.css
+        media: all
+        priority: 40
+      # Słowniki katalogowe: tabele dopasowania i kodów w akordeonie.
+      - id: quince-dictionaries
+        path: assets/css/components/dictionaries.css
+        media: all
+        priority: 40
+      # Załączniki do pobrania: wiersze plików w akordeonie.
+      - id: quince-attachment
+        path: assets/css/components/attachment.css
+        media: all
+        priority: 40
+      # Zestawy z tym produktem: rząd składników i słupek z ceną zestawu.
+      - id: quince-bundle
+        path: assets/css/components/bundle.css
+        media: all
+        priority: 40
+      # Składniki zestawu: wiersz w panelu zakupu i szuflada z listą.
+      - id: quince-pack-items
+        path: assets/css/components/pack-items.css
+        media: all
+        priority: 40
+
+    # Strony z listą produktów. PrestaShop ma ich siedem i wszystkie renderuje
+    # ten sam szablon, więc arkusz jest jeden, a wpisów tyle, ile kluczy stron.
+    # `prose.css` jedzie razem z nim: opis kategorii i opis dodatkowy wpisuje
+    # sprzedawca edytorem, więc mają nagłówki, listy i tabele.
+    category: &quince-listing-css
+      - id: quince-listing
+        path: assets/css/components/listing.css
+        media: all
+        priority: 40
+      - id: quince-prose
+        path: assets/css/components/prose.css
+        media: all
+        priority: 40
+    manufacturer: *quince-listing-css
+    supplier: *quince-listing-css
+    search: *quince-listing-css
+    new-products: *quince-listing-css
+    prices-drop: *quince-listing-css
+    best-sales: *quince-listing-css
+
+    # Konto klienta. Jeden arkusz dla sidebara i wszystkich podstron — reszta
+    # dochodzi w miarę budowy (ta sama kotwica, ten sam wzorzec co przy
+    # stronach z listą produktów wyżej).
+    my-account: &quince-account-css
+      - id: quince-account
+        path: assets/css/components/account.css
+        media: all
+        priority: 40
+    order-detail: *quince-account-css
+    history: *quince-account-css
+    addresses: *quince-account-css
+    address: *quince-account-css
+    identity: *quince-account-css
+    discount: *quince-account-css
+    order-follow: *quince-account-css
+    order-slip: *quince-account-css
+
+    # Strona CMS i kategoria CMS: jeden klucz strony (`cms`) dla obu, bo
+    # `CmsController::$php_self` jest ten sam niezależnie od trybu. Treść
+    # strony jest tekstem edytora (`prose.css`), siatka zajawek i nagłówek
+    # kategorii mają własny arkusz.
+    cms: &quince-cms-css
+      - id: quince-cms
+        path: assets/css/components/cms.css
+        media: all
+        priority: 40
+      - id: quince-prose
+        path: assets/css/components/prose.css
+        media: all
+        priority: 40
+      - id: quince-listing-empty
+        path: assets/css/components/listing.css
+        media: all
+        priority: 40
+
+    # 404, mapa strony, kontakt: grupowane w panelu razem z CMS jako
+    # „Strony CMS / Statyczne” — ten sam arkusz (okruszki, nagłówki sekcji,
+    # pusty stan z listingu dla 404), bez osobnego kompletu reguł.
+    pagenotfound: *quince-cms-css
+    sitemap: *quince-cms-css
+    contact: *quince-cms-css
+  js:
+    all:
+      # Jawny wpis, nie konwencja: bez niego PrestaShop dokładał ten plik do
+      # sklejanego pliku na dole strony, ZA jQuery i jQuery Migrate — a szyna
+      # zdarzeń (`prestashop.on`/`.emit`) musi istnieć PRZED nimi, bo jQuery
+      # Migrate sam czyta `prestashop.debug` zaraz po starcie. Priorytet w tym
+      # samym pliku `bottom` nie wystarczał: rdzeń (jQuery, Migrate) zawsze
+      # ląduje przed plikami motywu bez względu na priorytet, więc jedyny
+      # sposób, żeby wyprzedzić rdzeń, to osobny plik w `<head>`. Bezpieczne:
+      # plik czeka na `DOMContentLoaded`, nie dotyka DOM-u od razu.
+      - id: quince-theme-js
+        path: assets/js/theme.js
+        position: head
+        priority: 1
+      # Wyspy dokładamy osobno, bo każda obsługuje jeden komponent i ma dać
+      # się usunąć razem z nim.
+      - id: quince-promobar
+        path: assets/js/islands/promobar.js
+        position: bottom
+        priority: 100
+      # Okno modalne bez JS Bootstrapa. Stoi wysoko na liście: inne wyspy
+      # (np. kasa jednostronicowa) mogą otwierać okno zaraz po starcie.
+      - id: quince-bootstrap-modal-shim
+        path: assets/js/islands/bootstrap-modal-shim.js
+        position: bottom
+        priority: 90
+      - id: quince-checkout-nav
+        path: assets/js/islands/checkout-nav.js
+        position: bottom
+        priority: 100
+      - id: quince-form-validate
+        path: assets/js/islands/form-validate.js
+        position: bottom
+        priority: 100
+      - id: quince-checkout-summary
+        path: assets/js/islands/checkout-summary.js
+        position: bottom
+        priority: 100
+      - id: quince-checkout-option-click
+        path: assets/js/islands/checkout-option-click.js
+        position: bottom
+        priority: 100
+      - id: quince-cart-qty
+        path: assets/js/islands/cart-qty.js
+        position: bottom
+        priority: 100
+      - id: quince-password
+        path: assets/js/islands/password-toggle.js
+        position: bottom
+        priority: 100
+      - id: quince-checkout-buyer
+        path: assets/js/islands/checkout-buyer.js
+        position: bottom
+        priority: 100
+      - id: quince-checkout-login
+        path: assets/js/islands/checkout-login.js
+        position: bottom
+        priority: 100
+      - id: quince-slider
+        path: assets/js/islands/slider.js
+        position: bottom
+        priority: 100
+      - id: quince-picker
+        path: assets/js/islands/picker.js
+        position: bottom
+        priority: 100
+      - id: quince-header
+        path: assets/js/islands/header.js
+        position: bottom
+        priority: 100
+      - id: quince-navbar
+        path: assets/js/islands/navbar.js
+        position: bottom
+        priority: 100
+      - id: quince-suggest
+        path: assets/js/islands/suggest.js
+        position: bottom
+        priority: 100
+      - id: quince-footer
+        path: assets/js/islands/footer.js
+        position: bottom
+        priority: 100
+      - id: quince-toast
+        path: assets/js/islands/toast.js
+        position: bottom
+        priority: 100
+      # Panel zakupu (buybox): licznik ilości, szuflada progów, wgrywanie
+      # pliku, „Kup teraz". Jedzie ze wszystkimi stronami, bo z tych samych
+      # zachowań korzysta szybki podgląd otwierany z listingu.
+      - id: quince-buybox
+        path: assets/js/islands/buybox.js
+        position: bottom
+        priority: 103
+
+      # Karuzele zajawek: przesuwanie strzałkami i wygaszanie ich na krańcach.
+      # Stoją na stronie głównej i pod kartą produktu, więc jadą ze wszystkimi.
+      - id: quince-carousel
+        path: assets/js/islands/carousel.js
+        position: bottom
+        priority: 104
+
+      # Licznik do końca promocji: pas nad panelem zakupu, kafelek produktu
+      # na listingu i w karuzeli, słupek z ceną zestawu.
+      - id: quince-countdown
+        path: assets/js/islands/countdown.js
+        position: bottom
+        priority: 104
+
+      # Szybki podgląd otwierany okiem na zajawce, czyli wszędzie tam, gdzie
+      # stoi karta produktu.
+      - id: quince-quickview
+        path: assets/js/islands/quickview.js
+        position: bottom
+        priority: 104
+
+      - id: quince-wishlist
+        path: assets/js/islands/wishlist.js
+        position: bottom
+        priority: 100
+
+      # Szuflada koszyka: podmienia okno modułu koszyka po dodaniu produktu,
+      # otwiera się z nagłówka, zmienia ilość i usuwa pozycje.
+      - id: quince-cart-drawer
+        path: assets/js/islands/cart-drawer.js
+        position: bottom
+        priority: 104
+
+    # Klucz strony odpowiada polu `php_self` kontrolera. Galeria jest potrzebna
+    # wyłącznie na karcie produktu i tylko tam się ładuje.
+    product:
+      - id: quince-gallery
+        path: assets/js/islands/gallery.js
+        position: bottom
+        priority: 100
+
+      # Bloki zależne od wariantu, których rdzeń nie odświeża: dostępność,
+      # „Kup teraz" albo „Powiadom", kody i pasek zakupu na telefonie.
+      - id: quince-variant
+        path: assets/js/islands/variant.js
+        position: bottom
+        priority: 105
+
+      # Skoki do sekcji akordeonu: otwierają sekcję, do której prowadzą.
+      - id: quince-section-jump
+        path: assets/js/islands/section-jump.js
+        position: bottom
+        priority: 101
+
+      # Zapis na powiadomienie o dostępności w szufladzie.
+      - id: quince-notify
+        path: assets/js/islands/notify.js
+        position: bottom
+        priority: 102
+
+      # Zapytanie do specjalisty: szuflada z kartą człowieka i formularzem.
+      - id: quince-expert
+        path: assets/js/islands/expert.js
+        position: bottom
+        priority: 103
+
+      # Oferta PDF: lista ofertowa i wysyłka z szuflady.
+      - id: quince-offer
+        path: assets/js/islands/offer.js
+        position: bottom
+        priority: 103
+
+
+
+      # Opinie: doładowanie kolejnych porcji w akordeonie.
+      - id: quince-reviews
+        path: assets/js/islands/reviews.js
+        position: bottom
+        priority: 103
+
+      # Pytania o produkt: doładowanie i szuflada z pytaniem.
+      - id: quince-questions
+        path: assets/js/islands/questions.js
+        position: bottom
+        priority: 103
+
+    # Strony z listą produktów. Skrypt przenosi panel filtrów do szuflady na
+    # wąskim ekranie, rozwija pas nad listą i przełącza siatkę na listę.
+    category: &quince-listing-js
+      - id: quince-select
+        path: assets/js/islands/select.js
+        position: bottom
+        priority: 99
+      - id: quince-listing
+        path: assets/js/islands/listing.js
+        position: bottom
+        priority: 100
+    manufacturer: *quince-listing-js
+    supplier: *quince-listing-js
+    search: *quince-listing-js
+    new-products: *quince-listing-js
+    prices-drop: *quince-listing-js
+    best-sales: *quince-listing-js
+
+    # Sidebar konta jako rozwijana lista na telefonie — reszta podstron konta
+    # dochodzi w miarę budowy (ten sam wzorzec co przy arkuszu CSS wyżej).
+    my-account: &quince-account-js
+      - id: quince-account-nav
+        path: assets/js/islands/account-nav.js
+        position: bottom
+        priority: 100
+    order-detail: *quince-account-js
+    history: *quince-account-js
+    addresses: *quince-account-js
+    address: *quince-account-js
+    identity: *quince-account-js
+    discount: *quince-account-js
+    order-follow: *quince-account-js
+    order-slip: *quince-account-js
+
+    # Podpis pola wgrywania pliku (załącznik) na etykiecie — ta sama wyspa
+    # co przy personalizacji produktu, zarejestrowana osobno: `buybox.js`
+    # wiąże się tylko z panelem zakupu, którego tu nie ma.
+    contact:
+      - id: quince-upload
+        path: assets/js/islands/upload.js
+        position: bottom
+        priority: 100
+theme_settings:
+  rtl_generation: false
+  default_layout: layout-full-width
+  layouts:
+    # Listingi idą na pełną szerokość, a nie na układ z lewą kolumną Bootstrapa.
+    # Miejsce filtrów jest ustawieniem silnika: szuflada, kolumna obok listy
+    # albo pas nad listą. Lewa kolumna układu renderowała je drugi raz, obok
+    # naszego panelu, i do tego w siatce `col-md-4`, która biła się z siatką
+    # listingu. Moduły z hooka `displayLeftColumn` dokłada się teraz tak jak
+    # wszystko inne: przeciągnięciem hooka do strefy na ekranie listingu.
+    contact: layout-left-column
+    # Kasa bierze uklad bez naglowka i bez stopki sklepu: skrocona oprawa
+    # kasy jest w `checkout/checkout.tpl`. Menu i wyszukiwarka na tym ekranie
+    # nie maja czego szukac, a kazde wyjscie z niego to porzucony koszyk.
+    checkout: layout-content-only
+    order: layout-content-only

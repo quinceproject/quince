@@ -1,0 +1,146 @@
+/* ===================================================================
+   Quince — powiadomienia
+
+   PrestaShop wypisuje komunikaty przy okruszkach, na całą szerokość treści.
+   U nas wychodzą jako toasty przy prawej górnej krawędzi: komunikat po dodaniu
+   do koszyka albo po zalogowaniu dotyczy czynności, którą klient właśnie
+   wykonał, a nie strony, na którą wszedł — a pas nad treścią spycha przy tym
+   całą stronę w dół i klient traci miejsce, na które patrzył.
+
+   Toast ma jedno tło dla wszystkich rodzajów. Rodzaj niesie znacznik przy
+   krawędzi i ikona: cztery komunikaty jeden pod drugim czytają się wtedy jako
+   jedna kolumna, a nie jako cztery różne pudełka.
+
+   Tokeny komponentu (--q-toast-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-toasts {
+        position: fixed;
+        inset-block-start: calc(var(--q-header-h, 4rem) + var(--q-space-md));
+        inset-inline-end: var(--q-space-md);
+        z-index: 60;
+
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-sm);
+
+        inline-size: min(24rem, calc(100vw - 2 * var(--q-space-md)));
+
+        /* Pudełko nie łapie kliknięć, bo przykrywa róg strony także wtedy, gdy
+           nie ma w nim ani jednego komunikatu. Łapią je same toasty. */
+        pointer-events: none;
+    }
+
+    .q-toast {
+        --toast-accent: var(--q-toast-accent-info);
+
+        pointer-events: auto;
+
+        display: flex;
+        align-items: flex-start;
+        gap: var(--q-toast-gap);
+
+        padding: var(--q-toast-pad-block) var(--q-toast-pad-inline);
+
+        background: var(--q-toast-bg);
+        color: var(--q-toast-text);
+
+        /* Znacznik przy krawędzi początkowej przetrwa druk i tryb wysokiego
+           kontrastu, w których tło znika. */
+        border-inline-start: var(--q-toast-bar) solid var(--toast-accent);
+        border-radius: var(--q-toast-radius);
+        box-shadow: var(--q-shadow-md);
+
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-normal);
+    }
+
+    .q-toast--success { --toast-accent: var(--q-toast-accent-success); }
+    .q-toast--warning { --toast-accent: var(--q-toast-accent-warning); }
+    .q-toast--danger { --toast-accent: var(--q-toast-accent-danger); }
+
+    /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku — przy
+       komunikacie na trzy linie ikona przy środku wygląda jak zgubiona. */
+    .q-toast__icon {
+        inline-size: 18px;
+        block-size: 18px;
+        flex: none;
+        margin-block-start: 1px;
+        color: var(--toast-accent);
+    }
+
+    .q-toast__body {
+        flex: 1;
+        min-inline-size: 0;
+    }
+
+    .q-toast__body a {
+        color: inherit;
+        text-decoration: underline;
+    }
+
+    .q-toast__body ul {
+        margin: 0;
+        padding-inline-start: var(--q-space-md);
+    }
+
+    .q-toast__close {
+        flex: none;
+        inline-size: 1.5rem;
+        block-size: 1.5rem;
+        padding: 0;
+        display: grid;
+        place-items: center;
+
+        background: none;
+        border: 0;
+        border-radius: var(--q-radius-sm);
+        color: inherit;
+        opacity: .7;
+        cursor: pointer;
+    }
+
+    .q-toast__close:hover {
+        opacity: 1;
+    }
+
+    .q-toast__close:focus-visible {
+        outline: 2px solid var(--q-toast-text);
+        outline-offset: 1px;
+    }
+
+    /* Wejście od strony, z której toast się pojawia. */
+    @media (prefers-reduced-motion: no-preference) {
+        .q-toast {
+            animation: q-toast-wejscie var(--q-dur, .18s) var(--q-ease, ease-out);
+        }
+
+        .q-toast.is-znika {
+            transition: opacity var(--q-dur, .18s) var(--q-ease, ease-out),
+                        transform var(--q-dur, .18s) var(--q-ease, ease-out);
+        }
+    }
+
+    @keyframes q-toast-wejscie {
+        from { opacity: 0; transform: translateX(1rem); }
+        to { opacity: 1; transform: none; }
+    }
+
+    .q-toast.is-znika {
+        opacity: 0;
+        transform: translateX(1rem);
+    }
+
+    /* Na telefonie toast idzie przez całą szerokość i siada pod nagłówkiem:
+       wąskie pudełko przy krawędzi zabiera połowę ekranu, a komunikat i tak
+       nie zmieści się w jednym wierszu. */
+    @media (max-width: 767px) {
+        .q-toasts {
+            inset-inline: var(--q-space-sm);
+            inset-block-start: calc(var(--q-header-h, 3.5rem) + var(--q-space-sm));
+            inline-size: auto;
+        }
+    }
+}

@@ -1,0 +1,87 @@
+/* ===================================================================
+   Quince — okruszki
+
+   Stoją na każdej stronie kategorii i produktu. Cztery role z mapy:
+   odnośnik, odnośnik pod kursorem, element bieżący, separator.
+
+   Separator rysujemy w CSS, nie w szablonie, bo to dekoracja — czytnik
+   ekranu ma odczytać samą ścieżkę, bez „ukośnik" między każdą pozycją.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-breadcrumb {
+        font-size: var(--q-fs-xs);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-breadcrumb__list {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-breadcrumb__item {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    /* Separator przed każdą pozycją poza pierwszą. `inline-start` zamiast
+       `left` sprawia, że w językach pisanych od prawej ścieżka odwraca się
+       sama, bez osobnego arkusza. */
+    .q-breadcrumb__item + .q-breadcrumb__item::before {
+        content: "›";
+        margin-inline: var(--q-space-xs);
+        color: var(--q-breadcrumb-separator);
+    }
+
+    .q-breadcrumb__link {
+        color: var(--q-breadcrumb-link);
+    }
+
+    .q-breadcrumb__link:hover {
+        color: var(--q-breadcrumb-link-hover);
+    }
+
+    /* Pozycja bieżąca nie jest odnośnikiem — nie prowadzi nigdzie. */
+    .q-breadcrumb__current {
+        color: var(--q-breadcrumb-current);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Na telefonie ścieżka jedzie w jednym wierszu i przewija się w bok.
+       Zawijana do trzech wierszy spycha treść poniżej zgięcia, a jest tylko
+       podpowiedzią, gdzie klient stoi.
+
+       Maska wygasza PRAWY koniec, bo tylko tam ścieżka ma ciąg dalszy, kiedy
+       klient wchodzi na stronę. Wygaszony lewy koniec zjadał pierwszą literę
+       pierwszej pozycji: ścieżka zaczyna się przy krawędzi pojemnika, więc
+       pod maską znikało „H" z „Home". */
+    @media (max-width: 767px) {
+        .q-breadcrumb__list {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+            scrollbar-width: none;
+
+            mask-image: linear-gradient(to right,
+                #000 0,
+                #000 calc(100% - var(--q-space-lg)),
+                transparent 100%);
+        }
+
+        .q-breadcrumb__list::-webkit-scrollbar {
+            display: none;
+        }
+
+        .q-breadcrumb__item {
+            flex: none;
+            white-space: nowrap;
+        }
+    }
+}

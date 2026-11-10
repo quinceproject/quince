@@ -1,0 +1,396 @@
+/* ===================================================================
+   Quince — koszyk
+
+   Nowe jest tu tylko OPAKOWANIE: układ dwóch kolumn, szeroka odmiana
+   pozycji koszyka i blok podsumowania. Pozycja koszyka, pasek darmowej
+   dostawy, licznik sztuk, cena, plakietka, stan magazynu i przyciski to
+   komponenty motywu i nie są tu przerabiane — strona koszyka sięga po nie
+   takie, jakie są w szufladzie koszyka i przy karcie produktu.
+
+   Kolumna zamówienia bierze prawdziwy `.q-ordersum` z kasy, ale bez głowy
+   rozwijającej — na stronie koszyka podsumowanie ma stać zawsze otwarte.
+
+   Barwy wyłącznie z palety silnika, żaden odcień nie jest wpisany wprost.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Wyściółka i odstęp pod okruszkami jak na listingu: widok ma zaczynać
+       się na tej samej wysokości co każdy inny. */
+    .q-cart {
+        padding-block: var(--q-space-md) var(--q-space-xl);
+    }
+
+    .q-cart .q-breadcrumb {
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-cart__head {
+        display: flex;
+        align-items: baseline;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-lg);
+    }
+
+    .q-cart__title {
+        margin: 0;
+    }
+
+    .q-cart__count {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Zawartość po lewej, decyzja po prawej. Ten sam podział szerokości,
+       co na stronie produktu i w kasie: ustawienie panelu zakupu rządzi
+       też tą kolumną, nie sztywna wartość. `--q-pdp-glowna`/`--q-pdp-panel`
+       dokłada szablon. */
+    .q-cart__layout {
+        display: grid;
+        grid-template-columns:
+            minmax(0, var(--q-pdp-glowna, 2fr))
+            minmax(min(100%, var(--q-pdp-panel-min, 19rem)), var(--q-pdp-panel, 1fr));
+        gap: var(--q-space-lg);
+        align-items: start;
+    }
+
+    .q-cart__main {
+        min-inline-size: 0;
+    }
+
+    /* Podsumowanie jedzie z treścią i zatrzymuje się pod nagłówkiem: przy
+       dziesięciu pozycjach przycisk zakupu inaczej znika z ekranu. */
+    .q-cart__side {
+        position: sticky;
+        inset-block-start: var(--q-space-md);
+        display: grid;
+        gap: var(--q-space-md);
+    }
+
+    /* ── lista pozycji ───────────────────────────────────────────────── */
+
+    .q-cart__shipping {
+        padding: var(--q-space-md);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-cart__lines {
+        margin: 0;
+        padding: var(--q-space-xs) var(--q-space-md);
+        list-style: none;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    .q-cart__actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-cart__continue {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text);
+    }
+
+    .q-cart__continue:hover { color: var(--q-link-hover); }
+
+    /* ── dokupka ─────────────────────────────────────────────────────── */
+
+    .q-cart__suggest {
+        margin-block-start: var(--q-space-lg);
+        padding: var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+    }
+
+    .q-cart__suggest-title {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        color: var(--q-meta-color);
+    }
+
+    .q-cart__suggest-title svg { color: var(--q-fill-primary); }
+
+    /* Miejsce na hook pod dokupką: sam odstęp od sąsiada, bez karty — treść
+       modułu (np. baner WiseBlocka) zwykle niesie już własne tło na pełną
+       szerokość, więc karta tylko dokładałaby ramkę i tło wokół czegoś, co
+       jest już kompletnym blokiem. Ten sam margines co nad dokupką, żeby
+       odstęp wyglądał tak samo niezależnie od tego, czy dokupka coś pokazała. */
+    .q-cart__below-suggest { margin-block-start: var(--q-space-lg); }
+
+    .q-cart__suggest-item {
+        display: grid;
+        grid-template-columns: 4rem minmax(0, 1fr) auto;
+        gap: var(--q-space-md);
+        align-items: center;
+    }
+
+    /* Ten sam odstęp między pozycjami, co w szufladzie (`q-upsell__item`). */
+    .q-cart__suggest-item + .q-cart__suggest-item {
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-cart__suggest-media {
+        aspect-ratio: 1;
+        display: grid;
+        place-items: center;
+        overflow: hidden;
+
+        background: var(--q-pcard-media-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-sm);
+    }
+
+    .q-cart__suggest-media img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+    }
+
+    .q-cart__suggest-name {
+        display: block;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+        color: var(--q-text-strong);
+    }
+
+    .q-cart__suggest-name:hover { color: var(--q-link-hover); }
+
+    .q-cart__suggest-meta {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-cart__suggest-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-cart__suggest-rating svg { color: var(--q-fill-primary); }
+
+    /* ── zakup ───────────────────────────────────────────────────────── */
+
+    .q-cart__checkout {
+        inline-size: 100%;
+        margin-block-start: var(--q-space-md);
+    }
+
+    @media (max-width: 991px) {
+        .q-cart__layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-cart__side {
+            position: static;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .q-cart__lines { padding-inline: var(--q-space-sm); }
+
+        .q-cart__suggest-item {
+            grid-template-columns: 3.5rem minmax(0, 1fr);
+        }
+
+        .q-cart__suggest-item .q-btn {
+            grid-column: 2;
+            justify-self: start;
+        }
+    }
+}
+
+/* Odmiana pozycji koszyka stoi w warstwie komponentów, bo nadpisuje komponent
+   `q-cartline` z szuflady koszyka. W warstwie układu przegrywałaby z nim
+   niezależnie od kolejności w pliku i pozycja zostawałaby przy trzech
+   kolumnach szuflady. */
+@layer quince.components {
+
+    /* ── pozycja na stronie koszyka ──────────────────────────────────────
+       Odmiana pozycji z szuflady. W szufladzie mieści się nazwa, cena
+       i licznik; tutaj jest miejsce na cechy wariantu, stan magazynu, cenę
+       jednostkową i kwotę pozycji, więc każde z nich dostaje własną
+       kolumnę i nie trzeba ich czytać z jednego ciągu. */
+    /* Złożony selektor, nie sam modyfikator: `.q-cartline--page` ma tę samą
+       specyficzność co bazowy `.q-cartline` z szuflady (jedna klasa każdy),
+       więc o wygranej decydowałaby kolejność ładowania plików, nie reguła
+       z projektu. */
+    .q-cartline.q-cartline--page {
+        grid-template-columns:
+            5.5rem
+            minmax(0, 1fr)
+            minmax(7rem, auto)
+            auto
+            minmax(6rem, auto)
+            auto;
+        gap: var(--q-space-md);
+        align-items: center;
+    }
+
+    .q-cartline--page .q-cartline__name {
+        font-size: var(--q-fs-base);
+    }
+
+    .q-cartline__attrs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+        margin: var(--q-space-xs) 0 0;
+    }
+
+    .q-cartline__attr {
+        display: flex;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-cartline__attr dt::after { content: ":"; }
+    .q-cartline__attr dd { margin: 0; color: var(--q-text); }
+
+    .q-cartline__stock {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+    }
+
+    /* Cena jednostkowa i plakietka obniżki w słupku: przy dwóch kwotach obok
+       siebie nie widać, która jest aktualna. */
+    .q-cartline__unit {
+        display: grid;
+        justify-items: start;
+        gap: var(--q-space-xs);
+    }
+
+    .q-cartline__unit .q-price {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--q-space-xs);
+    }
+
+    .q-cartline__total {
+        font-weight: var(--q-weight-bold);
+        font-size: var(--q-fs-lg);
+        text-align: end;
+        white-space: nowrap;
+    }
+
+    /* Kwoty w pozycji koszyka stoją przy nazwie, a nie nad nią. Komponent ceny
+       jest wymiarowany pod listing i kartę produktu, gdzie cena jest liczbą
+       główną ekranu; tutaj liczbą główną jest suma zamówienia w kolumnie obok,
+       a te kwoty tylko opisują pozycję. */
+    .q-cartline--page .q-price__current {
+        font-size: var(--q-fs-base);
+    }
+
+    .q-cartline--page .q-price__old {
+        font-size: var(--q-fs-xs);
+    }
+
+    .q-cartline--page .q-cartline__total {
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* Ikona stoi przed napisem w jednym wierszu. Komponent z szuflady daje
+       napisowi `display: block`, bo tam ikony nie ma. */
+    .q-cart__shipping .q-shipping__label {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        margin-block-end: var(--q-space-sm);
+    }
+
+    /* Pasek wypełniony do końca zmienia barwę na potwierdzającą. Brakującej
+       kwoty pilnuje barwa marki, osiągniętego progu barwa powodzenia: pełny
+       pasek w barwie marki czyta się jak „jeszcze trwa". Obie z palety. */
+    .q-shipping--done .q-shipping__fill {
+        background: var(--q-fill-success);
+    }
+
+    .q-shipping--done .q-shipping__label {
+        color: var(--q-text-success);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    @media (max-width: 767px) {
+        /* Pozycja schodzi do dwóch kolumn: zdjęcie i reszta. Cena, licznik
+           i kwota stają pod nazwą, bo sześć kolumn na 360 px daje słupki
+           po pięćdziesiąt pikseli. */
+        .q-cartline.q-cartline--page {
+            grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+            column-gap: var(--q-space-sm);
+            row-gap: var(--q-space-sm);
+        }
+
+        /* Zdjęcie przy górnej krawędzi pozycji. Wyśrodkowane w pionie stawało
+           naprzeciw ceny albo licznika, bo pozycja ma tu cztery wiersze,
+           i odjeżdżało od nazwy, którą opisuje. */
+        .q-cartline--page .q-cartline__media { align-self: start; }
+
+        .q-cartline--page .q-cartline__body { grid-column: 2; }
+        .q-cartline--page .q-cartline__remove { grid-column: 3; grid-row: 1; align-self: start; }
+
+        .q-cartline--page .q-cartline__unit,
+        .q-cartline--page .q-cartline__qty,
+        .q-cartline--page .q-cartline__total {
+            grid-column: 2 / -1;
+        }
+
+        /* Kwoty w jednym słupku przy prawej krawędzi, tak jak kwota pozycji
+           pod nimi: cena przed obniżką na górze, bieżąca pod nią, plakietka
+           na końcu. Rozrzucone na dwie osie, część przy nazwie i część przy
+           prawej krawędzi, zmuszały do czytania liczb w dwóch miejscach. */
+        .q-cartline--page .q-cartline__unit {
+            grid-row: 2;
+            justify-items: end;
+            text-align: end;
+        }
+
+        .q-cartline--page .q-cartline__unit .q-price {
+            flex-direction: column-reverse;
+            align-items: flex-end;
+            gap: 0;
+        }
+
+        .q-cartline--page .q-cartline__qty {
+            grid-row: 3;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--q-space-sm);
+        }
+
+        .q-cartline--page .q-cartline__total {
+            grid-row: 3;
+            text-align: end;
+            align-self: center;
+        }
+    }
+}

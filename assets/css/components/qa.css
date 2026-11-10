@@ -1,0 +1,189 @@
+@layer quince.components {
+    /*
+       Pytania o produkt i odpowiedzi sklepu, w akordeonie karty.
+
+       Treść przynosi moduł `quince_qa`, wygląd jest tutaj.
+
+       Pytanie i odpowiedź to JEDEN wątek. Makieta miała tu dwa wiersze obok
+       siebie i czytało się je jak dwa osobne wpisy — bez niczego, co mówiłoby,
+       że należą do siebie.
+
+       Spinają je trzy rzeczy, wzięte z tego, jak robią to sklepy z dobrą sekcją
+       opinii i odpowiedzią sprzedawcy pod nią:
+
+       — nagłówek z inicjałami, który otwiera wątek i nazywa pytającego;
+       — odpowiedź w osobnym bloku z własnym tłem i pionową kreską, wciętym pod
+         pytanie, więc widać dwa głosy i widać, że jeden odpowiada drugiemu;
+       — mikropodpis nad tym blokiem, który nazywa go, zanim ktoś go przeczyta.
+    */
+
+    .q-qa {
+        /* Jedna miara na kółko z inicjałami i na wcięcie odpowiedzi: gdy zmieni
+           się kółko, wcięcie idzie za nim samo i nic się nie rozjeżdża. */
+        --q-qa-avatar: 2rem;
+        --q-qa-indent: calc(var(--q-qa-avatar) + var(--q-space-sm));
+    }
+
+    /* Wątek: pytanie i odpowiedź jako jeden obiekt. Wcześniej były to dwa
+       wiersze obok siebie i czytało się je jak dwa osobne wpisy. */
+    .q-qa__thread + .q-qa__thread {
+        margin-block-start: var(--q-space-lg);
+        padding-block-start: var(--q-space-lg);
+        border-block-start: 1px solid var(--q-border-subtle);
+    }
+
+    .q-qa__head {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-xs);
+    }
+
+    /* Inicjały zamiast zdjęcia: klient nie wgrywa awatara, a puste kółko nic nie
+       mówi. Dwie litery wystarczą, żeby wątki różniły się od siebie na pierwszy
+       rzut oka. */
+    .q-qa__avatar {
+        display: grid;
+        place-items: center;
+        flex: none;
+
+        inline-size: var(--q-qa-avatar);
+        block-size: var(--q-qa-avatar);
+        border-radius: 50%;
+
+        background: var(--q-surface-sunken);
+        color: var(--q-text-muted);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        line-height: 1;
+    }
+
+    .q-qa__author {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-qa__date {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Pytanie zaczyna się pod nazwiskiem, nie pod kółkiem: nagłówek i treść
+       tworzą wtedy jedną kolumnę tekstu. */
+    .q-qa__question {
+        margin: 0;
+        padding-inline-start: var(--q-qa-indent);
+
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-text-strong);
+    }
+
+    /* Odpowiedź: własne tło i pionowa kreska po lewej. To ona spina głos sklepu
+       w jeden blok i mówi, że należy do pytania wyżej — bez rysowania ramki
+       wokół całej pary. */
+    .q-qa__answer {
+        margin-block-start: var(--q-space-sm);
+        margin-inline-start: var(--q-qa-indent);
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border-inline-start: 3px solid var(--q-fill-primary);
+        border-radius: 0 var(--q-radius-sm) var(--q-radius-sm) 0;
+    }
+
+    /* Mikropodpis nad treścią: nazywa blok, zanim ktokolwiek go przeczyta.
+       Wersaliki i rozstrzelenie, bo to etykieta, a nie zdanie. */
+    .q-qa__answer-label {
+        margin: 0 0 4px;
+
+        font-size: 10px;
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--q-meta-color);
+    }
+
+    .q-qa__answer-text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-text-body);
+    }
+
+    .q-qa__answer-by {
+        margin: 4px 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* ── stopka sekcji ─────────────────────────────────────────────────── */
+
+    .q-qa__actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* ── szuflada z pytaniem ───────────────────────────────────────────── */
+
+    .q-qa__intro {
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Etykieta siedzi na górnej kresce pola, więc wiersz potrzebuje odstępu. */
+    .q-qa__field {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-qa__hint {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-field-border-invalid);
+    }
+
+    .q-qa__done {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+    }
+
+    .q-qa__done-icon {
+        inline-size: 3rem;
+        block-size: 3rem;
+        color: var(--q-fill-primary);
+    }
+
+    .q-qa__done-title {
+        margin: 0;
+        font-size: var(--q-fs-h6);
+    }
+
+    .q-qa__done-text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Na wąskim ekranie wcięcie zjadałoby połowę wiersza, więc znika. Odpowiedź
+       poznaje się wtedy po tle i kresce, które zostają. */
+    @media (max-width: 575px) {
+        .q-qa__question,
+        .q-qa__answer {
+            padding-inline-start: 0;
+            margin-inline-start: 0;
+        }
+
+        .q-qa__answer {
+            padding-inline: var(--q-space-sm);
+        }
+    }
+}

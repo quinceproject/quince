@@ -1,0 +1,176 @@
+/* ===================================================================
+   Quince — gwiazdki oceny
+
+   Dwie role z mapy: wypełnienie i tło pustej gwiazdki.
+
+   Ocena nie może być przekazana samym kolorem — obok gwiazdek zawsze
+   stoi wartość liczbowa, a całość ma etykietę dla czytnika ekranu.
+   To wymóg dostępności: „kolor nie jest jedynym nośnikiem informacji".
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-rating {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-rating__stars {
+        display: inline-flex;
+        gap: 1px;
+        color: var(--q-star-empty);
+    }
+
+    .q-rating__star--filled {
+        color: var(--q-star-fill);
+    }
+
+    /* Gwiazdka częściowa: wypełnienie odcięte do wartości ułamkowej.
+       `--rating-fill` jest zmienną lokalną, nie tokenem systemu — szablon ustawia
+       ją inline dla konkretnego produktu, bo zależy od jego oceny, a nie od
+       ustawień sklepu. Stąd brak prefiksu --q-, zarezerwowanego dla kontraktu. */
+    .q-rating__star--half {
+        position: relative;
+        color: var(--q-star-empty);
+    }
+
+    .q-rating__star--half::before {
+        content: "";
+        position: absolute;
+        inset-block: 0;
+        inset-inline-start: 0;
+        inline-size: var(--rating-fill, 50%);
+        overflow: hidden;
+        color: var(--q-star-fill);
+    }
+
+    .q-rating__value {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-rating__count {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* --- wiersz oceny pod nazwą produktu ---
+       Stoi tu, a nie w arkuszu karty produktu, bo ten sam wiersz wchodzi też do
+       szybkiego podglądu otwieranego z listingu, gdzie arkusz karty nie jedzie.
+
+       Wiersz jest listą, bo kolejna pozycja ma się dołożyć obok, a nie pod
+       spodem. */
+    .q-pdp__meta {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs) var(--q-space-sm);
+
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-pdp__meta-item {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    /* Kropka rozdziela pozycje, ale nie stoi przed pierwszą. */
+    .q-pdp__meta-item + .q-pdp__meta-item::before {
+        content: "·";
+        margin-inline-end: var(--q-space-sm);
+        color: var(--q-border);
+    }
+}
+
+@layer quince.components {
+
+    /* --- gwiazdki rysowane przez moduł opinii ---
+
+       Wtyczka modułu wstawia w miejsce oceny dwie warstwy `div`-ów: pustą
+       i pełną, a w każdej po pięć `div.star`. Nie ma tam żadnego znacznika
+       obrazkowego, więc bez tych reguł elementy mają zero wysokości i widać
+       tylko liczbę opinii w nawiasie.
+
+       Gwiazdka jest MASKĄ malowaną barwą, a nie obrazkiem: moduł niesie własne
+       PNG-i w dwóch rozmiarach, które nie znają palety sklepu, więc przy
+       zmianie barwy marki zostałyby pomarańczowe. Ten sam sposób co ikony
+       podkategorii i znak wyboru w polach — jeden mechanizm w całym motywie.
+
+       Reguły są w motywie, a nie w nadpisaniu arkusza modułu, bo arkusze
+       modułów rejestrują się późno i przy włączonym sklejaniu plików nie
+       trafiają do paczki. Arkusz motywu jedzie z każdą stroną. */
+
+    .star-content {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        margin: 0;
+    }
+
+    .star-content div.star,
+    .star-content div.star-on,
+    .star-content div.star-hover {
+        display: block;
+        flex: none;
+
+        inline-size: 16px;
+        block-size: 16px;
+        margin-inline-end: 1px;
+
+        background: var(--q-border);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z'/%3E%3C/svg%3E") center / contain no-repeat;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.56.56 0 0 0-.163-.505L1.71 6.745l4.052-.576a.53.53 0 0 0 .393-.288L8 2.223l1.847 3.658a.53.53 0 0 0 .393.288l4.052.575-2.906 2.77a.56.56 0 0 0-.163.506l.694 3.957-3.686-1.894a.5.5 0 0 0-.461 0z'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+
+    /* Wtyczka buduje DWIE warstwy: pustą z miejscami na wszystkie pięć gwiazdek
+       i pełną z tymi, które się należą. Warstwy leżą JEDNA NA DRUGIEJ, bo tak
+       powstaje połówka: pusta gwiazdka jest przycinana szerokością, a pełna
+       dokłada się na wierzch. Ułożone w potoku dałyby dwa wiersze pod sobą.
+
+       Pojemnik musi mieć wymiar wprost, bo warstwy są wyjęte z potoku i nie
+       mają czego rozpychać. */
+    .grade-stars {
+        position: relative;
+        display: inline-block;
+        inline-size: 85px;
+        block-size: 16px;
+    }
+
+    .grade-stars .star-content {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+    }
+
+    /* Jeden rozmiar gwiazdki, i to DOKŁADNIE ten, którym liczy wtyczka.
+       Skrypt listingu woła ją z `starWidth: 16`, a wtyczka z tej liczby wylicza
+       szerokość gwiazdki połówkowej i wpisuje ją w styl elementu. Mniejsze
+       pudełko w arkuszu znaczyło, że połówka miała 16 px, a reszta 12 — stąd
+       gwiazdki różnej wielkości w jednym rzędzie.
+
+       Pojemnik: pięć gwiazdek po 16 px plus pięć odstępów po 1 px. */
+    .grade-stars.small-stars {
+        inline-size: 85px;
+        block-size: 16px;
+    }
+
+    /* Gwiazdka zapalona ma maskę WYPEŁNIONĄ, pusta sam obrys. To dwie różne
+       ścieżki, a nie ta sama w dwóch barwach: przy jednej maski połówka
+       wychodziła jako ucięty kawałek wypełnionej gwiazdki zamiast gwiazdki
+       obrysowanej, w której złoto sięga do połowy. */
+    .star-content div.star-on,
+    .star-content div.star-hover {
+        background: var(--q-fill-primary);
+        mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3E%3C/svg%3E") center / contain no-repeat;
+        -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/%3E%3C/svg%3E") center / contain no-repeat;
+    }
+
+    .star-content div.star-hover {
+        cursor: pointer;
+    }
+
+}

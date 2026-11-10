@@ -1,0 +1,220 @@
+@layer quince.components {
+    /*
+       Szuflada koszyka: komunikat po dodaniu, pasek darmowej dostawy, pozycje
+       koszyka, dokupka i stopka z sumą.
+
+       Reguły przepisane z makiety strony produktu (szuflada koszyka).
+       Sama szuflada, nagłówek, treść i stopka to `q-modal--drawer` z modal.css.
+       Dokupka ma własny arkusz, upsell.css.
+    */
+
+    /* Znaczniki szuflady przychodzą z widżetu ps_shoppingcart, a moduł koszyka
+       po każdej zmianie podmienia element `.blockcart` w środku. Opakowania nie
+       mogą więc zniknąć, ale nie mogą też być pudełkami: nagłówek, treść
+       i stopka mają zostać dziećmi kolumny okna, inaczej stopka nie siada
+       na dole. */
+    .q-cart-drawer,
+    .q-cart-drawer__content {
+        display: contents;
+    }
+
+    .q-drawer__alert {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+
+        background: var(--q-surface-success);
+        color: var(--q-text-success);
+        border: 1px solid var(--q-border-success);
+        border-radius: var(--q-radius-md);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+    }
+
+    /* Pasek darmowej dostawy: jeden wiersz, nie karta. To podpowiedź, a nie
+       kolejna decyzja do podjęcia. */
+    .q-shipping {
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-shipping__label {
+        display: block;
+        font-size: var(--q-fs-sm);
+        margin-block-end: var(--q-space-xs);
+        color: var(--q-shipping-label);
+    }
+
+    .q-shipping__track {
+        display: block;
+        block-size: .375rem;
+        border-radius: var(--q-radius-pill);
+        background: var(--q-shipping-track-bg);
+        overflow: hidden;
+    }
+
+    .q-shipping__fill {
+        display: block;
+        block-size: 100%;
+        background: var(--q-shipping-fill);
+    }
+
+    /* pozycja koszyka */
+    .q-cartline {
+        display: grid;
+        grid-template-columns: 4.5rem minmax(0, 1fr) auto;
+        gap: var(--q-space-sm);
+        align-items: start;
+
+        padding-block: var(--q-space-md);
+    }
+
+    .q-cartline + .q-cartline {
+        border-block-start: 1px solid var(--q-border-card);
+    }
+
+    .q-cartline__media {
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+        background: var(--q-pcard-media-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-sm);
+        overflow: hidden;
+    }
+
+    .q-cartline__media img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+        padding: 3px;
+    }
+
+    .q-cartline__name {
+        display: block;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-strong);
+    }
+
+    .q-cartline__name:hover {
+        color: var(--q-link-hover);
+    }
+
+    .q-cartline__row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-cartline__price {
+        font-weight: var(--q-weight-semibold);
+        font-size: var(--q-fs-sm);
+    }
+
+    /* Licznik ilości w koszyku jest drobniejszy niż przy zakupie: tam wybiera
+       się ilość, tutaj tylko koryguje. */
+    .q-cartline .q-qty__btn {
+        inline-size: 1.625rem;
+        block-size: 1.625rem;
+        min-block-size: 0;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-cartline .q-qty__input {
+        inline-size: 2rem;
+        block-size: 1.625rem;
+        min-block-size: 0;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-cartline__remove {
+        inline-size: 1.75rem;
+        block-size: 1.75rem;
+        display: grid;
+        place-items: center;
+        padding: 0;
+
+        background: none;
+        border: 0;
+        border-radius: var(--q-radius-sm);
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-cartline__remove:hover {
+        background: var(--q-surface-hover);
+        color: var(--q-fill-danger);
+    }
+
+    /* Pozycja, której zmiana właśnie idzie do sklepu. Klient widzi, że
+       kliknięcie zadziałało, a drugie kliknięcie nie wyśle drugiej zmiany. */
+    .q-cartline[aria-busy="true"] {
+        opacity: .5;
+        pointer-events: none;
+    }
+
+    /* Podsumowanie: dwa wiersze JEDEN POD DRUGIM, w każdym etykieta z lewej
+       i wartość z prawej. Ogólna reguła stopki okna stawia je w rzędzie. */
+    .q-cart-drawer .q-modal__summary {
+        display: block;
+        inline-size: 100%;
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-cart-drawer .q-drawer__row {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+    }
+
+    /* Suma: etykieta zwykłej wagi, kwota o dwa stopnie większa i gruba. To
+       jedyna liczba, po którą klient tu sięga. */
+    .q-cart-drawer .q-drawer__row--sum > :last-child {
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+        font-family: var(--q-heading-font);
+    }
+
+    .q-cart-drawer .q-drawer__row--muted {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-cart-drawer .q-drawer__foot-actions {
+        display: grid;
+        gap: var(--q-space-xs);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-drawer__link {
+        text-align: center;
+        font-size: var(--q-fs-sm);
+        color: var(--q-link);
+    }
+
+    .q-drawer__link:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* pusty koszyk */
+    .q-drawer__empty {
+        text-align: center;
+        padding-block: var(--q-space-xl);
+        color: var(--q-meta-color);
+    }
+
+    /* Ikona jest blokiem, więc `text-align` jej nie centruje. Stała przy lewej
+       krawędzi, a napis i przycisk pod nią na środku. */
+    .q-drawer__empty svg {
+        margin-inline: auto;
+        margin-block-end: var(--q-space-sm);
+    }
+}

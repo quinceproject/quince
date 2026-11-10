@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+      <trans-unit id="quince.navmob.allin" resname="All in">
+        <source>All in</source>
+        <target>Wszystko w dziale</target>
+      </trans-unit>
+
+      <!-- Rdzeń tłumaczy „Data sheet" na „Opis", przez co karta produktu ma dwie
+           sekcje akordeonu o tej samej nazwie: opis produktu i tabelę cech. -->
+      <trans-unit id="quince.product.datasheet" resname="Data sheet">
+        <source>Data sheet</source>
+        <target>Dane techniczne</target>
+      </trans-unit>
+
+      <!-- Licznik w belce listingu: sama liczba wytłuszczona, a po niej
+           rzeczownik. Zdanie rdzenia („Jest 2 produktów.") czyta się jak
+           komunikat systemu i przy każdej liczbie ma inną odmianę. -->
+      <trans-unit id="quince.listing.products" resname="products">
+        <source>products</source>
+        <target>produktów</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.subcategories" resname="Subcategories">
+        <source>Subcategories</source>
+        <target>Podkategorie</target>
+      </trans-unit>
+
+      <!-- Pusta lista. Rdzeń ma te zdania tylko po angielsku. -->
+      <trans-unit id="quince.listing.empty" resname="No products available at the moment">
+        <source>No products available at the moment</source>
+        <target>W tej chwili nie ma tu żadnych produktów</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.back_home" resname="Back to Home page">
+        <source>Back to Home page</source>
+        <target>Wróć na stronę główną</target>
+      </trans-unit>
+
+      <!-- Zajawka w widoku listy: słupek zakupu. -->
+      <trans-unit id="quince.card.availability" resname="Availability">
+        <source>Availability</source>
+        <target>Dostępność</target>
+      </trans-unit>
+      <trans-unit id="quince.card.shipping" resname="Shipping">
+        <source>Shipping</source>
+        <target>Wysyłka</target>
+      </trans-unit>
+      <trans-unit id="quince.card.ean" resname="EAN">
+        <source>EAN</source>
+        <target>EAN</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shop1">
+        <source>%shown% of %total% products</source>
+        <target>Pokazano %shown% z %total%</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shop2">
+        <source>All %total% products shown</source>
+        <target>Pokazano wszystkie produkty (%total%)</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shop3">
+        <source>No results found</source>
+        <target>Nic nie znaleziono</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shop4">
+        <source>We could not find any products matching</source>
+        <target>Nie znaleźliśmy produktów pasujących do</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.shop5">
+        <source>Nothing matches that phrase</source>
+        <target>Nic nie pasuje do tej frazy</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filtr1">
+        <source>No product matches the chosen filters</source>
+        <target>Żaden produkt nie pasuje do wybranych filtrów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filtr2">
+        <source>Go back to the full list and narrow it down differently.</source>
+        <target>Wróć do pełnej listy i zawęż ją inaczej.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

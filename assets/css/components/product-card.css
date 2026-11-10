@@ -1,0 +1,480 @@
+/* ===================================================================
+   Quince — karta produktu
+
+   Najczęściej powtarzany element sklepu: listing kategorii, wyniki
+   wyszukiwania, nowości, promocje, produkty podobne, ostatnio oglądane.
+   Jedna definicja obsługuje wszystkie te miejsca.
+
+   Karta reaguje na szerokość WŁASNEGO kontenera, nie okna. Ta sama karta
+   stoi w szerokim listingu i w wąskiej kolumnie bocznej — bez zapytań
+   kontenerowych trzeba by dla każdego miejsca robić osobny wariant klasy.
+
+   Odporność na niepełne dane jest wymogiem, nie dodatkiem: produkt bez
+   zdjęcia, nazwa na cztery linijki, brak ceny promocyjnej obok produktu
+   z promocją — wszystko to zdarza się w każdym sklepie i karta musi
+   wyglądać poprawnie w każdym z tych przypadków.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-pcard {
+        /* Układ odniesienia dla licznika promocji: siedzi w pojemniku decyzji,
+           a odbija się od karty. `container-type` też to ustanawia, ale zapis
+           wprost nie zależy od tego, czy kontener kiedyś zniknie. */
+        position: relative;
+
+        container-type: inline-size;
+        container-name: pcard;
+
+        display: flex;
+        flex-direction: column;
+        block-size: 100%;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+
+        transition: box-shadow 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    /* Pod kursorem karta odpowiada tym, czym już jest rysowana: kreska bierze
+       barwę marki. Cień zostaje taki, jaki był, bo dwa sygnały naraz czytają
+       się jak podskok kafelka, a nie jak podświetlenie.
+
+       TŁA NIE RUSZAMY. Kadr zdjęcia ma własną powierzchnię, więc zmiana tła
+       karty wchodziła pod treść i omijała zdjęcie: kafelek robił się
+       dwubarwny, a rząd kafelków szarą płachtą. */
+    .q-pcard:hover {
+        border-color: var(--q-fill-primary);
+    }
+
+    /* --- obszar zdjęcia ---
+       Proporcja pochodzi z konfiguracji PrestaShopa (Design → Image Settings),
+       nie z motywu. Silnik podstawia ją w zmiennej; tu jest tylko wartość
+       zapasowa na wypadek, gdyby typ obrazu nie został jeszcze odczytany.
+
+       Stały stosunek boków jest konieczny, żeby karty w rzędzie miały równą
+       wysokość niezależnie od tego, jakie zdjęcia wgrał sprzedawca. */
+    /* Kadr zajawki bez szarej obwódki: szare tło kadru zostawiało wokół zdjęcia
+       ramkę, której nikt nie zamawiał — zdjęcia w sklepie i tak mają własny
+       margines wpisany w plik. Puste pole po bokach zdjęcia o innych
+       proporcjach bierze barwę karty, więc go nie widać. */
+    .q-pcard__media {
+        --q-pcard-media-bg: var(--q-card-bg);
+
+        position: relative;
+        aspect-ratio: var(--q-pcard-media-ratio, 1 / 1);
+
+        /* Zdjęcie na środku kadru. Produkty mają różne proporcje, a bez tego
+           te węższe od kwadratu przyklejały się do lewej krawędzi. */
+        display: grid;
+        place-items: center;
+
+        background: var(--q-pcard-media-bg);
+        overflow: hidden;
+    }
+
+    /* Odnośnik wypełnia kadr, ale nim nie jest: kadr musi móc zawierać
+       przyciski, a `<a>` nie może ich zawierać. */
+    .q-pcard__image-link {
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+    }
+
+    .q-pcard__image {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: var(--q-pcard-media-fit);
+
+        transition: transform 300ms ease;
+    }
+
+    /* Zdjęcie przybliża się pod kursorem o cztery setne. To jedyny ruch karty
+       poza cieniem: mówi, że kafelek jest klikalny, i nie przesuwa napisów. */
+    .q-pcard:hover .q-pcard__image {
+        transform: scale(1.04);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-pcard__image {
+            transition: none;
+        }
+
+        .q-pcard:hover .q-pcard__image {
+            transform: none;
+        }
+    }
+
+    /* Zastępnik dla produktu bez zdjęcia. Zajmuje dokładnie tyle samo miejsca
+       co obraz, więc brak zdjęcia nie rozjeżdża rzędu. */
+    .q-pcard__media--empty {
+        display: grid;
+        place-items: center;
+        color: var(--q-pcard-media-placeholder);
+    }
+
+    /* --- plakietki ---
+       Leżą na zdjęciu, w rogu odpowiednim dla kierunku pisma. */
+    /* Pojemnik plakietek jest listą, więc zdejmujemy jej wcięcie i kropki:
+       bez tego przeglądarka dokłada 40 px z lewej i 16 px od góry, i cała
+       kolumna plakietek odjeżdża od rogu kadru. */
+    .q-pcard__badges {
+        position: absolute;
+        inset-block-start: var(--q-space-sm);
+        inset-inline-start: var(--q-space-sm);
+        z-index: 2;
+
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--q-space-xs);
+
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    /* Plakietka w kafelku jest mniejsza niż w panelu zakupu: w karcie szerokiej
+       na 200 px ta z panelu zakrywa ćwierć zdjęcia. */
+    .q-pcard__badges .q-badge {
+        padding: 3px 8px;
+        font-size: .68rem;
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .02em;
+        line-height: 1.4;
+        text-transform: uppercase;
+    }
+
+    /* --- licznik promocji ---
+       Leży na zdjęciu, tuż nad słupkiem narzędzi, wyśrodkowany. Cień odcina go
+       od zdjęcia, bo pod spodem bywa jasny fragment kadru. Po wygaśnięciu znika
+       w całości: „00 00 00" na zdjęciu czyta się jak zepsuty licznik. */
+    /* Licznik w kafelku: nad przyciskami narzędzi, przy dolnej krawędzi
+       kadru. Zegar siedzi w pojemniku decyzji, więc nie ma jak odbić się
+       od kadru — kadr jest kwadratem, czyli jego dół leży `100cqw` od góry
+       karty, a karta jest kontenerem i to ona wyznacza układ odniesienia. */
+    .q-pcard__countdown {
+        position: absolute;
+        inset-inline-start: 50%;
+        inset-block-start: calc(100cqw - 2.75rem - var(--q-space-sm) - var(--q-space-xs));
+        inset-block-end: auto;
+        translate: -50% -100%;
+        z-index: 2;
+
+        box-shadow: var(--q-shadow-md);
+    }
+
+    .q-pcard__countdown[hidden] {
+        display: none;
+    }
+
+    /* --- treść --- */
+    /* Wcięcie u góry mniejsze, bo nad marką stoi już kadr zdjęcia. Po bokach
+       i u dołu jeden stopień skali, nie dwa: na zajawce szerokiej na 288 px
+       wcięcie po 20 px z każdej strony zabierało 40 px, czyli siódmą część
+       karty, a na telefonie ponad jedną czwartą. */
+    .q-pcard__body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-xs);
+        padding: var(--q-space-xs) var(--q-space-sm) var(--q-space-sm);
+        flex: 1;
+    }
+
+    /* Marka nad nazwą: w katalogu technicznym to ona najczęściej rozstrzyga,
+       a jako drobny, wersalikowy dopisek nie konkuruje z nazwą. */
+    .q-pcard__brand {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    /* Nazwa produktu jest nagłówkiem karty, ale ma wyglądać jak reszta karty:
+       bez marginesów i w rozmiarze pisma karty, a nie nagłówka. Wygląd niesie
+       odnośnik w środku. */
+    .q-pcard__name-h {
+        margin: 0;
+        font: inherit;
+    }
+
+    /* Nazwa łamie się najwyżej na dwa wiersze: trzeci rozjeżdża wysokość kart
+       i rząd traci wspólną linię cen. */
+    .q-pcard__name {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-strong);
+    }
+
+    /* W projekcie nie podkreślamy odnośników: nazwa reaguje na kursor nad CAŁĄ
+       kartą, bo klikalny jest cały kafelek, a nie sam napis. Rozjaśnienie,
+       nie barwa odnośnika: nagłówek w zajawce jest tylko jeden i nie musi się
+       przedstawiać jako odnośnik. */
+    .q-pcard:hover .q-pcard__name {
+        color: var(--q-neutral-8);
+    }
+
+    /* Ocena stoi nad ceną, nie pod nazwą: to ostatnia rzecz, na którą klient
+       patrzy, zanim spojrzy na kwotę. Gwiazdki w barwie marki, liczba wyciszona. */
+    .q-pcard__rating {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Dwie warstwy gwiazdek: szara na spodzie, złota na wierzchu przycięta
+       do ułamka oceny. Szerokość złotej wypisuje szablon z wartości policzonej
+       przez silnik, więc 4,4 wygląda inaczej niż 4,8.
+
+       Obie warstwy mają te same znaczniki i ten sam odstęp, a złota jest wyjęta
+       z potoku i przyklejona do lewej krawędzi — inaczej wystarczyłby piksel
+       różnicy, żeby gwiazdki się rozjechały. */
+    .q-pcard__stars {
+        position: relative;
+        display: inline-block;
+        line-height: 0;
+    }
+
+    .q-pcard__stars-empty,
+    .q-pcard__stars-full {
+        display: flex;
+        gap: 1px;
+    }
+
+    .q-pcard__stars-empty {
+        color: var(--q-border);
+    }
+
+    .q-pcard__stars-full {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 0;
+        overflow: hidden;
+        color: var(--q-fill-primary);
+    }
+
+    .q-pcard__star {
+        inline-size: 12px;
+        block-size: 12px;
+        flex: none;
+        fill: currentColor;
+    }
+
+    /* Zajawka bez opinii nie renderuje wiersza oceny wcale — decyduje o tym
+       szablon, bo to on zna dane. CSS nie musi niczego zgadywać. */
+
+    /* Cena odsunięta do dołu karty: przy różnej długości nazw kwoty w całym
+       rzędzie zostają wyrównane w pionie. */
+    .q-pcard__price {
+        margin-block-start: auto;
+        padding-block-start: var(--q-space-xs);
+    }
+
+    /* Przycisk zakupu wprost z kafelka: bez niego każdy zakup z listingu wymaga
+       wejścia na kartę produktu i powrotu. Na pełną szerokość karty, bo jest
+       jej jedyną akcją.
+
+       Wolne miejsce karty zbiera WYŁĄCZNIE cena. Gdy brały je obie, cena
+       i przycisk rozjeżdżały się na dwa końce karty, a między nimi stała
+       pusta przestrzeń. Teraz cena, nota i przycisk trzymają się razem przy
+       dolnej krawędzi. */
+    .q-pcard__cart {
+        padding-block-start: var(--q-space-sm);
+    }
+
+    /* Wymiary z dzisiejszego sklepu: 0,8 rem, waga 600, krój nagłówkowy,
+       wcięcie 8/12. Minimalna wysokość przycisku bazowego (44 px, próg dla
+       palca przy głównej akcji) robi w kafelku listingu belkę, więc schodzi. */
+    .q-pcard__cart .q-btn {
+        inline-size: 100%;
+        min-block-size: 0;
+        gap: var(--q-space-xs);
+        padding: 8px 12px;
+
+        font-family: var(--q-heading-font);
+        font-size: .8rem;
+        font-weight: var(--q-weight-semibold);
+        line-height: 1.2;
+    }
+
+    .q-pcard__cart .q-btn svg {
+        inline-size: 14px;
+        block-size: 14px;
+    }
+
+    /* --- reakcja na szerokość kontenera, nie okna --- */
+
+    /* Wąsko: kolumna boczna, karuzela na telefonie. Nazwa schodzi do jednego
+       wiersza, a przycisk zajmuje całą szerokość, bo na resztę nie ma miejsca. */
+    @container pcard (max-width: 220px) {
+        .q-pcard__name {
+            -webkit-line-clamp: 1;
+            font-size: var(--q-fs-xs);
+        }
+    }
+
+    /* Szeroko: pojedyncza karta w wyróżnionym miejscu. Więcej powietrza
+       i większa nazwa, bo jest na to miejsce. */
+    @container pcard (min-width: 380px) {
+        .q-pcard__name {
+            font-size: var(--q-fs-base);
+        }
+    }
+
+    /* --- słupek narzędzi ---
+       Podgląd i ulubione siadają razem przy dolnej krawędzi kadru i wchodzą
+       dopiero pod kursorem: na listingu z dwudziestoma produktami czterdzieści
+       widocznych przycisków to szum, nie ułatwienie.
+
+       Na ekranie dotykowym kursora nie ma, więc tam zostają widoczne na stałe —
+       inaczej byłyby nieosiągalne. */
+    .q-pcard__tools {
+        position: absolute;
+        inset-block-end: var(--q-space-sm);
+        inset-inline-start: 50%;
+        transform: translateX(-50%) translateY(var(--q-space-xs));
+
+        display: flex;
+        gap: var(--q-space-xs);
+        z-index: 2;
+
+        padding: var(--q-space-xs);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+
+        opacity: 0;
+        transition: opacity 150ms ease-out, transform 150ms ease-out;
+    }
+
+    /* Wjeżdżają od dołu, czyli z tej krawędzi, przy której siadają — ruch
+       w stronę przeciwną do miejsca docelowego czyta się jak drganie, a nie
+       jak pojawienie. */
+    .q-pcard:hover .q-pcard__tools,
+    .q-pcard:focus-within .q-pcard__tools {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+
+    @media (hover: none) {
+        .q-pcard__tools {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    }
+
+    /* Zaokrąglony kwadrat, nie koło — ten sam kształt mają przyciski ikon przy
+       galerii i udostępnianiu.
+
+       Ramkę nosi SŁUPEK, nie każdy znak z osobna: dwa pudełka obok siebie czytają
+       się jak dwie niezależne rzeczy, a to jest jedna grupa narzędzi do tego
+       produktu. */
+    .q-pcard__tool {
+        inline-size: 2rem;
+        block-size: 2rem;
+        display: grid;
+        place-items: center;
+
+        background: none;
+        border: 0;
+        border-radius: var(--q-btn-radius-sm);
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-pcard__tool svg {
+        inline-size: 15px;
+        block-size: 15px;
+    }
+
+    .q-pcard__tool:hover {
+        background: var(--q-fill-primary);
+        border-color: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    /* Ulubione po dodaniu zostają wypełnione — stan musi być widoczny bez
+       najeżdżania, bo klient wraca na listing sprawdzić, co już zaznaczył. */
+    .q-pcard__wish[aria-pressed="true"] {
+        background: var(--q-fill-primary);
+        border-color: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-pcard__wish-filled,
+    .q-pcard__wish[aria-pressed="true"] .q-pcard__wish-outline {
+        display: none;
+    }
+
+    .q-pcard__wish[aria-pressed="true"] .q-pcard__wish-filled {
+        display: inline;
+    }
+
+    /* Znak w trakcie zapisu jest nieklikalny, żeby dwa szybkie kliknięcia nie
+       wysłały dodania i usunięcia naraz. */
+    .q-pcard__wish[aria-busy="true"] {
+        opacity: .55;
+        pointer-events: none;
+    }
+
+    /* --- nota o najniższej cenie ---
+       Stoi na KAŻDEJ karcie, także bez obniżki — wtedy pusta.
+
+       To rezerwacja miejsca, nie treść: bez niej karta z obniżką jest o wiersz
+       wyższa od sąsiadek, a że wszystkie mają wspólną wysokość, przycisk zjeżdża
+       na niej niżej niż na pozostałych. Zarezerwowany wiersz sprawia, że ceny
+       i przyciski stoją w jednej linii w całym rzędzie, niezależnie od tego,
+       ile kart w nim akurat ma promocję.
+
+       Kosztem jest pusty wiersz na kartach bez obniżki. Przyklejenie samego
+       przycisku do dołu wyrównuje przyciski, ale zostawia ceny na dwóch
+       wysokościach, czyli rozwiązuje połowę problemu. */
+    /* Nota o najniższej cenie zajmuje miejsce tylko wtedy, gdy coś niesie.
+       Rezerwacja wiersza na każdej karcie miała wyrównać przyciski w rzędzie,
+       ale przyciski wyrównuje już wspólna wysokość kart, a pusty wiersz
+       odsuwał cenę od przycisku na każdej karcie bez obniżki. */
+    .q-pcard__omnibus {
+        margin: 2px 0 0;
+
+        font-size: var(--q-fs-xs);
+        line-height: var(--q-lh-snug);
+        color: var(--q-meta-color);
+    }
+
+    .q-pcard__omnibus:empty {
+        display: none;
+    }
+
+    /* Pojemnik decyzji jest w kafelku PRZEZROCZYSTY: cena, nota i przycisk
+       zachowują się tak, jakby go nie było, razem z odsunięciem ceny do dołu
+       karty. W widoku listy staje się słupkiem — patrz components/listing.css.
+
+       Bez tego pojemnika trzy elementy trafiały w rzędzie do trzech osobnych
+       pól siatki, a ich wysokości dyktowała kolumna treści obok, więc między
+       ceną, notą i przyciskiem robiły się dziury. */
+    .q-pcard__decyzja {
+        display: contents;
+    }
+
+    /* Cztery rzeczy, które należą tylko do widoku listy. Są w znacznikach
+       każdej karty, bo oba widoki renderują się z tego samego szablonu —
+       w kafelku nie ma dla nich miejsca i gasi je ta reguła. */
+    .q-pcard__topline,
+    .q-pcard__description,
+    .q-pcard__fakty,
+    .q-pcard__stock {
+        display: none;
+    }
+
+}

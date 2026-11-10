@@ -1,0 +1,61 @@
+/* ===================================================================
+   Quince — komponenty
+
+   Plik zbiorczy. Każdy komponent ma własny arkusz w components/,
+   żeby dało się go znaleźć, zmienić i usunąć bez czytania reszty.
+
+   Import zamiast rejestrowania każdego pliku osobno w theme.yml:
+   komponentów będzie kilkadziesiąt, a lista trzydziestu wpisów
+   w konfiguracji motywu jest trudniejsza w utrzymaniu niż jedna lista tutaj.
+   Na produkcji plik i tak trafia do konkatenacji PrestaShopa.
+   =================================================================== */
+
+/* --- akcje --- */
+@import url("components/button.css");
+
+/* --- produkt ---
+   Arkusze samej karty produktu (product.css, gallery.css) nie wchodzą tutaj:
+   rejestruje je theme.yml pod kluczem strony, żeby nie jechały z każdą stroną
+   sklepu. Karta produktu to jedyne miejsce, w którym są potrzebne. */
+@import url("components/product-card.css");
+/* Zestawienia nazwa-wartość. Nie tylko karta produktu: zajawka w widoku listy
+   pokazuje nimi cechy i dostępność, a jej arkusz jedzie z każdą stroną. */
+@import url("components/facts.css");
+@import url("components/price.css");
+@import url("components/badge.css");
+@import url("components/section-title.css");
+@import url("components/rating.css");
+@import url("components/stock.css");
+
+/* --- pasy strony --- */
+@import url("components/topbar.css");
+@import url("components/navbar.css");
+@import url("components/header.css");
+@import url("components/footer.css");
+@import url("components/dropdown.css");
+@import url("components/picker.css");
+@import url("components/field.css");
+@import url("components/field-float.css");
+@import url("components/checkout.css");
+@import url("components/cart.css");
+
+/* --- strona główna ---
+   Slajder nie jedzie przez theme.yml pod kluczem strony głównej, bo moduł może
+   go postawić na dowolnej stronie sklepu — tak samo jak karuzelę zajawek. */
+@import url("components/slider.css");
+@import url("components/homepage.css");
+
+/* --- listing i nawigacja --- */
+@import url("components/breadcrumb.css");
+@import url("components/toolbar.css");
+@import url("components/chip.css");
+@import url("components/pagination.css");
+@import url("components/card.css");
+@import url("components/accordion.css");
+@import url("components/table.css");
+@import url("components/alert.css");
+
+/* Powiadomienia dzielą znaczenie z alertami, ale nie miejsce: wychodzą
+   nad treścią, w rogu okna. */
+@import url("components/toast.css");
+@import url("components/modal.css");

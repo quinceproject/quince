@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+
+      <!-- Domena wspólna dla obu wariantów kasy (krokowej i OPC) — moduł
+           ps_onepagecheckout ma własne tłumaczenia (Modules.Onepagecheckout.Shop),
+           ale napisy dopisane przez motyw Quince (kupujący jako firma/osoba
+           prywatna, kolumna zamówienia, stopka kasy, potwierdzenie) idą tędy. -->
+
+      <trans-unit id="quince.checkout.optional" resname="(optional)">
+        <source>(optional)</source>
+        <target>(opcjonalnie)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.addresses" resname="Addresses">
+        <source>Addresses</source>
+        <target>Adresy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.already_have_account" resname="Already have an account?">
+        <source>Already have an account?</source>
+        <target>Masz już konto?</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.email_sent_to" resname="An email has been sent to your mail address %email%.">
+        <source>An email has been sent to your mail address %email%.</source>
+        <target>Wiadomość e-mail została wysłana na adres %email%.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.back_to_cart" resname="Back to cart">
+        <source>Back to cart</source>
+        <target>Powrót do koszyka</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.back_to_shop" resname="Back to shop">
+        <source>Back to shop</source>
+        <target>Powrót do sklepu</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.billing_differs" resname="Billing address differs from shipping address">
+        <source>Billing address differs from shipping address</source>
+        <target>Adres rozliczeniowy różni się od adresu dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.confirm_conditions" resname="By confirming the order, you certify that you have read and agree with all of the conditions below:">
+        <source>By confirming the order, you certify that you have read and agree with all of the conditions below:</source>
+        <target>Potwierdzając zamówienie, oświadczasz, że zapoznałeś się i akceptujesz poniższe warunki:</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.company_details_invoice" resname="Company details (for invoice)">
+        <source>Company details (for invoice)</source>
+        <target>Dane firmy (do faktury)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.company" resname="Company">
+        <source>Company</source>
+        <target>Firma</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.create_account" resname="Create an account">
+        <source>Create an account</source>
+        <target>Utwórz konto</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.deliver_different_address" resname="Deliver to a different address">
+        <source>Deliver to a different address</source>
+        <target>Dostarcz na inny adres</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.delivery_information" resname="Delivery Information">
+        <source>Delivery Information</source>
+        <target>Informacje o dostawie</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.delivery_option" resname="Delivery Option">
+        <source>Delivery Option</source>
+        <target>Sposób dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.edit_in_cart" resname="Edit in cart">
+        <source>Edit in cart</source>
+        <target>Edytuj w koszyku</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.enter_your_code" resname="Enter your code">
+        <source>Enter your code</source>
+        <target>Wpisz kod</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.gifts" resname="Gift(s)">
+        <source>Gift(s)</source>
+        <target>Prezent(y)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.promo_code_question" resname="Have a promo code?">
+        <source>Have a promo code?</source>
+        <target>Masz kod promocyjny?</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.buying_as" resname="I am buying as">
+        <source>I am buying as</source>
+        <target>Kupuję jako</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.recycled_packaging" resname="I would like to receive my order in recycled packaging.">
+        <source>I would like to receive my order in recycled packaging.</source>
+        <target>Chcę otrzymać zamówienie w opakowaniu z recyklingu.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.signout_empties_cart" resname="If you sign out now, your cart will be emptied.">
+        <source>If you sign out now, your cart will be emptied.</source>
+        <target>Jeśli teraz się wylogujesz, Twój koszyk zostanie opróżniony.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.invoice_address" resname="Invoice address">
+        <source>Invoice address</source>
+        <target>Adres do faktury</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.invoice_details" resname="Invoice details">
+        <source>Invoice details</source>
+        <target>Dane do faktury</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.invoice_different_details" resname="Invoice with different details">
+        <source>Invoice with different details</source>
+        <target>Faktura na inne dane</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.just_a_password" resname="Just a password. You get your order history and invoices in one place.">
+        <source>Just a password. You get your order history and invoices in one place.</source>
+        <target>Wystarczy hasło. Zyskasz historię zamówień i faktury w jednym miejscu.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.next_step" resname="Next: %step_name%">
+        <source>Next: %step_name%</source>
+        <target>Dalej: %step_name%</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.no_payment_needed" resname="No payment needed for this order">
+        <source>No payment needed for this order</source>
+        <target>To zamówienie nie wymaga płatności</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_and_pay" resname="Order and pay">
+        <source>Order and pay</source>
+        <target>Zamawiam i płacę</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_details" resname="Order details">
+        <source>Order details</source>
+        <target>Szczegóły zamówienia</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_reference" resname="Order reference: %reference%">
+        <source>Order reference: %reference%</source>
+        <target>Numer zamówienia: %reference%</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_summary" resname="Order summary">
+        <source>Order summary</source>
+        <target>Podsumowanie zamówienia</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_obligation_to_pay" resname="Order with an obligation to pay">
+        <source>Order with an obligation to pay</source>
+        <target>Zamawiam z obowiązkiem zapłaty</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_without_signing_in" resname="Order without signing in">
+        <source>Order without signing in</source>
+        <target>Zamów bez logowania</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order" resname="Order">
+        <source>Order</source>
+        <target>Zamówienie</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.payment_method" resname="Payment method">
+        <source>Payment method</source>
+        <target>Metoda płatności</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.check_order_before_payment" resname="Please check your order before payment">
+        <source>Please check your order before payment</source>
+        <target>Sprawdź zamówienie przed płatnością</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.price" resname="Price">
+        <source>Price</source>
+        <target>Cena</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.private_person" resname="Private person">
+        <source>Private person</source>
+        <target>Osoba prywatna</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.products_in_cart" resname="Products in cart">
+        <source>Products in cart</source>
+        <target>Produkty w koszyku</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.products_count" resname="Products (%count%)">
+        <source>Products (%count%)</source>
+        <target>Produkty (%count%)</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.view_customization" resname="View my customization">
+        <source>View my customization</source>
+        <target>Zobacz moją personalizację</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.will_send_confirmation" resname="We will send the order confirmation and the invoice here.">
+        <source>We will send the order confirmation and the invoice here.</source>
+        <target>Tu wyślemy potwierdzenie zamówienia i fakturę.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.promo_code" resname="Promo code">
+        <source>Promo code</source>
+        <target>Kod promocyjny</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.selected" resname="Selected">
+        <source>Selected</source>
+        <target>Wybrano</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.shipping_address_cap" resname="Shipping Address">
+        <source>Shipping Address</source>
+        <target>Adres dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.shipping_method_cap" resname="Shipping Method">
+        <source>Shipping Method</source>
+        <target>Sposób dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.shipping_method" resname="Shipping method">
+        <source>Shipping method</source>
+        <target>Sposób dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.shopping_cart" resname="Shopping Cart">
+        <source>Shopping Cart</source>
+        <target>Koszyk</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.signed_in_as" resname="Signed in as">
+        <source>Signed in as</source>
+        <target>Zalogowano jako</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.terms_and_conditions" resname="Terms and conditions">
+        <source>Terms and conditions</source>
+        <target>Regulamin</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.address_used_as_personal" resname="The selected address will be used as your personal address (for invoice).">
+        <source>The selected address will be used as your personal address (for invoice).</source>
+        <target>Wybrany adres będzie użyty jako Twój adres osobisty (do faktury).</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.address_used_as_both" resname="The selected address will be used both as your personal address (for invoice) and as your delivery address.">
+        <source>The selected address will be used both as your personal address (for invoice) and as your delivery address.</source>
+        <target>Wybrany adres będzie użyty zarówno jako Twój adres osobisty (do faktury), jak i adres dostawy.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.cart_empty" resname="There are no more items in your cart">
+        <source>There are no more items in your cart</source>
+        <target>W Twoim koszyku nie ma już żadnych produktów</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.transaction_amount_updated" resname="Transaction amount has been correctly updated">
+        <source>Transaction amount has been correctly updated</source>
+        <target>Kwota transakcji została poprawnie zaktualizowana</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.no_carriers" resname="Unfortunately, there are no carriers available for your delivery address.">
+        <source>Unfortunately, there are no carriers available for your delivery address.</source>
+        <target>Niestety, dla podanego adresu dostawy nie ma dostępnych przewoźników.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.no_payment_methods" resname="Unfortunately, there are no payment method available.">
+        <source>Unfortunately, there are no payment method available.</source>
+        <target>Niestety, nie ma dostępnych metod płatności.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.use_address_for_delivery_too" resname="Use this address for delivery too">
+        <source>Use this address for delivery too</source>
+        <target>Użyj tego adresu też do dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.will_load_details" resname="We will load your details and addresses. Your order stays where you left it.">
+        <source>We will load your details and addresses. Your order stays where you left it.</source>
+        <target>Wczytamy Twoje dane i adresy. Zamówienie zostanie tam, gdzie je zostawiłeś.</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.write_comment" resname="Write a comment about this order">
+        <source>Write a comment about this order</source>
+        <target>Napisz komentarz do zamówienia</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.write_comment_placeholder" resname="Write your comment...">
+        <source>Write your comment...</source>
+        <target>Wpisz komentarz...</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.free_delivery" resname="You get free delivery">
+        <source>You get free delivery</source>
+        <target>Masz darmową dostawę</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.your_delivery_address" resname="Your Delivery Address">
+        <source>Your Delivery Address</source>
+        <target>Twój adres dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.your_invoice_address" resname="Your Invoice Address">
+        <source>Your Invoice Address</source>
+        <target>Twój adres do faktury</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.order_confirmed" resname="Your order is confirmed">
+        <source>Your order is confirmed</source>
+        <target>Twoje zamówienie zostało potwierdzone</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.your_order" resname="Your order">
+        <source>Your order</source>
+        <target>Twoje zamówienie</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.without_shipping_cost" resname="without the shipping cost">
+        <source>without the shipping cost</source>
+        <target>bez kosztu dostawy</target>
+      </trans-unit>
+
+      <trans-unit id="quince.checkout.choose_in_step_3" resname="you will choose it in step 3">
+        <source>you will choose it in step 3</source>
+        <target>wybierzesz w kroku 3</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

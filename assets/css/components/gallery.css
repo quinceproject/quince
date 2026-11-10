@@ -1,0 +1,530 @@
+/* ===================================================================
+   Quince — galeria produktu
+
+   Kadr ze zdjęciem, licznik, pas miniatur, kropki na telefonie i podgląd
+   na wierzchu. Zdjęcia nie przesuwają się obok siebie — miniatura podmienia
+   źródło jednego obrazu, więc szerokość kadru nie zależy od ich liczby.
+
+   Projekt: makieta strony produktu.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-gallery {
+        min-inline-size: 0;
+    }
+
+    .q-gallery__frame {
+        position: relative;
+        aspect-ratio: 1 / 1;
+        display: grid;
+        place-items: center;
+
+        background: none;
+        border-radius: var(--q-card-radius);
+        overflow: hidden;
+        cursor: zoom-in;
+    }
+
+    /* `contain`, nie `cover`: zdjęcie produktu ma być całe. Przycięcie do kadru
+       ucina najczęściej to, po co klient je otworzył. */
+    .q-gallery__img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    /* Licznik zdjęć w rogu kadru. Lewy dolny, bo prawy dolny należy do lupy —
+       a to jest podpis, nie przycisk, więc nie ma prawa stać w miejscu,
+       w które klient celuje palcem. */
+    .q-gallery__counter {
+        position: absolute;
+        inset-block-end: var(--q-space-sm);
+        inset-inline-start: var(--q-space-sm);
+        z-index: 1;
+
+        padding: 2px var(--q-space-sm);
+        background: var(--q-text-strong);
+        border-radius: var(--q-radius-pill, 99px);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-surface-page);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-gallery__zoom {
+        position: absolute;
+        inset-block-end: var(--q-space-sm);
+        inset-inline-end: var(--q-space-sm);
+        z-index: 2;
+
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        display: grid;
+        place-items: center;
+        padding: 0;
+
+        background: var(--q-surface-raised);
+        color: var(--q-text-body);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+        cursor: pointer;
+    }
+
+    .q-gallery__zoom:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    .q-gallery__zoom:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* --- pas miniatur --- */
+
+    .q-gallery__thumbs {
+        display: flex;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+
+        overflow-x: auto;
+        scrollbar-width: none;
+        scroll-snap-type: inline proximity;
+        overscroll-behavior-inline: contain;
+
+        /* Zanik przy krawędzi, za którą jest jeszcze jedna miniatura. Pasek
+           przewijania jest schowany, więc ostatnia widoczna miniatura kończy się
+           równo przy krawędzi i pas wygląda na komplet, choć stoi za nią więcej.
+
+           Maska, nie nakładka z gradientem: nakładka leżałaby NAD pasem, czyli
+           przechwytywałaby kliknięcia w miniaturę pod sobą. Maska działa na
+           pudełku, nie na przewijanej treści, więc trzyma się krawędzi i nie
+           jedzie razem ze zdjęciami. */
+        --q-fade-start: 0px;
+        --q-fade-end: 0px;
+
+        mask-image: linear-gradient(to right,
+            rgba(0, 0, 0, 0) 0,
+            rgb(0, 0, 0) var(--q-fade-start),
+            rgb(0, 0, 0) calc(100% - var(--q-fade-end)),
+            rgba(0, 0, 0, 0) 100%);
+    }
+
+    .q-gallery__thumbs::-webkit-scrollbar {
+        display: none;
+    }
+
+    .q-gallery__thumbs.has-left { --q-fade-start: 2.5rem; }
+    .q-gallery__thumbs.has-right { --q-fade-end: 2.5rem; }
+
+    .q-gallery__thumb {
+        flex: none;
+        inline-size: 4.25rem;
+        aspect-ratio: 1 / 1;
+        padding: 0;
+        scroll-snap-align: start;
+
+        display: grid;
+        place-items: center;
+
+        background: var(--q-surface-sunken);
+        border: 1px solid transparent;
+        border-radius: var(--q-radius-sm);
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .q-gallery__thumb img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+        padding: 0;
+    }
+
+    /* Wybór zaznaczamy obwódką wewnętrzną, nie ramką: ramka zmieniłaby rozmiar
+       miniatury i pas przeskakiwałby przy każdym kliknięciu. */
+    .q-gallery__thumb.is-active {
+        box-shadow: inset 0 0 0 2px var(--q-fill-primary);
+    }
+
+    .q-gallery__thumb:hover {
+        box-shadow: inset 0 0 0 1px var(--q-border-subtle);
+    }
+
+    /* --- kropki ---
+       Zastępują pas miniatur tam, gdzie zająłby połowę ekranu. */
+
+    .q-gallery__dots {
+        display: none;
+        justify-content: center;
+        gap: var(--q-space-xs);
+        padding-block: var(--q-space-sm);
+    }
+
+    .q-gallery__dot {
+        inline-size: .5rem;
+        block-size: .5rem;
+        padding: 0;
+
+        background: var(--q-border-subtle);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: transform .15s ease, background .15s ease;
+    }
+
+    .q-gallery__dot.is-active {
+        background: var(--q-fill-primary);
+        transform: scale(1.25);
+    }
+
+    @media (max-width: 767px) {
+        .q-gallery__thumbs { display: none; }
+        .q-gallery__dots { display: flex; }
+    }
+
+    /* --- podgląd na wierzchu ---
+       Zdjęcie nie powiększa się w kadrze: w trzech kolumnach kadr ma nieco ponad
+       400 px, a zdjęcie w nim jeszcze mniej — powiększenie z takiego kadru daje
+       obraz mniejszy niż plik źródłowy. Podgląd wychodzi więc na całe okno. */
+
+    .q-modal--lightbox {
+        inline-size: min(94vw, 1200px);
+        max-inline-size: none;
+        block-size: min(92dvh, 900px);
+        max-block-size: none;
+
+        padding: 0;
+        border: 0;
+        border-radius: var(--q-radius-lg, var(--q-radius-md));
+        background: var(--q-card-bg);
+        overflow: hidden;
+    }
+
+    .q-modal--lightbox[open] {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Scena: strzałka, kadr, strzałka. Kadr bierze całą wolną wysokość, a pasek
+       miniatur pod spodem ma swoją — bez tego zdjęcie wyższe od okna wychodziło
+       poza warstwę i było przycięte. */
+    .q-lightbox__stage {
+        flex: 1 1 auto;
+        min-block-size: 0;
+
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-md);
+        margin: 0;
+    }
+
+    /* Wiersz podpisu trzyma wysokość jednej linii, także pusty. Bez tego
+       przejście ze zdjęcia z podpisem na pozycję bez podpisu skracało scenę
+       i strzałki po bokach przesuwały się w pionie. Pusty wiersz na ciemnym
+       tle okna i tak nie jest widoczny. */
+    .q-lightbox__caption[hidden] {
+        display: block;
+        visibility: hidden;
+    }
+
+    .q-lightbox__caption {
+        min-block-size: 1.375rem;
+    }
+
+    .q-lightbox__frame {
+        position: relative;
+
+        /* Kadr bierze całą wysokość sceny, a nie wysokość swojej treści.
+           Film leży w nim bezwzględnie, więc bez tego kadr zapadał się przy
+           przejściu ze zdjęcia na film i strzałki po bokach skakały w pionie. */
+        align-self: stretch;
+        block-size: 100%;
+        min-block-size: 0;
+        display: grid;
+        place-items: center;
+    }
+
+    /* Bezwzględnie w kadrze, nie na procentach: reguła zerująca motywu ustawia
+       `img { block-size: auto }`, a przy `object-fit` i własnych proporcjach
+       zdjęcie brało wysokość równą swojej szerokości — czyli dół poza oknem.
+       Przy `inset: 0` rozmiar wynika z krawędzi kadru. */
+    .q-lightbox__img {
+        position: absolute;
+        inset: 0;
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-lightbox__nav,
+    .q-lightbox__close {
+        display: grid;
+        place-items: center;
+
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        padding: 0;
+
+        background: none;
+        border: 0;
+        border-radius: var(--q-radius-sm);
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-lightbox__nav:hover,
+    .q-lightbox__close:hover {
+        background: var(--q-surface-hover);
+        color: var(--q-text-strong);
+    }
+
+    .q-lightbox__close {
+        position: absolute;
+        inset-block-start: var(--q-space-sm);
+        inset-inline-end: var(--q-space-sm);
+        z-index: 2;
+    }
+
+    /* Podpis bierze się z pola `legend` przy zdjęciu — tego samego, z którego
+       powstaje `alt`. Większość sklepów zostawia je puste, więc wiersz znika,
+       gdy podpisu nie ma; zarezerwowane puste miejsce wyglądałoby na usterkę. */
+    .q-lightbox__caption {
+        flex: none;
+        padding-inline: var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+        text-align: center;
+    }
+
+    .q-lightbox__caption[hidden] {
+        display: none;
+    }
+
+    .q-lightbox__thumbs {
+        flex: none;
+        display: flex;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-sm) var(--q-space-md) var(--q-space-md);
+        overflow-x: auto;
+        scrollbar-width: thin;
+    }
+
+    .q-lightbox__thumb {
+        flex: none;
+        inline-size: 4rem;
+        block-size: 4rem;
+        padding: 0;
+
+        background: var(--q-surface-sunken);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-sm);
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .q-lightbox__thumb img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-lightbox__thumb.is-active {
+        border-color: var(--q-fill-primary);
+        border-width: 2px;
+    }
+
+    /* Na telefonie strzałki ustępują palcowi: zdjęcie zmienia się miniaturą
+       albo kropką, a dwa przyciski po bokach zabierają szerokość kadru. */
+    @media (max-width: 767px) {
+        .q-lightbox__nav {
+            display: none;
+        }
+
+        .q-lightbox__stage {
+            grid-template-columns: minmax(0, 1fr);
+            padding: var(--q-space-sm);
+        }
+    }
+
+    /* --- film w galerii ---
+       Projekt: makieta strony produktu.
+
+       Film jest kolejnym kadrem tej samej galerii, nie osobnym widokiem: leży
+       na zdjęciu, w tym samym prostokącie, i wchodzi po kliknięciu miniatury. */
+
+    .q-gallery__video[hidden] {
+        display: none;
+    }
+
+    .q-gallery__video {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+
+        display: grid;
+        place-items: center;
+
+        /* Film ma proporcje 16:9, kadr galerii jest kwadratowy. Kadrujemy ciemnym
+           tłem zamiast przycinać obraz: inaczej znika góra i dół ujęcia. */
+        background: var(--q-video-bg, #10161f);
+        border-radius: inherit;
+        overflow: hidden;
+        cursor: default;
+    }
+
+    .q-gallery__poster {
+        grid-area: 1 / 1;
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    /* Przycisk odtwarzania jest tym samym przyciskiem, co „Do koszyka": ta sama
+       barwa wypełnienia i ten sam zaokrąglony prostokąt. Na stronie nie ma
+       drugiego kształtu na działanie główne i film nie jest tu wyjątkiem. */
+    .q-gallery__play {
+        grid-area: 1 / 1;
+        place-self: center;
+        z-index: 1;
+
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+        border: 0;
+        border-radius: var(--q-radius-md);
+
+        background: var(--q-btn-primary-bg);
+        color: var(--q-btn-primary-label);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        line-height: 1;
+        cursor: pointer;
+        transition: background-color .15s ease, transform .15s ease;
+    }
+
+    .q-gallery__play svg {
+        inline-size: 1.25rem;
+        block-size: 1.25rem;
+    }
+
+    .q-gallery__play:hover {
+        background: var(--q-btn-primary-bg-hover);
+        color: var(--q-btn-primary-label-hover);
+        transform: scale(1.04);
+    }
+
+    /* Po włączeniu filmu zapowiedź schodzi z drogi: plakat i przycisk znikają,
+       żeby nie przebijały się przez odtwarzacz. */
+    .q-gallery__video.is-playing .q-gallery__poster,
+    .q-gallery__video.is-playing .q-gallery__play {
+        display: none;
+    }
+
+    .q-gallery__embed {
+        grid-area: 1 / 1;
+        inline-size: 100%;
+        aspect-ratio: 16 / 9;
+    }
+
+    .q-gallery__embed iframe {
+        inline-size: 100%;
+        block-size: 100%;
+        border: 0;
+    }
+
+    /* Znak odtwarzania na miniaturze. Leży w tej samej komórce siatki co obraz,
+       więc nie potrzebuje pozycjonowania bezwzględnego. */
+    .q-gallery__thumb-play {
+        grid-area: 1 / 1;
+        place-self: stretch;
+
+        display: grid;
+        place-items: center;
+
+        background: color-mix(in oklab, var(--q-video-bg, #10161f) 38%, transparent);
+        border-radius: inherit;
+    }
+
+    .q-gallery__thumb-play svg {
+        inline-size: 1.5rem;
+        block-size: 1.5rem;
+        padding: .1875rem;
+
+        background: var(--q-btn-primary-bg);
+        color: var(--q-btn-primary-label);
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* Plakat filmu to zdjęcie z planu, a nie wycięty produkt: wypełnia miniaturę
+       zamiast stać w niej z marginesem jak zdjęcia katalogowe. */
+    .q-gallery__thumb--video img {
+        /* Obraz i znak odtwarzania muszą trafić do tej samej komórki siatki.
+           Bez tego siatka robi dwa wiersze i przyciemnienie zakrywa sam znak
+           zamiast całej miniatury. */
+        grid-area: 1 / 1;
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+        padding: 0;
+    }
+
+    /* Kursor lupy schodzi z kadru, bo kliknięcie w film go nie powiększa.
+       Sama lupa zostaje: film też otwiera się w podglądzie na wierzchu, tylko
+       drogą przycisku, a nie kliknięcia w obraz. */
+    .q-gallery.is-video .q-gallery__frame { cursor: default; }
+
+    .q-gallery.is-video .q-gallery__zoom { z-index: 2; }
+
+    /* --- film w podglądzie na wierzchu ---
+       Ten sam układ co w kadrze: plakat, przycisk, ramka po kliknięciu. */
+
+    .q-lightbox__video {
+        position: absolute;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: var(--q-video-bg, #10161f);
+        border-radius: var(--q-radius-md);
+        overflow: hidden;
+    }
+
+    .q-lightbox__video[hidden] {
+        display: none;
+    }
+
+    .q-lightbox__poster {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-lightbox__video .q-gallery__play {
+        position: absolute;
+        z-index: 1;
+    }
+
+    .q-lightbox__embed {
+        position: absolute;
+        inset: 0;
+    }
+
+    .q-lightbox__embed iframe {
+        inline-size: 100%;
+        block-size: 100%;
+        border: 0;
+    }
+
+    /* Po włączeniu filmu plakat i przycisk schodzą z drogi odtwarzaczowi. */
+    .q-lightbox__video.is-playing .q-lightbox__poster,
+    .q-lightbox__video.is-playing .q-gallery__play {
+        display: none;
+    }
+}

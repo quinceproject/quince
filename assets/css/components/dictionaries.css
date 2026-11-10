@@ -1,0 +1,24 @@
+@layer quince.components {
+    /*
+       Słowniki katalogowe na karcie produktu: dopasowanie do pojazdów, numery
+       OEM, kody silnika.
+
+       Treść przynosi moduł `quince_dictionaries`, wygląd jest tutaj — moduł bez
+       motywu ma wyglądać jak reszta sklepu, a nie jak wtrącona wyspa. Tabela to
+       ta sama `q-table`, co specyfikacja produktu: dwie różne tabele obok siebie
+       w jednym akordeonie czytałyby się jak dwa różne sklepy.
+    */
+
+    .q-dict + .q-dict {
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* Nazwa roli, czyli co znaczy powiązanie: „Kompatybilność", „Numer OEM".
+       Stopień niżej niż nagłówek sekcji, bo w jednej sekcji bywa kilka ról. */
+    .q-dict__title {
+        margin: 0 0 var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+}

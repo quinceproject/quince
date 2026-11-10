@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+
+      <!-- Napisy listingu, których rdzeń nie ma: przycisk filtrów w belce
+           i rozwijanie rzędu podkategorii. -->
+      <trans-unit id="quince.listing.filters" resname="Filters">
+        <source>Filters</source>
+        <target>Filtry</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.show_all" resname="Show all">
+        <source>Show all</source>
+        <target>Pokaż wszystkie</target>
+      </trans-unit>
+
+      <!-- Przycisk zamykający pas filtrów nad listą. Niesie wynik zawężenia,
+           bo zamknięcie pasa jest skutkiem wyboru. -->
+      <trans-unit id="quince.listing.show_products" resname="Show %product_count% products">
+        <source>Show %product_count% products</source>
+        <target>Pokaż %product_count% produktów</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.show_less" resname="Show less">
+        <source>Show less</source>
+        <target>Pokaż mniej</target>
+      </trans-unit>
+
+
+      <trans-unit id="quince.card.to_cart" resname="To cart">
+        <source>To cart</source>
+        <target>Do koszyka</target>
+      </trans-unit>
+
+      <!-- „Następna", nie „Następny": chodzi o stronę. Rdzeń tłumaczy samo
+           „Next" w rodzaju męskim, więc używamy własnego napisu, żeby nie
+           nadpisywać tamtego w całym sklepie. -->
+      <trans-unit id="quince.pagination.next" resname="Next page">
+        <source>Next page</source>
+        <target>Następna</target>
+      </trans-unit>
+
+      <!-- Opisy dla czytnika ekranu przy stronicowaniu, zajawce i podglądzie.
+           Rdzeń ich nie ma, a są czytane na głos przy każdej pozycji listy. -->
+      <trans-unit id="quince.a11y.next_page" resname="Go to next page">
+        <source>Go to next page</source>
+        <target>Przejdź do następnej strony</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.go_to_page" resname="Go to page %page%">
+        <source>Go to page %page%</source>
+        <target>Przejdź do strony %page%</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.add_to_cart" resname="Add to cart %product_name%">
+        <source>Add to cart %product_name%</source>
+        <target>Dodaj do koszyka: %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.quick_view" resname="Quick view %product_name%">
+        <source>Quick view %product_name%</source>
+        <target>Szybki podgląd: %product_name%</target>
+      </trans-unit>
+
+      <trans-unit id="quince.a11y.wishlist_add" resname="Add %product_name% to your saved products">
+        <source>Add %product_name% to your saved products</source>
+        <target>Dodaj do ulubionych: %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.wishlist" resname="Saved products">
+        <source>Saved products</source>
+        <target>Ulubione</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.act1">
+        <source>Show more products</source>
+        <target>Pokaż więcej produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.act2">
+        <source>Show all results</source>
+        <target>Pokaż wszystkie wyniki</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.act3">
+        <source>See all</source>
+        <target>Zobacz wszystkie</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.filtract1">
+        <source>Show all products</source>
+        <target>Pokaż wszystkie produkty</target>
+      </trans-unit>
+
+      <!-- Link „Zmień" przy już potwierdzonym kroku kasy
+           (checkout-step.tpl) — rdzeń ma „Change” tylko w słowniku panelu
+           administratora, nie w sklepie. -->
+      <trans-unit id="quince.checkout.change_step" resname="Change">
+        <source>Change</source>
+        <target>Zmień</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

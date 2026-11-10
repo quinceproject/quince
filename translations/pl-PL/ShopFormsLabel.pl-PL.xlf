@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="translations">
+    <body>
+
+      <trans-unit id="quince.pulapka.etykieta">
+        <source>Leave this field empty</source>
+        <target>Zostaw to pole puste</target>
+      </trans-unit>
+
+    </body>
+  </file>
+</xliff>

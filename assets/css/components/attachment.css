@@ -1,0 +1,95 @@
+@layer quince.components {
+    /*
+       Załączniki do pobrania w akordeonie karty produktu.
+
+       Reguły przepisane z makiety strony produktu. Cały wiersz jest
+       odnośnikiem, więc klikalne jest wszystko: znaczek typu pliku, nazwa,
+       rozmiar i strzałka. Wcześniej klikalny był sam napis „Pobierz" na końcu.
+    */
+
+    .q-attach {
+        display: grid;
+        gap: var(--q-space-xs);
+    }
+
+    .q-attach__item {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border: 1px solid transparent;
+        border-radius: var(--q-radius-md);
+
+        /* Barwa odnośnika przejęta z otoczenia, bo klikalny jest cały wiersz.
+           Niebieska nazwa pliku obok szarego rozmiaru rozbijałaby wiersz na
+           dwie różne rzeczy. */
+        color: inherit;
+    }
+
+    /* Pod kursorem zmienia się sama ramka. Barwę tekstu trzymamy, bo ogólna
+       reguła motywu rozjaśnia każdy odnośnik pod kursorem, a tu przefarbowałaby
+       cały wiersz razem z rozmiarem pliku. */
+    .q-attach__item:hover {
+        border-color: var(--q-fill-primary);
+        color: inherit;
+    }
+
+    /* Znaczek z rozszerzeniem zamiast ikony pliku: klient widzi od razu, co
+       pobiera, bez otwierania. */
+    .q-attach__ico {
+        display: grid;
+        place-items: center;
+        flex: none;
+
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+
+        background: var(--q-attach-badge-bg);
+        color: var(--q-attach-badge-label);
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-bold);
+        line-height: 1;
+    }
+
+    /* Nazwa i opis w jednej kolumnie, bo opis dotyczy nazwy, a nie wiersza.
+       Kolumna rozpycha wiersz, żeby rozmiar i strzałka stały przy prawej
+       krawędzi niezależnie od długości opisu. */
+    .q-attach__text {
+        flex: 1;
+        min-inline-size: 0;
+    }
+
+    .q-attach__name {
+        display: block;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-medium);
+    }
+
+    /* Opis wpisany przy pliku w panelu. Przygaszony, bo to zdanie pomocnicze:
+       klient klika po nazwie, a opis czyta dopiero, gdy nazwa mu nie wystarczy. */
+    .q-attach__desc {
+        display: block;
+        margin-block-start: 2px;
+
+        font-size: var(--q-fs-xs);
+        line-height: var(--q-lh-snug);
+        color: var(--q-meta-color);
+    }
+
+    .q-attach__size {
+        flex: none;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-attach__dl {
+        flex: none;
+        color: var(--q-link);
+    }
+}

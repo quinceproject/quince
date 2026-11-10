@@ -1,0 +1,491 @@
+/* ===================================================================
+   Quince — blog.
+
+   Zajawki (q-post*, q-posts--*): 1:1 z makiety zajawek bloga,
+   trzy układy — wyróżniony + lista obok (q-posts--feature), rząd równych
+   kafli (q-posts--grid), taśma zwarta (q-posts--rail). Osadzane przez
+   moduł `quince_blog` hookami `displayQuinceBlogTeasers*`.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Ten sam problem i to samo lekarstwo co `.q-cms-crumbs` w cms.css:
+       goły `page.tpl` nie daje okruszkom górnego odstępu, bo na innych
+       stronach dostają go przez wspólny kontener z resztą treści. Własna
+       klasa, nie `.q-cms-crumbs` — strony bloga nie wczytują cms.css. */
+    .q-blog-crumbs {
+        padding-block-start: var(--q-space-md);
+    }
+
+    /* Te same reguły co `.q-listing__title` (listing.css), `.q-cms-list__excerpt`
+       (cms.css) i `.q-empty` (reviews.css) — strony bloga nie wczytują żadnego
+       z tych arkuszy, więc własne odpowiedniki, nie pożyczone klasy. */
+    .q-blog-title {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-h2);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-blog-excerpt {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-snug);
+        color: var(--q-meta-color);
+    }
+
+    .q-blog-empty {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+        color: var(--q-meta-color);
+    }
+
+    .q-blog-empty p { margin: 0; }
+
+    /* Plakietka kategorii to `q-badge` z komponentu plakietek (card.css /
+       components.css), więc ma zaokrąglenie stąd, a nie własne. */
+    .q-post {
+        position: relative;
+
+        display: flex;
+        flex-direction: column;
+        block-size: 100%;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+
+        transition: border-color 200ms ease-out;
+    }
+
+    /* Ten sam token co `.q-pcard:hover` — kreska bierze barwę marki, tak samo
+       jak w karcie produktu. */
+    .q-post:hover { border-color: var(--q-fill-primary); }
+
+    .q-post__media {
+        position: relative;
+        display: block;
+        background: var(--q-surface-sunken);
+        overflow: hidden;
+    }
+
+    .q-post__img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+        display: block;
+        min-inline-size: 0;
+        min-block-size: 0;
+    }
+
+    .q-post__body {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-xs);
+        padding: var(--q-space-md);
+    }
+
+    .q-post__title {
+        margin: 0;
+        /* Tytuł wpisu jest nagłówkiem artykułu, nie etykietą kafla jak nazwa
+           produktu — czyta się jak reszta tytułów `h6` w motywie, nie jak
+           `.q-pcard__name`. */
+        font-size: var(--q-fs-h6);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-card);
+        color: inherit;
+    }
+
+    /* Nazwa klikalna zmienia barwę, nigdy nie dostaje podkreślenia: w całym
+       projekcie podkreśleń na hover nie ma. */
+    .q-post__title a { color: inherit; text-decoration: none; }
+    /* Ten sam token co `.q-pcard:hover .q-pcard__name`: rozjaśnienie
+       atramentu, nie barwa marki — makieta zajawek bloga miała tu
+       nieistniejący token `--q-brand`, ale zajawka ma się zachowywać tak
+       jak karta produktu. */
+    .q-post:hover .q-post__title a { color: var(--q-neutral-8); }
+
+    .q-post__lead {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        /* Ten sam token co zajawka strony CMS (`.q-cms-list__excerpt`). */
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-muted);
+
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .q-post__date {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-post__date svg { flex: none; }
+
+    /* Plakietka kategorii leżąca NA zdjęciu. Stoi u góry z lewej, tak samo
+       jak plakietki na zajawce produktu. */
+    .q-post__cat--over {
+        position: absolute;
+        inset-block-start: var(--q-space-sm);
+        inset-inline-start: var(--q-space-sm);
+        z-index: 1;
+    }
+
+    /* Barwa marki, tak jak we flavor_blog — nie plakietka „nowość": jej
+       kolor sklep ustawia osobno i w tym sklepie wyszedł atramentowy,
+       a kategoria wpisu ma brać wprost z marki, tak jak reszta akcentów. */
+    /* `--q-badge-post-bg`: kategoria może ustawić własny kolor w panelu —
+       szablon wypisuje go wtedy jako zmienną na samej plakietce. Bez koloru
+       zostaje barwa marki. Napis zostaje w stałym, ciemnym kolorze: dowolny
+       kolor wybrany przez sklep nie ma gwarantowanego kontrastu wyliczonego
+       tak, jak reszta plakietek (patrz komentarz w tokens.css przy
+       `--q-badge-*`), więc nie podmieniamy go razem z tłem. */
+    .q-badge--post {
+        background: var(--q-badge-post-bg, var(--q-fill-primary));
+        color: var(--q-on-fill-primary);
+        text-transform: uppercase;
+        letter-spacing: .02em;
+    }
+
+    /* Pasek filtra kategorii nad listą wpisów. 1:1 z `.blog-chips` flavor_blog:
+       wyśrodkowany, z odstępem od siatki pod spodem — bez tego piguły kategorii
+       (`.q-chip`) kleiły się do pierwszego rzędu kart, bo nie miały żadnego
+       marginesu. Osobna klasa od `.q-badge--post`: to jest SELEKTOR filtra
+       (pigułka, stan aktywny), nie plakietka leżąca na zdjęciu karty — mają
+       stać obok siebie inaczej, nie identycznie. */
+    .q-posts-cats {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--q-space-sm);
+        margin-inline: auto;
+        margin-block-end: var(--q-space-lg);
+        max-inline-size: 56rem;
+    }
+
+    /* `.q-chip` ma rozmiar pigułki filtra zawężeń — tu ma być wyborem
+       sekcji, dużo bardziej widocznym. Padding i krój jak w `.blog-chip`
+       flavor_blog (8px/18px, 0.9rem), przełożone na najbliższe tokeny
+       siatki odstępów i pisma. Tylko w tym miejscu — reszta `.q-chip`
+       w sklepie zostaje bez zmian. */
+    .q-posts-cats .q-chip {
+        min-block-size: auto;
+        padding-block: var(--q-space-sm);
+        padding-inline: var(--q-space-md);
+        font-size: var(--q-fs-sm);
+    }
+
+    /* --- układ 1: wyróżniony wpis i lista obok ------------------------- */
+
+    .q-posts--feature {
+        display: grid;
+        grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+        gap: var(--q-space-md);
+    }
+
+    /* Wysokość rzędu wyznacza zdjęcie wyróżnionego wpisu, a kolumna obok
+       dzieli ją równo między swoje wpisy. Odwrotnie nie działa: karta
+       rozciągnięta do wysokości sąsiada liczyła z niej szerokość i wychodziła
+       poza kolumnę. */
+    .q-posts__side {
+        display: grid;
+        grid-auto-rows: 1fr;
+        gap: var(--q-space-md);
+    }
+
+    /* Wyróżniony: zdjęcie niesie treść, więc tekst leży na nim, a nie pod
+       nim. Siatka zamiast bloku, bo blok dokładał pod zdjęciem pasek
+       wysokości linii. Dolna granica pilnuje, żeby pas nie spłaszczył się
+       przy dwóch krótkich wpisach obok. */
+    .q-post--big { display: grid; }
+
+    .q-post--big .q-post__media {
+        block-size: 100%;
+        min-block-size: 360px;
+    }
+
+    /* Maska idzie od dołu i kończy się w połowie — bez niej biały napis
+       gaśnie na jasnym zdjęciu. */
+    .q-post--big .q-post__body {
+        position: absolute;
+        inset-block-end: 0;
+        inset-inline: 0;
+        padding: var(--q-space-lg);
+        color: #fff;
+        background: linear-gradient(to top, rgb(0 0 0 / .78) 0%, rgb(0 0 0 / .55) 45%, rgb(0 0 0 / 0) 100%);
+    }
+
+    /* Ten sam token co nagłówek sekcji (`.q-section-title`) — wyróżniony
+       wpis niesie tyle samo wagi, co tytuł pasa nad nim. */
+    .q-post--big .q-post__title { font-size: var(--q-fs-h4); }
+    .q-post--big .q-post__title a { color: #fff; }
+    .q-post--big:hover .q-post__title a { color: #fff; }
+    .q-post--big .q-post__lead,
+    .q-post--big .q-post__date { color: rgb(255 255 255 / .82); }
+
+    /* Wpis w kolumnie obok: zdjęcie z lewej, treść z prawej. */
+    .q-post--row { flex-direction: row; }
+
+    .q-post--row .q-post__media { flex: none; inline-size: 150px; align-self: stretch; }
+
+    .q-post--row .q-post__body { flex: 1; min-inline-size: 0; justify-content: center; }
+
+    /* Tytuł przycięty, żeby jeden dłuższy wpis nie rozpychał kolumny ponad
+       wysokość wyróżnionego zdjęcia. */
+    .q-post--row .q-post__title,
+    .q-posts--rail .q-post__title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .q-post--row .q-post__title { -webkit-line-clamp: 3; }
+    .q-posts--rail .q-post__title { -webkit-line-clamp: 2; }
+
+    /* Kategoria przy małej zajawce schodzi na drugi plan: tytuł ma być tym,
+       co widać najpierw. Przy wyróżnionym wpisie plakietka zostaje duża, bo
+       leży na zdjęciu i nie ma z czym konkurować. */
+    .q-post--row .q-badge,
+    .q-posts--rail .q-badge {
+        align-self: flex-start;
+        padding-inline: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-medium);
+        letter-spacing: .04em;
+    }
+
+    /* --- układ 2: rząd równych kafli ----------------------------------- */
+
+    .q-posts--grid {
+        display: grid;
+        grid-template-columns: repeat(var(--q-posts-cols, 3), minmax(0, 1fr));
+        gap: var(--q-space-md);
+        /* Oddech od tytułu strony nad nim. Margines `.q-blog-title` sam
+           to nie daje (`--q-space-xs`, bo na listingu produktowym tę rolę
+           bierze wstęp pod tytułem) — strona kategorii bloga często nie ma
+           opisu między nimi i siatka klei się wtedy wprost pod nagłówek. */
+        margin-block-start: var(--q-space-lg);
+    }
+
+    .q-posts--grid .q-post__media { aspect-ratio: 16 / 9; }
+
+    /* --- układ 3: taśma zwarta ----------------------------------------- */
+
+    /* Wpisy bez zajawki tekstowej, zdjęcie małe i kwadratowe. Mieści się
+       w wąskiej kolumnie sekcji i nie rozpycha pasa na pół ekranu. Liczba
+       kafli idzie za szerokością kolumny sekcji, tak jak przy zajawkach
+       produktów (--q-posts-cols, ustawiane inline przez szablon). */
+    .q-posts--rail {
+        display: grid;
+        grid-template-columns: repeat(var(--q-posts-cols, 3), minmax(0, 1fr));
+        gap: var(--q-space-md);
+    }
+
+    .q-posts--rail .q-post { flex-direction: row; align-items: stretch; }
+
+    .q-posts--rail .q-post__media { flex: none; inline-size: 96px; }
+
+    .q-posts--rail .q-post__body { flex: 1; min-inline-size: 0; padding: var(--q-space-sm) var(--q-space-md); }
+
+    .q-posts--rail .q-post__title { font-size: var(--q-fs-sm); }
+
+    .q-posts--rail .q-post__cat { font-size: var(--q-fs-xs); }
+
+    /* --- nagłówek pasa -------------------------------------------------- */
+
+    .q-posts-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-posts-head h2 { margin: 0; font-size: var(--q-fs-h4); }
+
+    .q-posts-more { font-size: var(--q-fs-sm); color: var(--q-text-muted); text-decoration: none; }
+    /* Ta sama barwa marki, co reszta hover w karcie — patrz komentarz przy
+       `.q-post:hover .q-post__title a`. */
+    .q-posts-more:hover { color: var(--q-fill-primary); }
+
+    @media (max-width: 991px) {
+        .q-posts--feature { grid-template-columns: minmax(0, 1fr); }
+        .q-posts--grid,
+        .q-posts--rail { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 575px) {
+        .q-posts--grid,
+        .q-posts--rail { grid-template-columns: minmax(0, 1fr); }
+        .q-post--row { flex-direction: column; }
+        .q-post--row .q-post__media { inline-size: 100%; aspect-ratio: 16 / 9; }
+    }
+
+    /* --- pojedynczy wpis -------------------------------------------------
+
+       Szerokość treści i szerokość zdjęcia liczy PHP (BlogLayoutSettings,
+       ustawienia z Blog → Settings), nie CSS `calc()` — zagnieżdżone `var()`
+       w `calc()` nie dawały w przeglądarce poprawnego wyniku. Szablon
+       wypisuje gotowe piksele jako --q-blog-content-width / --q-blog-cover-width
+       na tym elemencie. */
+    .q-post-single {
+        inline-size: 100%;
+        max-inline-size: var(--q-blog-content-width, 800px);
+        margin-inline: auto;
+        /* `.q-container`'s own padding-inline, powielone tutaj — ten element
+           celowo NIE nosi klasy `.q-container` (dwie reguły max-inline-size na
+           jednym elemencie to zawodny konflikt), więc traci jej styl i musi
+           go dostać wprost. */
+        padding-inline: var(--q-space-md);
+    }
+
+    @media (max-width: 767px) {
+        .q-post-single {
+            padding-inline: var(--q-space-sm);
+        }
+
+    }
+
+    /* Karuzela produktów: `.q-carousel__item` liczy kartę z `--q-grid-columns`
+       (carousel.css) — tu nadpisane na liczbę kolumn TREŚCI, żeby pokazała
+       dokładnie tyle kart, ile szerokości ma cała kolumna wpisu. */
+    .q-post-single__featured {
+        --q-grid-columns: var(--q-blog-content-cols, 3);
+    }
+
+    /* 1:1 z `.blog-post__header` flavor_blog: wyśrodkowany tytuł, pod nim
+       jeden wiersz meta (data, kategoria, wyświetlenia) — bez plakietki
+       kategorii nad tytułem. */
+    .q-post-single__head {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-lg);
+        text-align: center;
+    }
+
+    .q-post-single__head h1 { margin: 0; }
+
+    .q-post-single__meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--q-space-md);
+    }
+
+    .q-post-single__meta-category { text-decoration: none; font-weight: var(--q-weight-semibold); }
+    .q-post-single__meta-category:hover { color: var(--q-link-hover); }
+
+    /* Zdjęcie ma własną szerokość (Blog → Settings), zwykle szerszą niż
+       treść — gotowe piksele z PHP (--q-blog-cover-width), wyłamuje się
+       z węższej `.q-post-single` z powrotem do tej szerokości. */
+    .q-post-single__cover {
+        position: relative;
+        inset-inline-start: 50%;
+        transform: translateX(-50%);
+        inline-size: min(var(--q-blog-cover-width, 100%), 100vw);
+        max-inline-size: min(var(--q-blog-cover-width, 100%), 100vw);
+        margin-block-end: var(--q-space-lg);
+        border-radius: var(--q-card-radius);
+        overflow: hidden;
+    }
+
+    .q-post-single__cover img {
+        display: block;
+        inline-size: 100%;
+        block-size: auto;
+    }
+
+    /* Podpis pod zdjęciem wyróżnionym. Leży w tym samym `<figure>`, co
+       zdjęcie — żeby nie liczyć drugi raz wyłamania na pełną szerokość
+       (`inset-inline-start`/`transform` wyżej) dla osobnego elementu. */
+    .q-post-single__cover-caption {
+        padding-block: var(--q-space-sm);
+        padding-inline: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        font-style: italic;
+        color: var(--q-text-muted);
+        text-align: center;
+    }
+
+    .q-post-single__content {
+        margin-block-end: var(--q-space-lg);
+    }
+
+    .q-post-single__content :is(h2, h3) { margin-block: var(--q-space-lg) var(--q-space-sm); }
+    .q-post-single__content p { margin-block: 0 var(--q-space-md); line-height: var(--q-lh-relaxed); }
+    .q-post-single__content ul,
+    .q-post-single__content ol { margin-block: 0 var(--q-space-md); padding-inline-start: 1.25em; }
+    .q-post-single__content li { margin-block-end: var(--q-space-xs); }
+
+    .q-post-single__faq {
+        margin-block: var(--q-space-lg);
+    }
+
+    /* Akordeon jest kartą, tak samo jak w sekcjach karty produktu: sam
+       `.q-accordion` jest przezroczysty (filtry i stopka telefonu stoją już
+       na własnym tle), więc każdy, kto chce karty, dokłada ją u siebie —
+       tak jak `.q-pdp__sections` robi to dla strony produktu. */
+    .q-post-single__faq .q-accordion {
+        background: var(--q-card-bg);
+        border: var(--q-blok-ramka);
+        border-radius: var(--q-accordion-radius);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    .q-post-single__faq-head {
+        margin-block-end: var(--q-space-md);
+    }
+
+    /* Ten sam stopień co nagłówek karuzeli produktowej: obie rzeczy są
+       nagłówkiem sekcji tej samej rangi. */
+    .q-post-single__faq-title {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin: 0;
+        font-size: var(--q-fs-h4);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-post-single__faq-ico {
+        inline-size: 1.25rem;
+        block-size: 1.25rem;
+        flex: none;
+        color: var(--q-fill-primary);
+    }
+
+    .q-post-single__nav {
+        display: flex;
+        align-items: stretch;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        margin-block: var(--q-space-lg);
+    }
+
+    /* `.q-btn` jest pisany na krótką etykietę (stąd `white-space: nowrap`
+       w jego regule bazowej) — tytuł wpisu bywa długi, więc tutaj, i tylko
+       tutaj, dostaje złamanie wiersza zamiast rozpychania strony w bok. */
+    .q-post-single__nav .q-btn {
+        flex: 1 1 0;
+        min-inline-size: 0;
+        block-size: auto;
+        padding-block: var(--q-space-xs);
+        white-space: normal;
+        overflow-wrap: anywhere;
+        text-align: start;
+        line-height: var(--q-lh-snug);
+    }
+}

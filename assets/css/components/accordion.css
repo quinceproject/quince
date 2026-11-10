@@ -1,0 +1,204 @@
+/* ===================================================================
+   Quince — akordeon
+
+   Karta produktu (opis, dane techniczne, dostawa, opinie), stopka na telefonie,
+   filtry na listingu, pytania i odpowiedzi. 21 szablonów motywu.
+
+   Zbudowany na <details> i <summary>, nie na własnym mechanizmie:
+   przeglądarka daje za darmo obsługę klawiatury, poprawne ogłaszanie stanu
+   w czytniku ekranu, wyszukiwanie tekstu w zwiniętych sekcjach (Ctrl+F otwiera
+   właściwą) i działanie bez JavaScriptu. Własny mechanizm musiałby to wszystko
+   odtworzyć, żeby wyjść na zero.
+
+   Tokeny komponentu (--q-accordion-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-accordion {
+        border: 1px solid var(--q-accordion-border);
+        border-radius: var(--q-accordion-radius);
+
+        /* Przycięcie do promienia: pierwszy i ostatni nagłówek dotykają ramki,
+           więc ich tło pod kursorem musi trzymać się zaokrąglonego rogu. */
+        overflow: hidden;
+    }
+
+    .q-accordion__item + .q-accordion__item {
+        border-block-start: 1px solid var(--q-accordion-border);
+    }
+
+    .q-accordion__header {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-accordion-pad-block) var(--q-accordion-pad-inline);
+
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-semibold);
+        line-height: var(--q-lh-snug);
+        color: var(--q-accordion-header-label);
+        cursor: pointer;
+
+        /* Znacznik przeglądarki zastępujemy własnym: domyślny trójkąt wygląda
+           inaczej w każdej przeglądarce i nie da się mu nadać koloru. */
+        list-style: none;
+    }
+
+    .q-accordion__header::-webkit-details-marker {
+        display: none;
+    }
+
+    .q-accordion__header:hover {
+        background: var(--q-accordion-header-bg-hover);
+    }
+
+    /* Rozwinięta sekcja ma podświetlony nagłówek. To jedyny znak, po którym
+       widać, gdzie zaczyna się otwarta treść, gdy sekcji jest kilka i wszystkie
+       są długie — sam obrócony znaczek gubi się przy prawej krawędzi. */
+    .q-accordion__item[open] > .q-accordion__header {
+        background: var(--q-surface-sunken);
+    }
+
+    .q-accordion__item[open] > .q-accordion__header:hover {
+        background: var(--q-surface-sunken);
+    }
+
+    .q-accordion__header:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: -2px;
+    }
+
+    /* Tytuł sekcji jest nagłówkiem dokumentu (`h2` pod nazwą produktu), a nie
+       napisem: czytnik ekranu i wyszukiwarka układają z tego spis treści karty.
+       Wielkość pisma bierze z wiersza nagłówka, więc stopień w kodzie nie
+       zmienia wyglądu — o wyglądzie decyduje miejsce, o stopniu treść. */
+    /* Nazwa sekcji czyta się jako etykieta, nie jako nagłówek treści.
+       Powód: w opisie produktu sprzedawca wpisuje własne śródtytuły, a te
+       przy zdaniowym zapisie tej samej wielkości przykrywały nazwę sekcji,
+       w której stoją. Wersaliki z rozstrzeleniem odróżniają ją rodzajem,
+       a nie wielkością, więc hierarchia trzyma się bez powiększania czegokolwiek.
+
+       Ten sam zapis co pozostałe etykiety motywu: tytuły kolumn stopki,
+       nagłówek tabeli składników, marka na kafelku produktu. */
+    .q-accordion__title {
+        flex: 1;
+        min-inline-size: 0;
+        margin: 0;
+
+        font-family: var(--q-font-heading);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+
+    /* Liczba przy tytule — ile opinii, ile filtrów wybrano. Stoi przed znakiem
+       rozwinięcia, żeby nie odsuwała go od krawędzi. */
+    .q-accordion__count {
+        font-weight: var(--q-weight-regular);
+        color: var(--q-text-muted);
+    }
+
+    .q-accordion__icon {
+        inline-size: 14px;
+        block-size: 14px;
+        flex: none;
+        color: var(--q-accordion-icon);
+        transition: transform 150ms ease-out;
+    }
+
+    .q-accordion__item[open] > .q-accordion__header .q-accordion__icon {
+        transform: rotate(180deg);
+    }
+
+    /* --- odmiana ze znakiem plus ---
+       Kształt daje szablon, obrót daje arkusz: strzałka obraca się o pół obrotu
+       i wskazuje w drugą stronę, plus o ćwierć i staje się krzyżykiem. To jedyna
+       różnica, więc odmiana to jedna reguła, a nie drugi zestaw tokenów.
+
+       Plus mówi „rozwiń", krzyżyk „zwiń" — czytelniej niż strzałka tam, gdzie
+       sekcje są krótkie i stoją gęsto, na przykład w pytaniach i odpowiedziach. */
+    .q-accordion--plus .q-accordion__item[open] > .q-accordion__header .q-accordion__icon {
+        transform: rotate(45deg);
+    }
+
+    /* Odstęp z każdej strony, także od góry. Bez górnego treść przyklejała się
+       do nagłówka, a odkąd nagłówek rozwiniętej sekcji ma własne tło, stykały
+       się dwie płaszczyzny. */
+    .q-accordion__body {
+        padding-block: var(--q-accordion-pad-block);
+        padding-inline: var(--q-accordion-pad-inline);
+        color: var(--q-accordion-body-label);
+        font-size: var(--q-fs-base);
+        line-height: var(--q-lh-relaxed);
+    }
+
+    .q-accordion__body > :first-child { margin-block-start: 0; }
+    .q-accordion__body > :last-child  { margin-block-end: 0; }
+
+    /* Tabela w akordeonie musi zostać tabelą. Reguły resetujące wyświetlanie
+       elementów w rozwijanej treści potrafią zamienić ją w blok i wtedy
+       szerokości kolumn przestają działać — to była realna pułapka w poprzednim
+       motywie, więc tu deklarujemy to wprost. */
+    .q-accordion__body table {
+        display: table;
+        inline-size: 100%;
+    }
+
+
+    /* --- odmiana bez ramki, z kreską pod nagłówkiem ---
+       Ta sama barwa i te same odstępy co odmiana podstawowa — inne jest tylko
+       to, gdzie stoi linia. Dlatego nie ma tu ani jednego nowego tokenu:
+       „bez ramki, z kreską" to inne ułożenie tych samych decyzji, a nie nowa
+       decyzja o wyglądzie. */
+    .q-accordion--underline {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-accordion--underline .q-accordion__item {
+        border-block-start: 0;
+    }
+
+    /* Kreska pod nagłówkiem, nie pod całą sekcją: kończy wiersz z nazwą
+       i strzałką, a rozwinięta treść zostaje pod nią bez własnej linii. */
+    .q-accordion--underline .q-accordion__header {
+        padding-inline: 0;
+        border-block-end: 1px solid var(--q-accordion-border);
+    }
+
+    .q-accordion--underline .q-accordion__body {
+        padding-inline: 0;
+    }
+
+    /* Odmiana bez ramki — stopka na telefonie i filtry, gdzie sekcje stoją
+       jedna pod drugą w kolumnie, która ma już własne obramowanie. */
+    .q-accordion--plain {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-accordion--plain .q-accordion__header {
+        padding-inline: 0;
+    }
+
+    .q-accordion--plain .q-accordion__body {
+        padding-inline: 0;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-accordion__icon {
+            transition: none !important;
+        }
+    }
+
+    /* Zapas nad sekcją przy skoku do kotwicy. Przyklejony nagłówek zasłaniał
+       nagłówek sekcji, do której klient właśnie przeszedł, więc trafiał na
+       treść bez tytułu i nie wiedział, gdzie jest. Wysokość paska wpisuje
+       skrypt nagłówka w `--q-header-h`. */
+    .q-accordion__item {
+        scroll-margin-block-start: calc(var(--q-header-h, 4rem) + var(--q-space-md));
+    }
+}

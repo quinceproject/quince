@@ -1,0 +1,79 @@
+/* ===================================================================
+   Quince — przycisk otwierający listę w sekcji górnej
+
+   Odmiana bez ramki: stoi w pasku informacyjnym i bierze barwy tej sekcji.
+   Sama lista jest wspólna dla całego motywu — patrz components/dropdown.css.
+
+   Odmiana formularzowa (.q-select__button) jest w components/field.css.
+
+   Projekt: widok paska górnego.
+   Tokeny komponentu (--q-picker-*) definiuje tokens.css.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Element obejmuje sam przycisk, a nie całą szerokość rodzica: lista
+       pozycjonuje się względem niego, więc w bloku rozciągniętym na całą
+       szerokość odjechałaby na przeciwny koniec ekranu. */
+    .q-picker {
+        position: relative;
+        display: inline-block;
+    }
+
+    .q-picker__button {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+
+        /* Cel dotykowy: 44 px w pionie mimo niskiego paska — realizowane
+           odstępem wewnętrznym, nie wysokością, żeby pasek został wąski. */
+        min-block-size: var(--q-touch-target);
+        padding-inline: var(--q-space-xs);
+
+        border: 0;
+        background: none;
+        font: inherit;
+        font-size: var(--q-fs-sm);
+        color: var(--q-picker-label);
+        cursor: pointer;
+    }
+
+    .q-picker__button:hover {
+        color: var(--q-picker-label-hover);
+    }
+
+    .q-picker__button:focus-visible {
+        outline: 2px solid var(--q-picker-focus);
+        outline-offset: -2px;
+    }
+
+    .q-picker__chev {
+        inline-size: 9px;
+        block-size: 9px;
+        opacity: .5;
+        transition: transform 120ms ease-out;
+    }
+
+    .q-picker__button[aria-expanded="true"] .q-picker__chev {
+        transform: rotate(180deg);
+    }
+
+    /* Lista wjeżdża na pasek zamiast wisieć pod nim. Na jasnej stronie biała
+       lista stykała się z białym tłem i zostawała po niej sama kreska ramki;
+       zachodząc na ciemny pas, dostaje oparcie. Wartość liczona od przycisku,
+       który jest wyższy od paska o cel dotykowy. */
+    .q-topbar .q-picker .q-dropdown {
+        inset-block-start: calc(100% - 6px);
+    }
+
+    /* Flaga: kwadrat z obrazkiem kraju. Kod lub nazwa zostaje obok, bo sama
+       flaga nie jest jednoznaczna — ta sama bywa dla kilku wariantów języka. */
+    .q-flag {
+        inline-size: 16px;
+        block-size: 12px;
+        border-radius: 2px;
+        background: var(--q-picker-flag-bg);
+        object-fit: cover;
+        flex: none;
+    }
+}

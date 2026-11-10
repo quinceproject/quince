@@ -1,0 +1,2378 @@
+/* ===================================================================
+   Quince — kasa
+
+   Oba warianty kasy: krokowy, czyli natywny checkout PrestaShopa, i kasa
+   jednostronicowa z modułu `ps_onepagecheckout`. Wyglądają tak samo; różnią
+   się tym, że w jednostronicowej wszystkie sekcje są rozwinięte naraz.
+
+   Przeniesione z makiety kasy. Pole formularza nie jest tutaj:
+   mieszka w `components/field-float.css` i obsługuje cały sklep.
+   =================================================================== */
+
+/* ===================================================================
+   Quince — drobiazgi wspólne dla widoków zakupu
+
+   Rzeczy, których używa więcej niż jeden widok, a które przy wdrożeniu
+   trafią do komponentów motywu, nie do arkusza pojedynczego ekranu.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Rząd wyborów jednokrotnych stojących obok siebie. `q-field-row` to
+       siatka dla pól o szerokości co najmniej 220 px i rozpychała dwa
+       przyciski radiowe na pół szerokości karty. Przy wdrożeniu to miejsce
+       dla `components/field.css`, obok samego `q-choice`. */
+    .q-choices {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-md);
+    }
+
+}
+
+/* Przyciski portfeli: PayPal, Google Pay. Pokazuje je koszyk i kasa, bo
+   w sklepie rysuje je ten sam hook `displayExpressCheckout`, a nie dwa
+   osobne bloki. Barwy operatorow sa ich znakiem towarowym i nie podlegaja
+   palecie sklepu; napis bierze do nich biel o wystarczajacym kontrascie.
+
+   W warstwie komponentow, nie ukladu: regula nadpisuje tokeny przycisku,
+   a te stoja wlasnie tam. Z warstwy ukladu przegralaby bez wzgledu na
+   kolejnosc plikow. */
+@layer quince.components {
+
+    .q-express-btn {
+        --btn-border: transparent;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-express-btn--paypal {
+        --btn-bg: #003087;
+        --btn-label: #ffffff;
+    }
+
+    .q-express-btn--gpay {
+        --btn-bg: #1c1c1c;
+        --btn-label: #ffffff;
+    }
+}
+
+
+/* ===================================================================
+   Quince — kolumna zamówienia
+
+   Z prototypu checkoutu, mierzonego w przeglądarce.
+   Układ: zwijana głowa, ciało z pozycjami i kwotami netto, kwota do
+   zapłaty POZA ciałem (zostaje na wierzchu po zwinięciu) i stopka
+   z przyciskiem zapłaty.
+
+   Kwota i stopka nie siedzą w zwijanym ciele celowo: po zwinięciu klient
+   ma dalej widzieć, ile płaci i czym zakończy zakup.
+   =================================================================== */
+
+@layer quince.layout {
+
+    .q-ordersum {
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+    }
+
+    /* ── głowa ────────────────────────────────────────── */
+
+    .q-ordersum__head {
+        display: flex;
+        inline-size: 100%;
+        gap: var(--q-space-sm);
+        align-items: center;
+        min-block-size: 3.75rem;
+        padding-inline: var(--q-space-md);
+
+        border: 0;
+        background: none;
+        cursor: pointer;
+        text-align: start;
+    }
+
+    .q-ordersum__head b {
+        flex: 1;
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Miniatury widoczne dopiero po zwinięciu: mówią, czego dotyczy kwota,
+       bez rozwijania listy. */
+    .q-ordersum__mini { display: flex; }
+
+    .q-ordersum__mini i {
+        inline-size: 2rem;
+        block-size: 2rem;
+        border-radius: var(--q-radius-pill);
+        background: var(--q-pcard-media-bg);
+        border: 2px solid var(--q-card-bg);
+        margin-inline-start: -0.625rem;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .q-ordersum__mini i:first-child { margin-inline-start: 0; }
+
+    .q-ordersum__chev { flex: none; transition: transform 150ms ease-out; }
+
+    .q-ordersum--open .q-ordersum__chev { transform: rotate(180deg); }
+    .q-ordersum--open .q-ordersum__mini { display: none; }
+
+    /* ── ciało ───────────────────────────────────────── */
+
+    .q-ordersum__body { display: none; padding: 0 var(--q-space-md) var(--q-space-xs); }
+    .q-ordersum--open .q-ordersum__body { display: block; }
+
+    .q-ordersum__top {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        align-items: baseline;
+        margin-block-end: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-ordersum__top b { font-weight: var(--q-weight-semibold); }
+
+    /* ── pozycje ───────────────────────────────────── */
+
+    .q-ordersum__item {
+        display: flex;
+        gap: var(--q-space-sm);
+        align-items: center;
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-ordersum__thumb {
+        inline-size: 3.25rem;
+        block-size: 3.25rem;
+        flex: none;
+        border-radius: var(--q-radius-sm);
+        background: var(--q-pcard-media-bg);
+        object-fit: cover;
+    }
+
+    .q-ordersum__nm {
+        flex: 1;
+        min-inline-size: 0;
+        font-weight: var(--q-weight-medium);
+    }
+
+    .q-ordersum__nm small {
+        display: block;
+        font-weight: var(--q-weight-regular);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-ordersum__pr {
+        white-space: nowrap;
+        font-weight: var(--q-weight-medium);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ── kwoty składowe ──────────────────────────────── */
+
+    .q-ordersum__tot {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-sm);
+        border-block-start: 1px solid var(--q-card-border);
+        font-size: var(--q-fs-sm);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Na stronie koszyka ciało zaczyna się tu wprost pod nagłówkiem karty
+       (bez listy pozycji i bez „Products (N)" nad nim) — kreska oddzielałaby
+       wtedy nagłówek od niczego. Na potwierdzeniu zamówienia ten sam blok
+       stoi pod listą kupionych pozycji i kreska tam zostaje. */
+    .js-cart-detailed-totals .q-ordersum__tot { border-block-start: 0; }
+
+    .q-ordersum__tr { display: flex; justify-content: space-between; gap: var(--q-space-sm); }
+
+    /* Koszt dostawy przed wyborem przewoźnika: zamiast zera, które kłamie,
+       zdanie mówiące, w którym kroku się go pozna. */
+    .q-ordersum__later { color: var(--q-meta-color); }
+
+    /* ── kwota do zapłaty ───────────────────────────── */
+
+    .q-ordersum__grand {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        align-items: baseline;
+        padding: var(--q-space-sm) var(--q-space-md) var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* Kreska nad kwotą taka sama jak pozostałe w karcie. Prototyp rysuje
+       tu grubą, ciemną — motyw nie ma takiego stylu i jedna gruba kreska
+       w całym sklepie czytałaby się jak błąd, a nie jak akcent. */
+    .q-ordersum--open .q-ordersum__grand {
+        margin-inline: var(--q-space-md);
+        padding-inline: 0;
+    }
+
+    .q-ordersum__grand b { font-weight: var(--q-weight-semibold); }
+
+    .q-ordersum__grand b small {
+        display: block;
+        font-weight: var(--q-weight-regular);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Strona koszyka pokazuje VAT pod kwotą, kasa nie — tam go nie było
+       w projekcie i kolumna jest ciaśniejsza. */
+    .q-ordersum__tax {
+        margin: 0;
+        padding: 0 var(--q-space-md) var(--q-space-md);
+        text-align: end;
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Na stronie koszyka głowa stoi zawsze otwarta i jest zwykłym nagłówkiem,
+       nie przyciskiem — bez wskaźnika klikalności, którego tu nie ma. */
+    .q-cart__side .q-ordersum__head { cursor: default; }
+
+    .q-ordersum__grand-value {
+        font-size: var(--q-fs-h4);
+        font-weight: var(--q-weight-semibold);
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* ── stopka: zgoda i zapłata ───────────────────────── */
+
+    .q-ordersum__foot {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-xs);
+        padding: var(--q-space-md) var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* Ta sama sztuczka co przy `.q-ordersum__grand`: margines zamiast
+       paddingu wsuwa samą krawędź pudełka (tam, gdzie stoi kreska) do
+       środka karty, więc kreska kończy się tam, gdzie tekst, a nie przy
+       brzegu karty. */
+    .q-ordersum--open .q-ordersum__foot {
+        margin-inline: var(--q-space-md);
+        padding-inline: 0;
+    }
+
+    .q-ordersum__pay {
+        inline-size: 100%;
+        min-block-size: 3.375rem;
+        justify-content: center;
+    }
+
+    .q-ordersum__pay[disabled],
+    .q-ordersum__pay[aria-disabled="true"] {
+        background: var(--q-card-border);
+        color: var(--q-text-muted);
+        border-color: transparent;
+        cursor: not-allowed;
+    }
+
+    /* Nieużywane w checkoucie krokowym — klauzula o danych przeszła do
+       kroku 1. Zostaje dla checkoutu jednostronicowego (OPC), gdzie nie ma
+       osobnego kroku 1 i ta klauzula wraca na swoje miejsce z prototypu. */
+    .q-ordersum__clause {
+        margin: var(--q-space-xs) 0 0;
+        padding: var(--q-space-sm) var(--q-space-sm);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* OPC: psgdpr i ps_dataprivacy wyświetlone razem (patrz
+       `one-page-checkout.tpl`) — każdy w swoim akapicie, żeby teksty
+       dwóch modułów nie sklejały się w jedno zdanie bez odstępu. */
+    .q-ordersum__clause p { margin: 0 0 var(--q-space-xs); }
+
+    .q-ordersum__clause p:last-child { margin-block-end: 0; }
+
+    /* ── kod rabatowy ──────────────────────────────── */
+
+    /* Natywny `<details>`, tak jak w projekcie koszyka: przeglądarka sama
+       rozwija pole, bez JS. `.q-voucher-wrap` to tylko miejsce na listę
+       już naliczonych kodów nad przełącznikiem. */
+    .q-voucher-wrap { display: flex; flex-direction: column; }
+
+    .q-voucher {
+        margin-block: var(--q-space-sm);
+    }
+
+    /* Kreska nad przełącznikiem oddziela go od listy już naliczonych kodów
+       wyżej w `.q-voucher-wrap` — potrzebna tylko, gdy ta lista istnieje.
+       Bez warunku rysowała się też wtedy, gdy przełącznik jest jedynym
+       dzieckiem (kod jeszcze niedodany): tuż pod własną kreską
+       `.q-ordersum__foot`, dwie kreski jedna pod drugą zamiast jednej. */
+    .q-voucher-wrap > .q-voucher:not(:first-child) {
+        border-block-start: 1px solid var(--q-card-border);
+        padding-block-start: var(--q-space-sm);
+    }
+
+    .q-voucher__toggle {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-text);
+        cursor: pointer;
+        list-style: none;
+    }
+
+    .q-voucher__toggle::-webkit-details-marker { display: none; }
+    .q-voucher__toggle:hover { color: var(--q-link-hover); }
+
+    .q-voucher__chev {
+        margin-inline-start: auto;
+        transition: transform 160ms ease-out;
+    }
+
+    .q-voucher[open] .q-voucher__chev { transform: rotate(180deg); }
+
+    .q-voucher__form {
+        display: flex;
+        gap: var(--q-space-xs);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-voucher__form .form-control { flex: 1; min-inline-size: 0; }
+
+    .q-voucher__error {
+        margin-block-start: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-danger);
+    }
+
+    .q-ordersum__voucher-off { margin-inline-start: var(--q-space-xs); color: var(--q-meta-color); }
+    .q-ordersum__voucher-off:hover { color: var(--q-text-danger); }
+
+    /* ── wąski ekran ─────────────────────────────────
+       Kolumna idzie nad formularz, a stopka z zapłatą znika: przycisk zapłaty
+       nad niewypełnionym formularzem nie ma czego wysłać. Zapłata zostaje
+       tam, gdzie kończy się krok płatności. */
+    @media (max-width: 991px) {
+        .q-ordersum__head { min-block-size: 3.25rem; padding-inline: var(--q-space-sm); }
+        .q-ordersum__body { padding: 0 var(--q-space-sm) var(--q-space-xs); }
+        .q-ordersum__grand { padding: var(--q-space-sm) var(--q-space-sm) var(--q-space-sm); }
+        .q-ordersum--open .q-ordersum__grand { margin-inline: var(--q-space-sm); }
+        /* Stopka kolumny zostaje, bo na wąskim ekranie trzyma klauzulę;
+           znika z niej tylko zapowiedź zapłaty. Zgoda i prawdziwy przycisk
+           stoją wtedy w kroku płatności — kolumna jest nad formularzem. */
+        .q-ordersum__foot .q-ordersum__pay { display: none; }
+    }
+}
+
+
+/* ===================================================================
+   Quince — kasa
+
+   Kroki zamówienia: dane osobowe, adres, dostawa, płatność. Te same cztery,
+   które wystawia PrestaShop 9.2 pod identyfikatorami
+   `checkout-personal-information-step`, `checkout-addresses-step`,
+   `checkout-delivery-step` i `checkout-payment-step`.
+
+   Kasa ma własną, skróconą oprawę: logo, zapewnienie o bezpieczeństwie,
+   telefon i wyjście do kontaktu, a na dole odnośniki prawne i znaki
+   akceptowanych płatności. Bez menu i bez wyszukiwarki: na tym ekranie nie
+   ma już czego szukać, a każde wyjście z niego to porzucony koszyk.
+
+   Nowe jest tu OPAKOWANIE kroków. Pola, zgody, komunikaty, przyciski,
+   plakietki i ceny to komponenty motywu i nie są przerabiane.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* ── oprawa kasy ─────────────────────────────────────────────────── */
+
+    .q-checkout-head {
+        background: var(--q-card-bg);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-checkout-head__in {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        padding-block: var(--q-space-md);
+    }
+
+    /* Logo skraca się do wysokości paska, a szerokość idzie za nim.
+       Bez `inline-size: auto` obrazek zostawał przy szerokości z atrybutu
+       i ściskał się w pionie — 315×70 rysowało się jako 315×40. */
+    .q-checkout-head__logo img {
+        display: block;
+        inline-size: auto;
+        block-size: auto;
+        max-block-size: 2.5rem;
+        max-inline-size: 100%;
+    }
+
+    .q-checkout-head__right {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-lg);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-checkout-head__item {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        color: var(--q-text-muted);
+    }
+
+    .q-checkout-head__item svg { flex: none; }
+
+    /* Tylko odstęp od treści nad nią — tło, obramowanie i układ środka
+       niesie `.q-footer__bar`, bo to on jest teraz w środku: ten sam pasek,
+       co w prawdziwej stopce sklepu, z tymi samymi danymi z panelu. */
+    .q-checkout-foot {
+        margin-block-start: var(--q-space-xl);
+    }
+
+    /* ── pasek kroków ────────────────────────────────────────────────── */
+
+    .q-checkout-steps {
+        background: var(--q-surface-sunken);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-checkout-steps__in {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-md);
+    }
+
+    .q-checkout-steps__step {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-checkout-steps__number {
+        inline-size: 1.75rem;
+        block-size: 1.75rem;
+        display: grid;
+        place-items: center;
+
+        background: var(--q-neutral-5);
+        color: var(--q-meta-color);
+        border-radius: var(--q-radius-pill);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+    }
+
+    .q-checkout-steps__step--current { color: var(--q-text-strong); font-weight: var(--q-weight-semibold); }
+    .q-checkout-steps__step--current .q-checkout-steps__number {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    /* Krok przebyty bierze obrys w barwie marki, krok bieżący pełne
+       wypełnienie. Wypełnienie mówi „jesteś tutaj", obrys „to już za tobą",
+       a cała ścieżka trzyma się jednej barwy zamiast wprowadzać drugą. */
+    .q-checkout-steps__step--done .q-checkout-steps__number {
+        background: transparent;
+        border: 2px solid var(--q-fill-primary);
+        color: var(--q-fill-primary);
+    }
+
+    /* Łącznik między krokami pokazuje przebytą drogę. Na telefonie znika
+       razem z napisami: zostają same numery. */
+    .q-checkout-steps__connector {
+        inline-size: 3rem;
+        block-size: 2px;
+        background: var(--q-neutral-5);
+    }
+
+    .q-checkout-steps__connector--done { background: var(--q-fill-primary); }
+
+    /* ── układ ───────────────────────────────────────────────────────── */
+
+    .q-checkout {
+        padding-block: var(--q-space-lg);
+    }
+
+    .q-checkout__layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 22rem;
+        gap: var(--q-space-lg);
+        align-items: start;
+    }
+
+    .q-checkout__step-list {
+        display: grid;
+        gap: var(--q-space-md);
+        min-inline-size: 0;
+    }
+
+    /* ── krok ────────────────────────────────────────────────────────── */
+
+    .q-step {
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    /* Krok, w którym klient właśnie jest, ma kreskę w barwie marki: to
+       jedyne miejsce na stronie, które czeka na jego ruch. */
+    .q-step--current {
+        border-color: var(--q-fill-primary);
+        box-shadow: 0 0 0 1px var(--q-fill-primary), var(--q-shadow-sm);
+    }
+
+    .q-step--upcoming { opacity: .55; }
+
+    /* Karta kroku z prototypu: wyściółka na całej karcie, nazwa i czynność
+       obok niej w jednym rzędzie, treść niżej. Żadnej kreski między głową
+       a treścią — kartę zamyka obramowanie. Zmierzone 24px/18px podciągnięte
+       pod najbliższy stopień skali silnika, zamiast zostawać poza nią. */
+    .q-step { padding: var(--q-space-md); }
+
+    .q-step__head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+        align-items: baseline;
+        justify-content: space-between;
+        padding: 0;
+    }
+
+    /* Nazwa kroku: krój nagłówkowy, nie krój tekstu — zmierzone w makiecie kasy
+       (21,16px / 700 / Lexend), identycznie w kroku bieżącym i zwiniętym.
+       Rozmiar nie maleje, gdy krok przestaje być bieżący: w prototypie
+       jedyna różnica to kolor, i to tylko dla kroku nieosiągalnego. */
+    .q-step__title {
+        margin: 0;
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-step--upcoming .q-step__title {
+        color: var(--q-meta-color);
+    }
+
+    /* Krok ukończony: zamiast numeru ptaszek w kółku, przed nazwą. */
+    .q-step__done-badge {
+        display: inline-grid;
+        place-items: center;
+        inline-size: 1.5rem;
+        block-size: 1.5rem;
+        margin-inline-end: var(--q-space-xs);
+        border: 2px solid var(--q-fill-primary);
+        border-radius: var(--q-radius-pill);
+        color: var(--q-fill-primary);
+        vertical-align: middle;
+    }
+
+    /* Podsumowanie kroku ukończonego: zdanie pod nazwą, nie obok niej —
+       zmierzone w prototypie (`.sub` pod `<h2>`, nie w jednym wierszu z nim).
+       „Zmień" stoi przy prawej krawędzi samej nazwy, bo to ona jest tytułem
+       wiersza; zdanie pod spodem już nic nie rozpycha. */
+    .q-step__summary {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-step__body {
+        margin-block-start: var(--q-space-md);
+        padding: 0;
+        border: 0;
+    }
+
+    /* Krok ukończony pokazuje tylko nazwę i zdanie — pełny formularz
+       zostaje w DOM-ie (kasa i tak chowa kroki nieaktualne tą samą regułą
+       co karty na innych stronach), ale nie na oczach klienta. */
+    .q-step--done .q-step__body { display: none; }
+
+    .q-step__nav {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--q-space-sm);
+
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* ── zakładki pierwszego kroku ───────────────────────────────────── */
+
+    .q-checkout-tabs {
+        display: flex;
+        gap: var(--q-space-lg);
+        margin-block-end: var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-checkout-tab {
+        padding-block: var(--q-space-sm);
+        border: 0;
+        background: none;
+        cursor: pointer;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-meta-color);
+        border-block-end: 2px solid transparent;
+        margin-block-end: -1px;
+    }
+
+    .q-checkout-tab--current {
+        color: var(--q-text-strong);
+        border-block-end-color: var(--q-fill-primary);
+    }
+
+    /* ── wybór z listy: adres, przewoźnik, płatność ──────────────────────
+       Jeden wzorzec na trzy listy. Każda pozycja to pole wyboru na całej
+       szerokości, bo klikalny ma być wiersz, a nie sam krążek. */
+
+    .q-option {
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    .q-option__item {
+        display: grid;
+        grid-template-columns: auto auto minmax(0, 1fr) auto;
+        gap: var(--q-space-md);
+        align-items: center;
+
+        padding: var(--q-space-md);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-md);
+        cursor: pointer;
+    }
+
+    .q-option__item:hover { border-color: var(--q-fill-primary); }
+
+    .q-option__item--selected {
+        border-color: var(--q-fill-primary);
+        background: var(--q-surface-primary-soft, var(--q-primary-2));
+    }
+
+    .q-option__badge {
+        inline-size: 2.75rem;
+        block-size: 1.75rem;
+        display: grid;
+        place-items: center;
+
+        background: var(--q-surface-sunken);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-sm);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+    }
+
+    .q-option__name {
+        display: block;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-option__description {
+        display: block;
+        margin-block-start: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-option__amount {
+        font-weight: var(--q-weight-bold);
+        white-space: nowrap;
+    }
+
+    .q-option__amount--free { color: var(--q-text-success); }
+
+    /* Adres ma dwa wiersze treści i czynności pod spodem, więc jego pozycja
+       rozkłada się na dwie kolumny zamiast czterech. */
+    .q-option--addresses .q-option__item {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: start;
+    }
+
+    .q-option__actions {
+        grid-column: 2;
+        display: flex;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-option__actions a { color: var(--q-link); }
+    .q-option__actions a:hover { color: var(--q-link-hover); }
+
+    /* Dwa pola obok siebie tam, gdzie razem tworzą jedną daną. */
+    .q-checkout__fields {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-md);
+    }
+
+    /* Wyjście do poprawki adresu przy prawej krawędzi pozycji, nie pod nią:
+       to czynność na tym adresie, a nie kolejna pozycja listy. */
+    .q-option__edit {
+        grid-column: 3;
+        grid-row: 1;
+        align-self: start;
+        color: var(--q-meta-color);
+    }
+
+    .q-option__edit:hover { color: var(--q-link-hover); }
+
+    .q-option--addresses .q-option__item {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+    }
+
+    /* Dodanie adresu to czynność drugiego planu, więc kreska przerywana,
+       a nie kolejny przycisk w barwie marki obok „Dalej". */
+    .q-checkout__new-address {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-xs);
+        inline-size: 100%;
+
+        margin-block-start: var(--q-space-sm);
+        padding: var(--q-space-md);
+
+        background: none;
+        border: 1px dashed var(--q-card-border);
+        border-radius: var(--q-radius-md);
+        cursor: pointer;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+    }
+
+    .q-checkout__new-address:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    /* ── drobne bloki kroku ──────────────────────────────────────────── */
+
+    .q-checkout__extras {
+        display: grid;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    .q-checkout__consents {
+        display: grid;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-md);
+    }
+
+    /* Pasek zamówienia: kwota i jedyny przycisk, który kończy zakup. */
+    .q-checkout__order {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--q-space-md);
+
+        margin-block-start: var(--q-space-md);
+        padding: var(--q-space-md);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    /* Na telefonie przycisk zostaje tutaj, nie w kolumnie (patrz
+       `checkout-summary.js`). `#payment-confirmation` jest elementem flex
+       bez własnej szerokości, więc samo sizuje się do treści — procent na
+       przycisku liczy się wtedy względem już skurczonego rodzica i nic nie
+       zmienia. Rozciągamy cały łańcuch, nie tylko przycisk. */
+    .q-checkout__order #payment-confirmation {
+        inline-size: 100%;
+    }
+
+    .q-checkout__order #payment-confirmation .q-btn {
+        inline-size: 100%;
+        min-block-size: 3.375rem;
+        justify-content: center;
+    }
+
+    .q-checkout__order-label {
+        display: block;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-checkout__order-amount {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h4);
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* ── wąski ekran ─────────────────────────────────────────────────── */
+
+    @media (max-width: 991px) {
+        .q-checkout__layout { grid-template-columns: minmax(0, 1fr); }
+
+        /* Podsumowanie nad krokami: klient ma widzieć, za co płaci, zanim
+           zacznie wypełniać pola. */
+        .q-checkout__side { order: -1; }
+    }
+
+    @media (max-width: 767px) {
+        .q-checkout-steps__step span:not(.q-checkout-steps__number) { display: none; }
+        .q-checkout-steps__connector { inline-size: 1.5rem; }
+
+        .q-option__item {
+            grid-template-columns: auto minmax(0, 1fr);
+            row-gap: var(--q-space-sm);
+        }
+
+        .q-option__badge { grid-row: 1; }
+        .q-option__amount { grid-column: 2; justify-self: end; }
+
+        .q-step__head { flex-wrap: wrap; }
+
+        .q-step__nav .q-btn { inline-size: 100%; }
+        .q-checkout__fields { grid-template-columns: minmax(0, 1fr); }
+    }
+}
+
+
+/* ===================================================================
+   Quince — kasa, układ wspólny dla obu wariantów
+
+   Przeniesienie prototypu checkoutu na tokeny i komponenty
+   Quince. Układ, kolejność pól i zachowanie zostają z prototypu; zmienia
+   się skóra: barwy, pismo, odstępy i nazwy klas.
+
+   Z gotowych komponentów bierzemy: `q-option__item` (karty wyboru adresu,
+   przewoźnika i płatności), `q-ordersum` (kolumna zamówienia, wspólna
+   z koszykiem), `q-modal--drawer` (szuflada logowania), `q-checkout-head`
+   i `q-checkout-foot` (skrócona oprawa kasy), `q-checkout-steps` (pasek kroków),
+   `q-btn`, `q-choice`, `q-ffield`.
+
+   Nowy jest tutaj tylko rozkład strony i karta sekcji.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* ── dwie kolumny ─────────────────────────────────────────────────── */
+
+    .q-checkout2 {
+        display: grid;
+        /* Podział szerokości bierzemy ze strony produktu: ta sama siatka, te
+           same zmienne i to samo ustawienie w panelu, co panel zakupu. Kolumna
+           zamówienia i buybox to w oczach klienta to samo miejsce — szpalta
+           z ceną i przyciskiem — więc nie mają powodu mieć dwóch pokręteł.
+           Wartości `--q-pdp-glowna` i `--q-pdp-panel` dokłada szablon. */
+        grid-template-columns:
+            minmax(0, var(--q-pdp-glowna, 2fr))
+            minmax(min(100%, var(--q-pdp-panel-min, 19rem)), var(--q-pdp-panel, 1fr));
+        gap: var(--q-space-lg) var(--q-pdp-gap, var(--q-space-lg));
+        align-items: start;
+        padding-block: var(--q-space-lg);
+    }
+
+    .q-checkout2__form {
+        display: grid;
+        gap: var(--q-space-md);
+        min-inline-size: 0;
+    }
+
+    /* Kolumna zamówienia jedzie z treścią. Bez tego po wypełnieniu
+       formularza trzeba przewijać w górę po przycisk zapłaty.
+
+       Zapięte na `.q-ordersum`, bo to ona jest drugim dzieckiem siatki;
+       osobnego opakowania tu nie ma. */
+    .q-checkout2 > .q-checkout__side {
+        position: sticky;
+        inset-block-start: var(--q-space-md);
+        min-inline-size: 0;
+        max-block-size: calc(100dvh - 2 * var(--q-space-md));
+        overflow-y: auto;
+
+        display: grid;
+        gap: var(--q-space-md);
+        align-content: start;
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    /* Odstęp od nagłówka strony niesie kontener, tą samą wartością, co na
+       karcie produktu i na listingu (`.q-pdp`, `.q-listing`) —
+       `padding-block: var(--q-space-md) ...`. Prototyp tego odstępu nie miał
+       w ogóle (sam znacznik nagłówka bez tokenów), więc tutaj się nie liczy
+       jako źródło; liczy się konwencja już ustalona w reszcie sklepu. */
+    .q-checkout2-page {
+        padding-block: var(--q-space-md) var(--q-space-xl);
+    }
+
+    .q-checkout2__title {
+        margin: 0;
+        font-size: var(--q-fs-h2);
+    }
+
+    /* ── karta sekcji ─────────────────────────────────────────────────── */
+
+    .q-checkout2__section {
+        padding: var(--q-space-lg);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    .q-checkout2__section-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .q-checkout2__section h2 {
+        margin: 0;
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-checkout2__sub {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-checkout2__body { margin-block-start: var(--q-space-md); }
+
+    .q-checkout2__stack {
+        display: grid;
+        gap: var(--q-space-md);
+    }
+
+    /* Sekcja jeszcze niedostępna: w kasie jednostronicowej dostawa
+       i płatność czekają na adres. Kreska przerywana mówi, że to miejsce
+       się wypełni, a nie że coś się zepsuło. */
+    /* Krok, do którego klient jeszcze nie doszedł. Ta sama karta co reszta
+       sekcji, bo to ten sam krok kasy; nieaktywność niesie przygaszony
+       nagłówek. Prototyp źródłowy miał tu ramkę z przerywanej kreski bez tła,
+       ale bez zdania w środku czytało się to jak puste miejsce. */
+    .q-checkout2__section--pending {
+        padding-block: var(--q-space-md);
+    }
+
+    .q-checkout2__section--pending h2 { color: var(--q-text-muted); }
+
+    .q-checkout2__pending {
+        margin: var(--q-space-md) 0 0;
+        padding: var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    /* ── wiersze pól ──────────────────────────────────────────────────────
+       Pola stoją w wierszach po dwa tam, gdzie razem tworzą jedną daną.
+       Skraca się KOLUMNA, nie pole: pole węższe od swojej kolumny zostawia
+       dziurę i prawa krawędź formularza zaczyna skakać. */
+    .q-checkout2__row {
+        display: grid;
+        gap: var(--q-space-md);
+        align-items: start;
+    }
+
+    .q-checkout2__row--2    { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .q-checkout2__row--zip  { grid-template-columns: 9.5rem minmax(0, 1fr); }
+    .q-checkout2__row--street { grid-template-columns: minmax(0, 1fr) 10rem; }
+    .q-checkout2__row--nip  { grid-template-columns: 20rem minmax(0, 1fr); }
+
+    /* ── wybór kupującego ─────────────────────────────────────────────────
+       Dwa pola wyboru wyglądające jak dwa przyciski obok siebie. Jedno jest
+       zawsze zaznaczone, więc klient nie może zostawić tego nierozstrzygnięte. */
+    .q-checkout2__seg {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-sm);
+    }
+
+    /* Ta sama wysokość co pole tekstowe, 3,5 rem: wybór kupującego stoi
+       w jednym słupku z polami adresu i niższy łamał równy rytm. */
+    .q-checkout2__seg .q-option__item {
+        grid-template-columns: auto minmax(0, 1fr);
+        align-items: center;
+        min-block-size: 3.5rem;
+        padding-block: 0;
+        padding-inline: var(--q-space-md);
+        font-weight: var(--q-weight-medium);
+    }
+
+    .q-checkout2__label {
+        display: block;
+        margin-block-end: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-checkout2__h3 {
+        margin-block: 0 var(--q-space-sm);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Drugi formularz adresu wydzielony kreską: to osobna rzecz, a nie
+       dalszy ciąg pierwszego. */
+    .q-checkout2__second {
+        display: grid;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-lg);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* ── odnośnik wyglądający jak odnośnik, działający jak przycisk ────── */
+
+    .q-linkbtn {
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+
+        color: var(--q-link);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-linkbtn:hover { color: var(--q-link-hover); }
+
+    /* „Wstecz" przy przycisku „Dalej": zwykły odnośnik, nie przycisk
+       z ramką — zmierzone w prototypie. Mikro-strzałka mówi „cofam", bo sam
+       napis „Wstecz" tego nie pokazuje— krok, do którego wraca, stoi już
+       w nazwie przycisku „Dalej" obok, nie trzeba go powtarzać. */
+    .q-linkbtn--back {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-linkbtn--back svg { flex: none; }
+
+    /* ── strona potwierdzenia ─────────────────────────────────────────── */
+
+    .q-checkout2__thanks {
+        display: flex;
+        gap: var(--q-space-md);
+        align-items: flex-start;
+    }
+
+    .q-checkout2__tick {
+        flex: none;
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        display: grid;
+        place-items: center;
+
+        background: var(--q-fill-success);
+        color: var(--q-on-fill-success, #fff);
+        border-radius: var(--q-radius-pill);
+    }
+
+    .q-checkout2__ok {
+        padding: var(--q-space-md);
+        background: var(--q-surface-success-soft, var(--q-surface-sunken));
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-checkout2__detail-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-checkout2__detail-grid b { display: block; font-size: var(--q-fs-sm); margin-block-end: var(--q-space-xs); }
+    .q-checkout2__detail-grid span { display: block; font-size: var(--q-fs-sm); color: var(--q-text-muted); }
+
+    .q-checkout2__bank {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr);
+        gap: var(--q-space-xs) var(--q-space-md);
+        margin: var(--q-space-sm) 0 0;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-checkout2__bank dt { color: var(--q-meta-color); }
+    .q-checkout2__bank dd { margin: 0; font-weight: var(--q-weight-medium); }
+
+    /* Strona potwierdzenia stoi w pełnym układzie sklepu (nagłówek, menu,
+       stopka), nie w skróconej oprawie kasy — czyści domyślne okruszki
+       layoutu i sama je włącza, jak każda inna podstrona. Bez tego
+       odstępu okruszki stoją tuż pod paskiem menu. */
+    .order-confirmation__crumbs { padding-block-start: var(--q-space-md); }
+
+    /* ── wąski ekran ───────────────────────────────────────────────────── */
+
+    @media (max-width: 991px) {
+        .q-checkout2 { grid-template-columns: minmax(0, 1fr); gap: var(--q-space-md); }
+
+        /* Kolumna zamówienia na górze, zwinięta: klient ma widzieć kwotę,
+           zanim zacznie wypełniać pola, ale nie ma jej przewijać.
+           Zgody i przycisk schodzą pod formularz, bo przycisk zapłaty nad
+           pustym formularzem nie ma czego wysłać. */
+        .q-checkout2 > .q-checkout__side { position: static; order: -1; }
+        .q-checkout2__detail-grid { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (max-width: 767px) {
+        .q-checkout2__row--2,
+        .q-checkout2__row--nip { grid-template-columns: minmax(0, 1fr); }
+        .q-checkout2__seg { grid-template-columns: minmax(0, 1fr); }
+        .q-checkout2__section { padding: var(--q-space-md); }
+    }
+}
+
+/* ===================================================================
+   Drobiazgi przeniesione z prototypu, które nie miały odpowiednika
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Grupa pola: pole z etykietą, pod nią podpowiedź i komunikat.
+       `q-ffield` musi zostać wysokie dokładnie na pole, bo etykieta
+       pozycjonuje się względem niego. */
+    .q-fgroup { min-inline-size: 0; }
+
+    .q-opt { font-weight: var(--q-weight-regular); color: var(--q-meta-color); }
+
+    /* ── karta sekcji w wariancie krokowym ────────────────────────────── */
+
+    /* Krok, w którym klient właśnie jest, ma kreskę w barwie marki: to
+       jedyne miejsce na stronie, które czeka na jego ruch. */
+    .q-checkout2__section--current {
+        border-color: var(--q-fill-primary);
+        box-shadow: 0 0 0 1px var(--q-fill-primary), var(--q-shadow-sm);
+    }
+
+    .q-checkout2__status { font-size: var(--q-fs-sm); font-weight: var(--q-weight-semibold); color: var(--q-text-success); }
+    .q-checkout2__aside { font-size: var(--q-fs-sm); }
+
+    /* Powrót przy lewej krawędzi, przejście dalej przy prawej. Przycisk
+       przejścia dosuwa się sam, więc trafia w prawo także w kroku, który
+       nie ma powrotu. */
+    .q-checkout2__nav {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-lg);
+    }
+
+    .q-checkout2__nav > .q-btn { margin-inline-start: auto; }
+
+    .q-checkout2__back {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-checkout2__back svg { flex: none; }
+
+    /* ── pasek kroków ─────────────────────────────────────
+       Wygląd niesie `q-checkout-steps` z `kasa.css`, ten sam, co w makiecie kasy
+       krokowej. Tutaj zostaje tylko odsunięcie od nagłówka: pasek przyklejony
+       do napisu „Zamówienie" czytał się jak jego dalszy ciąg. */
+    .q-checkout-steps {
+        margin-block: var(--q-space-md) var(--q-space-lg);
+        border-radius: var(--q-radius-md);
+        border-block-end: 0;
+    }
+
+    /* ── bloki wewnątrz sekcji ────────────────────────────────────────── */
+
+    .q-checkout2__id-box {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+
+        padding: var(--q-space-md);
+        background: var(--q-surface-success-soft, var(--q-surface-sunken));
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-checkout2__id-box small { display: block; font-size: var(--q-fs-sm); color: var(--q-text-muted); }
+
+    .q-checkout2__sub-box {
+        display: grid;
+        gap: var(--q-space-md);
+        padding: var(--q-space-md);
+        margin-block-start: var(--q-space-md);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+
+    .q-checkout2__optins { display: grid; gap: var(--q-space-xs); }
+
+    .q-checkout2__pay-info {
+        margin: var(--q-space-xs) 0 0;
+        padding-inline-start: var(--q-space-lg);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    /* Blok zamawiania powtórzony pod płatnością. Na szerokim ekranie stoi
+       w prawej kolumnie i ten jest zbędny; na wąskim odwrotnie. */
+    .q-checkout2__pay-mobile { display: none; }
+
+    /* ── kolumna zamówienia ───────────────────────────────────────────── */
+
+    /* Pole kodu rabatowego przychodzi z rdzenia jako `form-control`, więc
+       reguła z makiety, pisana pod `q-field`, sama go nie złapie. */
+    .q-voucher__form .form-control { flex: 1; min-inline-size: 0; }
+
+    .q-voucher__error {
+        margin-block-start: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-danger);
+    }
+
+    .q-voucher__offers {
+        margin: var(--q-space-sm) 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-ordersum__voucher-off {
+        margin-inline-start: var(--q-space-xs);
+        color: var(--q-meta-color);
+        vertical-align: middle;
+    }
+
+    .q-ordersum__voucher-off:hover { color: var(--q-text-danger); }
+
+    .q-ordersum__rows--vouchers { margin-block-start: var(--q-space-sm); }
+
+
+    /* ── szuflada logowania ───────────────────────────────────────────── */
+
+}
+
+@media (max-width: 991px) {
+    @layer quince.layout {
+        .q-checkout2__pay-mobile { display: block; }
+    }
+}
+
+@layer quince.layout {
+
+    /* `display` z klasy bije `[hidden] { display: none }` przegladarki, bo
+       arkusz autora wygrywa z arkuszem przegladarki. Bez tego komunikaty
+       bledow i bloki odslaniane stoja widoczne od wejscia na strone. */
+}
+
+@layer quince.layout {
+
+    /* Zaznaczona karta wyboru. Prototyp rozpoznaje stan po zaznaczonym polu
+       w srodku, a nie po klasie dokladanej skryptem, wiec reguly motywu
+       trzeba zapiac na `:has()`. */
+    .q-option__item:has(.q-choice__input:checked) {
+        border-color: var(--q-fill-primary);
+        background: var(--q-surface-primary-soft, var(--q-primary-2));
+    }
+
+    /* Karta ma trzy czesci: krazek, tresc i kwote przy prawej krawedzi.
+       Czwarta kolumna z `kasa.css` zostawala pusta i spychala kwote
+       na srodek. */
+    .q-checkout2 .q-option__item {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+    }
+
+    .q-checkout2 .q-option__content { min-inline-size: 0; }
+
+    /* Dodanie adresu i uwagi do zamowienia to czynnosci drugiego planu:
+       zaczynaja sie przy lewej krawedzi, tam gdzie tresc nad nimi. */
+    .q-checkout2__stack > .q-linkbtn,
+    .q-checkout2__body > .q-linkbtn,
+    .q-checkout2__stack > [data-show] > .q-linkbtn { justify-self: start; text-align: start; }
+}
+
+@layer quince.components {
+
+    /* `display` z klasy bije `[hidden]` przegladarki, a te klasy mieszkaja
+       w warstwie komponentow, wiec guzik trzeba zalozyc tutaj. */
+    .q-ffield__hint[hidden],
+    .q-ffield__error[hidden] { display: none; }
+}
+
+@layer quince.components {
+
+    /* Prototyp rysuje szufladę jako `aside`, nie `dialog`, więc stan otwarcia
+       niesie klasa, a nie atrybut `open`. Wygląd zostaje komponentu. */
+    .q-modal__back {
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        background: rgb(0 0 0 / .5);
+    }
+
+    .q-modal--open {
+        position: fixed;
+        inset-block: 0;
+        inset-inline-end: 0;
+        z-index: 41;
+        display: flex;
+        flex-direction: column;
+        translate: 0 0;
+    }
+}
+
+@layer quince.components {
+
+    /* Kolumna startuje rozwinięta; zwinięcie niesie klasa, bo wstawia ją
+       skrypt. Odwrotnie niż w makiecie, gdzie stanem domyślnym był brak klasy:
+       bez JavaScriptu kolumna ma być widoczna, a nie pusta. */
+    .q-ordersum--zwinieta .q-ordersum__body { display: none; }
+
+    .q-ordersum--zwinieta .q-ordersum__chev { transform: rotate(180deg); }
+
+    /* Kwota dostawy przed wyborem przewoźnika: tekst zastępczy, nie liczba. */
+    .q-ordersum__later { color: var(--q-meta-color); font-size: var(--q-fs-sm); }
+
+    .q-ffield__hint--ok { color: var(--q-text-success); }
+    .q-ffield__hint--nf { color: var(--q-field-border-invalid); }
+}
+
+/* ===================================================================
+   Odnosniki w zdaniu
+
+   Motyw ma dwa rodzaje odnosnikow i opisuje je w `theme.css`. Odnosnik
+   INTERFEJSU nie ma kreski ani wlasnej barwy, bo jego klikalnosc niesie
+   pozycja: wiersz menu, naglowek zajawki. Odnosnik W TRESCI dostaje
+   pogrubienie i kreske w barwie marki, bo stoi w zdaniu i pozycja nic
+   o nim nie mowi.
+
+   Lista selektorow w motywie jest celowo waska i nie obejmuje kasy.
+   Dlatego „regulamin sklepu", „polityke prywatnosci" i „Zaloguj sie"
+   wygladaly jak zwykly tekst. Dopisujemy konteksty kasy; przy wdrozeniu
+   ta sama lista idzie do `theme.css`.
+   =================================================================== */
+
+@layer quince.elements {
+
+    .q-choice__label a,
+    .q-checkout2__sub a,
+    .q-ffield__hint a {
+        font-weight: var(--q-weight-semibold);
+        color: inherit;
+        text-decoration: none;
+
+        background-image: linear-gradient(var(--q-fill-primary), var(--q-fill-primary));
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        background-size: 100% 2px;
+        box-decoration-break: clone;
+
+        transition: background-size 160ms ease-out, color 160ms ease-out;
+    }
+
+    .q-choice__label a:hover,
+    .q-checkout2__sub a:hover,
+    .q-ffield__hint a:hover:hover {
+        color: var(--q-on-fill-primary);
+        background-size: 100% 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-choice__label a,
+            .q-checkout2__sub a,
+        .q-ffield__hint a { transition: none; }
+    }
+}
+
+@layer quince.layout {
+
+    /* „Masz juz konto? Zaloguj sie” stoi w zdaniu, wiec dostaje wyglad
+       odnosnika w tresci. Regula musi byc w warstwie ukladu, bo tam siedzi
+       `.q-linkbtn` i z warstwy elementow by jej przegrala. */
+    .q-checkout2__aside .q-linkbtn {
+        font-weight: var(--q-weight-semibold);
+        color: inherit;
+
+        background-image: linear-gradient(var(--q-fill-primary), var(--q-fill-primary));
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        background-size: 100% 2px;
+
+        transition: background-size 160ms ease-out, color 160ms ease-out;
+    }
+
+    .q-checkout2__aside .q-linkbtn:hover {
+        color: var(--q-on-fill-primary);
+        background-size: 100% 100%;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-checkout2__aside .q-linkbtn { transition: none; }
+    }
+}
+
+/* ===================================================================
+   Znak wyboru
+
+   Arkusz motywu wklejony do makiet jest starszy niz `components/field.css`
+   i niesie poprzednia wersje znaku: dwa przejscia tonalne skladane obrotem,
+   przy czym obrot stoi na zerze. Zaznaczone pole pokazuje przez to dwie
+   pionowe kreski zamiast ptaszka.
+
+   Ponizsza regula jest przepisana WPROST z motywu. Zniknie stad w chwili,
+   gdy odswiezymy arkusz w makiecie kategorii.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Zdjecie starego znaku: bez tego oba rysuja sie jeden na drugim. */
+    .q-choice__input[type="checkbox"]:checked { background-image: none; }
+
+    .q-choice__input[type="checkbox"] {
+            display: inline-grid;
+            place-content: center;
+        }
+
+        .q-choice__input[type="checkbox"]::before {
+            content: "";
+            inline-size: 12px;
+            block-size: 12px;
+            background: var(--q-choice-mark);
+            mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M3 8.5l3.2 3.2L13 4.8' fill='none' stroke='black' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+            transform: scale(0);
+        }
+
+        .q-choice__input[type="checkbox"]:checked::before {
+            transform: scale(1);
+        }
+}
+
+@layer quince.components {
+
+    /* Dopisek pod napisem pola wyboru: „Wystarczy haslo. Zyskasz historie
+       zamowien…". Wlasny wiersz i mniejsze pismo, inaczej doklejal sie do
+       napisu w jeden ciag. */
+    .q-choice__label small {
+        display: block;
+        margin-block-start: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-regular);
+        color: var(--q-text-muted);
+    }
+}
+
+
+/* ===================================================================
+   Nazwy klas przychodzące z rdzenia
+
+   Krok kasy, lista przewoźników, lista płatności i podsumowanie koszyka
+   renderuje rdzeń. Zamiast przepisywać sześć szablonów, dopisujemy ich
+   nazwy do komponentów, które mamy. Ta sama metoda, co w `field.css`
+   dla `form-control` i w `button.css` dla `btn`.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* ── rząd przycisków kroku ────────────────────────────────────────
+       Rdzeń daje powrót przed przejściem dalej w znacznikach, więc wystarczy
+       dosunąć przejście do prawej krawędzi. */
+    /* Przycisk kończący krok przy prawej krawędzi. Gdy w rzędzie jest też
+       powrót, rozsuwamy je na boki: powrót po lewej, przejście po prawej. */
+    .buttons-wrapper {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-lg);
+    }
+
+    .buttons-wrapper--split { justify-content: space-between; }
+
+    .buttons-wrapper > .btn-primary,
+    .buttons-wrapper > [type="submit"] { margin-inline-start: auto; }
+
+    /* ── przewoźnicy i płatności jako karty wyboru ───────────────────── */
+
+    .delivery-options__list,
+    .js-payment-option-form,
+    .payment-options__list {
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    /* Pole uwag stoi w rdzeniu jako zwykły sąsiad listy przewoźników, bez
+       żadnego odstępu między nimi. */
+    .order-options { margin-block-start: var(--q-space-md); }
+
+    .delivery-option__item,
+    .payment-option {
+        padding: var(--q-space-md);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-md);
+        cursor: pointer;
+    }
+
+    .delivery-option__item:hover,
+    .payment-option:hover { border-color: var(--q-fill-primary); }
+
+    /* Zaznaczona karta. Rdzeń nie dokłada klasy stanu, więc rozpoznajemy go
+       po zaznaczonym polu w środku. */
+    .delivery-option__item:has(input:checked),
+    .payment-option:has(input:checked) {
+        border-color: var(--q-fill-primary);
+        background: var(--q-surface-primary-soft, var(--q-primary-2));
+    }
+
+    /* Kreska dzieląca treść w środku zaznaczonej karty idzie za jej
+       obramowaniem, zamiast zostawać szarą na żółtym tle. */
+    .delivery-option__item:has(input:checked) .delivery-option__extra,
+    .payment-option:has(input:checked) .payment-option__additional-information {
+        border-block-start-color: var(--q-fill-primary);
+    }
+
+    /* Siatka siedzi na etykiecie, nie na karcie: karta ma jedno dziecko,
+       wiec na niej wszystko ukladalo sie w slupek. Krazek wyboru i znak
+       przewoznika po lewej, nazwa z terminem posrodku, kwota przy prawej
+       krawedzi. */
+    .delivery-option__label,
+    .payment-option label,
+    .payment-option__form-check {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: var(--q-space-md);
+        align-items: center;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .delivery-option__left {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+    }
+
+    .delivery-option__carrier {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+    }
+
+    .delivery-option__content { min-inline-size: 0; }
+
+    .delivery-option__carrier-name { font-weight: var(--q-weight-semibold); }
+
+    .delivery-option__price {
+        font-weight: var(--q-weight-bold);
+        white-space: nowrap;
+        justify-self: end;
+    }
+
+    .delivery-option__carrier-logo img { max-block-size: 1.75rem; inline-size: auto; }
+
+    /* Kwota na wąskim ekranie schodzi pod treść, zamiast ściskać się
+       w trzeciej kolumnie obok terminu dostawy i nachodzić na tekst —
+       ten sam wzorzec, co makieta stosuje dla `.q-option__item`. */
+    @media (max-width: 767px) {
+        .delivery-option__label,
+        .payment-option label,
+        .payment-option__form-check {
+            grid-template-columns: auto minmax(0, 1fr);
+            row-gap: var(--q-space-xs);
+        }
+
+        .delivery-option__price { grid-column: 2; justify-self: end; }
+    }
+
+    /* Treść doklejana przez moduł przewoźnika, np. wybór paczkomatu. Rdzeń
+       renderuje ten kontener dla każdego przewoźnika, z treścią w środku
+       albo bez niej — kreska i odstęp mają sens tylko wtedy, gdy faktycznie
+       jest co oddzielić. */
+    .delivery-option__extra:has(.delivery-option__extra-content),
+    .payment-option__additional-information {
+        grid-column: 1 / -1;
+        margin-block-start: var(--q-space-sm);
+        padding-block-start: var(--q-space-sm);
+        border-block-start: 1px solid var(--q-card-border);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    /* Niektóre moduły płatności (np. ps_wirepayment) chowają swoją treść
+       w oknie modalnym Bootstrapa, otwieranym linkiem, który pojawia się
+       tylko przy skonfigurowanym dodatkowym tekście. Bez niego modal nie ma
+       czym się otworzyć, a Quince i tak nie ładuje stylu chowającego okna
+       Bootstrapa (ma własny system `.q-modal`) — treść wychodzi więc zawsze
+       widoczna, co jest poprawne, ale z przyciskiem zamknięcia, który nie ma
+       podpiętego skryptu i tylko myli. */
+    .payment-option__additional-information .modal .close {
+        display: none;
+    }
+
+    /* ── kolumna zamówienia ──────────────────────────────────────────── */
+
+    .cart-summary__top,
+    .cart-summary__products,
+    .cart-summary__subtotals,
+    .cart-summary__total { padding-inline: 0; }
+
+    .cart-summary__line {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+    }
+
+    .cart-summary__line + .cart-summary__line { margin-block-start: var(--q-space-sm); }
+
+    .cart-summary__label { color: var(--q-meta-color); }
+    .cart-summary__value { font-variant-numeric: tabular-nums; }
+
+    /* Kwota do zapłaty oddzielona kreską: to jedyna liczba, którą klient
+       naprawdę czyta przed kliknięciem. */
+    .cart-summary__total {
+        margin-block-start: var(--q-space-md);
+        padding-block-start: var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    .cart-summary__line--bold .cart-summary__label { color: var(--q-text-strong); font-weight: var(--q-weight-semibold); }
+
+    .cart-summary__line--bold .cart-summary__value {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+    }
+
+    .cart-summary__products { margin-block-end: var(--q-space-md); }
+
+    .cart-summary-product {
+        display: grid;
+        grid-template-columns: 3rem minmax(0, 1fr);
+        gap: var(--q-space-sm);
+        align-items: start;
+        font-size: var(--q-fs-sm);
+    }
+
+    .cart-summary-product + .cart-summary-product { margin-block-start: var(--q-space-sm); }
+
+    .cart-summary-product__image { grid-row: span 2; }
+
+    .cart-summary-product__img {
+        inline-size: 100%;
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* Nazwa po lewej, kwota po prawej, w jednym wierszu. Rdzen daje dwa
+       bloki obok siebie; bez ustawienia ukladaly sie jeden pod drugim
+       i pozycja zajmowala pieć wierszy. */
+    .cart-summary-product__content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        min-inline-size: 0;
+    }
+
+    .cart-summary-product__content-left { min-inline-size: 0; }
+
+    .cart-summary-product__content-right {
+        flex: none;
+        text-align: end;
+        font-weight: var(--q-weight-semibold);
+        white-space: nowrap;
+    }
+
+    .cart-summary-product__attributes,
+    .cart-summary-product__quantity {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Rozwijane szczegóły koszyka: rdzeń używa akordeonu Bootstrapa, którego
+       nie wgrywamy. Zostaje sam przycisk, bez jego oprawy. */
+    .accordion-button {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        inline-size: 100%;
+        padding: 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        font-weight: var(--q-weight-semibold);
+        text-align: start;
+    }
+
+    .accordion-item + .accordion-item { margin-block-start: var(--q-space-sm); }
+}
+
+@layer quince.layout {
+
+    /* ── zakładki pierwszego kroku ────────────────────────────────────
+       Rdzeń daje dwie karty: zamówienie jako gość i logowanie. Przełącza je
+       Bootstrap, którego nie wgrywamy, więc obie stały widoczne naraz pod
+       sobą. Pokazujemy tę aktywną, a przełączenie robi skrypt motywu. */
+    .q-checkout2__form .tab-pane { display: none; }
+    .q-checkout2__form .tab-pane.active { display: block; }
+
+    /* Krok ukończony zostaje widoczny, w odróżnieniu od tych, do których
+       klient jeszcze nie doszedł — pokazuje nazwę i jedno zdanie, a pełne
+       ciało chowa osobna reguła (`.q-step--done .q-step__body`). */
+    .q-checkout2__form .tab-pane.q-step--done { display: block; }
+
+    .q-checkout2__form .q-checkout2__login {
+        display: flex;
+        gap: var(--q-space-lg);
+        margin: 0 0 var(--q-space-md);
+        padding: 0;
+        list-style: none;
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-checkout2__form .q-checkout2__login .nav-link {
+        padding: var(--q-space-sm) 0;
+        border: 0;
+        background: none;
+        cursor: pointer;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-meta-color);
+        border-block-end: 2px solid transparent;
+        margin-block-end: -1px;
+    }
+
+    .q-checkout2__form .q-checkout2__login .nav-link.active {
+        color: var(--q-text-strong);
+        border-block-end-color: var(--q-fill-primary);
+    }
+
+    /* Rdzeń chowa kroki niedostępne klasą `d-none`, której nie wgrywamy. */
+    .d-none { display: none !important; }
+}
+
+@layer quince.layout {
+
+    /* Krok, do ktorego klient jeszcze nie doszedl, rdzen chowa klasa `d-none`.
+       U nas zostaje widoczny jako przygaszony naglowek z numerem: klient widzi,
+       ile jeszcze przed nim. */
+    .q-checkout2__form .step.d-none { display: block !important; }
+
+}
+
+@layer quince.layout {
+
+    /* Znaczki z kroju PrestaShopa: Quince go nie ładuje, więc każdy rysowałby
+       się pustym kwadratem — na przyciskach przejścia dalej i powrotu,
+       przy podglądzie hasła, przy pozycji z prezentem. Tak samo robi stopka. */
+    .q-checkout2-page .material-icons,
+    .q-float .material-icons {
+        display: none;
+    }
+
+}
+
+@layer quince.layout {
+
+    /* Pary pól w formularzu adresu. Skraca się KOLUMNA, nie pole: pole węższe
+       od swojej kolumny zostawia dziurę i prawa krawędź formularza zaczyna
+       skakać z wiersza na wiersz. */
+    .q-checkout2__row {
+        display: grid;
+        gap: var(--q-space-md);
+        align-items: start;
+    }
+
+    .q-checkout2__row--firstname  { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    /* Pole NIP-u ma w srodku przycisk pobrania danych, wiec kolumna musi
+       pomiescic numer i przycisk obok niego. */
+    .q-checkout2__row--vat_number { grid-template-columns: 20rem minmax(0, 1fr); }
+    .q-checkout2__row--postcode   { grid-template-columns: 9.5rem minmax(0, 1fr); }
+    /* 10rem z makiety starczało tylko na krótki polski placeholder "Lokal";
+       prawdziwa etykieta rdzenia "Address Complement" (i jej tłumaczenia
+       w innych językach sklepu) przy tej szerokości łamała się na dwie
+       linie już w stanie pustym. 13rem daje zapas bez ściskania pola
+       na nazwę ulicy. */
+    .q-checkout2__row--address1   { grid-template-columns: minmax(0, 1fr) 13rem; }
+
+    @media (max-width: 767px) {
+        .q-checkout2__row--firstname,
+        .q-checkout2__row--vat_number { grid-template-columns: minmax(0, 1fr); }
+    }
+}
+
+@layer quince.layout {
+
+    /* Wybór kupującego otwiera sekcję adresu. */
+    .q-checkout2__buyer { margin-block-end: var(--q-space-md); }
+
+    /* Pole z kontrolką w środku: przycisk pobrania danych przy NIP-ie.
+       Grupa pola musi być punktem odniesienia dla jego położenia. */
+    .q-float { position: relative; }
+
+    /* Komunikat rejestru pod polem NIP-u. Błąd w barwie błędu, powodzenie
+       w barwie zwykłej podpowiedzi: zielony napis przy poprawnie pobranych
+       danych niczego nie dodaje, a rozbija spokój formularza. */
+    .q-float__error { color: var(--q-field-border-invalid); }
+}
+
+@layer quince.layout {
+
+    /* Dopisek pod napisem pola wyboru, także przy nazwach z rdzenia. */
+    .q-choice__label small,
+    .form-check-label small,
+    .form-check-label em {
+        display: block;
+        margin-block-start: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        font-style: normal;
+        font-weight: var(--q-weight-regular);
+        color: var(--q-text-muted);
+    }
+
+    /* „Masz już konto? Zaloguj się” przy nazwie sekcji, nie pod nią. */
+    .q-checkout2__login {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--q-space-xs);
+        margin-block-end: var(--q-space-md);
+    }
+}
+
+/* W warstwie komponentów, bo tam mieszka `.form-text`, a reguła z warstwy
+   układu zawsze jej przegrywa. */
+@layer quince.components {
+
+    /* Podpowiedź rdzenia opisuje regułę walidacji („Only letters and the dot
+       (.) character…"), a nie to, co klient ma zrobić. W kasie jej nie
+       pokazujemy: komunikat pojawia się dopiero przy błędzie i mówi wprost, co
+       poprawić. Na pozostałych stronach zostaje, bo tam formularz wypełnia się
+       bez pośpiechu. */
+    .q-checkout2-page .form-text--rule { display: none; }
+}
+
+@layer quince.layout {
+
+    .q-checkout2__login { margin-block-end: 0; }
+}
+
+@layer quince.layout {
+
+    /* Rdzeń rysuje nad listą pozycji własny nagłówek akordeonu („1 item”,
+       „Show details”). Kolumna ma już swój nagłówek z liczbą pozycji i
+       wyjściem do koszyka, więc ten drugi powtarzałby to samo. */
+    .q-ordersum .cart-summary__products-accordion .accordion-header,
+    .q-ordersum .cart-summary__products-number { display: none; }
+
+    /* Lista pozycji zawsze rozwinięta: w kolumnie na 26 rem i tak mieści się
+       kilka wierszy, a klient ma widzieć, za co płaci. */
+    .q-ordersum .cart-summary__products-accordion .accordion-collapse {
+        display: block !important;
+        visibility: visible;
+    }
+}
+
+/* ===================================================================
+   Wejscie do konta w kroku pierwszym — przeniesione z makiety
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* ── wejście do konta ────────────────────────────────────────────────
+       Logowanie jako widoczna czynność, nie odnośnik w biegu tekstu.
+       Klient, który ma konto, ma je rozpoznać od razu: wpisanie adresu
+       i hasła zajmuje dwa pola, a wypełnienie całego formularza adresu
+       osiem. */
+    .q-opc__account {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+
+        margin-block-end: var(--q-space-md);
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-opc__account-text {
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-opc__account-data {
+        margin: 0 0 var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-snug);
+    }
+}
+
+
+@layer quince.layout {
+
+    /* Szuflada logowania. Układ głowy, treści i stopki niesie komponent okna;
+       tutaj zostaje tylko to, co dotyczy samego formularza. */
+    /* Treść szuflady trzyma się góry. Bez tego wiersze siatki rozciągały się
+       na całą wysokość okna i między zdaniem a polami zostawała dziura. */
+    .q-login-drawer .q-modal__body {
+        display: grid;
+        align-content: start;
+        gap: var(--q-space-md);
+    }
+
+    /* „Nie pamiętam hasła” to wyjście na bok, nie druga czynność równorzędna
+       z logowaniem: odnośnik, nie przycisk w ramce. */
+    .q-login-drawer .forgot-password { margin: 0; }
+
+
+    .q-login-drawer .q-modal__foot { justify-content: center; }
+}
+
+/* Wygląd przycisków mieszka w `button.css`, w warstwie komponentów, więc
+   nadpisanie z warstwy układu zawsze mu przegrywa. */
+@layer quince.components {
+
+    .q-login-drawer .buttons-wrapper .btn-basic,
+    .q-login-drawer .forgot-password a {
+        padding: 0;
+        border: 0;
+        background: none;
+        min-block-size: 0;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-link);
+    }
+
+    .q-login-drawer .buttons-wrapper .btn-basic:hover,
+    .q-login-drawer .forgot-password a:hover { color: var(--q-link-hover); background: none; }
+
+    /* „Nie pamiętam hasła" i „Zaloguj się" w słupku, nie obok siebie: przycisk
+       logowania bierze całą szerokość szuflady. */
+    .q-login-drawer .buttons-wrapper {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-login-drawer .buttons-wrapper .btn-basic { align-self: flex-start; }
+}
+
+
+@layer quince.layout {
+
+    .q-checkout2__aside {
+        /* Przy prawej krawędzi głowy kroku, bo nazwa stoi przy lewej. */
+        margin-inline-start: auto;
+        display: inline-flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+    }
+}
+
+
+/* ===================================================================
+   Rytm pionowy kroku
+
+   Mierzone na prototypie checkoutu: 10 px między
+   zgodami, a nad rzędem przycisków kreska z 20 px z każdej strony.
+
+   W warstwie komponentów, bo tam mieszka `.mb-3` z `field.css`, a reguła
+   z warstwy układu by jej przegrała.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Zgody idą w rytmie listy, nie w rytmie pól: pole jest wysokie
+       i potrzebuje przerwy, wiersz z kwadracikiem nie. */
+    .q-checkout2__form .mb-3:has(> .form-check),
+    .q-checkout2__form .mb-3:has(> .q-choice) { margin-block-end: var(--q-space-sm); }
+
+    /* Rząd przycisków kroków: „Wstecz" przy lewej krawędzi, „Dalej" przy
+       prawej, bez kreski nad nimi — rozsunięte na boki w jednym rzędzie.
+       Bez kreski, bo nie ma jej w prototypie checkoutu. */
+    .q-checkout2__form .buttons-wrapper {
+        justify-content: flex-end;
+        margin-block-start: var(--q-space-md);
+        gap: var(--q-space-sm) var(--q-space-md);
+    }
+
+    .q-checkout2__form .buttons-wrapper.buttons-wrapper--split { justify-content: space-between; }
+
+    .q-checkout2__form .buttons-wrapper > .btn-primary,
+    .q-checkout2__form .buttons-wrapper > [type="submit"] { margin-inline-start: auto; }
+
+    .q-checkout2__form .buttons-wrapper.buttons-wrapper--split > .btn-primary,
+    .q-checkout2__form .buttons-wrapper.buttons-wrapper--split > [type="submit"] { margin-inline-start: 0; }
+}
+
+
+/* ===================================================================
+   Zgoda i zapłata w kolumnie zamówienia
+
+   Węzły przychodzą z kroku płatności przeniesione przez wyspę, więc niosą
+   klasy rdzenia (`form-check`, `q-btn`) i trzeba im w kolumnie ustawić
+   rozmiar i rytm — w kroku stały w szerokim rzędzie, tu w wąskiej szpalcie.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Pusty pasek po przeniesionym przycisku nie ma czego pokazać. `display`
+       z klasy bije `[hidden]` z arkusza przeglądarki, więc trzeba wprost. */
+    .q-checkout__order[hidden] { display: none; }
+
+    .q-ordersum__foot #conditions-to-approve,
+    .one-page-checkout__footer #conditions-to-approve { display: grid; gap: var(--q-space-xs); }
+
+    .q-ordersum__foot #conditions-to-approve .form-check,
+    .one-page-checkout__footer #conditions-to-approve .form-check { margin: 0; }
+
+    .q-ordersum__foot #conditions-to-approve .form-check-label,
+    .q-ordersum__foot #conditions-to-approve .q-choice__label,
+    .one-page-checkout__footer #conditions-to-approve .form-check-label,
+    .one-page-checkout__footer #conditions-to-approve .q-choice__label {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-regular);
+    }
+
+    /* OPC: `.q-choice` niesie własny odstęp dotykowy (`--q-touch-target`)
+       w `padding-block`, a `.mb-3` z newslettera/ofert (`{form_field}`,
+       klasy rdzenia) własny spory margines — tutaj, w wąskiej stopce zgód,
+       rytm daje sam `gap` powyżej, więc oba zerujemy, tak jak krok
+       płatności zeruje margines `.form-check`. */
+    .q-ordersum__foot #conditions-to-approve .q-choice,
+    .one-page-checkout__footer #conditions-to-approve .q-choice {
+        padding-block: 0;
+        min-block-size: auto;
+    }
+
+    .q-ordersum__foot #conditions-to-approve .mb-3,
+    .one-page-checkout__footer #conditions-to-approve .mb-3 { margin-block-end: 0; }
+
+    /* Ten sam przycisk, dwa możliwe id zależnie od wariantu kasy
+       (`checkout-summary.js` przenosi oba tym samym mechanizmem —
+       patrz komentarz przy liście `PRZENOSZONE` w tym pliku): krokowa
+       zostaje przy `#payment-confirmation`, bo to węzeł, którym i tak
+       zarządza rdzeń; OPC ma własny `#opc-payment-confirmation-wrap`
+       (patrz tam, dlaczego). Reguła szerokości musi znać oba. */
+    .q-ordersum__foot #payment-confirmation .q-btn,
+    .q-ordersum__foot #opc-payment-confirmation-wrap .q-btn {
+        inline-size: 100%;
+        min-block-size: 3.375rem;
+        justify-content: center;
+    }
+
+    /* Rdzeń wyłącza przycisk, dokładając mu nazwę `disabled`, a nie atrybut. */
+    .q-ordersum__foot #payment-confirmation .q-btn.disabled,
+    .q-ordersum__foot #opc-payment-confirmation-wrap .q-btn.disabled {
+        background: var(--q-card-border);
+        color: var(--q-text-muted);
+        border-color: transparent;
+        pointer-events: none;
+    }
+}
+
+
+@layer quince.components {
+
+    /* Klauzula o danych w kroku 1. Nie jest zgodą do zaznaczenia, tylko
+       zdaniem o tym, po co te dane zbieramy — czyta się jak nota, nie jak
+       kolejne pole do odhaczenia. */
+    .q-checkout2__notice {
+        margin: 0 0 var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-checkout2__notice em { font-style: normal; }
+}
+
+
+@layer quince.components {
+
+    /* Podgląd zgody na regulamin w kolumnie, zanim klient dojdzie do kroku
+       płatności — ten sam odnośnik, zaszarzony i nieklikalny, żeby kolumna
+       nie zmieniała układu dopiero na ostatnim kroku. */
+    .q-choice--preview {
+        opacity: .55;
+        cursor: not-allowed;
+    }
+
+    .q-choice--preview .q-choice__label a { pointer-events: none; }
+}
+
+/* ===================================================================
+   Quince — kasa jednostronicowa (moduł ps_onepagecheckout)
+
+   Moduł dostarcza własny szablon dla każdej sekcji, ale karta, tytuł, pole
+   i wiersz pól to te same komponenty, co w kasie krokowej — nie przepisujemy
+   znaczników modułu, dopisujemy jego klasy do istniejących reguł. Tak samo
+   jak `.delivery-options__list`/`.payment-options__list` wyżej w tym pliku.
+
+   Moduł zakłada załadowany JS Bootstrapa (okno modalne, rozwijane menu).
+   Quince go nie ładuje, więc dwie rzeczy wymagają własnego skryptu zamiast
+   samego CSS: okno dodania/edycji adresu i menu „..." przy adresie. Reszta
+   sekcji działa na gołym CSS, bo ich JS (modułu) tylko przełącza klasy
+   i atrybuty, nie wywołuje komponentów Bootstrapa.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Rdzeń modułu (`views/public/one-page-checkout.css`, plik niezastąpiony
+       nadpisaniem motywu) niesie `@media(min-width:992px){.one-page-checkout{
+       padding-right:2em}}` — miejsce pod BRAKIEM własnego stylu w stockowym
+       OPC. U nas robi inną szkodę: sekcja płatności stoi POZA `#opc-form`
+       (`one-page-checkout.tpl`, komentarz „żeby nie zagnieżdżać formularza
+       płatności"), więc nie dziedziczy tego paddingu — i wychodzi szersza
+       o 32px od sekcji 1-3, które stoją W formularzu.
+
+       `!important` konieczny, nie tylko wyższa specyficzność: plik modułu
+       nie stoi w żadnej warstwie (`@layer`), a cała nasza kaskada tak —
+       niewarstwowa reguła rdzenia wygrywa z KAŻDĄ naszą, bez względu na
+       specyficzność, dopóki i ona nie dostanie `!important`. */
+    #opc-form.one-page-checkout { padding-right: 0 !important; }
+
+    /* ── karta sekcji ──────────────────────────────────────────────────
+       Ten sam wygląd, co `.q-checkout2__sec`: biała karta, cień, promień
+       z tokenów. Moduł nazywa swoją kartę inaczej, więc podpinamy regułę
+       pod jego nazwę zamiast przepisywać 11 szablonów. */
+    .one-page-checkout__section {
+        padding: var(--q-space-lg);
+        margin-block-end: var(--q-space-md);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    /* Nie `:last-child`: moduł stawia każdą sekcję w osobnym opakowaniu
+       (`js-opc-contact-section`, `js-opc-addresses-section`...), więc
+       sekcja jest „ostatnim dzieckiem" swojego jednoelementowego rodzica
+       nawet w środku strony — reguła zerowała odstęp po kroku 1, mimo że
+       krok 2 szedł zaraz po nim. Dodatkowy odstęp przed stopką jest
+       nieszkodliwy, bo ona i tak ma własny `margin-block-start`. */
+
+    /* Numer sekcji liczony przez CSS, nie wpisany w każdym z czterech
+       szablonów modułu: jedna reguła ponumeruje tyle sekcji, ile akurat
+       się wyrenderuje (koszyk wirtualny chowa dostawę), bez dziury
+       w numeracji i bez czterech miejsc do pilnowania przy zmianie. */
+    .q-checkout2__form:has(.one-page-checkout__section) {
+        counter-reset: q-opc-section;
+    }
+
+    /* Wiersz nazwy sekcji z linkiem logowania przy prawej krawędzi —
+       ten sam układ, co `.q-step__head` w kasie krokowej (flex,
+       `justify-content: space-between`, `.q-checkout2__aside` dosuwa się
+       sam przez własny `margin-inline-start: auto`). Osobna reguła zamiast
+       reużycia `.q-step__head`: ta sama mechanika, własna nazwa dla
+       kontekstu modułu, zgodnie z resztą klas `.one-page-checkout__*`
+       w tym pliku. */
+    .one-page-checkout__head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+        align-items: baseline;
+        justify-content: space-between;
+    }
+
+    .one-page-checkout__title {
+        counter-increment: q-opc-section;
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-tight);
+    }
+
+    .one-page-checkout__title::before {
+        content: counter(q-opc-section) ". ";
+    }
+
+    .one-page-checkout__hint {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .one-page-checkout__links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm) var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .one-page-checkout__link {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-link);
+    }
+
+    .one-page-checkout__link:hover { color: var(--q-link-hover); }
+
+    /* Pole pojedyncze poza wierszem — samo `{form_field}` już daje odstęp
+       (`.q-float` w `mb-3`), więc opakowanie modułu nie dokłada drugiego. */
+    .one-page-checkout__field { margin: 0; }
+
+    .one-page-checkout__field + .one-page-checkout__field { margin-block-start: var(--q-space-md); }
+
+    /* Wiersz kilku pól obok siebie — ten sam wzorzec co `.q-kasa2__row`:
+       BEZ własnego marginesu na dole. Każde pole w środku ma już swój
+       `.mb-3` z `{form_field}` — własny margines wiersza dokładałby się
+       do tego, dając podwójny odstęp pod wierszem z dwiema kolumnami,
+       dwa razy większy niż pod zwykłym pojedynczym polem. */
+    .opc-form-fields-row {
+        display: grid;
+        gap: var(--q-space-md);
+    }
+
+    .opc-form-fields-row--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .opc-form-fields-row--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+    @media (max-width: 767px) {
+        .opc-form-fields-row--2,
+        .opc-form-fields-row--3 { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    /* ── gotowość sekcji: dostawa i płatność czekają na adres ──────────
+       Ten sam komunikat, co `.q-kasa2__sec--czeka` w kasie krokowej. */
+    .js-opc-awaiting-address {
+        padding: var(--q-space-md);
+        background: var(--q-surface-sunken);
+        border: 0;
+        border-radius: var(--q-radius-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    /* ── stopka: zgody i przycisk zamówienia ────────────────────────── */
+    .one-page-checkout__footer {
+        margin-block-start: var(--q-space-md);
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    /* `checkout-summary.js` (`ustawKlaseStopki`) przenosi tę klasę na sam
+       `#conditions-to-approve`, gdy węzeł stoi w kolumnie zamówienia — tam
+       odstęp od góry daje `gap` rodzica (`.q-ordersum__foot`), reguła wyżej
+       dokładałaby drugi, własny. */
+    #conditions-to-approve.one-page-checkout__footer { margin-block-start: 0; }
+
+    #conditions-to-approve .form-check { margin: 0; }
+
+    .one-page-checkout__submit {
+        inline-size: 100%;
+        min-block-size: 3.375rem;
+    }
+
+    /* ── adres zapisany na koncie ───────────────────────────────────── */
+    .opc-address-item {
+        display: flex;
+        gap: var(--q-space-sm);
+        align-items: flex-start;
+
+        padding: var(--q-space-md);
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        cursor: pointer;
+    }
+
+    .opc-address-item:hover { border-color: var(--q-fill-primary); }
+
+    .opc-address-item.selected {
+        border-color: var(--q-fill-primary);
+        background: var(--q-surface-primary-soft, var(--q-primary-2));
+    }
+
+    .opc-address-item + .opc-address-item { margin-block-start: -1px; }
+
+    .opc-address-card__actions {
+        display: flex;
+        gap: var(--q-space-sm);
+        margin-inline-start: auto;
+    }
+
+    .q-linkbtn--danger { color: var(--q-text-danger); }
+    .q-linkbtn--danger:hover { color: var(--q-text-danger); opacity: .8; }
+
+    /* ── przyciski portfeli nad formularzem ─────────────────────────── */
+    .opc-express-checkout { margin-block-end: var(--q-space-lg); }
+
+    .opc-express-checkout__buttons {
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    .opc-express-checkout__separator {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block: var(--q-space-lg);
+        color: var(--q-meta-color);
+        font-size: var(--q-fs-sm);
+    }
+
+    .opc-express-checkout__separator::before,
+    .opc-express-checkout__separator::after {
+        content: "";
+        flex: 1;
+        block-size: 1px;
+        background: var(--q-card-border);
+    }
+
+    /* ── skorupka narzędziowa modułu ─────────────────────────────────
+       Moduł zakłada kilka klas Bootstrapa dla samego pokazywania/ukrywania
+       i pozycjonowania nakładki ładowania — nie całego frameworka, tylko
+       tych kilku. Ta sama zasada, co `.d-none` wyżej w pliku. */
+    .position-relative { position: relative; }
+    .position-absolute { position: absolute; }
+    .top-0 { inset-block-start: 0; }
+    .start-0 { inset-inline-start: 0; }
+    .end-0 { inset-inline-end: 0; }
+    .bottom-0 { inset-block-end: 0; }
+    .bg-white { background: var(--q-card-bg); }
+}
+

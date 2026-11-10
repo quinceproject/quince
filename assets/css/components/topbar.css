@@ -1,0 +1,187 @@
+/* ===================================================================
+   Quince — topbar
+
+   Pas informacyjny sklepu i opcjonalny pasek komunikatu nad nim.
+   Projekt: widok paska górnego.
+
+   Klasy widoczności (q-hide-desktop, q-hide-phone) wypisuje silnik na podstawie
+   ustawień sprzedawcy. Element niewidoczny na danym ekranie jest ukrywany, a nie
+   usuwany z dokumentu — dzięki temu obrót telefonu nie wymaga przeładowania strony.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* --- pas informacyjny ---
+       Tokeny komponentu (--q-topbar-*, --q-promobar-*) definiuje tokens.css,
+       tak samo jak dla przycisku i karty produktu. */
+
+    /* Pas informacyjny stoi nad nagłówkiem, choć jest nad nim także w kodzie:
+       nagłówek ma własną warstwę (panel konta musi zakrywać nawigację), więc bez
+       tego rozwinięta lista języka i waluty chowałaby się pod nim. */
+    .q-topbar {
+        position: relative;
+        z-index: 43;
+        background: var(--q-topbar-bg);
+        color: var(--q-topbar-label);
+        font-size: var(--q-fs-sm);
+        border-block-end: 1px solid var(--q-topbar-border);
+    }
+
+    .q-topbar__inner {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-md);
+
+        inline-size: 100%;
+        max-inline-size: var(--q-container);
+        margin-inline: auto;
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
+           ten sam wzorzec co `.q-container` w theme.css. */
+        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+
+        /* Pas jest niski, ale wszystko, co się w nim klika, dostaje pełne 44 px
+           przez wewnętrzny odstęp — próg dotykowy wymagany przez WCAG. */
+        min-block-size: var(--q-topbar-height);
+    }
+
+    .q-topbar__contact {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-md);
+        min-inline-size: 0;
+    }
+
+    .q-topbar__item {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        white-space: nowrap;
+        color: var(--q-topbar-label-muted);
+    }
+
+    a.q-topbar__item {
+        color: var(--q-topbar-link);
+    }
+
+    a.q-topbar__item:hover {
+        color: var(--q-topbar-link-hover);
+    }
+
+    .q-topbar__ico {
+        inline-size: 14px;
+        block-size: 14px;
+        flex: none;
+        opacity: .85;
+    }
+
+    .q-topbar__tools {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        margin-inline-start: auto;
+        flex: none;
+    }
+
+    /* --- pasek komunikatu --- */
+
+    .q-promobar {
+        background: var(--q-promobar-bg);
+        color: var(--q-promobar-label);
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Treść wyśrodkowana niezależnie od krzyżyka — ten jest pozycjonowany
+       bezwzględnie, więc włączenie zamykania nie przesuwa napisu w lewo. */
+    .q-promobar__inner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-sm);
+
+        inline-size: 100%;
+        max-inline-size: var(--q-container);
+        margin-inline: auto;
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
+           ten sam wzorzec co `.q-container` w theme.css. */
+        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        min-block-size: var(--q-promobar-height);
+    }
+
+    /* Na wąskim ekranie komunikat zawija się na dwa wiersze zamiast urywać.
+       To jedyna treść tego pasa, która ma sprzedawać, i nie może zniknąć akurat
+       tam, gdzie decyzja o zakupie zapada najszybciej. */
+    .q-promobar__text {
+        display: inline-block;
+        max-inline-size: 44ch;
+        line-height: var(--q-lh-snug);
+    }
+
+    /* Jedyne miejsce w motywie, gdzie odnośnik jest podkreślony. Pas to jednolita
+       plama koloru — zmiana barwy pod kursorem nic tu nie da, a bez podkreślenia
+       nic nie sygnalizuje, że da się kliknąć. */
+    a.q-promobar__text {
+        color: inherit;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+
+    a.q-promobar__text:hover {
+        text-decoration-thickness: 2px;
+    }
+
+    .q-promobar__close {
+        position: absolute;
+        inset-inline-end: var(--q-space-xs);
+        inset-block: 0;
+
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        inline-size: var(--q-touch-target);
+
+        border: 0;
+        background: none;
+        color: inherit;
+        cursor: pointer;
+        opacity: .7;
+    }
+
+    .q-promobar__close:hover {
+        opacity: 1;
+    }
+
+    .q-promobar__close:focus-visible {
+        outline: 2px solid currentColor;
+        outline-offset: -4px;
+    }
+
+    /* Na wąskim ekranie pas ściska odstępy, żeby zmieścić numer i selecty. */
+    @media (max-width: 767px) {
+        .q-topbar__inner {
+            gap: var(--q-space-sm);
+            padding-inline: var(--q-space-sm);
+        }
+    }
+
+    /* Na tablecie godziny pracy ustępują miejsca — najmniej pilna informacja,
+       bo klient i tak dzwoni albo pisze. To decyzja projektowa, nie ustawienie
+       sklepu: przy 768 px po prostu nie ma na nie miejsca. */
+    @media (min-width: 768px) and (max-width: 991px) {
+        .q-topbar__item--hours { display: none; }
+    }
+}
+
+/* Klasy ukrywające wypisuje silnik na podstawie ustawień sprzedawcy. Siedzą
+   w warstwie utilities, bo muszą przebić `display` ustawiony przez komponent —
+   warstwa załatwia to bez `!important`, wystarczy jej pozycja w kaskadzie. */
+@layer quince.utilities {
+    @media (max-width: 767px) {
+        .q-hide-phone { display: none; }
+    }
+
+    @media (min-width: 768px) {
+        .q-hide-desktop { display: none; }
+    }
+}

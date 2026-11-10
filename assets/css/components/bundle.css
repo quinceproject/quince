@@ -1,0 +1,311 @@
+@layer quince.components {
+    /*
+       Zestawy z tym produktem: sekcja pod kartą produktu.
+
+       Reguły przepisane z makiety strony produktu. Układ z dzisiejszego
+       sklepu: składniki w rzędzie po lewej, podsumowanie po prawej, oddzielone
+       kreską, a nie dwie karty obok siebie.
+    */
+
+    /* Nagłówek sekcji stoi w `components/section-title.css`: używa go też
+       strona główna, a ten arkusz ładuje się tylko na karcie produktu. */
+
+    /* ── zestaw ──────────────────────────────────────────────────────────
+       Składniki NIE ZAWIJAJĄ się do drugiego rzędu, tylko przewijają w poziomie.
+       Zestaw z czterech pozycji rozbity na dwa rzędy przestaje czytać się jako
+       jedno „to plus to", a zaczyna jako lista zakupów.
+
+       Słupek z ceną ma 21 rem: przy węższym najdłuższa nazwa zestawu łamała się
+       na trzy wiersze, a to ona jest nagłówkiem tego bloku. Szerszy nic już nie
+       zyskuje, a pas składników traci miejsce. */
+    .q-bundle {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) var(--q-bundle-slupek, 21rem);
+        gap: var(--q-space-lg);
+        align-items: center;
+
+        padding: var(--q-space-md);
+        background: var(--q-card-bg);
+        border: var(--q-blok-ramka);
+        border-radius: var(--q-radius-md);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    .q-bundle + .q-bundle {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-bundle__items {
+        display: flex;
+        align-items: stretch;
+        gap: var(--q-space-sm);
+
+        min-inline-size: 0;
+        overflow-x: auto;
+
+        /* Górne wcięcie mieści plakietkę „Ten produkt", która wystaje 8 px ponad
+           kolumnę. Pojemnik przewijany w poziomie przycina też w pionie, więc
+           przy mniejszym wcięciu plakietka była ścinana od góry. */
+        padding-block: var(--q-space-sm) var(--q-space-xs);
+        scrollbar-width: thin;
+    }
+
+    .q-bundle__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+
+        inline-size: 8.75rem;
+        flex: none;
+        position: relative;
+        padding: var(--q-space-sm);
+    }
+
+    /* Oglądany produkt dostaje tło na CAŁEJ kolumnie, nie obwódkę na miniaturze:
+       przy czterech pozycjach to jedyny sposób, żeby od razu było widać, która
+       jest tą oglądaną. */
+    .q-bundle__item--current {
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    /* Plakietka wychodzi ponad górną krawędź kolumny, wyśrodkowana. W rogu
+       ginęła wśród innych plakietek na stronie; okrakiem na krawędzi czyta się
+       jako etykieta przypięta do tej pozycji.
+
+       Dwie klasy, bo plakietka pakietu ma w motywie własne tło i napis,
+       a tutaj nosi barwę marki. */
+    .q-badge.q-bundle__tag {
+        position: absolute;
+        inset-block-start: -8px;
+        inset-inline-start: 50%;
+        transform: translateX(-50%);
+        z-index: 1;
+
+        padding: 2px 8px;
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-radius: var(--q-radius-sm);
+
+        font-size: .65rem;
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .02em;
+        line-height: 1.5;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    /* Zdjęcie składnika nie ma kadru: ani tła, ani ramki. Zestaw to ciąg
+       rzeczy, a nie siatka kart; obwódki wokół miniatur robiły z jednego
+       zestawu cztery osobne kafelki. */
+    .q-bundle__thumb {
+        inline-size: 100px;
+        block-size: 100px;
+        display: grid;
+        place-items: center;
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-bundle__thumb img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-bundle__name {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+
+        margin-block-end: var(--q-space-xs);
+        font-size: .8rem;
+        font-weight: var(--q-weight-medium);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-body);
+    }
+
+    .q-bundle__price {
+        margin-block-start: auto;
+        font-size: .8rem;
+        color: var(--q-meta-color);
+    }
+
+    /* Znak dodawania to zaokrąglony kwadrat: ten sam kształt mają przyciski
+       ikon przy galerii i na karcie produktu. */
+    .q-bundle__plus {
+        align-self: center;
+        flex: none;
+
+        inline-size: 2rem;
+        block-size: 2rem;
+        display: grid;
+        place-items: center;
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-bundle__plus svg {
+        inline-size: 14px;
+        block-size: 14px;
+    }
+
+    /* ── słupek z ceną ───────────────────────────────────────────────────
+       Podsumowanie nie jest osobną kartą w karcie: oddziela je kreska. Karta
+       w karcie robiła z zestawu dwa obiekty. */
+    .q-bundle__side {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--q-space-sm);
+        text-align: center;
+
+        padding-inline-start: var(--q-space-md);
+        border-inline-start: 1px solid var(--q-border-card);
+    }
+
+    /* Nazwa zestawu jest nagłówkiem tego bloku, a nie podpisem pod ceną: mówi,
+       co klient w ogóle ogląda. */
+    .q-bundle__side-title {
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-bundle__total {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-bundle__total-label {
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        color: var(--q-meta-color);
+    }
+
+    .q-bundle__total-old {
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+        text-decoration: line-through;
+    }
+
+    /* Kwota zestawu to liczba do rzucenia okiem, więc idzie krojem nagłówkowym,
+       tak jak cena w panelu zakupu. */
+    .q-bundle__total-price {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h4);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        color: var(--q-text-strong);
+    }
+
+    /* Oszczędność w pigułce, nie w wierszu tekstu: to jedyny powód, dla którego
+       ktoś kupuje zestaw zamiast pojedynczych sztuk. */
+    .q-bundle__total-save {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-xs) var(--q-space-sm);
+        background: var(--q-surface-success);
+        border-radius: var(--q-radius-pill, 99px);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-success);
+    }
+
+    /* Formularz rozciąga się na szerokość słupka, bo przycisk wypełnia swój
+       pojemnik, a słupek centruje dzieci i dałby mu szerokość napisu. */
+    .q-bundle__form {
+        align-self: stretch;
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Odnośnik do karty zestawu: cichy tekst ze strzałką. Jako przycisk
+       konturowy ważył tyle, co przycisk zakupu tuż nad nim, a jest wyjściem
+       do opisu, nie drugą akcją zakupu. */
+    .q-bundle__more {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        margin-block-start: var(--q-space-sm);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-bundle__more:hover {
+        color: var(--q-link-hover);
+    }
+
+    .q-bundle__arrow {
+        flex: none;
+        transition: transform 150ms ease-out;
+    }
+
+    .q-bundle__more:hover .q-bundle__arrow {
+        transform: translateX(2px);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-bundle__arrow {
+            transition: none;
+        }
+    }
+
+    /* ── licznik promocji zestawu ────────────────────────────────────────
+       Przy zestawie z terminem słupek staje się pudełkiem: obrys w barwie marki,
+       a na jego górnej krawędzi pas z licznikiem. Ten sam układ co w panelu
+       zakupu, w mniejszej skali. Działa tak samo, gdy na telefonie słupek
+       schodzi pod składniki, bo jest pudełkiem niezależnie od miejsca.
+
+       Kreska oddzielająca słupek od składników znika: obrys robi to samo. */
+    .q-bundle__side:has(.q-bundle__pas) {
+        /* Bez górnego wcięcia: pas siedzi przy samej krawędzi i sam je zastępuje. */
+        padding: 0 var(--q-space-md) var(--q-space-md);
+        border: 1px solid var(--q-fill-primary);
+        border-radius: var(--q-radius-md);
+        overflow: clip;
+    }
+
+    /* Pas dochodzi do krawędzi pudełka: ujemne marginesy równe jego wcięciu.
+       Rozciągnięty, bo słupek centruje dzieci i pas brałby szerokość treści.
+       Karta na niego nie wjeżdża, więc zakładka jest zerowa, a wcięcia zostają
+       te same co pasa w panelu zakupu. */
+    .q-buy__pas.q-bundle__pas {
+        --q-buy-zakladka: 0px;
+
+        align-self: stretch;
+        margin: 0 calc(var(--q-space-md) * -1) var(--q-space-sm);
+        border-radius: calc(var(--q-radius-md) - 1px) calc(var(--q-radius-md) - 1px) 0 0;
+    }
+
+    .q-bundle__pas .q-buy__pas-napis {
+        font-size: .68rem;
+    }
+
+    /* ── telefon ─────────────────────────────────────────────────────────
+       Słupek schodzi pod składniki, a kreska przechodzi z boku na górę. */
+    @media (max-width: 767px) {
+        .q-bundle {
+            grid-template-columns: minmax(0, 1fr);
+            gap: var(--q-space-md);
+        }
+
+        .q-bundle__side {
+            padding-inline-start: 0;
+            border-inline-start: 0;
+            padding-block-start: var(--q-space-md);
+            border-block-start: 1px solid var(--q-border-card);
+        }
+    }
+}

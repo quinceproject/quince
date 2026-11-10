@@ -1,0 +1,71 @@
+/* ===================================================================
+   Quince — dostępność produktu
+
+   Trzy stany z mapy: w magazynie, na wyczerpaniu, brak. Każdy ma parę
+   kropka + tekst.
+
+   Kropka NIGDY nie występuje sama. Około ośmiu procent mężczyzn nie
+   odróżnia zieleni od czerwieni, więc informacja przekazana wyłącznie
+   barwą jest dla nich niedostępna — a dostępność towaru decyduje
+   o zakupie. Stąd zawsze kropka i podpis.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-stock {
+        display: inline-flex;
+        /* Kropka siada na PIERWSZYM wierszu napisu, a nie na środku całości:
+           przy dwuwierszowym stanie odsuwało ją to od słowa, do którego należy. */
+        align-items: flex-start;
+        gap: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-stock__dot {
+        inline-size: 8px;
+        margin-block-start: calc((1lh - 8px) / 2);
+        block-size: 8px;
+        border-radius: 50%;
+        flex: none;
+    }
+
+    .q-stock--in .q-stock__dot    { background: var(--q-stock-in-dot); }
+    .q-stock--in                  { color: var(--q-stock-in-text); }
+
+    .q-stock--low .q-stock__dot   { background: var(--q-stock-low-dot); }
+    .q-stock--low                 { color: var(--q-stock-low-text); }
+
+    .q-stock--out .q-stock__dot   { background: var(--q-stock-out-dot); }
+    .q-stock--out                 { color: var(--q-stock-out-text); }
+
+    /* --- zwarta linijka dla panelu zakupu ---
+       Stan, liczba sztuk i termin wysyłki w jednym wierszu. W kolumnie opisu ta
+       sama treść idzie wierszami faktów, bo tam jest miejsce na nazwę obok
+       wartości; panel ma 362 px i tabela zjadałaby tam dwa wiersze na to, co
+       mieści się w jednym.
+
+       Wiersz umie się zawinąć: przy długim terminie dostawy („wysyłka w ciągu
+       24 godzin roboczych") sam schodzi niżej zamiast rozpychać panel. */
+    .q-stock-line {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-xs) var(--q-space-sm);
+
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Kropka rozdzielająca rysowana stylem, a nie wpisana w treść: wyłączenie
+       liczby sztuk albo terminu nie zostawia wtedy wiszącego znaku. */
+    .q-stock-line > * + *::before {
+        content: "·";
+        margin-inline-end: var(--q-space-sm);
+        color: var(--q-border);
+    }
+
+    .q-stock-line__qty {
+        font-variant-numeric: tabular-nums;
+    }
+}

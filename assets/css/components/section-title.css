@@ -1,0 +1,36 @@
+/* ===================================================================
+   Quince — nagłówek sekcji
+
+   Jeden napis używany w kilku widokach: pasy strony głównej, sekcje pod
+   kartą produktu, zestawy. Stał wcześniej w `bundle.css`, a ten arkusz
+   motyw ładuje tylko na karcie produktu, więc na stronie głównej nagłówek
+   spadał do globalnego `h2` i był o osiem pikseli większy niż w makiecie.
+   =================================================================== */
+
+@layer quince.components {
+
+    /* Odstęp pod nagłówkiem niesie sam nagłówek, a nie pojemnik: sekcje mają
+       różne opakowania, więc odstęp dokładany przez rodzica rozjeżdżałby się
+       razem z nimi.
+
+       Ikona stoi przed tekstem, w barwie marki, bo jest znakiem sekcji, a nie
+       częścią zdania. Ma stałe pole, żeby nagłówki z ikoną i bez niej zaczynały
+       się w tej samej linii. */
+    .q-section-title {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-h4);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-section-title__ico {
+        inline-size: 1.25rem;
+        block-size: 1.25rem;
+        flex: none;
+        color: var(--q-fill-primary);
+    }
+
+}

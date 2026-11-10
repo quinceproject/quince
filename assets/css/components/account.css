@@ -1,0 +1,1477 @@
+/* ===================================================================
+   Quince — konto klienta
+
+   Układ wzięty z prototypu konta klienta motywu Flavor, przełożony
+   na tokeny Quince. Sidebar
+   i siatka kart obsługują wszystkie podstrony konta — ten sam komplet
+   klas wraca na historii zamówień, adresach, danych osobowych itd.,
+   w miarę jak powstają.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Układ dwóch kolumn z `customer/page.tpl`: sidebar 3/12, treść 9/12 —
+       te same proporcje co `.col-lg-3`/`.col-lg-9` z Hummingbirda, które
+       nic w motywie nie styluje (zero Bootstrapa), więc bez tej siatki
+       obie kolumny stały pod sobą na pełnej szerokości. */
+    .q-account {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+        gap: var(--q-space-lg);
+        align-items: start;
+        padding-block: var(--q-space-sm) var(--q-space-xl);
+    }
+
+    /* Ten sam problem i to samo lekarstwo, co `.order-confirmation__crumbs`
+       w kasie: goły layout nie daje okruszkom żadnego górnego odstępu, bo
+       na stronach bez sidebara dostają go przez wspólny kontener z resztą
+       treści. Tu stoją osobno, więc odstęp dokłada ten kontener sam. */
+    .q-account__crumbs { padding-block-start: var(--q-space-md); }
+
+    /* `minmax(0, 1fr)`, nie goły `1fr`: domyślne minimum toru siatki to
+       `auto`, czyli szerokość treści. Sidebar na wąskim ekranie ma w środku
+       poziomo przewijaną listę (patrz niżej) — bez `minmax(0, …)` jej
+       naturalna, nierozwinięta szerokość rozpychała całą stronę zamiast
+       przewijać się we własnym pudełku. */
+    @media (max-width: 991px) {
+        .q-account {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    /* Strony bez sidebara (logowanie z poziomu śledzenia zamówienia jako
+       gość): jedna kolumna zamiast pustej drugiej, bo drzewo ma wtedy tylko
+       jedno dziecko. */
+    .q-account--no-nav {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
+
+@layer quince.components {
+
+    /* ── sidebar ─────────────────────────────────────── */
+
+    /* Tło/ramka/promień z `.q-card` (card.css) — tu dokładany jest tylko
+       cień, ten sam token wprost co karta produktu (product-card.css), bez
+       pośredniego `--q-blok-cien`, którego tu nie ma: to osobny system
+       (`SurfaceStyle`), nazwane powierzchnie z własnym przedrostkiem per
+       ekran (np. `--q-pdp-karta-shadow`), nie jeden uniwersalny token na
+       cały sklep. Panel konta nie ma dziś takiej rejestracji, więc bierze
+       to samo globalne `--q-shadow-sm`, co każdy inny blok bez niej. */
+    .q-account-nav {
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+    }
+
+    /* Bez wewnętrznego odstępu — ta sama zasada co w `.q-dropdown`: pierwsza
+       i ostatnia pozycja dotykają ramki, inaczej zostaje szpara nad/pod
+       podświetleniem pozycji aktywnej albo pod kursorem. */
+    .q-account-nav__list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .q-account-nav__item a,
+    .q-account-nav__item button {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        inline-size: 100%;
+        padding: var(--q-space-sm) var(--q-space-md);
+
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-strong);
+        line-height: var(--q-lh-snug);
+        text-decoration: none;
+
+        background: none;
+        border: 0;
+        cursor: pointer;
+        transition: background 150ms ease-out, color 150ms ease-out;
+    }
+
+    /* Pod kursorem dokładnie to samo co pozycja aktywna — pełne tło marki,
+       ten sam zabieg co bieżąca strona w paginacji
+       (`.q-pagination__page.is-active`): jedno, już przyjęte rozwiązanie
+       dla „to jest pozycja, na której teraz stoisz" w liście opcji, zamiast
+       osobnego, słabszego wariantu tylko dla stanu hover.
+
+       Druga wersja selektora celuje w `a.is-active` wprost: pozycje
+       z hooka `displayCustomerAccount` (wishlist, RODO, powiadomienia,
+       odstąpienia) dzielą jedno `<li>` na wszystkie moduły naraz, więc
+       klasa aktywności na `<li>` podświetliłaby je wszystkie razem. Moduł
+       zaznacza więc aktywność na WŁASNYM `<a>`. */
+    .q-account-nav__item a:hover,
+    .q-account-nav__item button:hover,
+    .q-account-nav__item.is-active a,
+    .q-account-nav__item a.is-active {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    .q-account-nav__item a:hover .q-account-nav__icon,
+    .q-account-nav__item button:hover .q-account-nav__icon,
+    .q-account-nav__item.is-active .q-account-nav__icon,
+    .q-account-nav__item a.is-active .q-account-nav__icon {
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-account-nav__icon {
+        flex: none;
+        inline-size: 18px;
+        block-size: 18px;
+        color: var(--q-text-strong);
+        transition: color 150ms ease-out;
+    }
+
+    .q-account-nav__divider {
+        block-size: 1px;
+        margin-block: var(--q-space-xs);
+        background: var(--q-card-border);
+    }
+
+    /* Ikona modułów (lista życzeń, RODO, powiadomienia) — ten sam rozmiar,
+       barwa i zachowanie pod kursorem co ikony pozostałych wierszy menu,
+       żeby nie wyróżniały się niczym poza treścią odnośnika. */
+    .q-account-nav__item .account-menu__icon {
+        flex: none;
+        inline-size: 18px;
+        block-size: 18px;
+        color: var(--q-text-strong);
+        transition: color 150ms ease-out;
+    }
+
+    .q-account-nav__item a:hover .account-menu__icon {
+        color: var(--q-on-fill-primary);
+    }
+
+    /* W sidebarze to jeden wiersz jak każdy inny — podpis modułu (widoczny
+       niżej w siatce kart) tu się chowa, żeby nie dublować wysokości rzędu. */
+    .q-account-nav__item .account-menu__desc {
+        display: none;
+    }
+
+    .q-account-cards .account-menu__icon {
+        flex: none;
+        inline-size: 22px;
+        block-size: 22px;
+        color: var(--q-text-strong);
+        transition: color 150ms ease-out;
+    }
+
+    .q-account-cards .account-menu__link:hover .account-menu__icon {
+        color: var(--q-fill-primary);
+    }
+
+    /* Wyloguj — jedyny czerwony wiersz w menu. */
+    .q-account-nav__item--logout a { color: var(--q-text-danger); }
+    .q-account-nav__item--logout a:hover { background: var(--q-surface-danger); }
+    .q-account-nav__item--logout .q-account-nav__icon { color: var(--q-text-danger); }
+
+    /* Przycisk-wyzwalacz: tylko telefon i tablet. Na szerokim ekranie lista
+       stoi otwarta na stałe, więc nic go nie pokazuje. */
+    .q-account-nav__trigger {
+        display: none;
+    }
+
+    /* Pionowa kolumna 3/12 na ekranie 768px zjadałaby za dużo miejsca nad
+       treścią — poniżej 992px sidebar składa się do jednego przycisku,
+       a pełna lista wysuwa się nad treścią jako panel, dokładnie tak jak
+       każda inna rozwijana lista w motywie (`.q-dropdown`). */
+    @media (max-width: 991px) {
+        /* Karta sidebara znika — na szerokim ekranie to ona ramkuje całą
+           listę, ale na telefonie widać tylko przycisk, a jego własna ramka
+           (`.q-select__button`) w cudzej ramce robiła podwójne obramowanie,
+           pudełko w pudełku. Ramkę i tło niesie teraz wyłącznie przycisk
+           (zamknięta) albo panel listy (otwarta), nigdy oba naraz. */
+        .q-account-nav {
+            position: relative;
+            overflow: visible;
+            background: none;
+            border: 0;
+        }
+
+        /* Kształt pola bierze z `.q-select__button` (field.css), ale kolor
+           swój: pełne tło marki, jak pozycja aktywna w rozwiniętej liście
+           (ten sam sygnał — „to jest nawigacja konta"). Neutralne pole
+           w barwach formularza ginęło na białym tle strony; sama ramka —
+           patrz poprzednia wersja — nie wystarczała, żeby czytać się jako
+           kontrolka, a nie kolejny wiersz treści. */
+        .q-account-nav__trigger {
+            display: flex;
+            font-weight: var(--q-weight-semibold);
+            background: var(--q-fill-primary);
+            border-color: var(--q-fill-primary);
+            color: var(--q-on-fill-primary);
+        }
+
+        .q-account-nav__trigger:hover {
+            background: var(--q-fill-primary-hover);
+            border-color: var(--q-fill-primary-hover);
+        }
+
+        /* Zamknięta: nie zajmuje miejsca i nie stoi w kolejności tabulatora —
+           `display:none`, nie sama widoczność. Otwarta wysuwa się NAD treścią,
+           więc jej rozwinięcie nie przesuwa niczego poniżej. */
+        .q-account-nav__list {
+            display: none;
+
+            position: absolute;
+            inset-block-start: calc(100% + 4px);
+            inset-inline: 0;
+            z-index: 40;
+
+            background: var(--q-dropdown-bg);
+            border: 1px solid var(--q-dropdown-border);
+            border-radius: var(--q-dropdown-radius);
+            box-shadow: var(--q-dropdown-shadow);
+        }
+
+        .q-account-nav__list.is-open {
+            display: block;
+            max-block-size: 70vh;
+            overflow-y: auto;
+        }
+    }
+
+    /* ── nagłówek treści ─────────────────────────────── */
+
+    .q-account-header {
+        margin-block-end: var(--q-space-lg);
+    }
+
+    .q-account-header__welcome {
+        margin: 0 0 4px;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-account-header__title {
+        margin: 0;
+        font-size: var(--q-fs-h3);
+    }
+
+    /* ── kafle statystyk ─────────────────────────────── */
+
+    .q-account-stats {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        /* Ten sam odstęp co między zajawkami produktów (`.q-grid` w theme.css):
+           md na szerokim ekranie, sm poniżej 768px — jedna miara siatki
+           kafli w całym sklepie, a nie osobna dla każdej strony. */
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-lg);
+    }
+
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
+       tu dokładany jest tylko układ kafla i cień. */
+    .q-account-stat {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-sm) var(--q-space-md);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    /* Ten sam powód co `.q-account-card__body`: bez `min-inline-size: 0`
+       długa etykieta („Aktywne kupony”) nie chciała się złamać i rozpychała
+       kafel, siatkę i stronę szerzej niż ekran. */
+    .q-account-stat__body {
+        min-inline-size: 0;
+        flex: 1;
+    }
+
+    /* Jedna, neutralna para teł/ikony dla wszystkich trzech kafli — ten sam
+       zabieg co ikona karty niżej. Prototyp daje każdej roli osobny kolor
+       (zamówienia niebieski, adresy zielony, kupony żółty); tu jeden
+       atrament na szarym tle, bo reszta panelu nie miesza żadnych innych
+       barw poza marką. */
+    .q-account-stat__icon {
+        display: grid;
+        place-items: center;
+        inline-size: 40px;
+        block-size: 40px;
+        flex: none;
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-card-radius);
+        color: var(--q-text-strong);
+    }
+
+    .q-account-stat__value {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h4);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+        line-height: 1.1;
+    }
+
+    .q-account-stat__label {
+        margin-block-start: 1px;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    /* ── siatka kart (Baymard: ikona + nazwa + opis) ─── */
+
+    .q-account-cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-lg);
+    }
+
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
+       tu dokładany jest tylko układ karty, cień i stan hover. */
+    .q-account-card {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-md);
+
+        box-shadow: var(--q-shadow-sm);
+        color: var(--q-text-strong);
+        text-decoration: none;
+        transition: border-color 150ms ease-out;
+    }
+
+    /* Pod kursorem tylko ramka, cień zostaje bez zmian — ten sam efekt
+       co karta produktu (`.q-pcard:hover` w product-card.css). */
+    .q-account-card:hover {
+        border-color: var(--q-fill-primary);
+    }
+
+    .q-account-card__icon {
+        display: grid;
+        place-items: center;
+        inline-size: 42px;
+        block-size: 42px;
+        flex: none;
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-card-radius);
+        color: var(--q-text-strong);
+        transition: background 150ms ease-out, color 150ms ease-out;
+    }
+
+    .q-account-card:hover .q-account-card__icon {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    /* Domyślne minimum elementu flex to `auto` (szerokość treści), nie `0` —
+       dokładnie ten sam powód co `minmax(0, …)` w siatkach wyżej. Bez tego
+       długi tytuł („Moje pokwitowania - korekty płatności”) próbował
+       zmieścić się jednym ciągiem i rozpychał kartę, a za nią siatkę
+       i całą stronę, szerzej niż ekran, zamiast złamać się w przydzielonej
+       szerokości. */
+    .q-account-card__body {
+        min-inline-size: 0;
+        flex: 1;
+    }
+
+    .q-account-card__title {
+        margin: 0 0 3px;
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    .q-account-card__desc {
+        margin: 0;
+        font-size: var(--q-fs-xs);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-muted);
+    }
+
+    /* Te same moduły, co w sidebarze (lista życzeń, RODO, powiadomienia)
+       dokładają odnośnik też tutaj, przez ten sam hook — własną klasą
+       (`account-menu__link`), bez niczego wspólnego z `.q-account-card`.
+       Ubieramy ją w tę samą kartę, żeby nie wyłamywała się z siatki. */
+    .q-account-cards .account-menu__link {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-md);
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        color: var(--q-text-strong);
+        text-decoration: none;
+        transition: border-color 150ms ease-out;
+    }
+
+    .q-account-cards .account-menu__link:hover {
+        border-color: var(--q-fill-primary);
+    }
+
+    /* Tytuł i podpis jeden nad drugim, tą samą czcionką nagłówkową co
+       `<h2 class="q-account-card__title">` w pozostałych kartach — bez
+       tego link modułu czytał się lżej, bo pismo podstawowe jest cieńsze
+       od nagłówkowego przy tej samej wadze. */
+    .q-account-cards .account-menu__text {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        min-inline-size: 0;
+        flex: 1;
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+    }
+
+    .q-account-cards .account-menu__desc {
+        font-family: var(--q-body-font);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-regular);
+        line-height: var(--q-lh-snug);
+        color: var(--q-text-muted);
+    }
+
+    /* ── ostatnie zamówienia ──────────────────────────── */
+
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
+       tu dokładany jest tylko cień. */
+    .q-account-section {
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+    }
+
+    .q-account-section__header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    /* Nagłówek przed kartą zamiast w jej pasku (np. „Ostatnie zamówienia”
+       nad tabelą) — sam układ zostaje, ale bez wewnętrznych odstępów karty
+       i linii, które miały sens tylko w środku. */
+    .q-account-section__header--standalone {
+        padding: 0;
+        margin-block-end: var(--q-space-sm);
+        border-block-end: 0;
+    }
+
+    /* Ten sam krój co nagłówek sekcji w karcie — dane osobowe (niżej) stawiają
+       go PRZED kartą, nie w jej pasku, ale liternictwo zostaje takie samo. */
+    .q-account-section__title,
+    .q-identity-heading {
+        margin: 0;
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* Status zamówienia: kropka + ciemny tekst — ten sam wzorzec co dostępność magazynowa
+       (`.q-stock`), nie pełna plakietka. Kolor przychodzi inline z
+       `$order.history.current.color`: statusy zamówień są dowolne, ustawia
+       je sklepikarz w panelu, więc tu nie ma stałej listy nazw jak
+       w prototypie. Wzięty wprost na duże pole plakietki wyglądał obco przy
+       reszcie strony, bo nic innego tu nie miesza barw poza marką — jako
+       mała kropka ten sam kolor dalej rozróżnia status na pierwszy rzut
+       oka, nie narzucając się. Tekst stoi już na białym tle karty, nie na
+       kolorze statusu, więc nie potrzeba osobnej pary kontrastu
+       (`contrast`/`--dark`/`--bright` z rdzenia) — zawsze ten sam, nasz
+       atrament. */
+    .q-recent-order__status {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        max-inline-size: 100%;
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+
+        /* Bez `nowrap`: nazwę statusu ustawia sklepikarz w panelu i może
+           być dowolnej długości. Jedna za długa nazwa, która nie mogłaby
+           się złamać, rozpychała cały wiersz — a za nim całą stronę —
+           szerzej niż ekran. */
+        white-space: normal;
+        overflow-wrap: break-word;
+    }
+
+    .q-recent-order__status-dot {
+        inline-size: 8px;
+        block-size: 8px;
+        border-radius: 50%;
+        flex: none;
+    }
+
+    /* Cztery odcienie z naszej palety — rozstrzyga `OrderStatusTone::forState()`
+       (modyfikator Smarty `qstatustone`) po wbudowanych statusach rdzenia
+       (`PS_OS_*`), nie po kolorze z panelu. Ten sam modyfikator i te same
+       cztery klasy wraca na podglądzie zamówienia (plakietka i oś czasu).
+       Własny status sklepu bez dopasowania nie dostaje żadnej z tych klas
+       i zostaje bez kropki — zwykły, ciemny napis jak reszta wiersza. */
+    .q-recent-order__status--success .q-recent-order__status-dot { background: var(--q-fill-success); }
+    .q-recent-order__status--danger  .q-recent-order__status-dot { background: var(--q-fill-danger); }
+    .q-recent-order__status--warning .q-recent-order__status-dot { background: var(--q-fill-warning); }
+    .q-recent-order__status--info    .q-recent-order__status-dot { background: var(--q-fill-info); }
+
+    /* ── podgląd zamówienia ──────────────────────────── */
+
+    .q-order-header {
+        display: flex;
+        flex-direction: column;
+        gap: var(--q-space-xs);
+        margin-block-end: var(--q-space-lg);
+    }
+
+    .q-order-back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+        text-decoration: none;
+        transition: color 150ms ease-out;
+    }
+
+    .q-order-back:hover { color: var(--q-link-hover); }
+
+    .q-order-back__icon { flex: none; }
+
+    .q-order-header__title {
+        margin: 0;
+        font-size: var(--q-fs-h3);
+    }
+
+    .q-order-info {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-lg);
+        padding: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-order-info__item {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+    }
+
+    /* Kwota ma stać przy prawej krawędzi paska, reszta pól przy lewej. */
+    .q-order-info__item--amount {
+        margin-inline-start: auto;
+        text-align: end;
+    }
+
+    .q-order-info__label {
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-info__value {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    .q-order-info__value--lg { font-size: var(--q-fs-h5); }
+
+    .q-order-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-lg);
+    }
+
+    /* Dwie kolumny 8/4, ten sam podział co `.q-checkout__layout` — kolumna
+       boczna ma stałą szerokość, główna bierze resztę. */
+    .q-order-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 22rem;
+        gap: var(--q-space-lg);
+        align-items: start;
+    }
+
+    /* Pionowy stos kart z odstępem — ten sam wzorzec dla dwóch kolumn
+       podglądu zamówienia i dla sekcji dowolnej innej podstrony konta
+       (np. danych osobowych), nie osobna reguła na każdą. */
+    .q-order-layout__main,
+    .q-order-layout__side,
+    .q-account-stack {
+        display: grid;
+        gap: var(--q-space-md);
+        min-inline-size: 0;
+    }
+
+    /* Ta sama siatka 2-kolumnowa, co lista zapisanych adresów klienta
+       (`.addresses__list` niżej) — jeden wspólny wzorzec „dwie karty adresu
+       obok siebie", nie dwa osobne. */
+    .q-order-addresses,
+    .addresses__list {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-md);
+    }
+
+    /* Ten sam wygląd bloku adresu co w karcie zapisanego adresu klienta
+       (`.address-card__content` niżej) — jedna reguła na obie. */
+    .q-order-address,
+    .address-card__content {
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-address { padding: var(--q-space-md); }
+
+    /* Pierwsza linia adresu z rdzenia to zawsze imię i nazwisko (albo nazwa
+       firmy, zależnie od formatu kraju) — `::first-line` zaznacza ją bez
+       oddzielnego pola, bo rdzeń łączy całość przez `<br>` w jeden ciąg,
+       nie w osobne znaczniki. */
+    .q-order-address::first-line,
+    .address-card__content::first-line {
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    /* --- tabela produktów (rdzeń: `.grid-table`/`.order-product__*`,
+       współdzielona z historią zamówień, kuponami i kartą kredytową) --- */
+
+    .grid-table { font-size: var(--q-fs-sm); }
+
+    /* Siatka kolumn wspólna dla nagłówka i każdego wiersza pod nim — bez niej
+       (flex, szerokość komórki liczona z własnej treści) kolumny w ogóle się
+       nie trzymały: „Nazwa" w nagłówku i „Nazwa" w wierszu wychodziły innej
+       szerokości, bo każdy wiersz liczył swoją osobno. Liczbę kolumn niesie
+       modyfikator `grid-table__inner--N`, już używany w znacznikach (rdzeń
+       i nasze szablony), jako zmienna CSS, którą dziedziczy nagłówek
+       i każdy wiersz w środku. */
+    .grid-table__inner--2 { --q-grid-cols: repeat(2, minmax(0, 1fr)); }
+    .grid-table__inner--3 { --q-grid-cols: repeat(3, minmax(0, 1fr)); }
+    .grid-table__inner--4 { --q-grid-cols: repeat(4, minmax(0, 1fr)); }
+    .grid-table__inner--5 { --q-grid-cols: repeat(5, minmax(0, 1fr)); }
+    .grid-table__inner--6 { --q-grid-cols: repeat(6, minmax(0, 1fr)); }
+    .grid-table__inner--7 { --q-grid-cols: repeat(7, minmax(0, 1fr)); }
+
+    /* Kupony: siedem kolumn równej szerokości ściskało „Nazwa" tak samo
+       mocno, jak „Ilość" czy „Łącznie" — te ostatnie nigdy nie potrzebują
+       więcej niż kilku znaków, a nazwa kuponu łamała się bez potrzeby.
+       Jedna elastyczna kolumna (nazwa) bierze resztę miejsca, reszta ma
+       stałą szerokość dopasowaną do treści. Nadpisuje `--7` wyżej: ta sama
+       zmienna, więcej niż jeden selektor, wygrywa kolejność w arkuszu. */
+    .grid-table__inner--vouchers {
+        --q-grid-cols: 7rem minmax(0, 1fr) 3.5rem 6rem 6rem 4.5rem 6rem;
+    }
+
+    /* Nagłówek kolumn zostaje widoczny i klikalny — wariant zwrotu (core:
+       `order-detail-return.tpl`) chowa w pierwszej komórce prawdziwy
+       checkbox „zaznacz wszystkie", nie samą etykietę, więc całego wiersza
+       nie można schować tak jak `.visually-hidden` (odebrałoby to też
+       klawiaturze). Ta sama wysokość w pionie co wiersze z danymi —
+       `--q-space-sm`, nie węższe `--q-space-xs`: pasek nagłówka węższy niż
+       to, co pod nim, wyglądał ścieśniony (ten sam powód co `.q-order-table
+       th`, ujednolicone tutaj). */
+    .grid-table__header,
+    .grid-table__row {
+        display: grid;
+        grid-template-columns: var(--q-grid-cols, none);
+        align-items: center;
+        gap: var(--q-space-md);
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .grid-table__header {
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+    }
+
+    .grid-table__row:last-child { border-block-end: 0; }
+
+    .grid-table__cell--center { text-align: center; }
+    .grid-table__cell--right {
+        text-align: end;
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    /* Wiersze podsumowania (drugi `.grid-table`, patrz niżej) — jedna
+       komórka na cały wiersz, nie kolumna siatki: wyciszone jak w makiecie,
+       dopóki `:last-child` (suma) nie przeważy pogrubieniem. */
+    .grid-table__cell--label-value {
+        margin-inline-start: auto;
+        text-align: end;
+    }
+
+    .order-product {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        min-inline-size: 0;
+    }
+
+    .order-product__image {
+        flex: none;
+        display: block;
+        inline-size: 56px;
+        block-size: 56px;
+        border-radius: var(--q-card-radius);
+        overflow: hidden;
+        background: var(--q-surface-sunken);
+    }
+
+    .order-product__img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+    }
+
+    .order-product__content {
+        min-inline-size: 0;
+    }
+
+    .order-product__name {
+        display: block;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        text-decoration: none;
+    }
+
+    .order-product__name:hover { color: var(--q-link-hover); }
+
+    /* Kaseta produktów w wariancie zwrotu (core: `order-detail-return.tpl`)
+       dokłada znacznik wyboru i select ilości — ten sam wiersz, dwa
+       dodatkowe cele dotykowe. */
+    .grid-table__cell:has(> input[type="checkbox"]) {
+        flex: none;
+        order: -1;
+    }
+
+    /* Podsumowanie zamówienia (core: `order-detail-return.tpl` i warianty bez
+       zwrotu) — 1:1 z prototypu (`_account.css` → `.order-totals`), nie
+       tabela: etykieta i kwota stoją obok siebie, widoczne obie, bez
+       `visually-hidden`. Poprzednia wersja chowała etykietę i dokładała
+       osobną kreskę nad wierszem sumy OBOK kreski pod wierszem nad nim —
+       dwie kreski obok siebie czytały się jak jedna, podwojona. */
+    .q-order-totals {
+        padding: var(--q-space-sm) var(--q-space-md);
+        background: var(--q-surface-sunken);
+    }
+
+    .q-order-totals__row {
+        display: flex;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-xs);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-totals__row--total {
+        padding-block-start: var(--q-space-sm);
+        margin-block-start: var(--q-space-xs);
+        border-block-start: 2px solid var(--q-card-border);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    /* Zgłoszenie zwrotu (core: `order-detail-return.tpl`) — ten sam odstęp
+       od tabeli nad nim co pozostałe sekcje karty. */
+    .order-merchandise-return {
+        padding: var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    .order-merchandise-return h2 {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* --- oś czasu statusu --- */
+
+    /* Kolejność od najstarszego na górze do najnowszego na dole —
+       `$order.history` z rdzenia idzie od najnowszego, więc odwracamy
+       samym układem zamiast dowolnej funkcji PHP w szablonie. */
+    .q-order-timeline {
+        display: flex;
+        flex-direction: column-reverse;
+        padding: var(--q-space-md);
+    }
+
+    .q-order-timeline__item {
+        display: flex;
+        gap: var(--q-space-sm);
+        position: relative;
+        padding-block-end: var(--q-space-md);
+    }
+
+    /* Ostatnie dziecko w DOM-ie to pierwsza pozycja na osi (patrz wyżej) —
+       ono stoi na dole po odwróceniu, więc to ono nie dostaje łącznika. */
+    .q-order-timeline__item:not(:first-child)::before {
+        content: '';
+        position: absolute;
+        inset-inline-start: 7px;
+        inset-block-start: 18px;
+        inset-block-end: 0;
+        inline-size: 2px;
+        background: var(--q-card-border);
+    }
+
+    .q-order-timeline__dot {
+        inline-size: 16px;
+        block-size: 16px;
+        border-radius: 50%;
+        flex: none;
+        background: var(--q-neutral-5);
+    }
+
+    .q-order-timeline__item--success .q-order-timeline__dot { background: var(--q-fill-success); }
+    .q-order-timeline__item--danger  .q-order-timeline__dot { background: var(--q-fill-danger); }
+    .q-order-timeline__item--warning .q-order-timeline__dot { background: var(--q-fill-warning); }
+    .q-order-timeline__item--info    .q-order-timeline__dot { background: var(--q-fill-info); }
+
+    .q-order-timeline__content { min-inline-size: 0; }
+
+    .q-order-timeline__title {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-order-timeline__date {
+        margin-block-start: 1px;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    /* --- śledzenie przesyłki --- */
+
+    .q-order-track-list { padding: var(--q-space-md); }
+
+    .q-order-track--sep {
+        padding-block-end: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-order-track__carrier {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    .q-order-track__number {
+        margin-block-start: 2px;
+        margin-block-end: var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-track__code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: 0.02em;
+        background: var(--q-surface-sunken);
+        padding: 2px 6px;
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* --- wiadomości --- */
+
+    .q-order-message {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-order-message__meta {
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-message__meta strong { color: var(--q-text-strong); }
+
+    .q-order-message__text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-text-strong);
+    }
+
+    .q-order-message-form {
+        display: grid;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-md);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    .q-order-message-form__text { resize: vertical; }
+
+    .q-order-message-form__actions {
+        display: flex;
+        justify-content: flex-end;
+    }
+
+    /* ── historia zamówień ───────────────────────────── */
+
+    /* Tylko tabela może przewijać się w poziomie, nigdy cała strona —
+       ta sama zasada co przy szerokich tabelach w panelu. */
+    .q-order-table-wrap {
+        overflow-x: auto;
+    }
+
+    .q-order-table {
+        inline-size: 100%;
+        border-collapse: collapse;
+    }
+
+    .q-order-table th {
+        padding: var(--q-space-sm) var(--q-space-md);
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-muted);
+        text-align: start;
+        white-space: nowrap;
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-order-table td {
+        padding: var(--q-space-sm) var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        vertical-align: middle;
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .q-order-table tbody tr:last-child td { border-block-end: 0; }
+    .q-order-table tbody tr:hover td { background: var(--q-surface-sunken); }
+
+    .q-order-table__ref {
+        font-family: var(--q-heading-font);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    .q-order-table__ref a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .q-order-table__ref a:hover { color: var(--q-link-hover); }
+
+    .q-order-hint {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        margin: var(--q-space-sm) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    .q-order-hint svg { flex: none; }
+
+    /* ── adresy ───────────────────────────────────────── */
+
+    /* Siatka zdefiniowana wyżej, wspólnie z `.q-order-addresses`. */
+
+    /* Tło/ramka/promień z `.q-card` (klasa dopisana w markupie
+       `block-address.tpl`) — tu dokładany jest tylko wewnętrzny odstęp. */
+    .address-card {
+        padding: var(--q-space-md);
+    }
+
+    .address-card__header { margin-block-end: var(--q-space-xs); }
+
+    .address-card__alias {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-base);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    /* Reszta wyglądu wyżej, wspólnie z `.q-order-address`. Tu tylko reset
+       kursywy — `<address>` jest kursywą domyślnie, `<div>` w order-detail
+       nie, więc tamta reguła tego nie potrzebowała. */
+    .address-card__content {
+        font-style: normal;
+    }
+
+    .address-card__actions {
+        display: flex;
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-sm);
+        padding-block-start: var(--q-space-sm);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* `.link-danger` obok: ten sam odnośnik „ikona + napis, wyciszony,
+       czerwienieje pod kursorem", co „Usuń" na karcie adresu — rdzeń
+       używa tej klasy też w kasie (wybór adresu, podsumowanie) i w liście
+       powiadomień e-mail, więc jeden styl na wszystkie, nie cztery kopie. */
+    .address-card__edit,
+    .link-danger {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+        text-decoration: none;
+        background: none;
+        border: 0;
+        cursor: pointer;
+    }
+
+    .address-card__edit:hover { color: var(--q-link-hover); }
+    .link-danger:hover { color: var(--q-text-danger); }
+
+    /* Karta „dodaj nowy adres" — obrys kreskowany, bez wypełnienia, ikona
+       i napis wyśrodkowane. Ta sama wysokość co karta z treścią obok niej
+       w siatce (`align-items: stretch` domyślne w grid), więc nie trzeba
+       osobnego `min-block-size`. */
+    .address-card--add-address {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: var(--q-space-sm);
+        border-style: dashed;
+        color: var(--q-text-muted);
+        text-decoration: none;
+        transition: border-color 150ms ease-out, color 150ms ease-out;
+    }
+
+    .address-card--add-address:hover {
+        border-color: var(--q-text-strong);
+        color: var(--q-text-strong);
+    }
+
+    .address-card__add-text {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+    }
+
+    /* Formularz adresu nie ma własnej makiety — ta sama karta co reszta
+       konta; odstęp wewnętrzny bierze wprost z `.q-card__body` (klasa
+       w markupie `address.tpl`), bez osobnej reguły. */
+
+    /* ── dane osobowe ─────────────────────────────────── */
+
+    /* Nagłówek sekcji PRZED kartą, nie w jej pasku — ciaśniejszy odstęp do
+       własnej karty niż do następnej sekcji, więc para nagłówek+karta ma
+       swój osobny, mniejszy `gap`, zagnieżdżony w większym `gap`
+       `.q-account-stack`. */
+    .q-identity-group {
+        display: grid;
+        gap: var(--q-space-sm);
+    }
+
+    /* `.q-account-stack` daje `--q-space-md` między każdą parą — za mało,
+       żeby pogrubiony nagłówek odkleił się od karty NAD nim, skoro ten sam
+       odstęp (tylko mniejszy, `--q-space-sm`) dzieli go już od WŁASNEJ
+       karty pod spodem. Druga i kolejne sekcje dostają dodatkowy odstęp nad
+       sobą; pierwsza zostaje przy nagłówku strony bez zmian. */
+    .q-identity-group + .q-identity-group {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* Przyciski pobrania danych (RODO) — stoją pod akapitem, nie na końcu
+       formularza: `.buttons-wrapper` jest do tego za ciężki (duży odstęp
+       nad sobą, dosuwa się do prawej krawędzi), więc to osobna, lekka
+       reguła, nie ten komponent. */
+    .q-gdpr-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* ── powiadomienia e-mail ─────────────────────────── */
+
+    .ps-emailalerts__product-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .ps-emailalerts__product {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-sm) var(--q-space-md);
+        border-block-end: 1px solid var(--q-card-border);
+    }
+
+    .ps-emailalerts__product:last-child { border-block-end: 0; }
+
+    .ps-emailalerts__product-image-link {
+        flex: none;
+        display: block;
+        inline-size: 56px;
+        block-size: 56px;
+        border-radius: var(--q-card-radius);
+        overflow: hidden;
+        background: var(--q-surface-sunken);
+    }
+
+    .ps-emailalerts__product-image {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+    }
+
+    .ps-emailalerts__product-content {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs) var(--q-space-md);
+        min-inline-size: 0;
+        flex: 1;
+    }
+
+    .ps-emailalerts__product-name {
+        display: block;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+        text-decoration: none;
+    }
+
+    .ps-emailalerts__product-content > a:hover .ps-emailalerts__product-name { color: var(--q-link-hover); }
+
+    .ps-emailalerts__product-attributes {
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    .ps-emailalerts__product-delete {
+        margin-inline-start: auto;
+    }
+
+    @media (min-width: 768px) and (max-width: 991px) {
+        .q-account-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    /* Kolumna boczna (status, śledzenie, wiadomości) pod główną, nie obok —
+       ten sam próg co `.q-checkout__layout`. */
+    @media (max-width: 991px) {
+        .q-order-layout { grid-template-columns: minmax(0, 1fr); }
+    }
+
+    @media (max-width: 767px) {
+        .q-order-addresses,
+        .addresses__list { grid-template-columns: minmax(0, 1fr); }
+
+        .q-order-info__item--amount {
+            margin-inline-start: 0;
+            text-align: start;
+        }
+
+        /* Ta sama tabela stoi w `history.tpl` i w „Ostatnich zamówieniach”
+           na pulpicie konta (`my-account.tpl`) — jeden styl, nie dwa. Na
+           telefonie wiersz staje się kartą: numer, data i kwota w jednym
+           wierszu, status pod spodem, każde zamówienie jako osobny
+           „klocek” z odstępem, nie linia między wierszami. */
+        .q-order-table thead { display: none; }
+
+        .q-order-table,
+        .q-order-table tbody {
+            display: block;
+            inline-size: 100%;
+        }
+
+        /* `minmax(0, 1fr)`, nie goły `1fr` ani domyślny `auto` — ten sam
+           powód co w `.q-account`/`.q-account-cards` wyżej: bez tego jedyny
+           tor siatki rośnie do szerokości najszerszej karty zamówienia. */
+        .q-order-table tbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--q-space-sm); }
+
+        /* Karta znika z zewnętrznego opakowania na telefonie — każde
+           zamówienie niesie teraz własną, osobną kartę, zamiast jednej
+           wspólnej karty dookoła całej listy (dwie ramki jedna w drugiej). */
+        .q-account-section:has(.q-order-table) {
+            background: none;
+            border: 0;
+            box-shadow: none;
+            overflow: visible;
+        }
+
+        .q-order-table tr {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            padding: var(--q-space-sm) var(--q-space-md);
+            background: var(--q-card-bg);
+            border: 1px solid var(--q-card-border);
+            border-radius: var(--q-card-radius);
+            box-shadow: var(--q-shadow-sm);
+            font-size: var(--q-fs-sm);
+        }
+
+        .q-order-table tr:hover { background: var(--q-surface-sunken); }
+
+        /* Reguła wyżej (`.q-order-table td`, poza media query) daje każdej
+           komórce linię pod spodem — na szerokiej tabeli niewidoczne, bo
+           komórki stoją w rzędzie. Tu `<td>` to osobny wiersz flexa, więc ta
+           sama linia wychodziła pod KAŻDYM polem karty. Karta ma już własną
+           ramkę dookoła, więc komórki jej nie potrzebują. */
+        .q-order-table td {
+            padding: 0;
+            border-block-end: 0;
+
+            /* Domyślne minimum elementu flex to `auto` (szerokość treści),
+               nie `0` — ten sam powód co `.q-account-card__body` wyżej.
+               Długa, nieprzełamywalna wartość w jednej komórce (np. nazwa
+               metody płatności) potrafiła rozepchnąć cały wiersz, a za nim
+               całą stronę, szerzej niż ekran, zamiast złamać się albo
+               skurczyć w przydzielonej szerokości karty. */
+            min-inline-size: 0;
+            overflow-wrap: break-word;
+        }
+
+        /* Etykieta znika domyślnie — numer, data, kwota i status czyta się
+           bez niej. Zostaje tylko tam, gdzie sama wartość nic by nie
+           znaczyła („2" bez kontekstu). */
+        .q-order-table td[data-label]::before { content: none; }
+
+        .q-order-table__cell--products::before,
+        .q-order-table__cell--payment::before {
+            content: attr(data-label) ": ";
+        }
+
+        /* Krój/kolor numeru zamówienia niesie już `.q-order-table__ref`
+           (działa na każdej szerokości) — tu tylko kolejność. */
+        .q-order-table__cell--ref { order: 1; }
+        .q-order-table__cell--date { order: 2; color: var(--q-text-muted); }
+        .q-order-table__cell--price { order: 3; color: var(--q-text-strong); }
+        .q-order-table__cell--status { order: 4; }
+
+        .q-order-table__cell--products,
+        .q-order-table__cell--payment {
+            order: 5;
+            font-size: var(--q-fs-xs);
+            color: var(--q-text-muted);
+        }
+
+        .q-order-table__cell--actions { order: 6; }
+    }
+
+    /* `minmax(0, 1fr)`, nie goły `1fr` — ten sam powód co w siatce `.q-account`:
+       domyślne minimum toru to `auto`, czyli szerokość treści. Długi tytuł
+       karty („Moje pokwitowania - korekty płatności") albo odnośnik modułu
+       bez przełamania rozpychał kartę szerzej niż ekran i całą stronę
+       w poziomy scroll. */
+    @media (max-width: 767px) {
+        .q-account-stats { grid-template-columns: minmax(0, 1fr); gap: var(--q-space-sm); }
+        .q-account-cards { grid-template-columns: minmax(0, 1fr); gap: var(--q-space-sm); }
+
+        .q-order-table tr {
+            gap: 6px var(--q-space-sm);
+        }
+
+        /* Pełna szerokość własnego wiersza, ale przycisk w nim do prawej —
+           przyciski przyklejone do lewej krawędzi nie są tu naturalne. */
+        .q-order-table__cell--actions {
+            display: flex;
+            justify-content: flex-end;
+            inline-size: 100%;
+            margin-inline-start: 0;
+            margin-block-start: 4px;
+        }
+    }
+
+    /* ── listy życzeń (blockwishlist) ────────────────── */
+
+    /* Znaczki z kroju PrestaShopa (Material Icons): Quince go nie ładuje,
+       więc każdy rysowałby się jako goły podpis („share", „add_circle_outline",
+       „chevron_left") — ten sam zabieg co w kasie i stopce. */
+    .wishlist-container .material-icons { display: none; }
+
+    /* Moduł rysuje przez Vue własny `<h1>` i link „Nowa lista" prosto do
+       `.wishlist-container` — ten sam układ co nasz
+       `.q-account-section__header--standalone` (tytuł + akcja, bez karty),
+       inna tylko nazwa klasy, bo przychodzi z modułu, nie z naszego
+       szablonu. */
+    .wishlist-container-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .wishlist-container-header h1 {
+        margin: 0;
+        font-size: var(--q-fs-h3);
+    }
+
+    /* Przycisk „Create new list": ten sam przepis co `.q-btn--secondary
+       .q-btn--sm` w `button.css` (klasa dodana tam do selektora, nie
+       powielona tutaj) — element rysuje Vue z własną nazwą klasy, więc nie
+       da się podmienić jej w szablonie na naszą. */
+
+    /* Każda lista to osobna karta w siatce, nie jeden pełny pasek — ten sam
+       wzorzec co kafelki adresów (`.address-card`)/konta (`.q-account-card`).
+       `minmax(0, 1fr)`, nie goły `1fr`: ten sam powód co w resztcie siatek
+       w tym pliku. */
+    .wishlist-container .page-content {
+        background: none;
+        border: 0;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .wishlist-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: var(--q-space-sm);
+    }
+
+    .wishlist-list-item {
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+
+        /* Róg karty jest zaokrąglony, tło na hover (na linku w środku) —
+           prostokątne; bez przycięcia tło wychodziło poza promień rogu. */
+        overflow: hidden;
+    }
+
+    .wishlist-list-item-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        padding: var(--q-space-sm) var(--q-space-md);
+        text-decoration: none;
+        color: inherit;
+        transition: background 150ms ease-out;
+    }
+
+    .wishlist-list-item-link:hover { background: var(--q-surface-sunken); }
+
+    .wishlist-list-item-title {
+        margin: 0;
+        font-family: var(--q-heading-font);
+        font-weight: var(--q-weight-bold);
+        color: var(--q-text-strong);
+    }
+
+    .wishlist-list-item-title span {
+        font-family: var(--q-body-font);
+        font-weight: var(--q-weight-regular);
+        color: var(--q-text-muted);
+        margin-inline-start: 4px;
+    }
+
+    .wishlist-list-item-right {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        flex: none;
+    }
+
+    .wishlist-list-item-right button {
+        display: grid;
+        place-items: center;
+        inline-size: 32px;
+        block-size: 32px;
+        padding: 0;
+        background: none;
+        border: 0;
+        border-radius: var(--q-card-radius);
+        color: var(--q-text-muted);
+        cursor: pointer;
+    }
+
+    .wishlist-list-item-right button:hover {
+        background: var(--q-surface-sunken);
+        color: var(--q-text-strong);
+    }
+
+    /* Ikony bez treści do podmiany w szablonie (rysuje je Vue) — maska tym
+       samym rysunkiem co znak w `data-label`, kolorowana `background-color`,
+       zamiast pustego kwadratu po ukryciu zepsutego napisu Material Icons
+       wyżej. Rozróżnienie przez kontekst w znacznikach, bo CSS nie umie
+       dobrać się po treści tekstowej ikony: „Udostępnij" wprost na liście
+       domyślnej (jedyna jej akcja), kebab po własnej klasie modułu na
+       pozostałych — „Zmień nazwę"/„Usuń" stoją pod nim w naszym
+       `.q-dropdown` (assets/js/islands/wishlist-lists.js), nie obok niego:
+       trzy ikony w rzędzie łamały się już przy dwóch kartach w siatce. */
+    .wishlist-list-item-right .material-icons {
+        display: block;
+        inline-size: 18px;
+        block-size: 18px;
+        background-color: currentColor;
+        mask-repeat: no-repeat;
+        mask-position: center;
+        mask-size: 18px;
+        -webkit-mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        -webkit-mask-size: 18px;
+    }
+
+    .wishlist-list-item-default .wishlist-list-item-right .material-icons {
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3'/%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.5 2.5 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5m-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3m11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3'/%3E%3C/svg%3E");
+    }
+
+    .wishlist-list-item-actions .material-icons {
+        mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0'/%3E%3C/svg%3E");
+        -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0'/%3E%3C/svg%3E");
+    }
+
+    /* Przycisk „Usuń", który moduł rysuje zawsze wprost (bez menu) na liście
+       innej niż domyślna — u nas ta akcja stoi pod kebabem, razem ze
+       „Zmień nazwę", więc ten drugi, osobny przycisk znika. */
+    .wishlist-list-item:not(.wishlist-list-item-default) .wishlist-list-item-right > button:last-child {
+        display: none;
+    }
+
+    /* ── produkty jednej listy (`products-list.tpl`) ────── */
+
+    .wishlist-products__back {
+        margin-block-start: var(--q-space-xl);
+        text-align: center;
+    }
+
+}
+
+/* Poniższe reguły stoją celowo poza `@layer quince.components`. Moduł listy
+   życzeń dokłada do strony WŁASNY, wstrzyknięty w locie przez Vue arkusz
+   (osobny od pliku `wishlist.css`, nigdzie niewidoczny w źródłach) — reguła
+   bez warstwy zawsze wygrywa z regułą w warstwie, niezależnie od
+   specyficzności selektora, więc żadna reguła w warstwie by tu nie
+   wystarczyła. */
+
+/* Kolor na hover: rozjaśniony atrament, ten sam token co nazwa produktu
+   w zajawce (`.q-pcard:hover .q-pcard__name`), nie barwa odnośnika —
+   inaczej stan spoczynku i najazd wyglądają identycznie i interakcja
+   znika. Wstrzyknięty arkusz: `.wishlist-list-item:hover .wishlist-list-item-title{color:#2fb5d2}`. */
+.wishlist-container .wishlist-list-item:hover .wishlist-list-item-title {
+    color: var(--q-neutral-8);
+}
+
+/* Menu modułu pod kebabem (`.dropdown-menu`) nie jest już w użyciu — „Zmień
+   nazwę"/„Udostępnij"/„Usuń" stoją pod WŁASNYM `.q-dropdown`
+   (`assets/js/islands/wishlist-lists.js`), nie pod oryginalnym mechanizmem
+   Vue. Kliknięcie kebaba jest przechwytywane, zanim dotrze do Vue, więc
+   `.dropdown-menu` w praktyce nigdy się nie wyrenderuje — to ukrycie jest
+   tylko zabezpieczeniem na wypadek, gdyby jednak się pojawiło. Selektor
+   o wyższej specyficzności niż wstrzyknięty arkusz modułu z tego samego
+   powodu co reguła hover wyżej. */
+.wishlist-container .wishlist-list-item .dropdown-menu {
+    display: none;
+}

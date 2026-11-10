@@ -1,0 +1,151 @@
+{**
+ * For the full copyright and license information, please view the
+ * LICENSE.md file that was distributed with this source code.
+ *}
+{extends file='checkout/_partials/steps/checkout-step.tpl'}
+
+{* Zdanie liczy silnik (`quince_engine`), z koszyka — stąd szablon kroku go
+   nie dosięgnie (`{render}` ma własny, odcięty zakres zmiennych). *}
+{block name='step_summary'}
+  {if isset($qAdresStreszczenie)}{$qAdresStreszczenie}{/if}
+{/block}
+
+{block name='step_content'}
+  <div class="js-address-form">
+    <form
+      method="POST"
+      action="{url entity='order' params=['id_address' => $id_address]}"
+      data-refresh-url="{url entity='order' params=['ajax' => 1, 'action' => 'addressForm', 'id_address' => $id_address]}"
+      data-ps-action="form-validation"
+    >
+      {* Zdanie „ten adres posłuży za oba" i nagłówek „Shipping Address" mają
+         sens tylko przy wyborze z ZAPISANYCH adresów (klient widzi, co
+         wybrał). Przy świeżym formularzu nagłówek roli stoi już w
+         `address-form.tpl`, zależny od „Kupuję jako" — ten tutaj by go
+         dublował, złym tekstem dla firmy. *}
+      {if !$show_delivery_address_form}
+        {if $use_same_address}
+          <p>
+            {if $cart.is_virtual}
+              {l s='The selected address will be used as your personal address (for invoice).' d='Shop.Theme.Checkout'}
+            {else}
+              {l s='The selected address will be used both as your personal address (for invoice) and as your delivery address.' d='Shop.Theme.Checkout'}
+            {/if}
+          </p>
+        {else}
+          <p class="h3">{l s='Shipping Address' d='Shop.Theme.Checkout'}</p>
+        {/if}
+      {/if}
+
+      {if $show_delivery_address_form}
+        <div id="delivery-address">
+          {render file                      = 'checkout/_partials/address-form.tpl'
+            ui                        = $address_form
+            use_same_address          = $use_same_address
+            type                      = "delivery"
+            form_has_continue_button  = $form_has_continue_button
+            previous_step             = $previous_step
+          }
+        </div>
+      {elseif $customer.addresses|count> 0}
+        <div id="delivery-addresses" class="address__list js-address-selector">
+          {include  file        = 'checkout/_partials/address-selector-block.tpl'
+            addresses   = $customer.addresses
+            name        = "id_address_delivery"
+            selected    = $id_address_delivery
+            type        = "delivery"
+            interactive = !$show_delivery_address_form and !$show_invoice_address_form
+          }
+        </div>
+
+        {if isset($delivery_address_error)}
+          <p class="alert alert-danger js-address-error" name="alert-delivery" id="id-failure-address-{$delivery_address_error.id_address}">{$delivery_address_error.exception}</p>
+        {else}
+          <p class="alert alert-danger js-address-error" name="alert-delivery" style="display: none">{l s='Your address is incomplete, please update it.' d='Shop.Notifications.Error'}</p>
+        {/if}
+
+        <div class="buttons-wrapper mb-3">
+          <a href="{$new_address_delivery_url}" class="btn btn-outline-primary">
+            <i class="material-icons" aria-hidden="true">&#xE145;</i>
+            {l s='Add new address' d='Shop.Theme.Actions'}
+          </a>
+        </div>
+
+        {if $use_same_address && !$cart.is_virtual}
+          <a data-link-action="different-invoice-address" href="{$use_different_address_url}" class="btn btn-basic">
+            {l s='Billing address differs from shipping address' d='Shop.Theme.Checkout'}
+          </a>
+        {/if}
+
+        {* Adres do faktury: tylko przy wyborze z zapisanych adresów. Przy
+           świeżym formularzu drugi adres stoi w panelu wewnątrz
+           `address-form.tpl` (checkbox „Kupuję jako" / „inny adres"),
+           w tym samym żądaniu co pierwszy — patrz override
+           `CheckoutAddressesStep`. *}
+        {if !$use_same_address}
+          <p class="h3 mt-4">{l s='Your Invoice Address' d='Shop.Theme.Checkout'}</p>
+
+          {if $show_invoice_address_form}
+            <div id="invoice-address">
+              {render file                      = 'checkout/_partials/address-form.tpl'
+                ui                        = $address_form
+                use_same_address          = $use_same_address
+                type                      = "invoice"
+                form_has_continue_button  = $form_has_continue_button
+                previous_step             = $previous_step
+              }
+            </div>
+          {else}
+            <div id="invoice-addresses" class="address__list js-address-selector">
+              {include  file        = 'checkout/_partials/address-selector-block.tpl'
+                addresses   = $customer.addresses
+                name        = "id_address_invoice"
+                selected    = $id_address_invoice
+                type        = "invoice"
+                interactive = !$show_delivery_address_form and !$show_invoice_address_form
+              }
+            </div>
+
+            {if isset($invoice_address_error)}
+              <p class="alert alert-danger js-address-error" name="alert-invoice" id="id-failure-address-{$invoice_address_error.id_address}">{$invoice_address_error.exception}</p>
+            {else}
+              <p class="alert alert-danger js-address-error" name="alert-invoice" style="display: none">{l s='Your address is incomplete, please update it.' d='Shop.Notifications.Error'}</p>
+            {/if}
+
+            <a href="{$new_address_invoice_url}" class="btn btn-outline-primary w-100 w-md-auto">
+              <i class="material-icons" aria-hidden="true">&#xE145;</i>
+              {l s='Add new address' d='Shop.Theme.Actions'}
+            </a>
+          {/if}
+        {/if}
+      {/if}
+
+      {* Dalej i Wstecz stoją w jednym rzędzie w stopce `address-form.tpl`,
+         nie tutaj: krok otwiera własny `<form>`, ale PrestaShop zagnieżdża
+         w nim drugi (ten w formularzu adresu), a przeglądarka zamyka ZEWNĘTRZNY
+         na pierwszym napotkanym `</form>`, czyli na tym wewnętrznym. Przycisk
+         Dalej MUSI więc stać w formularzu adresu, który naprawdę działa —
+         inaczej klik nic by nie wysłał. Przycisk Wstecz nie wysyła formularza,
+         więc dla jego działania nie ma to znaczenia, ale stoi tam razem
+         z Dalej, żeby był z nim w jednym rzędzie, tak jak w prototypie.
+
+         Ten wiersz zostaje tylko dla samodzielnej edycji adresu, gdzie
+         formularz nie ma własnego przycisku dalej. *}
+      {if !$form_has_continue_button}
+        <div class="buttons-wrapper mt-3">
+          {include file='checkout/_partials/checkout-step-buttons.tpl' show_back_button=false submit_name='confirm-addresses' submit_value='1'}
+          <input type="hidden" id="not-valid-addresses" class="js-not-valid-addresses" value="{$not_valid_addresses}">
+        </div>
+      {/if}
+    </form>
+
+    {capture name="address_selector_bottom"}{hook h='displayAddressSelectorBottom'}{/capture}
+    {if $smarty.capture.address_selector_bottom}
+      {block name='address_selector_bottom'}
+        <div class="address-selector-bottom mt-3">
+          {$smarty.capture.address_selector_bottom nofilter}
+        </div>
+      {/block}
+    {/if}
+  </div>
+{/block}

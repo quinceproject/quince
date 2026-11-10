@@ -1,0 +1,187 @@
+@layer quince.components {
+    /*
+       Oferta PDF: przycisk na karcie produktu i szuflada z listą ofertową.
+
+       Reguły przepisane z makiety strony produktu. Treść przynosi
+       moduł `quince_offers`, wygląd jest tutaj — moduł bez motywu ma wyglądać
+       jak formularz sklepu, a nie jak wtrącona wyspa.
+    */
+
+    /* Odmiana „quiet" stoi w `components/button.css`: używa jej także szuflada
+       specjalisty i kolumna opisu, więc należy do zestawu przycisków, a nie do
+       arkusza oferty. */
+
+    /* ── potwierdzenie po wysłaniu ────────────────────────────────────────
+       Formularz znika, zostaje jedno zdanie i numer. Numer jest jedyną rzeczą,
+       po której klient może się do nas odwołać, więc stoi osobno i większym
+       pismem, a nie w środku zdania. */
+    .q-offer__done {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+    }
+
+    .q-offer__done-icon {
+        inline-size: 3rem;
+        block-size: 3rem;
+        color: var(--q-fill-primary);
+    }
+
+    .q-offer__done-title {
+        margin: 0;
+        font-size: var(--q-fs-h6);
+    }
+
+    .q-offer__done-text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    .q-offer__done-number {
+        margin: 0;
+        padding: var(--q-space-xs) var(--q-space-sm);
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-sm);
+
+        font-size: var(--q-fs-md);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .02em;
+    }
+
+    .q-drawer__heading {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-h6);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-drawer__lead {
+        margin: 0 0 var(--q-space-md);
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+
+    /* Dwa przyciski w stopce jeden pod drugim: oba są pełnej szerokości, bo oba
+       dotyczą całej listy, a nie pojedynczej pozycji. */
+    .q-drawer__foot-actions {
+        display: grid;
+        gap: var(--q-space-xs);
+    }
+
+    /* Zgoda na newsletter: pole wyboru motywu, odsunięte od pól wyżej.
+       Sam kwadrat, znak i ognisko należą do komponentu `q-choice`. */
+    .q-offer__consent {
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* ── lista ofertowa ──────────────────────────────────────────────────
+       Kilka produktów w jednej ofercie. Nagłówek z licznikiem, bo bez niego jeden
+       kafelek wygląda na podsumowanie bieżącego produktu, a nie na listę, do której
+       można dołożyć następne. */
+    .q-offer {
+        margin-block-end: var(--q-space-md);
+        padding: var(--q-space-sm);
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-offer__head {
+        margin-block-end: var(--q-space-xs);
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-meta-color);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+    }
+
+    .q-offer__list {
+        display: grid;
+        gap: var(--q-space-xs);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-offer__item {
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-xs);
+        background: var(--q-card-bg);
+        border-radius: var(--q-radius-sm);
+    }
+
+    .q-offer__photo {
+        display: grid;
+        place-items: center;
+        inline-size: 2.75rem;
+        block-size: 2.75rem;
+        overflow: hidden;
+    }
+
+    .q-offer__photo img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-offer__text {
+        display: grid;
+        gap: 1px;
+        min-inline-size: 0;
+    }
+
+    /* Nazwa w jednym wierszu z wielokropkiem: lista ma pokazywać, ILE i CO, a nie
+       być drugim opisem produktu. Pełną nazwę klient widział na karcie, z której
+       ten produkt dodał. */
+    .q-offer__name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-offer__price {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-price-current);
+    }
+
+    .q-offer__remove {
+        display: grid;
+        place-items: center;
+
+        inline-size: 1.75rem;
+        block-size: 1.75rem;
+        padding: 0;
+
+        background: none;
+        border: 0;
+        border-radius: var(--q-radius-sm);
+        color: var(--q-meta-color);
+        cursor: pointer;
+    }
+
+    .q-offer__remove:hover {
+        background: var(--q-surface-hover);
+        color: var(--q-text-strong);
+    }
+
+    /* Pola formularza w szufladzie mają ten sam rytm co pola powiadomienia
+       o dostępności: etykieta siedzi na górnej kresce, więc wiersz potrzebuje
+       odstępu, żeby napis nie stykał się z tym, co stoi wyżej. */
+    .q-offer__field {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-offer__message {
+        margin-block-start: var(--q-space-md);
+        margin-block-end: 0;
+    }
+}

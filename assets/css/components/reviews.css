@@ -1,0 +1,330 @@
+@layer quince.components {
+    /*
+       Opinie o produkcie w akordeonie karty.
+
+       Reguły przepisane z makiety strony produktu. Treść przynosi
+       moduł `productcomments`, ale rysuje ją silnik i motyw, bo lista opinii ma
+       wyglądać jak reszta strony, a nie jak wstawka z cudzego modułu.
+    */
+
+    /* ── podsumowanie ────────────────────────────────────────────────────
+       Średnia po lewej, rozkład ocen po prawej. Wciągnięta powierzchnia
+       oddziela je od listy bez rysowania ramki. */
+
+    .q-reviews__summary {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-lg);
+
+        padding: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+
+        background: var(--q-surface-sunken);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-reviews__avg {
+        flex: none;
+        text-align: center;
+    }
+
+    .q-reviews__avg-number {
+        font-size: var(--q-fs-h2);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-reviews__avg-count {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-reviews__bars {
+        flex: 1;
+        display: grid;
+        gap: 3px;
+    }
+
+    .q-reviews__bar {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-reviews__bar-label {
+        flex: none;
+        inline-size: 1.5rem;
+    }
+
+    .q-reviews__bar-track {
+        flex: 1;
+        block-size: 6px;
+        overflow: hidden;
+
+        background: var(--q-border-subtle);
+        border-radius: var(--q-radius-pill);
+    }
+
+    .q-reviews__bar-fill {
+        display: block;
+        block-size: 100%;
+        background: var(--q-star-fill);
+    }
+
+    .q-reviews__bar-count {
+        flex: none;
+        inline-size: 1.5rem;
+        text-align: end;
+    }
+
+    /* ── jedna opinia ────────────────────────────────────────────────────
+       Opinia jest jednym obiektem, nie zbiorem wierszy. Nagłówek z inicjałami
+       otwiera wpis i nazywa autora, treść stoi w jednej kolumnie pod nim,
+       a stopka rozdziela informację od działania.
+
+       Ten sam kształt co wątek pytania i odpowiedzi obok: obie sekcje stoją
+       w tym samym akordeonie, więc mają czytać się jak jedna rodzina. */
+
+    .q-reviews {
+        /* Jedna miara na kółko i na wcięcie treści: zmiana kółka przesuwa
+           kolumnę tekstu sama. */
+        --q-review-avatar: 2rem;
+        --q-review-indent: calc(var(--q-review-avatar) + var(--q-space-sm));
+    }
+
+    .q-review + .q-review {
+        margin-block-start: var(--q-space-lg);
+        padding-block-start: var(--q-space-lg);
+        border-block-start: 1px solid var(--q-border-subtle);
+    }
+
+    .q-review__head {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-xs);
+    }
+
+    /* Inicjały zamiast zdjęcia: klient nie wgrywa awatara, a puste kółko nic
+       nie mówi. */
+    .q-review__avatar {
+        display: grid;
+        place-items: center;
+        flex: none;
+
+        inline-size: var(--q-review-avatar);
+        block-size: var(--q-review-avatar);
+        border-radius: 50%;
+
+        background: var(--q-surface-sunken);
+        color: var(--q-text-muted);
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        line-height: 1;
+    }
+
+    .q-review__author {
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-review__date {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Wszystko poniżej nagłówka w jednej kolumnie, wciętej pod nazwisko. */
+    .q-review__body {
+        padding-inline-start: var(--q-review-indent);
+    }
+
+    /* Ocena w osobnej linii, nie zepchnięta na prawą krawędź karty: przy
+       szerokiej karcie gwiazdki lądowały pół ekranu od opinii, której dotyczą. */
+    .q-review__stars {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        margin: 0 0 var(--q-space-xs);
+    }
+
+    .q-review__value {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    .q-review__title {
+        margin: 0 0 2px;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-text-strong);
+    }
+
+    .q-review__text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        line-height: var(--q-lh-relaxed);
+        color: var(--q-text-body);
+    }
+
+    /* Stopka: po lewej informacja, po prawej działanie. Wcześniej jeden przycisk
+       robił za jedno i drugie, więc licznik wyglądał na klikalny, a przycisk
+       na etykietę. */
+    .q-review__foot {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    .q-review__helpful-count {
+        font-size: var(--q-fs-xs);
+        color: var(--q-meta-color);
+    }
+
+    /* Przycisk odsunięty na koniec wiersza i obrysowany: to jedyne działanie
+       przy opinii, więc ma wyglądać na klikalne, a nie na kolejny napis. */
+    .q-review__helpful-btn {
+        margin-inline-start: auto;
+        padding: 4px 12px;
+
+        background: none;
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-pill);
+
+        font: inherit;
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+        cursor: pointer;
+
+        transition: border-color 120ms ease-out, color 120ms ease-out;
+    }
+
+    .q-review__helpful-btn:hover {
+        border-color: var(--q-fill-primary);
+        color: var(--q-text-strong);
+    }
+
+    .q-review__helpful-btn[disabled] {
+        border-color: var(--q-border-subtle);
+        color: var(--q-text-disabled);
+        cursor: default;
+    }
+
+    /* ── stopka sekcji ─────────────────────────────────────────────────── */
+
+    .q-reviews__actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-md);
+    }
+
+    /* ── brak opinii ───────────────────────────────────────────────────── */
+
+    .q-empty {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+        color: var(--q-meta-color);
+    }
+
+    .q-empty p {
+        margin: 0;
+    }
+
+    /* ── formularz opinii ──────────────────────────────────────────────── */
+
+    /* Wybór oceny na samych polach wyboru, bez skryptu. Gwiazdki stoją
+       w znacznikach od piątki do jedynki, więc „ta i wszystkie mocniejsze"
+       da się złapać sąsiedztwem w prawo. Wizualnie odwracamy je z powrotem. */
+    .q-stars {
+        margin: 0 0 var(--q-space-md);
+        padding: 0;
+        border: 0;
+    }
+
+    .q-stars__set {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+        gap: 2px;
+    }
+
+    .q-stars__label {
+        font-size: var(--q-fs-h5);
+        line-height: 1;
+        color: var(--q-border-subtle);
+        cursor: pointer;
+    }
+
+    .q-stars__input:checked ~ .q-stars__label {
+        color: var(--q-star-fill);
+    }
+
+    /* Pod kursorem zaznaczenie ustępuje podglądowi: najpierw gasimy cały rząd,
+       potem zapalamy gwiazdkę pod kursorem i te słabsze od niej.
+
+       „Słabsze" to w znacznikach te DALEJ, bo gwiazdki stoją od piątki do
+       jedynki — inaczej nie dałoby się ich złapać selektorem, który sięga
+       tylko w przód. Wizualnie kolejność wraca przez `row-reverse`. */
+    .q-stars__set:hover .q-stars__label {
+        color: var(--q-border-subtle);
+    }
+
+    /* Zestaw w selektorze powtórzony celowo: bez niego reguła gasząca wyżej ma
+       większą wagę i gwiazdka pod kursorem zostawała zgaszona. */
+    .q-stars__set:hover .q-stars__label:hover,
+    .q-stars__set:hover .q-stars__label:hover ~ .q-stars__label {
+        color: var(--q-star-fill);
+    }
+
+    .q-stars__input:focus-visible + .q-stars__label {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Etykieta siedzi na górnej kresce pola, więc wiersz potrzebuje odstępu. */
+    .q-review-form__field {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-review-form__hint {
+        margin: var(--q-space-xs) 0 0;
+        font-size: var(--q-fs-xs);
+        color: var(--q-field-border-invalid);
+    }
+
+    .q-review-form__done {
+        display: grid;
+        justify-items: center;
+        gap: var(--q-space-sm);
+        padding-block: var(--q-space-lg);
+        text-align: center;
+    }
+
+    .q-review-form__done-icon {
+        inline-size: 3rem;
+        block-size: 3rem;
+        color: var(--q-fill-primary);
+    }
+
+    .q-review-form__done-title {
+        margin: 0;
+        font-size: var(--q-fs-h6);
+    }
+
+    .q-review-form__done-text {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-meta-color);
+    }
+}

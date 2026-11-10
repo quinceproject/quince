@@ -1,0 +1,1003 @@
+/* ===================================================================
+   Quince — pasy strony głównej
+
+   Przeniesione z makiety strony głównej. Nowe jest tu wyłącznie
+   OPAKOWANIE: tło pasa, układ kolumn, kafel działu, duża zajawka i bohater
+   pasa. Zajawka produktu, cena, plakietka, przycisk i taśma to komponenty
+   motywu i nie są tu powtarzane — pas sięga po nie takie, jakie są na
+   listingu.
+
+   Pas ma skóry: --mist, --stone, --ink, --brand, --gradient, --photo.
+   Barwy wyłącznie z palety silnika, żaden odcień nie jest wpisany wprost.
+   =================================================================== */
+
+@layer quince.layout {
+    :root {
+        /* Cień pod napisem leżącym na fotografii. Zasłona gradientowa radzi
+        sobie z ciemnym zdjęciem, ale nie z jasnym fragmentem pod jedną
+        linijką — wtedy znika sam napis, nie cały blok. Cień działa punktowo
+        i nie przyciemnia materiału. */
+        --q-ps-text-shadow: 0 1px 3px rgb(0 0 0 / .85), 0 0 18px rgb(0 0 0 / .55);
+        --q-ps-pad: var(--q-space-xl);
+        --q-ps-radius: var(--q-radius-panel);
+        --q-ps-hero-media: 26rem;
+    }
+
+    /* ── pas sekcji ──────────────────────────────────────────────────
+           Tło idzie od krawędzi do krawędzi okna, treść zostaje w pojemniku
+           strony. Wariant „w ramce" trzyma się pojemnika i ma zaokrąglone rogi. */
+    .q-ps {
+        padding-block: var(--q-ps-pad);
+    }
+
+    /* `clip`, nie `hidden`: nie tworzy nowego kontekstu przewijania (CSS
+       dopisuje `overflow-y: auto`, gdy jedna oś zostaje `visible` a druga
+       nie — `clip` na obu osiach tego unika).
+       Bez tego pas `--bleed` (bez `.q-container`, czyli bez podbitki, którą
+       tor karuzeli zakłada do zniesienia swojego ujemnego marginesu —
+       patrz `.q-carousel__track` w carousel.css) rozpychał stronę w poziomie
+       dokładnie o `--q-space-md`, bo ujemny margines nie miał czego znieść. */
+    .q-ps__in {
+        position: relative;
+        z-index: 1;
+        overflow: clip;
+    }
+
+    /* Pas od krawędzi do krawędzi nie ma wyściółki w pionie: slajder ma
+       stykać się z nagłówkiem sklepu, tak jak w makiecie, gdzie stoi poza
+       pasem sekcji. */
+    .q-ps--bleed {
+        padding-block: 0;
+    }
+
+
+    /* Ciche tła sekcji biorą szarości skali neutralnej, nie rozjaśniony żółty.
+           Kremowy i piaskowy odcień były barwą marki ściągniętą do tła i przez to
+           cała strona wpadała w jeden, żółtawy ton.
+    
+           Dwa stopnie, bo jeden nie wystarcza: tło strony ma #fafafa, więc pas
+           cichy musi być od niego ciemniejszy na tyle, żeby dało się go zobaczyć,
+           a pas mocniejszy ma odcinać sekcję wyraźnie. */
+    /* Pas w pojemniku strony zamiast od krawędzi do krawędzi. Tło i zaokrąglenie
+           przechodzą wtedy na wewnętrzny pojemnik, bo to on jest widocznym blokiem;
+           sam pas zostaje przezroczysty i niesie tylko odstęp od sąsiadów. */
+    /* Skóry pasa stoją w arkuszu niżej, więc samo `background: none` na
+           `--boxed` przegrywało z nimi przy równej specyficzności i tło i tak szło
+           przez całą szerokość. Stąd wyliczenie skór w selektorze. */
+    .q-ps--boxed,
+    .q-ps--boxed:is(.q-ps--mist, .q-ps--stone, .q-ps--ink, .q-ps--brand, .q-ps--gradient, .q-ps--photo) {
+        background: none;
+    }
+
+    .q-ps--boxed > .q-ps__in {
+        padding: var(--q-ps-pad) var(--q-space-md);
+        border-radius: var(--q-ps-radius);
+    }
+
+    .q-ps--boxed.q-ps--mist  > .q-ps__in {
+        background: var(--q-neutral-4);
+    }
+
+    .q-ps--boxed.q-ps--stone > .q-ps__in {
+        background: var(--q-neutral-6);
+    }
+
+    .q-ps--boxed.q-ps--ink   > .q-ps__in {
+        background: var(--q-neutral-12);
+    }
+
+    .q-ps--boxed.q-ps--brand > .q-ps__in {
+        background: var(--q-fill-primary);
+    }
+
+    /* Gradient jako tło pasa: dwie barwy z palety sklepu i kąt. Ta sama
+           mechanika, co na slajdzie — pas i slajd mają wyglądać tak samo, gdy
+           sprzedawca ustawi im to samo tło. */
+    .q-ps--gradient {
+        background: linear-gradient(
+        var(--q-ps-angle, 120deg),
+        var(--q-ps-from, var(--q-neutral-4)),
+        var(--q-ps-to, var(--q-neutral-6))
+        );
+    }
+
+    .q-ps--boxed.q-ps--gradient > .q-ps__in {
+        background: linear-gradient(
+        var(--q-ps-angle, 120deg),
+        var(--q-ps-from, var(--q-neutral-4)),
+        var(--q-ps-to, var(--q-neutral-6))
+        );
+    }
+
+    .q-ps--boxed.q-ps--gradient {
+        background: none;
+    }
+
+    .q-ps--mist {
+        background: var(--q-neutral-4);
+    }
+
+    .q-ps--stone {
+        background: var(--q-neutral-6);
+    }
+
+    .q-ps--brand {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-ps--ink {
+        background: var(--q-neutral-12);
+        color: var(--q-neutral-1);
+    }
+
+    /* Zdjęcie pod spodem z zasłoną: ta sama zasada, co w slajderze — gradient,
+           nie płaska warstwa, żeby materiał był nadal widoczny. */
+    .q-ps--photo {
+        position: relative;
+        background: var(--q-ps-photo) center / cover no-repeat;
+        color: var(--q-neutral-1);
+    }
+
+    .q-ps--photo::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, var(--q-slider-veil-strong), var(--q-slider-veil) 55%, var(--q-slider-veil-clear));
+    }
+
+    .q-ps--light,
+    .q-ps--light :is(h1, h2, h3, h4, h5, h6) {
+        color: var(--q-neutral-1);
+    }
+
+    /* Nagłówki i cichy tekst na ciemnym biorą barwę pasa. */
+    .q-ps--brand :is(h1,h2,h3,h4,h5,h6),
+    .q-ps--ink :is(h1,h2,h3,h4,h5,h6),
+    .q-ps--photo :is(h1,h2,h3,h4,h5,h6) {
+        color: inherit;
+    }
+
+    /* ── nagłówek sekcji ─────────────────────────────────────────────
+           Tytuł po lewej, wyjście do listy po prawej. Odstęp pod spodem niesie
+           rząd, więc tytuł oddaje swój. */
+    .q-ps__head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-ps__more {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+        flex: none;
+
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        color: inherit;
+        opacity: .75;
+        white-space: nowrap;
+    }
+
+    .q-ps__more:hover {
+        color: inherit;
+        opacity: 1;
+    }
+
+    /* Napis nagłówka jako odnośnik wygląda jak nagłówek: barwę i krój bierze
+       z niego, a pod kursorem zmienia barwę. Podkreśleń w projekcie nie ma. */
+    .q-ps__title-link {
+        color: inherit;
+    }
+
+    .q-ps__title-link:hover {
+        color: var(--q-link-hover);
+    }
+
+    /* Telefon: odnośnik „zobacz wszystkie" znika, bo zabierał połowę wiersza
+       nagłówka i spychał napis na trzy linijki. Jego rolę przejmuje sam
+       nagłówek, który prowadzi w to samo miejsce. */
+    @media (max-width: 767px) {
+        .q-ps__more {
+            display: none;
+        }
+    }
+
+    /* Nadtytuł: z jakiego działu jest ta sekcja. W pigułce, bo na pełnej barwie
+           sam napis ginie w płaszczyźnie. */
+    /* Nadtytuł trzyma szerokość swojego napisu i bierze kształt plakietki
+           motywu, nie pigułki: pigułkę w projekcie ma filtr i cecha, a to jest
+           znacznik, czyli ta sama rzecz co plakietka na zajawce.
+    
+           `align-self` jest konieczne, bo nadtytuł stoi raz w siatce, raz w pasie
+           elastycznym — a tam dziecko rozciąga się na całą szerokość i napis na
+           trzy słowa zajmował cały kafel. */
+    .q-ps__over {
+        display: inline-block;
+        align-self: start;
+        justify-self: start;
+        margin: 0 0 var(--q-space-sm);
+        padding-inline: var(--q-space-sm);
+        padding-block: 2px;
+
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-bold);
+        letter-spacing: .06em;
+        text-transform: uppercase;
+
+        background: var(--q-ps-over-bg, var(--q-neutral-12));
+        color: var(--q-ps-over-label, var(--q-neutral-1));
+        border-radius: var(--q-radius-sm);
+    }
+
+    :is(.q-ps--ink,   .q-ps--photo) .q-ps__over {
+        --q-ps-over-bg: rgb(255 255 255 / .12);
+    }
+
+    /* ── pojedynczy produkt na całą szerokość ────────────────────────
+           Zdjęcie w jednej kolumnie, cała reszta w drugiej: hasło, zdanie, cechy,
+           cena i akcja. To jest ta forma, której nie dawała żadna siatka kart —
+           produkt dostaje tu tyle miejsca, co cała sekcja. */
+    /* Zdjęcie bierze prawie połowę pasa. Przy stałych 26 rem kolumna tekstu
+           robiła się tak szeroka, że zdanie kończyło się w jej połowie i prawa
+           strona pasa świeciła pustką. */
+    .q-ps__hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+        gap: var(--q-space-xl);
+        align-items: center;
+    }
+
+    .q-ps__hero-media {
+        display: grid;
+        place-items: center;
+
+        /* Kadr prostokątny, nie kwadratowy: kolumna ma tu około 660 px, więc
+        kwadrat dawał 660 px wysokości i pod treścią obok zostawał pusty pas. */
+        aspect-ratio: 4 / 3;
+        background: var(--q-ps-media-bg, var(--q-surface-raised));
+        border-radius: var(--q-ps-radius);
+    }
+
+    /* Obraz wpisuje się w kadr, zamiast go rozpychać.
+    
+           Samo `max-block-size` nie wystarczyło: element siatki ma domyślnie
+           `min-block-size: auto`, czyli nie wolno mu zmaleć poniżej własnej
+           wysokości — zdjęcie 600 px narzucało ją kadrowi i proporcja 4:3 nie
+           miała żadnego skutku. Dopiero wyzerowany rozmiar najmniejszy oddaje
+           rozstrzygnięcie proporcji kadru. */
+    .q-ps__hero-media img {
+        min-inline-size: 0;
+        min-block-size: 0;
+    }
+
+    .q-ps__hero-title {
+        margin: 0 0 var(--q-space-sm);
+        font-size: var(--q-fs-h2);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-ps__hero-lead {
+        margin: 0 0 var(--q-space-md);
+        line-height: var(--q-lh-relaxed);
+    }
+
+    /* Cechy jako pigułki, nie jako tabela: w sekcji reklamowej liczą się trzy
+           rzeczy do rzucenia okiem, a nie pełna specyfikacja. */
+    .q-ps__specs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+        margin: 0 0 var(--q-space-md);
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-ps__spec {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+
+        padding: var(--q-space-xs) var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+
+        background: var(--q-ps-spec-bg, var(--q-neutral-5));
+        border-radius: var(--q-radius-sm);
+    }
+
+    :is(.q-ps--ink,   .q-ps--photo) .q-ps__spec {
+        --q-ps-spec-bg: rgb(255 255 255 / .1);
+    }
+
+    /* Welon na żółtym dawał pigułkę o ton jaśniejszą od tła — na zrzucie nie
+           dało się jej odróżnić od pasa. Pełna biel robi z niej osobny element. */
+    .q-ps--brand .q-ps__spec {
+        --q-ps-spec-bg: var(--q-surface-raised);
+    }
+
+    /* Na szarym tle pigułka bierze biel, żeby odciąć się od pasa. */
+    :is(.q-ps--mist, .q-ps--stone) .q-ps__spec {
+        --q-ps-spec-bg: var(--q-surface-raised);
+    }
+
+    /* Wiersz ceny i akcji: cena po lewej, przyciski po prawej. */
+    .q-ps__buy {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: var(--q-space-md) var(--q-space-lg);
+    }
+
+    .q-ps__price {
+        display: flex;
+        align-items: baseline;
+        gap: var(--q-space-sm);
+    }
+
+    .q-ps__price-now {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h3);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-ps__price-was {
+        font-size: var(--q-fs-base);
+        text-decoration: line-through;
+        opacity: .65;
+    }
+
+    /* Przyciski stoją tuż obok ceny. Dosunięte do przeciwległej krawędzi
+           odjeżdżały o pół sekcji i traciły z nią związek. */
+    .q-ps__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+    }
+
+    /* W pasie z jednym produktem cena i akcje idą w osobnych wierszach.
+           Obok siebie mieszczą się w kaflu, gdzie miejsca jest mało i każdy wiersz
+           kosztuje; tutaj sekcja jest szeroka, a kwota i wezwanie do zakupu to dwie
+           różne rzeczy i nie muszą dzielić linii. */
+    .q-ps__hero .q-ps__buy {
+        display: grid;
+        justify-items: start;
+        gap: var(--q-space-md);
+    }
+
+    .q-ps--center .q-ps__hero .q-ps__buy,
+    .q-ps__hero--center .q-ps__buy {
+        justify-items: center;
+    }
+
+    /* ── duża zajawka ───────────────────────────────────────────────
+           Produkt, który dostaje więcej miejsca niż zajawka z listingu: zdjęcie
+           bez przycinania, nazwa, cena i akcja, a przy układzie obok także zdanie
+           opisu. Dwa ułożenia, bo kafel bywa wysoki i wąski albo niski i szeroki:
+    
+             --stack  zdjęcie nad nazwą, do kafla zajmującego dwie kolumny w pionie
+             --side   zdjęcie obok nazwy, do kafla szerokiego na pół rzędu
+    
+           Wysokość bierze z wiersza, w którym stoi, więc zrównuje się z zajawkami
+           obok. */
+    /* Cień i zachowanie pod kursorem z tych samych tokenów, co zajawka
+       listingu: duża zajawka stoi obok niej w jednym rzędzie i ma być tą samą
+       kartą, tylko większą. Bez cienia leżała płasko na tle, a sąsiadki
+       odstawały od niego. */
+    .q-ps__big {
+        display: grid;
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+        color: var(--q-body-color);
+
+        transition: box-shadow 200ms ease-out, border-color 200ms ease-out;
+    }
+
+    .q-ps__big:hover {
+        border-color: var(--q-fill-primary);
+    }
+
+    /* Kadr ma proporcję, nie resztę wysokości. Przy `1fr` duża zajawka brała
+           tyle miejsca, ile dał jej wiersz, czyli stawała się najwyższym elementem
+           i to MAŁE zajawki rozciągały się do niej. Proporcja odwraca zależność:
+           duża zajawka ma własną wysokość, zbliżoną do naturalnej wysokości
+           zajawki z listingu, i nikt nikogo nie rozciąga. */
+    .q-ps__big--stack {
+        grid-template-rows: auto auto;
+    }
+
+    .q-ps__big--stack .q-ps__big-media {
+        aspect-ratio: var(--q-big-ratio, 16 / 9);
+        block-size: auto;
+    }
+
+    .q-ps__big--side {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        align-items: center;
+    }
+
+    /* Bez wyściółki: zdjęcie wypełnia kadr i dochodzi do jego krawędzi, tak
+       jak na zajawce listingu. Wyściółka zostawiała wokół zdjęcia ramkę
+       z tła karty. */
+    .q-ps__big-media {
+        display: grid;
+        place-items: center;
+        block-size: 100%;
+        background: var(--q-pcard-media-bg);
+    }
+
+    /* Obraz wpisuje się w kadr, zamiast narzucać mu wysokość: element siatki
+           ma domyślnie `min-block-size: auto`. */
+    .q-ps__big-media img {
+        min-inline-size: 0;
+        min-block-size: 0;
+        max-inline-size: 100%;
+        max-block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-ps__big-body {
+        display: grid;
+        justify-items: start;
+        align-content: center;
+        gap: var(--q-space-xs);
+        padding: var(--q-space-md);
+    }
+
+    .q-ps__big-brand {
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        color: var(--q-meta-color);
+    }
+
+    .q-ps__big-title {
+        margin: 0;
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-snug);
+    }
+
+    .q-ps__big-lead {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-body-secondary-color);
+    }
+
+    .q-ps__big .q-ps__buy {
+        inline-size: 100%;
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-ps__big .q-ps__actions {
+        margin-inline-start: 0;
+    }
+
+    /* ── rząd: stały blok i przewijana taśma ────────────────────────
+           Pierwsza pozycja zajmuje kilka kolumn siatki i stoi nieruchomo; reszta
+           rzędu to taśma, która jedzie w bok. Dzięki temu wyróżniony produkt albo
+           baner zostaje na oku, a lista pod nim ma dowolną długość.
+    
+           Szerokość stałego bloku liczy się z gałki kolumn motywu: tyle pól siatki,
+           ile wskazał sprzedawca, razem z przerwami między nimi. Wyrażenie w jednej
+           linii, bo sklejarka arkuszy zjada spacje wokół „+" w zapisie rozbitym na
+           kilka wierszy.
+    
+           Wiersz ma jedną wysokość: `align-items: stretch` zrównuje stały blok
+           z taśmą, a zajawki w taśmie i tak mają wspólną wysokość z siatki. */
+    /* Rząd jest pasem elastycznym, nie siatką: długie wyrażenie szerokości
+           zapisane w `grid-template-columns` przeglądarka rozkładała na osobne
+           kolumny i zamiast dwóch pól wychodziły trzy, z czego jedno puste.
+    
+           Szerokość jednego pola liczy się RAZ, od szerokości całego rzędu, i stąd
+           biorą ją obie części: stały blok (tyle pól, ile wskazał sprzedawca)
+           i każda zajawka w taśmie. Dzięki temu karta w taśmie ma dokładnie tę samą
+           szerokość co karta w siatce obok.
+    
+           Miara `cqi` zamiast procentu, bo procent w zmiennej rozwiązuje się
+           dopiero w miejscu użycia — w taśmie odnosiłby się do taśmy, nie do rzędu.
+           Wyrażenia w jednej linii, bo sklejarka arkuszy zjada spacje wokół „+”
+           w zapisie rozbitym na kilka wierszy. */
+    .q-ps__mix {
+        --q-kol: var(--q-grid-columns, 4);
+        --q-span: var(--q-ps-span, 2);
+        --q-pole: calc((100cqi - (var(--q-kol) - 1) * var(--q-space-md)) / var(--q-kol));
+
+        container-type: inline-size;
+        display: flex;
+        gap: var(--q-space-md);
+        /* Bez rozciągania: każda część ma wysokość ze swojej treści. Wyrównanie
+        wysokości w wierszu bierze się z tego, że duża zajawka jest tak
+        zaprojektowana, żeby wyjść podobnie do zajawki z listingu. */
+        align-items: start;
+    }
+
+    /* Stały blok dociąga się do wysokości wiersza, a wiersz bierze ją z tego,
+           co w nim najwyższe. Baner ma własną treść krótką i bez tego zapadał się
+           do wysokości samego napisu. */
+    /* Udział kolumny: przy podziale kolumnowym tyle pól siatki, ile wskazał
+       sprzedawca, przy procentowym wprost procent. Procent przychodzi zmienną,
+       a nie stylem wpisanym w znacznik: wpisany wygrywał z arkuszem i kolumny
+       nie schodziły pod siebie na telefonie. */
+    .q-ps__mix-fixed {
+        flex: 0 0 var(--q-udzial, calc(var(--q-pole) * var(--q-span) + var(--q-space-md) * (var(--q-span) - 1)));
+        align-self: stretch;
+        display: grid;
+        min-inline-size: 0;
+    }
+
+    .q-ps__mix-rail {
+        flex: 1 1 0;
+        min-inline-size: 0;
+    }
+
+    /* Stały blok wypełnia swoją część wiersza na pełnej wysokości. */
+    .q-ps__mix-fixed {
+        display: grid;
+        min-inline-size: 0;
+    }
+
+    .q-ps__mix-fixed > * {
+        block-size: 100%;
+    }
+
+    /* ── trzy argumenty obok produktu ────────────────────────────────── */
+    .q-ps__reasons {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: var(--q-space-md);
+        margin-block-start: var(--q-space-lg);
+    }
+
+    /* Kafel argumentu: na ciemnym pasie welon w barwie napisu, na jasnym
+           powierzchnia karty. Jedna wartość nie obsłuży obu — welon biały na
+           jasnym tle jest niewidoczny. */
+    .q-ps__reason {
+        padding: var(--q-space-md);
+        background: var(--q-ps-reason-bg, var(--q-surface-raised));
+        border-radius: var(--q-ps-radius);
+    }
+
+    :is(.q-ps--ink, .q-ps--photo) .q-ps__reason {
+        --q-ps-reason-bg: rgb(255 255 255 / .08);
+    }
+
+    .q-ps__reason b {
+        display: block;
+        margin-block-end: var(--q-space-xs);
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h5);
+        font-weight: var(--q-weight-bold);
+    }
+
+    /* ── kafel kategorii ────────────────────────────────────────────
+           Wejście do działu: fotografia w tle, nad nią nadtytuł, nazwa działu,
+           zdanie i akcja. Zastępuje rząd małych kwadratów z samą nazwą — tamten
+           mówi tylko „jest taki dział", ten pokazuje, co w nim stoi.
+    
+           Dwie orientacje, bo pas bywa składany z różnej liczby kafli: pionowy
+           przy czterech i pięciu w rzędzie, poziomy przy dwóch i trzech, gdzie
+           kafel jest szeroki i pionowa proporcja zostawiałaby pustkę.
+    
+           Liczbę kolumn podaje sprzedawca; przy węższym oknie siatka schodzi
+           do dwóch i jednej kolumny bez osobnego ustawienia. */
+    .q-ps__cats {
+        display: grid;
+        grid-template-columns: repeat(var(--q-cats, 3), minmax(0, 1fr));
+        gap: var(--q-space-md);
+    }
+
+    .q-ps__cat {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        padding: var(--q-space-lg);
+        overflow: hidden;
+
+        background: var(--q-cat-photo) center / cover no-repeat, var(--q-neutral-12);
+        border-radius: var(--q-ps-radius);
+        color: var(--q-neutral-1);
+    }
+
+    /* Pionowy: kafel wyższy niż szerszy, treść przy dolnej krawędzi. */
+    .q-ps__cat--portrait {
+        aspect-ratio: var(--q-cat-ratio, 3 / 4);
+    }
+
+    /* Poziomy: treść w lewej połowie, zdjęcie zostaje widoczne po prawej.
+           Przy kaflu szerokim na pół pasa treść rozciągnięta na całą szerokość
+           kończyłaby się w jednej trzeciej i reszta świeciłaby pustką. */
+    .q-ps__cat--landscape {
+        aspect-ratio: var(--q-cat-ratio, 16 / 9);
+    }
+
+    .q-ps__cat--landscape .q-ps__cat-title,
+    .q-ps__cat--landscape .q-ps__cat-lead {
+        max-inline-size: 22ch;
+    }
+
+    .q-ps__cat::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgb(0 0 0 / .88) 20%, rgb(0 0 0 / .1) 75%);
+    }
+
+    /* Poziomy kafel ma treść z boku, więc i zasłona idzie z boku. */
+    .q-ps__cat--landscape::before {
+        background: linear-gradient(to right, rgb(0 0 0 / .88) 25%, rgb(0 0 0 / .1) 85%);
+    }
+
+    .q-ps__cat > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Napisy na zdjęciu dostają cień; przycisk nie, bo ma własne wypełnienie. */
+    .q-ps__cat :is(h1, h2, h3, h4, h5, h6, p, span):not(.q-btn):not(.q-btn *) {
+        text-shadow: var(--q-ps-text-shadow);
+    }
+
+    .q-ps__cat-title {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-h4);
+        line-height: var(--q-lh-tight);
+        color: inherit;
+    }
+
+    /* Własna deklaracja barwy, a nie samo dziedziczenie: kafel jest odnośnikiem,
+       więc po odwiedzeniu działu przeglądarka malowała jego treść barwą
+       odwiedzonego odnośnika. Nazwa miała swoją deklarację i zostawała biała,
+       zdanie pod nią robiło się fioletowe. */
+    .q-ps__cat-lead {
+        margin: 0 0 var(--q-space-md);
+        color: inherit;
+    }
+
+    .q-ps__cat .q-btn {
+        align-self: flex-start;
+    }
+
+    @media (max-width: 991px) {
+        .q-ps__hero {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-ps__hero-media {
+            max-inline-size: 20rem;
+        }
+
+        .q-ps__reasons {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .q-ps__big--side {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+    }
+
+}
+
+@layer quince.components {
+    /* Karuzela w rzędzie oddaje własny kontener miary: szerokość pozycji ma
+           wynikać z rzędu, a nie z taśmy, która jest od niego węższa. */
+    .q-ps__mix-rail .q-carousel {
+        container-type: normal;
+        margin-block-start: 0;
+        block-size: 100%;
+    }
+
+    .q-ps__mix-rail .q-carousel__item {
+        flex: 0 0 var(--q-pole);
+    }
+
+    /* Taśma w komponencie wychodzi ujemnym marginesem poza swoje pudełko, żeby
+           zmieścić cień kart. W rzędzie nachodziłaby wtedy na stały blok obok,
+           więc zapas zostaje tylko w pionie. */
+    .q-ps__mix-rail .q-carousel__track {
+        block-size: 100%;
+        margin-inline: 0;
+        padding-inline: 0;
+        scroll-padding-inline: 0;
+    }
+
+    /* Na mocniejszej szarości kreska przycisku konturowego ma dokładnie tę samą
+           wartość co tło pasa — obie biorą ten sam stopień skali — więc przycisk
+           znikał. Stopień ciemniejszy przywraca mu kształt. */
+    .q-ps--stone .q-btn--secondary {
+        --btn-border: var(--q-neutral-8);
+    }
+
+    /* Na ciemnym tle przycisk konturowy bierze welon i kreskę w barwie napisu:
+           pod przyciskiem bywa zdjęcie, więc kreska musi trzymać się sama. */
+    :is(.q-ps--ink,   .q-ps--photo) .q-btn--secondary {
+        --btn-bg: var(--q-slider-action-bg);
+        --btn-label: var(--q-neutral-1);
+        --btn-border: var(--q-slider-action-border);
+    }
+
+    /* Na pełnej barwie marki wiodącą akcją jest czerń: żółty przycisk na żółtym
+           tle znika. */
+    .q-ps--brand .q-btn--primary {
+        --btn-bg: var(--q-neutral-12);
+        --btn-label: var(--q-neutral-1);
+        --btn-border: var(--q-neutral-12);
+    }
+
+    .q-ps--brand .q-btn--primary:hover {
+        --btn-bg: var(--q-neutral-11);
+        --btn-border: var(--q-neutral-11);
+    }
+
+    .q-ps--brand .q-btn--secondary {
+        --btn-bg: transparent;
+        --btn-label: var(--q-on-fill-primary);
+        --btn-border: var(--q-neutral-12);
+    }
+
+    .q-ps--brand .q-btn--secondary:hover {
+        --btn-bg: rgb(255 255 255 / .45);
+    }
+
+    /* Tytuł w rzędzie z wyjściem do listy oddaje swój odstęp — niesie go rząd. */
+    .q-ps__head .q-section-title {
+        margin-block-end: 0;
+    }
+
+    /* Kadr trzyma proporcję także przy dużym zdjęciu. Wiersz siatki rośnie
+       domyślnie do wysokości zawartości, więc proporcja przegrywała z plikiem
+       800 na 800: zdjęcie produktu w sklepie jest dużo większe niż ilustracja
+       w makiecie i rozpychało kadr na podwójną wysokość. */
+    .q-ps__big-media,
+    .q-ps__hero-media {
+        grid-template-rows: minmax(0, 1fr);
+        overflow: hidden;
+    }
+
+    /* Zdjęcie wypełnia kadr. Samo `max-block-size: 100%` wystarczało ilustracji
+       z makiety, bo była mniejsza od kadru; fotografia produktu jest większa
+       i wychodziła poza. */
+    .q-ps__big-media img,
+    .q-ps__hero-media img {
+        inline-size: 100%;
+        block-size: 100%;
+    }
+
+    /* Kadr wypełnia się zdjęciem, tak samo jak kadr zajawki na listingu.
+       Zdjęcie wpisywane w kadr zostawiało wokół siebie pasy tła szersze niż
+       ono samo, a przy zdjęciu pionowym stało w kadrze niewyśrodkowane. */
+    .q-ps__big-media img,
+    .q-ps__hero-media img {
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .q-ps__big-media a,
+    .q-ps__hero-media a {
+        display: grid;
+        place-items: center;
+        inline-size: 100%;
+        block-size: 100%;
+        min-inline-size: 0;
+        min-block-size: 0;
+    }
+
+    /* Dwie karty w rzędzie zamiast pięciu: szerokość pozycji liczy się od
+           szerokości karuzeli, tak jak w komponencie, tylko dzielona przez dwa. */
+    .q-ps__wide .q-carousel__item {
+        flex-basis: calc(50cqi - var(--q-space-md) / 2);
+    }
+
+    @media (max-width: 991px) {
+        .q-ps__wide .q-carousel__item {
+            flex-basis: 88%;
+        }
+
+    }
+
+    /* Taśma zaczyna się na linii pojemnika strony, a nie na krawędzi okna:
+           pierwsza zajawka ma stać w jednej osi z tytułem nad nią. Wcięcie to
+           margines pojemnika plus jego własne wcięcie wewnętrzne.
+    
+           Wyrażenie w jednej linii, bo sklejarka arkuszy zjada spacje wokół „+"
+           w zapisie rozbitym na kilka wierszy i reguła przestaje działać. */
+    .q-ps__rail .q-carousel__track {
+        padding-inline: calc(max(var(--q-space-md), (100% - var(--q-container-width)) / 2) + var(--q-space-md));
+        scroll-padding-inline: calc(max(var(--q-space-md), (100% - var(--q-container-width)) / 2) + var(--q-space-md));
+        margin-inline: 0;
+    }
+
+}
+
+@layer quince.layout {
+    :root {
+        /* Pole adresu w zapisie na powiadomienia: tyle, żeby zmieścił się
+        typowy adres bez zawijania, i nie więcej. */
+        --q-home-email-w: 18rem;
+        /* Znak odtwarzania na plakacie filmu. */
+        --q-home-play-size: 4rem;
+        /* Szerokość wiersza w pytaniach: dłuższy męczy przy czytaniu. */
+        --q-home-narrow-w: 52rem;
+        /* Pas sekcji na pełną szerokość. Powierzchnia ciemna, bo jasna nie ma
+        czym się odciąć: tło strony i powierzchnia wklęsła mają tę samą
+        wartość, więc pas na niej byłby niewidoczny. Ten sam wzorzec, co
+        kafel promocyjny na listingu i slajd bez materiału. */
+        --q-home-band-bg: var(--q-neutral-12);
+        --q-home-band-fg: var(--q-neutral-1);
+    }
+
+    /* Siatka sekcji o zadanej liczbie kolumn. Siatka listingu (`q-grid`) liczy
+           kolumny z ustawienia sklepu i z najmniejszej szerokości zajawki — tutaj
+           liczba kolumn wynika z treści: dwie kampanie, trzy zestawy, cztery wejścia. */
+    .q-home__grid {
+        display: grid;
+        gap: var(--q-space-md);
+        grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+    }
+
+    @media (min-width: 768px) {
+        .q-home__grid--2 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .q-home__grid--3 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+    }
+
+    @media (min-width: 992px) {
+        .q-home__grid--4 {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+    }
+
+    /* --- pas sekcji ---
+           Tło idzie od krawędzi do krawędzi okna, a treść zostaje w pojemniku
+           strony, żeby nie rozjechała się z sekcjami nad i pod nim. Ten sam zapis,
+           co pasek nad stopką.
+    
+           Odstęp między sekcjami niosą marginesy, więc pas bierze własne wcięcie
+           pionowe: bez niego zajawki dotykałyby krawędzi tła. */
+    .q-home__band {
+        padding-block: var(--q-space-xl);
+        background: var(--q-home-band-bg);
+        color: var(--q-home-band-fg);
+    }
+
+    /* Nagłówki na ciemnym tle biorą barwę pasa, nie globalną barwę nagłówków. */
+    .q-home__band :is(h1, h2, h3, h4, h5, h6) {
+        color: inherit;
+    }
+
+    /* Nagłówek pasa: tytuł po jednej stronie, zegar po drugiej. Odstęp pod
+           spodem niesie rząd, więc tytuł oddaje tu swój własny. */
+    .q-home__band-head {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--q-space-sm);
+        margin-block-end: var(--q-space-md);
+    }
+
+    .q-home__band-head .q-section-title {
+        margin-block-end: 0;
+    }
+
+
+    /* Telefon. Makieta nie opisuje tych dwóch układów na wąskim ekranie:
+       kafle działów zostawały trzy w rzędzie po 103 px, a rząd kolumn dzielił
+       390 px na dwie części. Oba schodzą tu pod siebie. */
+    @media (max-width: 767px) {
+        /* Odstęp pasa od sąsiadów schodzi o stopień: na telefonie dwa pasy
+           w rzędzie zostawiały między sobą pas pustego ekranu. */
+        :root {
+            --q-ps-pad: var(--q-space-md);
+        }
+
+        /* Dwa kafle w rzędzie, tak jak dwie zajawki na listingu. Jeden na całą
+           szerokość przy proporcji pionowej ma 466 px wysokości, a cztery takie
+           kafle to dwa tysiące pikseli przewijania na samą nawigację. */
+        .q-ps__cats {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        /* Kafel ma teraz 165 px szerokości, więc napis nagłówkowy w nim się nie
+           mieści: „Programowanie ECU" łamało się w środku słowa na cztery
+           wiersze. Pismo schodzi do rozmiaru treści, a wyściółka o stopień. */
+        /* Wysokość kafla wyznacza jego treść, a nie proporcja. Przy 205 px
+           szerokości proporcja 16/9 dawała 115 px wysokości, a nazwa, zdanie
+           i przycisk potrzebują około 130: napisy wychodziły górą poza kadr
+           i kafel je obcinał. Dolna granica trzyma kafel fotograficzny
+           w rozmiarze, w którym zdjęcie jeszcze coś pokazuje. */
+        .q-ps__cat {
+            aspect-ratio: auto;
+            min-block-size: 9rem;
+            padding: var(--q-space-sm);
+        }
+
+        /* Pionowy zostaje wyższy od poziomego, bo taki jest jego sens. */
+        .q-ps__cats--portrait .q-ps__cat,
+        .q-ps__cat--portrait {
+            min-block-size: 13rem;
+        }
+
+        .q-ps__cat-title {
+            font-size: var(--q-fs-sm);
+        }
+
+        .q-ps__cat-lead {
+            font-size: var(--q-fs-xs);
+            margin-block-end: var(--q-space-sm);
+        }
+
+        /* Dwa przyciski bohatera dzielą jeden rząd po równo. Zawijane łamały
+           się tylko na pasie w ramce, bo ten ma własną wyściółkę i jego treść
+           jest o 40 px węższa: ten sam układ wyglądał na dwa różne. */
+        .q-ps__actions {
+            flex-wrap: nowrap;
+        }
+
+        .q-ps__actions > * {
+            flex: 1 1 0;
+            min-inline-size: 0;
+        }
+
+        .q-ps__mix {
+            flex-wrap: wrap;
+        }
+
+        .q-ps__mix-fixed,
+        .q-ps__mix-rail {
+            --q-udzial: 100%;
+            flex: 1 1 100%;
+        }
+    }
+}
+
+@layer quince.components {
+    /* To samo w pasie sekcji: odstęp pod nagłówkiem niesie rząd z tytułem. */
+    .q-home__band .q-carousel {
+        margin-block-start: 0;
+    }
+
+    /* Telefon: taśma w rzędzie wraca do własnej miary z komponentu. Szerokość
+       pola z pięciokolumnowej siatki ma tam 54 px i zajawka ściskała się do
+       paska. Reguła stoi w tej warstwie, bo nadpisuje regułę z tej warstwy. */
+    @media (max-width: 767px) {
+        .q-ps__mix-rail .q-carousel__item {
+            flex: 0 0 68%;
+        }
+    }
+
+    /* Telefon: przycisk na kaflu działu schodzi z progu dotykowego 44 px.
+       Przy kaflu wysokim na 144 px zabierał prawie jedną trzecią wysokości,
+       a cały kafel i tak jest odnośnikiem, więc próg trzyma sam kafel.
+       Reguła stoi w tej warstwie, bo przycisk jest komponentem. */
+    @media (max-width: 767px) {
+        .q-ps__cat .q-btn {
+            min-block-size: 0;
+            padding: 7px var(--q-space-sm);
+            font-size: var(--q-fs-xs);
+        }
+
+        /* Przycisk wypełnia swoją połowę rzędu akcji. Wyściółka boczna schodzi
+           o stopień, bo przy 360 px na przycisk zostaje około 145 px. */
+        .q-ps__actions .q-btn {
+            inline-size: 100%;
+            padding-inline: var(--q-space-sm);
+        }
+    }
+
+}
+

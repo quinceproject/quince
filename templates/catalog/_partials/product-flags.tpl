@@ -1,0 +1,47 @@
+{**
+ * Quince — plakietki produktu
+ *
+ * PrestaShop podaje gotową listę w `$product.flags`, gdzie `type` to jedna
+ * z wartości: new, on-sale, discount, pack, out_of_stock, online-only, used,
+ * refurbished oraz — od 9.2 — open_box, damaged, new_with_defects.
+ *
+ * Rozdzielamy je na dwie grupy, bo znaczą co innego:
+ *   handlowe  — zachęta do zakupu, kolor z palety promocji i statusów,
+ *   stan      — informacja o towarze, celowo neutralna, żeby nie konkurowała
+ *               z rabatem o uwagę klienta.
+ *
+ * Klasa listy przychodzi z zewnątrz (`$qBadgesClass`), bo miejsce jest różne:
+ * na kafelku plakietki leżą NA zdjęciu (warstwa bezwzględna w rogu kadru),
+ * a na stronie produktu płyną w kolumnie opisu. Jedna klasa dla obu miejsc
+ * ustawiała je na stronie produktu bezwzględnie względem przypadkowego
+ * przodka — wisiały nad inną treścią, zamiast stać w swoim wierszu.
+ *
+ * Klasy: components/badge.css
+ *}
+
+{assign var=qBadgesClass value=$qBadgesClass|default:'q-pcard__badges'}
+
+{if !empty($product.flags)}
+  {block name='product_flags'}
+    <ul class="{$qBadgesClass|escape:'html':'UTF-8'} js-product-flags">
+      {foreach from=$product.flags item=flag}
+        {* Stany produktu z PrestaShopa 9.2 dostają wariant neutralny. *}
+        {if in_array($flag.type, ['used', 'refurbished', 'open_box', 'damaged', 'new_with_defects'])}
+          <li class="q-badge q-badge--condition">{$flag.label nofilter}</li>
+        {elseif $flag.type === 'discount'}
+          <li class="q-badge q-badge--discount">{$flag.label nofilter}</li>
+        {elseif $flag.type === 'new'}
+          <li class="q-badge q-badge--new">{$flag.label nofilter}</li>
+        {elseif $flag.type === 'on-sale'}
+          <li class="q-badge q-badge--sale">{$flag.label nofilter}</li>
+        {elseif $flag.type === 'pack'}
+          <li class="q-badge q-badge--bundle">{$flag.label nofilter}</li>
+        {else}
+          {* out_of_stock, online-only i wszystko, co PrestaShop doda w przyszłości.
+             Nieznana wartość ma wyglądać poprawnie, a nie zniknąć. *}
+          <li class="q-badge q-badge--condition">{$flag.label nofilter}</li>
+        {/if}
+      {/foreach}
+    </ul>
+  {/block}
+{/if}

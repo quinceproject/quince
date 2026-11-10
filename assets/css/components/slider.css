@@ -1,0 +1,606 @@
+/* ===================================================================
+   Quince — slajder
+
+   Pas zapowiedzi na górze strony. Trzy rzeczy ustawia się na slajdzie
+   niezależnie od siebie, zamiast wybierać jeden z gotowych układów:
+
+     1. TŁO        --solid | --gradient | --photo | --video
+     2. TREŚĆ      ze zdjęciem po lewej albo samym tekstem
+     3. UŁOŻENIE   do krawędzi pojemnika albo na środku
+
+   Dzięki temu „zdjęcie w tle + treść na środku" albo „gradient + zdjęcie
+   produktu z lewej" nie wymagają osobnych odmian w arkuszu: sprzedawca składa
+   je z trzech wyborów w panelu.
+
+   Wtapianie krawędzi (`--fade-*`) wygasza tło w barwę strony przy wskazanej
+   krawędzi — zdjęcie przechodzi wtedy w stronę zamiast kończyć się kreską.
+   Przyciemnienie (`--shade`) kładzie zasłonę na całym kadrze i jest po to,
+   żeby tekst dało się czytać nad jasnym środkiem zdjęcia; samo wtapianie
+   z boków temu nie zaradzi.
+
+   Wideo pochodzi z YouTube albo Vimeo i siedzi w ramce o proporcji 16:9
+   rozciągniętej do pokrycia pasa — ramki nie da się przyciąć tak jak znacznika
+   `video`, więc bez tego zostałyby czarne pasy.
+   =================================================================== */
+
+@layer quince.components {
+
+    .q-slider {
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Slajder w pojemniku strony: dla sklepów, które nie chcą pasa od krawędzi
+       do krawędzi. Zaokrąglenie bierze się stąd, że pas przestaje dotykać
+       krawędzi okna i staje się blokiem na stronie. */
+    .q-slider--boxed {
+        inline-size: 100%;
+        max-inline-size: var(--q-container-width);
+        margin-inline: auto;
+        border-radius: var(--q-slider-radius);
+    }
+
+    .q-slider__track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: inline mandatory;
+        scroll-behavior: smooth;
+        scrollbar-width: none;
+    }
+
+    .q-slider__track::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Wysokość jest wspólna dla wszystkich slajdów. Przy wysokości z treści
+       strona skakała przy każdej zmianie, bo slajd z dwoma zdaniami jest niższy
+       niż slajd z czterema. */
+    .q-slider__slide {
+        position: relative;
+        flex: 0 0 100%;
+        scroll-snap-align: start;
+
+        display: grid;
+        align-items: center;
+        min-block-size: var(--q-slider-height);
+        overflow: hidden;
+    }
+
+    /* --- tła --- */
+
+    .q-slider__slide--solid {
+        background: var(--q-slide-bg, var(--q-surface-sunken));
+    }
+
+    /* Kierunek gradientu podaje sprzedawca w stopniach; reszta to dwie barwy
+       z palety sklepu. */
+    .q-slider__slide--gradient {
+        background: linear-gradient(
+            var(--q-slide-angle, 120deg),
+            var(--q-slide-from, var(--q-surface-sunken)),
+            var(--q-slide-to, var(--q-surface-raised))
+        );
+    }
+
+    .q-slider__slide--photo {
+        background: var(--q-slide-image, none) center / cover no-repeat,
+                    var(--q-slide-bg, var(--q-surface-sunken));
+    }
+
+    /* --- wideo z serwisu --- */
+
+    /* Ramka rozciąga się do pokrycia pasa: szerokość liczona z wysokości przez
+       proporcję obrazu i odwrotnie — bierzemy większą z dwóch. Bez tego film
+       16:9 w pasie 30 rem zostawia czarne pasy u góry i u dołu. */
+    .q-slider__video {
+        position: absolute;
+        inset-block-start: 50%;
+        inset-inline-start: 50%;
+        translate: -50% -50%;
+        z-index: 0;
+
+        inline-size: max(100%, calc(var(--q-slider-height) * 16 / 9));
+        block-size: max(100%, calc(100cqi * 9 / 16));
+        aspect-ratio: 16 / 9;
+        border: 0;
+        pointer-events: none;
+    }
+
+    .q-slider__slide--video {
+        container-type: inline-size;
+        background: var(--q-slide-poster, none) center / cover no-repeat,
+                    var(--q-slide-bg, var(--q-slider-video-bg));
+    }
+
+    /* --- wtapianie krawędzi i przyciemnienie ---
+       Warstwa leży nad tłem, pod treścią. Barwa wtapiania to domyślnie tło
+       strony, żeby pas przechodził w stronę bez widocznej kreski. */
+
+    .q-slider__slide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        pointer-events: none;
+    }
+
+    .q-slider__slide--fade-start::before {
+        background: linear-gradient(to right,
+            var(--q-slide-fade, var(--q-surface-page)) 0%,
+            transparent var(--q-slide-fade-size, 28%));
+    }
+
+    .q-slider__slide--fade-end::before {
+        background: linear-gradient(to left,
+            var(--q-slide-fade, var(--q-surface-page)) 0%,
+            transparent var(--q-slide-fade-size, 28%));
+    }
+
+    .q-slider__slide--fade-x::before {
+        background:
+            linear-gradient(to right, var(--q-slide-fade, var(--q-surface-page)) 0%, transparent var(--q-slide-fade-size, 28%)),
+            linear-gradient(to left, var(--q-slide-fade, var(--q-surface-page)) 0%, transparent var(--q-slide-fade-size, 28%));
+    }
+
+    .q-slider__slide--fade-bottom::before {
+        background: linear-gradient(to top,
+            var(--q-slide-fade, var(--q-surface-page)) 0%,
+            transparent var(--q-slide-fade-size, 28%));
+    }
+
+    /* Wtapianie z boków i od dołu naraz. */
+    .q-slider__slide--fade-x.q-slider__slide--fade-bottom::before {
+        background:
+            linear-gradient(to right, var(--q-slide-fade, var(--q-surface-page)) 0%, transparent var(--q-slide-fade-size, 28%)),
+            linear-gradient(to left, var(--q-slide-fade, var(--q-surface-page)) 0%, transparent var(--q-slide-fade-size, 28%)),
+            linear-gradient(to top, var(--q-slide-fade, var(--q-surface-page)) 0%, transparent var(--q-slide-fade-size, 28%));
+    }
+
+    /* Zasłona na całym kadrze. Osobno od wtapiania, bo odpowiada na inny
+       kłopot: jasny środek zdjęcia pod tekstem. */
+    .q-slider__slide--shade::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        background: var(--q-slide-shade, var(--q-slider-shade));
+        pointer-events: none;
+    }
+
+    /* --- treść --- */
+
+    .q-slider__inner {
+        position: relative;
+        z-index: 2;
+        inline-size: 100%;
+        max-inline-size: var(--q-container-width);
+        margin-inline: auto;
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
+           ten sam wzorzec co `.q-container` w theme.css. */
+        padding-inline: clamp(0px, calc((var(--q-container-width) - 100%) * 999), var(--q-space-md));
+        padding-block: var(--q-space-xl);
+    }
+
+    /* Zdjęcie po lewej, treść po prawej. Gdy zdjęcia nie ma, treść zajmuje
+       slajd na pełnej szerokości — stąd siatka opisana modyfikatorem, a nie
+       stałą liczbą kolumn. */
+    .q-slider__layout {
+        display: grid;
+        gap: var(--q-space-xl);
+        align-items: center;
+    }
+
+    .q-slider__layout--with-media {
+        grid-template-columns: minmax(0, var(--q-slide-media-share, 1fr)) minmax(0, 1.15fr);
+    }
+
+    .q-slider__media {
+        display: grid;
+        place-items: center;
+        aspect-ratio: var(--q-slide-media-ratio, 4 / 3);
+    }
+
+    /* Obraz wpisuje się w kadr, zamiast narzucać mu własną wysokość: element
+       siatki ma domyślnie `min-block-size: auto` i bez wyzerowania proporcja
+       kadru nie miałaby żadnego skutku. */
+    .q-slider__media img {
+        min-inline-size: 0;
+        min-block-size: 0;
+        max-inline-size: 100%;
+        max-block-size: 100%;
+        object-fit: contain;
+    }
+
+    .q-slider__body {
+        display: grid;
+        justify-items: start;
+        gap: var(--q-space-sm);
+        max-inline-size: var(--q-slider-content-max);
+    }
+
+    /* Ułożenie na środku: treść i każdy jej wiersz. Dotyczy też slajdu ze
+       zdjęciem — wtedy środkuje się kolumna tekstu obok zdjęcia. */
+    .q-slider__slide--center .q-slider__body {
+        justify-items: center;
+        text-align: center;
+        margin-inline: auto;
+    }
+
+    /* Rząd przycisków wyrównuje się tak samo jak reszta treści. Sam `justify-items`
+       środkuje rząd jako całość, ale gdy przyciski się zawiną, drugi wiersz
+       zostaje przy lewej krawędzi rzędu — stąd osobne wyrównanie w poprzek. */
+    .q-slider__slide--center .q-slider__actions {
+        justify-content: center;
+    }
+
+    .q-slider__slide--center .q-slider__layout:not(.q-slider__layout--with-media) {
+        justify-items: center;
+    }
+
+    /* Nadtytuł: z jakiego działu jest ta zapowiedź. */
+    .q-slider__over {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        color: inherit;
+        opacity: .75;
+    }
+
+    /* Tytuł bierze barwę ze slajdu, nie z globalnej reguły nagłówków: na
+       slajdzie jasnym musi być ciemny, na ciemnym jasny. */
+    .q-slider__title {
+        margin: 0;
+        font-size: var(--q-fs-h1);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        color: inherit;
+    }
+
+    .q-slider__text {
+        margin: 0;
+        max-inline-size: var(--q-slider-text-max);
+        line-height: var(--q-lh-relaxed);
+    }
+
+    .q-slider__actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-sm);
+    }
+
+    /* --- slajd dzielony ---
+       Fotografia wypełnia połowę pasa i dochodzi do jego krawędzi, treść stoi
+       na drugiej połowie, na własnym tle. To inny przypadek niż zdjęcie w tle
+       z wtapianiem: tam zdjęcie jest podkładem pod całość, tutaj jest połową
+       kompozycji i nie ma pod sobą tekstu.
+
+       Udział kolumn podaje sprzedawca: jedna trzecia, połowa albo dwie trzecie
+       na zdjęcie. */
+    .q-slider__slide--split {
+        grid-template-columns: minmax(0, var(--q-slide-split, 1fr)) minmax(0, 1fr);
+        align-items: stretch;
+    }
+
+    .q-slider__photo {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+        display: block;
+    }
+
+    /* Połowa z treścią niesie własne tło i trzyma linię pojemnika strony:
+       treść zaczyna się tam, gdzie nagłówki sekcji pod slajderem.
+
+       Wcięcie liczy się od szerokości POŁOWY — ta ma 100% = W/2, a margines
+       zewnętrzny pojemnika to W/2 − C/2. Wyrażenie w jednej linii, bo sklejarka
+       arkuszy zjada spacje wokół „+" w zapisie rozbitym na kilka wierszy. */
+    .q-slider__panel {
+        display: grid;
+        align-content: center;
+
+        background: var(--q-slide-bg, var(--q-surface-sunken));
+        padding-block: var(--q-space-xl);
+        padding-inline-start: var(--q-space-xl);
+        padding-inline-end: calc(max(var(--q-space-xl), 100% - var(--q-container-width) / 2) + var(--q-space-md));
+    }
+
+    /* --- cena na slajdzie ---
+       Slajd umiał dotąd powiedzieć „zobacz dział". Z ceną mówi „kup to":
+       kwota krojem nagłówkowym, obok niej cena sprzed obniżki. */
+    .q-slider__price {
+        display: flex;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: var(--q-space-sm);
+        margin-block-start: var(--q-space-xs);
+    }
+
+    .q-slider__price-now {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h3);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+        color: inherit;
+    }
+
+    .q-slider__price-was {
+        font-size: var(--q-fs-base);
+        text-decoration: line-through;
+        opacity: .65;
+    }
+
+    /* --- cechy w pigułkach ---
+       Trzy rzeczy do rzucenia okiem zamiast czwartego zdania w akapicie. */
+    .q-slider__specs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--q-space-xs);
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-slider__slide--center .q-slider__specs {
+        justify-content: center;
+    }
+
+    .q-slider__spec {
+        padding: var(--q-space-xs) var(--q-space-sm);
+        font-size: var(--q-fs-sm);
+
+        background: var(--q-slider-spec-bg);
+        border-radius: var(--q-radius-sm);
+    }
+
+    /* Na ciemnym tle pigułka bierze welon w barwie napisu: pełna biel robiłaby
+       z trzech cech trzy jasne plamy mocniejsze od tytułu nad nimi. */
+    .q-slider__slide--light .q-slider__spec {
+        background: var(--q-slider-spec-bg-dark);
+    }
+
+    /* --- licznik kampanii ---
+       Stoi w rogu slajdu, a nie w kolumnie treści. Licznik wstawiony między
+       zdanie a przycisk brał tę samą wysokość i to samo wypełnienie co przycisk
+       pod nim i czytał się jak druga akcja — a jest informacją o terminie,
+       nie rzeczą do kliknięcia.
+
+       Dlatego też nie bierze wyglądu licznika z karty produktu ani z zajawki:
+       tam leży w rzędzie z ceną i wypełnienie barwą marki jest tam potrzebne,
+       żeby go w ogóle zauważyć. Tutaj slajd jest pusty dookoła i wystarczą
+       same liczby.
+
+       Położenie w poziomie liczy się od pojemnika strony, żeby licznik stał
+       w jednej linii z treścią. Wyrażenie w jednej linii, bo sklejarka arkuszy
+       zjada spacje wokół „+" w zapisie rozbitym na kilka wierszy. */
+    .q-slider__timer {
+        position: absolute;
+        inset-block-start: var(--q-space-lg);
+        inset-inline-end: calc(max(var(--q-space-md), (100% - var(--q-container-width)) / 2) + var(--q-space-md));
+        z-index: 2;
+
+        display: grid;
+        justify-items: end;
+        gap: var(--q-space-xs);
+        text-align: end;
+    }
+
+    .q-slider__timer-label {
+        font-size: var(--q-fs-xs);
+        font-weight: var(--q-weight-semibold);
+        letter-spacing: .06em;
+        text-transform: uppercase;
+        opacity: .7;
+    }
+
+    .q-slider__timer-parts {
+        display: flex;
+        align-items: baseline;
+        gap: var(--q-space-md);
+        font-variant-numeric: tabular-nums;
+    }
+
+    .q-slider__timer-part {
+        display: grid;
+        justify-items: center;
+        gap: 2px;
+    }
+
+    .q-slider__timer-num {
+        font-family: var(--q-heading-font);
+        font-size: var(--q-fs-h2);
+        font-weight: var(--q-weight-bold);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-slider__timer-unit {
+        font-size: var(--q-fs-xs);
+        text-transform: uppercase;
+        opacity: .7;
+    }
+
+    /* --- napis jasny na ciemnym tle --- */
+
+    .q-slider__slide--light {
+        color: var(--q-slider-on-dark);
+    }
+
+    .q-slider__slide--light :is(h1, h2, h3, h4, h5, h6) {
+        color: inherit;
+    }
+
+    /* Napis na zdjęciu dostaje cień. Zasłona radzi sobie z ciemnym kadrem, ale
+       nie z jasnym fragmentem pod jedną linijką — wtedy znika sam napis, nie
+       cały blok. */
+    :is(.q-slider__slide--photo, .q-slider__slide--video) .q-slider__slide--light,
+    :is(.q-slider__slide--photo, .q-slider__slide--video).q-slider__slide--light
+        :is(.q-slider__over, .q-slider__title, .q-slider__text) {
+        text-shadow: var(--q-slider-text-shadow);
+    }
+
+    /* Przycisk konturowy na ciemnym tle. Barwy idą przez zmienne przycisku,
+       te same, których używają jego odmiany — więc to nadal ten sam przycisk,
+       tylko w innym otoczeniu. */
+    .q-slider__slide--light .q-btn--secondary {
+        --btn-bg: var(--q-slider-action-bg);
+        --btn-label: var(--q-slider-on-dark);
+        --btn-border: var(--q-slider-action-border);
+    }
+
+    .q-slider__slide--light .q-btn--secondary:hover {
+        --btn-bg: var(--q-slider-action-bg-hover);
+    }
+
+    /* --- sterowanie ---
+       Strzałki i kropki w jednym rzędzie przy dolnej krawędzi, nie po bokach.
+       Pojemnik strony bywa szeroki na 1520 px i przy oknie 1600 px zostaje po
+       jego bokach 40 px — mniej, niż zajmuje strzałka, która wchodziła wtedy
+       na pierwszy wiersz zdania.
+
+       Rząd ma własny podkład, bo stoi raz na ciemnym zdjęciu, raz na jasnym
+       tle slajdu w barwie marki. */
+    .q-slider__controls {
+        position: absolute;
+        inset-block-end: var(--q-space-md);
+        inset-inline-start: 50%;
+        translate: -50% 0;
+        z-index: 3;
+
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+
+        padding: var(--q-space-xs);
+        background: var(--q-slider-dots-bg);
+        border-radius: var(--q-radius-pill);
+    }
+
+    .q-slider__arrow {
+        display: grid;
+        place-items: center;
+        inline-size: var(--q-slider-arrow-size);
+        block-size: var(--q-slider-arrow-size);
+        padding: 0;
+
+        background: none;
+        color: var(--q-slider-on-dark);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+    }
+
+    .q-slider__arrow:hover {
+        color: var(--q-slider-dot-active);
+    }
+
+    .q-slider__arrow:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    .q-slider__dots {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    /* Bieżąca kropka rozciąga się w kreskę: po samej barwie nie dawało się jej
+       wskazać na zdjęciu. */
+    .q-slider__dot {
+        inline-size: var(--q-slider-dot-size);
+        block-size: var(--q-slider-dot-size);
+        padding: 0;
+
+        background: var(--q-slider-dot);
+        border: 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: inline-size 160ms ease-out, background-color 160ms ease-out;
+    }
+
+    .q-slider__dot.is-active {
+        inline-size: var(--q-slider-dot-size-active);
+        border-radius: calc(var(--q-slider-dot-size) / 2);
+        background: var(--q-slider-dot-active);
+    }
+
+    .q-slider__dot:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: 2px;
+    }
+
+    /* Wyłączony ruch: taśma przeskakuje bez animacji, a film nie startuje —
+       zamiast niego zostaje plakat, który i tak leży pod ramką. */
+    @media (prefers-reduced-motion: reduce) {
+        .q-slider__track {
+            scroll-behavior: auto;
+        }
+
+        .q-slider__dot {
+            transition: none;
+        }
+
+        .q-slider__video {
+            display: none;
+        }
+    }
+
+    /* Telefon: zdjęcie wraca nad treść, bo w dwóch kolumnach ani ono, ani
+       zdanie nie mieszczą się w swojej połowie. Strzałki zostają — stoją
+       w rzędzie na dole i niczego nie zasłaniają. */
+    @media (max-width: 991px) {
+        .q-slider__slide {
+            min-block-size: var(--q-slider-height-sm);
+        }
+
+        .q-slider__title {
+            font-size: var(--q-fs-h2);
+        }
+
+        .q-slider__layout--with-media {
+            grid-template-columns: minmax(0, 1fr);
+            gap: var(--q-space-lg);
+        }
+
+        .q-slider__slide--split {
+            grid-template-columns: minmax(0, 1fr);
+            align-content: center;
+        }
+
+        .q-slider__photo {
+            max-block-size: var(--q-slider-photo-h-sm);
+        }
+
+        .q-slider__panel {
+            padding-inline: var(--q-space-md);
+        }
+
+        .q-slider__media {
+            max-block-size: var(--q-slider-photo-h-sm);
+        }
+
+        /* Na wąskim ekranie treść zawsze stoi na środku: przy szerokości
+           ekranu równej szerokości kolumny wyrównanie do krawędzi i tak nie
+           jest widoczne, a środek lepiej znosi łamanie wierszy. */
+        .q-slider__body {
+            justify-items: center;
+            text-align: center;
+            margin-inline: auto;
+        }
+
+        .q-slider__actions {
+            justify-content: center;
+        }
+
+        /* Na wąskim ekranie róg slajdu zajmuje tytuł, więc licznik wraca
+           do zwykłego biegu treści, nad nią. */
+        .q-slider__timer {
+            position: static;
+            justify-items: center;
+            text-align: center;
+            margin-block-end: var(--q-space-md);
+        }
+    }
+}

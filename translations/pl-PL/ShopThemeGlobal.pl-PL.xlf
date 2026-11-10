@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+
+      <!-- Etykieta przy polu sortowania w belce listingu. Rdzeń ma „Sort by:",
+           czyli „Sortuj wg:", ale w pasku narzędzi liczy się każde słowo
+           i makieta ma tu samo „Sortuj:". -->
+      <trans-unit id="quince.listing.sort" resname="Sort:">
+        <source>Sort:</source>
+        <target>Sortuj:</target>
+      </trans-unit>
+
+      <!-- Przełącznik widoku listy. -->
+      <trans-unit id="quince.listing.view_grid" resname="Grid">
+        <source>Grid</source>
+        <target>Siatka</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.view_list" resname="List">
+        <source>List</source>
+        <target>Lista</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.display" resname="Display">
+        <source>Display</source>
+        <target>Widok</target>
+      </trans-unit>
+
+
+      <!-- Licznik do końca promocji na zajawce. Skróty, bo pasek ma trzy
+           człony i pełne słowa się w nim nie mieszczą. -->
+      <trans-unit id="quince.card.days" resname="days">
+        <source>days</source>
+        <target>dni</target>
+      </trans-unit>
+      <trans-unit id="quince.card.hrs" resname="hrs">
+        <source>hrs</source>
+        <target>godz</target>
+      </trans-unit>
+      <trans-unit id="quince.card.min" resname="min">
+        <source>min</source>
+        <target>min</target>
+      </trans-unit>
+
+      <!-- Liczba wyników przy pozycji filtra, czytana przez czytnik ekranu. -->
+      <trans-unit id="quince.listing.result" resname="result">
+        <source>result</source>
+        <target>wynik</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.results" resname="results">
+        <source>results</source>
+        <target>wyników</target>
+      </trans-unit>
+
+      <trans-unit id="quince.listing.product_filters" resname="Product filters">
+        <source>Product filters</source>
+        <target>Filtry produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.change_sort" resname="Change sort order">
+        <source>Change sort order</source>
+        <target>Zmień kolejność</target>
+      </trans-unit>
+
+      <trans-unit id="quince.a11y.breadcrumb" resname="Breadcrumb">
+        <source>Breadcrumb</source>
+        <target>Okruszki</target>
+      </trans-unit>
+
+      <!-- Zakres w filtrach: dwa pola liczbowe zamiast suwaka. Podpowiedź
+           w polu jest z małej litery, bo czyta się ją jako ciąg dalszy nazwy
+           grupy stojącej nad nią. -->
+      <trans-unit id="quince.listing.range_from" resname="from">
+        <source>from</source>
+        <target>od</target>
+      </trans-unit>
+      <trans-unit id="quince.listing.range_to" resname="to">
+        <source>to</source>
+        <target>do</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.range_from" resname="%label% from">
+        <source>%label% from</source>
+        <target>%label% od</target>
+      </trans-unit>
+      <trans-unit id="quince.a11y.range_to" resname="%label% to">
+        <source>%label% to</source>
+        <target>%label% do</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
