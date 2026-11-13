@@ -4,6 +4,16 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.1] - 2026-11-13
+
+### Changed
+
+- The theme preview in the back office shows the Quince logo instead of the default
+  PrestaShop screenshot.
+- The account button label read by screen readers separates the customer's name from
+  "My account" with a comma.
+- Code comments tidied up. No change in how the shop works.
+
 ## [0.1.0] - 2026-11-10
 
 First public release.
