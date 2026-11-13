@@ -670,6 +670,12 @@
         filter: var(--q-header-logo-stuck-filter, none);
     }
 
+    /* Osobny plik logo: widoczny tylko w przyklejonym nagłówku, w miejscu
+       głównego. Bez tej klasy na odnośniku nic się nie zmienia. */
+    .q-header__logo .q-header__logo-stuck { display: none; }
+    .q-header.is-stuck .q-header__logo--alt .q-header__logo-main { display: none; }
+    .q-header.is-stuck .q-header__logo--alt .q-header__logo-stuck { display: block; }
+
     /* Przyklejony nagłówek ma własne tło (ustawienie sklepu). Podmieniane są tokeny
        komponentu, a nie poszczególne reguły: wszystko, co rysuje nagłówek, czyta
        z nich i tak. */

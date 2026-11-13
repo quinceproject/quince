@@ -89,10 +89,14 @@
 
         {* ── znak firmowy ── *}
         {if $page.page_name == 'index'}<h1 class="q-header__logo-h1">{/if}
-          <a class="q-header__logo" href="{$urls.base_url}">
+          <a class="q-header__logo{if $qh.logo_stuck_src} q-header__logo--alt{/if}" href="{$urls.base_url}">
             {if $shop.logo_details}
-              <img src="{$shop.logo_details.src}" alt="{$shop.name}"
+              <img class="q-header__logo-main" src="{$shop.logo_details.src}" alt="{$shop.name}"
                    width="{$shop.logo_details.width}" height="{$shop.logo_details.height}">
+              {* Osobny plik logo dla przyklejonego nagłówka (ustawienie silnika). *}
+              {if $qh.logo_stuck_src}
+                <img class="q-header__logo-stuck" src="{$qh.logo_stuck_src}" alt="" aria-hidden="true">
+              {/if}
             {else}
               {$shop.name}
             {/if}
