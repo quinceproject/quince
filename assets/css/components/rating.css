@@ -1,9 +1,9 @@
 /* ===================================================================
-   Quince — gwiazdki oceny
+   Quince: gwiazdki oceny
 
    Dwie role z mapy: wypełnienie i tło pustej gwiazdki.
 
-   Ocena nie może być przekazana samym kolorem — obok gwiazdek zawsze
+   Ocena nie może być przekazana samym kolorem. Obok gwiazdek zawsze
    stoi wartość liczbowa, a całość ma etykietę dla czytnika ekranu.
    To wymóg dostępności: „kolor nie jest jedynym nośnikiem informacji".
    =================================================================== */
@@ -27,7 +27,7 @@
     }
 
     /* Gwiazdka częściowa: wypełnienie odcięte do wartości ułamkowej.
-       `--rating-fill` jest zmienną lokalną, nie tokenem systemu — szablon ustawia
+       `--rating-fill` jest zmienną lokalną, nie tokenem systemu: szablon ustawia
        ją inline dla konkretnego produktu, bo zależy od jego oceny, a nie od
        ustawień sklepu. Stąd brak prefiksu --q-, zarezerwowanego dla kontraktu. */
     .q-rating__star--half {
@@ -98,7 +98,7 @@
        Gwiazdka jest MASKĄ malowaną barwą, a nie obrazkiem: moduł niesie własne
        PNG-i w dwóch rozmiarach, które nie znają palety sklepu, więc przy
        zmianie barwy marki zostałyby pomarańczowe. Ten sam sposób co ikony
-       podkategorii i znak wyboru w polach — jeden mechanizm w całym motywie.
+       podkategorii i znak wyboru w polach: jeden mechanizm w całym motywie.
 
        Reguły są w motywie, a nie w nadpisaniu arkusza modułu, bo arkusze
        modułów rejestrują się późno i przy włączonym sklejaniu plików nie
@@ -148,9 +148,9 @@
 
     /* Jeden rozmiar gwiazdki, i to DOKŁADNIE ten, którym liczy wtyczka.
        Skrypt listingu woła ją z `starWidth: 16`, a wtyczka z tej liczby wylicza
-       szerokość gwiazdki połówkowej i wpisuje ją w styl elementu. Mniejsze
-       pudełko w arkuszu znaczyło, że połówka miała 16 px, a reszta 12 — stąd
-       gwiazdki różnej wielkości w jednym rzędzie.
+       szerokość gwiazdki połówkowej i wpisuje ją w styl elementu. Inny rozmiar
+       w arkuszu daje gwiazdki różnej wielkości w jednym rzędzie (połówka
+       zawsze ma 16 px).
 
        Pojemnik: pięć gwiazdek po 16 px plus pięć odstępów po 1 px. */
     .grade-stars.small-stars {

@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — chip filtra
+   Quince: chip filtra
 
    Wybrana wartość filtra na listingu oraz przełącznik w panelu filtrów.
    Pięć ról z mapy: tło, tło stanu aktywnego, napis, napis aktywny, obramowanie.
 
    Chip aktywny niesie informację także kształtem i krzyżykiem do usunięcia,
-   nie wyłącznie kolorem — inaczej osoba nierozróżniająca barw nie wie,
+   nie wyłącznie kolorem. Inaczej osoba nierozróżniająca barw nie wie,
    które filtry są włączone.
    =================================================================== */
 
@@ -28,8 +28,8 @@
 
         background: var(--q-chip-bg);
         /* Bez obrysu: pigułka odcina się samą barwą wypełnienia, tak jak
-           w makiecie. Kreska wokół jasnego wypełnienia dawała drugi kontur
-           tuż obok krawędzi tła i pigułka czytała się jak mały przycisk. */
+           w makiecie. Kreska wokół jasnego wypełnienia daje drugi kontur
+           tuż obok krawędzi tła i pigułka czyta się jak mały przycisk. */
         border: 0;
         border-radius: var(--q-radius-pill);
 
@@ -39,10 +39,9 @@
         line-height: var(--q-lh-tight);
     }
 
-    /* Bez obrysu (`border: 0` wyżej) kreska na hover nic nie dawała — sama
-       zmiana koloru obramowania na przezroczystej krawędzi jest niewidoczna.
-       Przyciemnienie tła, o stopień ciemniejszy niż `--q-chip-bg`, daje
-       realną, widoczną reakcję. */
+    /* Bez obrysu (`border: 0` wyżej) zmiana koloru obramowania na hover jest
+       niewidoczna. Reakcją jest przyciemnienie tła o stopień względem
+       `--q-chip-bg`. */
     .q-chip:hover {
         background: var(--q-surface-primary-active);
     }

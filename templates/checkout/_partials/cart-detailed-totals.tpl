@@ -5,7 +5,7 @@
 
 {* Kolumna podsumowania na stronie koszyka. Ten sam `.q-ordersum`, co
    w kasie, ale zawsze otwarty: bez przycisku rozwijania, bez miniaturek
-   i bez listy produktów — ta stoi już w lewej kolumnie. *}
+   i bez listy produktów, bo ta stoi już w lewej kolumnie. *}
 {block name='cart_detailed_totals'}
   {* Korzeń niesie klasy komponentu I zaczep AJAX rdzenia (`js-cart-detailed-totals`):
      po zmianie ilości rdzeń podmienia ten węzeł w całości odpowiedzią

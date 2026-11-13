@@ -4,22 +4,22 @@
  *}
 
 {**
- * Quince — kategoria CMS.
+ * Quince: kategoria CMS.
  *
- * Zajawka strony: makieta zajawki strony CMS (wariant B,
- * zatwierdzony). Strona CMS nie ma pola na zdjęcie ani na ikonę, więc
- * zajawka niesie wyłącznie typografię, bez karty i bez ramki.
+ * Zajawka strony: makieta zajawki strony CMS (wariant B). Strona CMS nie ma
+ * pola na zdjęcie ani na ikonę, więc zajawka niesie wyłącznie typografię,
+ * bez karty i bez ramki.
  *
- * Podkategorie: wariant C (karta, sam tytuł) z tego samego podglądu —
- * odróżnia „wejście głębiej" od „wejście na treść" (strony, wariant B
- * wyżej), bez żadnej grafiki. Liczba kolumn ta sama, co w siatce
+ * Podkategorie: wariant C (karta, sam tytuł) z tej samej makiety. Odróżnia
+ * „wejście głębiej" od „wejścia na treść" (strony, wariant B wyżej), bez
+ * żadnej grafiki. Liczba kolumn ta sama, co w siatce
  * produktów (ustawienie sklepu), żeby kafelek miał tę samą szerokość
  * wszędzie w sklepie.
  *}
 {extends file='page.tpl'}
 
-{* Goły `page.tpl` rysuje okruszki bez `.q-container` — ten sam problem
-   i to samo lekarstwo co w `customer/page.tpl` i na liście życzeń.
+{* Goły `page.tpl` rysuje okruszki bez `.q-container`; rozwiązanie jak
+   w `customer/page.tpl` i na liście życzeń.
    `.q-cms-crumbs`, nie `.q-account__crumbs`: ta strona nie wczytuje
    `account.css`. *}
 {block name='breadcrumb'}
@@ -31,7 +31,7 @@
 {* Bez `.q-container` tutaj: strona już stoi w jednej warstwie wcięcia
    z ambientu layoutu (`.columns-container.container` z `#center-column`),
    tak samo jak okruszki wyżej. Druga, własna warstwa dokładałaby wcięcie
-   po raz drugi — ten sam błąd i to samo lekarstwo co na liście życzeń. *}
+   po raz drugi (tak samo na liście życzeń). *}
 {block name='page_header_container'}
   <h1 class="q-listing__title">{$cms_category.name}</h1>
   {if $cms_category.description}

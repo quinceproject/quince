@@ -1,5 +1,5 @@
 {**
- * Quince — przełącznik widoku listy.
+ * Quince: przełącznik widoku listy.
  *
  * Siatka albo lista. Wybór zostaje u klienta, w jego przeglądarce, bo to jego
  * nawyk czytania, a nie ustawienie sklepu: część klientów porównuje zajawki

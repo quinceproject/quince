@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_categoryproducts.
+ * Quince: nadpisanie modułu ps_categoryproducts.
  *
  * Produkty z tej samej kategorii pod kartą produktu. Moduł daje listę, motyw
  * daje jej wygląd: tę samą karuzelę, co akcesoria i ostatnio oglądane.

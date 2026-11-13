@@ -5,7 +5,7 @@
 
 {* Odmiana pozycji koszyka z szuflady (`q-cartline`), szersza, z własną
    kolumną na cechy wariantu, stan magazynu, cenę jednostkową i kwotę.
-   Nazwy stanów magazynowych — patrz `catalog/_partials/product-availability.tpl`. *}
+   Nazwy stanów magazynowych: patrz `catalog/_partials/product-availability.tpl`. *}
 {if $product.availability == 'in_stock' || $product.availability == 'available'}
   {assign var=qKlasaStanu value='q-stock--in'}
 {elseif $product.availability == 'last_remaining_items'}
@@ -77,7 +77,7 @@
       {/if}
     </div>
 
-    {* Te same zaczepy, co w szufladzie koszyka (`data-q-cart-*`) — jeden
+    {* Te same zaczepy, co w szufladzie koszyka (`data-q-cart-*`): jeden
        skrypt (`cart-qty.js`) obsługuje obie. *}
     <div class="q-cartline__qty product-line__quantity-button quantity-button js-quantity-button">
       <div class="q-qty">

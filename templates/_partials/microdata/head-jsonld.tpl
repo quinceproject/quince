@@ -4,7 +4,7 @@
  *}
 {** Organization: wzbogacona wersja tego, co rdzeń PS9 wypisałby sam (patrz
     Quince\Engine\Settings\BrandSchemaSettings::organizationJsonLd(), panel
-    „Brand & Schema") — jeden obiekt, policzony i zescape'owany w PHP, nie
+    „Brand & Schema"): jeden obiekt, policzony i zescape'owany w PHP, nie
     drugi wpis obok. Panel pokazuje dokładnie ten sam podgląd. **}
 <script type="application/ld+json">{$quince_organization_jsonld nofilter}</script>
 

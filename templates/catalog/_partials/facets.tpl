@@ -1,5 +1,5 @@
 {**
- * Quince — panel zawężeń.
+ * Quince: panel zawężeń.
  *
  * Renderuje go rdzeń albo ps_facetedsearch, zależnie od tego, który przejął
  * wyszukiwanie. Silnik decyduje wyłącznie o tym, GDZIE ten kawałek stanie:

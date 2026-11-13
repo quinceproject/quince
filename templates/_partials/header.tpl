@@ -1,9 +1,9 @@
 {**
- * Quince — nagłówek
+ * Quince: nagłówek
  *
  * Znak firmowy, wyszukiwanie i akcje klienta. Projekt: widok nagłówka.
  *
- * Wszystko, co widać, przychodzi gotowe w `$modules.quince_engine.header` — ikony
+ * Wszystko, co widać, przychodzi gotowe w `$modules.quince_engine.header`: ikony
  * jako kod SVG, teksty rozwiązane dla bieżącego języka, wybory sprowadzone do
  * wartości logicznych. W szablonie nie ma obliczeń ani decyzji.
  *
@@ -11,7 +11,7 @@
  * idzie tabulator i czytnik ekranu; o miejscu na ekranie decyduje siatka w arkuszu.
  *
  * Czego tu nie ma: hooka displayTop. Silnik decyduje, co stoi w nagłówku, więc
- * moduły nie wstawiają się tu same — wyszukiwarka, koszyk i konto są nasze.
+ * moduły nie wstawiają się tu same (wyszukiwarka, koszyk i konto są nasze).
  *
  * Klasy: assets/css/components/header.css
  *}
@@ -34,8 +34,8 @@
   {if isset($modules.quince_engine.header)}
     {assign var=qh value=$modules.quince_engine.header}
 
-    {* Zakresy wyszukiwania dostarcza moduł wskazany w ustawieniach, a nie silnik —
-       dzięki temu każda nasza wyszukiwarka wystawia je tak samo, pod swoją nazwą. *}
+    {* Zakresy wyszukiwania dostarcza moduł wskazany w ustawieniach, a nie silnik.
+       Dzięki temu każda nasza wyszukiwarka wystawia je tak samo, pod swoją nazwą. *}
     {assign var=qSearchProvider value=$qh.search.provider}
     {if $qh.search.scope && isset($modules.$qSearchProvider.scopes) && $modules.$qSearchProvider.scopes}
       {assign var=qScopes value=$modules.$qSearchProvider.scopes}
@@ -43,7 +43,7 @@
       {assign var=qScopes value=[]}
     {/if}
 
-    {* Podpowiedzi dostarcza ten sam moduł co zakresy — wyszukiwarka wbudowana
+    {* Podpowiedzi dostarcza ten sam moduł co zakresy. Wyszukiwarka wbudowana
        ich nie ma, więc bez modułu formularz zostaje zwykłym formularzem. *}
     {if isset($modules.$qSearchProvider.suggest) && $modules.$qSearchProvider.suggest.enabled}
       {assign var=qSuggest value=$modules.$qSearchProvider.suggest}
@@ -58,7 +58,7 @@
         {* ── katalog w przyklejonym nagłówku ──
            Pas menu odjeżdża razem ze stroną i zabiera ze sobą jedyne dojście do
            katalogu; nagłówek, który zostaje, przejmuje je na siebie. Przycisk jest
-           w kodzie zawsze, a pokazuje się dopiero wtedy, gdy pasa menu nie widać —
+           w kodzie zawsze, a pokazuje się dopiero wtedy, gdy pasa menu nie widać:
            dokłada go klasa `is-stuck`, nie skrypt budujący znacznik.
 
            Ikona i nazwa idą z ustawień nawigacji, bo to ten sam przycisk co w pasie
@@ -109,8 +109,8 @@
         {* ── akcje klienta ── *}
         <div class="q-header__actions">
 
-          {* Miejsce na akcje z modułów — powiadomienia i co przyjdzie później.
-             Bez modułu hook nic nie zwraca i rząd wygląda jak dotąd. Moduł rysuje
+          {* Miejsce na akcje z modułów (np. powiadomienia).
+             Bez modułu hook nic nie zwraca. Moduł rysuje
              własną treść klasami motywu, więc dziedziczy barwy pasa nagłówka. *}
           {if $qh.module_actions}{hook h='displayQuinceHeaderActions'}{/if}
 
@@ -123,7 +123,7 @@
                    bez nazwy. *}
                 <button class="q-action" type="button" data-q-picker-button
                         aria-haspopup="true" aria-expanded="false"
-                        aria-label="{if $customer.is_logged}{$customer.firstname} — {l s='My Account' d='Shop.Theme.Customeraccount'}{elseif $qh.account.label}{$qh.account.label}{else}{l s='Sign in' d='Shop.Theme.Actions'}{/if}">
+                        aria-label="{if $customer.is_logged}{$customer.firstname}, {l s='My Account' d='Shop.Theme.Customeraccount'}{elseif $qh.account.label}{$qh.account.label}{else}{l s='Sign in' d='Shop.Theme.Actions'}{/if}">
                   {if $qh.account.icon}
                     <svg class="q-action__icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                       {$qh.account.icon nofilter}
@@ -170,7 +170,7 @@
               </div>
             {else}
               <a class="q-action" href="{if $customer.is_logged}{$urls.pages.my_account}{else}{$urls.pages.authentication}{/if}"
-                 aria-label="{if $customer.is_logged}{$customer.firstname} — {l s='My Account' d='Shop.Theme.Customeraccount'}{elseif $qh.account.label}{$qh.account.label}{else}{l s='Sign in' d='Shop.Theme.Actions'}{/if}">
+                 aria-label="{if $customer.is_logged}{$customer.firstname}, {l s='My Account' d='Shop.Theme.Customeraccount'}{elseif $qh.account.label}{$qh.account.label}{else}{l s='Sign in' d='Shop.Theme.Actions'}{/if}">
                 {if $qh.account.icon}
                   <svg class="q-action__icon" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
                     {$qh.account.icon nofilter}
@@ -187,7 +187,7 @@
             {/if}
           {/if}
 
-          {* Lista życzeń pojawia się razem z modułem, który ją prowadzi — bez niego
+          {* Lista życzeń pojawia się razem z modułem, który ją prowadzi. Bez niego
              silnik zwraca `visible = false`, więc ikona nie prowadzi donikąd. *}
           {if $qh.wishlist.visible}
             <a class="q-action" href="{$qh.wishlist.url}" aria-label="{l s='Saved products' d='Shop.Theme.Global'}">
@@ -226,12 +226,10 @@
 
       {* ── wąski ekran ──
          Wyszukiwanie ma na telefonie własny wiersz w barwach pasa nawigacji: pole
-         zmieszczone w wierszu ze znakiem firmowym byłoby węższe od wpisywanej frazy.
-         Docelowo ten wiersz należy do pasa nawigacji i przeniesie się tam razem
-         z nim — do tego czasu stoi tutaj, żeby telefon nie został bez szukania. *}
+         zmieszczone w wierszu ze znakiem firmowym byłoby węższe od wpisywanej frazy. *}
       {if $qh.search.enabled}
         <div class="q-header__mobile-search">
-          {* Hamburger i pole prowadzą do tego samego — do katalogu — więc stoją
+          {* Hamburger i pole prowadzą do tego samego (do katalogu), więc stoją
              razem. Przycisk otwiera panel z kategoriami wysuwany od lewej. *}
           {if isset($modules.quince_engine.navigation) && $modules.quince_engine.navigation.enabled}
             <button class="q-burger" type="button" data-q-navmob-open
@@ -284,14 +282,14 @@
     </header>
   {/if}
 
-  {* Pas nawigacji stoi pod nagłówkiem — osobny pas, bo należy do katalogu,
+  {* Pas nawigacji stoi pod nagłówkiem jako osobny pas, bo należy do katalogu,
      a nie do znaku firmowego i akcji klienta. *}
   {block name='header_nav_main'}
     {include file='_partials/navbar.tpl'}
     {include file='_partials/navbar-mobile.tpl'}
 
     {* Wartownik: zero wysokości, stoi tuż za pasem menu. Po nim skrypt poznaje,
-       że katalog schował się pod przyklejonym nagłówkiem — bez nasłuchu przewijania,
+       że katalog schował się pod przyklejonym nagłówkiem, bez nasłuchu przewijania,
        który liczyłby się przy każdym piksielu. *}
     {if isset($qh) && $qh.sticky}<div data-q-stuck aria-hidden="true"></div>{/if}
   {/block}

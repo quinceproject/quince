@@ -1,5 +1,5 @@
 {**
- * Quince — pas nawigacji
+ * Quince: pas nawigacji
  *
  * Kategorie i odnośniki własne. Projekt: widok paska nawigacji.
  *
@@ -9,7 +9,7 @@
  * ani obliczeń.
  *
  * Kategorie stoją zawsze pod jednym przyciskiem; obok niego wyłącznie odnośniki
- * własne. O kształcie rozwinięcia — kolumny, kafelki albo kaskada — decyduje
+ * własne. O kształcie rozwinięcia (kolumny, kafelki albo kaskada) decyduje
  * ustawienie `panel`; treść jest we wszystkich przypadkach ta sama.
  *
  * Klasy: assets/css/components/navbar.css
@@ -39,7 +39,7 @@
 
       {* ── odnośniki własne ──
          Stoją po kategoriach, bo prowadzą poza katalog: promocje, szkolenia, blog.
-         Odnośnik bez nazwy albo bez adresu nie dojdzie tutaj — odsiewa go silnik. *}
+         Odnośnik bez nazwy albo bez adresu nie dojdzie tutaj, odsiewa go silnik. *}
       {foreach from=$qn.links item=link}
         <a class="q-nav__item{if $link.style != 'normal'} q-nav__item--{$link.style}{/if}"
            href="{$link.url}">

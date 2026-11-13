@@ -4,14 +4,13 @@
  *}
 
 {**
- * OPC — Payment methods list partial (AJAX refresh)
+ * OPC: Payment methods list partial (AJAX refresh)
  * Variables: $payment_options, $is_free, $selected_payment_module, $selected_payment_selection_key
  *}
 
-{* Opakowanie `.payment-options__list` — ten sam wzorzec, co `.delivery-options__list`
+{* Opakowanie `.payment-options__list`: ten sam wzorzec, co `.delivery-options__list`
    w `carriers.tpl` (ta sama reguła w `checkout.css` daje obu odstęp między kartami).
-   Stockowy szablon modułu renderował karty bez opakowania wprost w `#opc-payment-methods`,
-   więc karty stały bez żadnego odstępu między sobą. *}
+   Szablon modułu renderuje karty bez opakowania, wprost w `#opc-payment-methods`. *}
 <div class="payment-options__list">
   {foreach from=$payment_options item="module_options"}
     {foreach from=$module_options item="option"}

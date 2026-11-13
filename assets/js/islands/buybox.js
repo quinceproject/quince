@@ -1,5 +1,5 @@
 /**
- * Quince — panel zakupu na karcie produktu.
+ * Quince: panel zakupu na karcie produktu.
  *
  * Cztery drobne zachowania, których PrestaShop nie przynosi sam:
  *   licznik ilości (rdzeń zostawia to motywowi),
@@ -49,7 +49,7 @@
     /**
      * Pasek zakupu na telefonie i warstwa z panelem.
      *
-     * Pasek jest wtedy, kiedy panelu zakupu NIE WIDAĆ — i przed dojechaniem do
+     * Pasek jest wtedy, kiedy panelu zakupu NIE WIDAĆ: i przed dojechaniem do
      * niego, i po minięciu. Gdy panel jest na ekranie, pasek powtarzałby to,
      * na co klient właśnie patrzy.
      *
@@ -59,7 +59,7 @@
      * będąc widocznym i zdarzenie przecięcia wtedy nie pada.
      *
      * Warstwa panelu nie kopiuje: POŻYCZA go na czas otwarcia i oddaje przy
-     * zamknięciu. Dwie kopie znaczyłyby dwa niezależne stany — wybrany wariant,
+     * zamknięciu. Dwie kopie znaczyłyby dwa niezależne stany: wybrany wariant,
      * wpisana personalizacja i ustawiona ilość rozjechałyby się między stroną
      * a warstwą. Przenoszony węzeł jest fizycznie ten sam, więc nie ma czego
      * uzgadniać.
@@ -74,7 +74,7 @@
 
         // Kotwicą jest BLOK CENY, nie przycisk zakupu: pasek niesie kwotę, więc
         // z chwilą, gdy klient widzi cenę na stronie, pasek powtarza to, na co
-        // patrzy. Mierzenie przycisku trzymało pasek na ekranie przez całą
+        // patrzy. Mierzenie przycisku trzymałoby pasek na ekranie przez całą
         // wysokość panelu, z kwotą tuż nad kwotą.
         var kotwica = panel.querySelector('.q-buy__slot--price') || panel;
         var czeka = false;
@@ -148,8 +148,8 @@
 
         if (warstwa && uchwyt) {
             // Panel wraca do kolumny dopiero PO zakończeniu zwijania. Oddany
-            // od razu zostawiał warstwę pustą w trakcie ruchu: zjeżdżał sam
-            // nagłówek z nazwą i wyglądało to jak zupełnie inny element.
+            // od razu zostawiłby warstwę pustą w trakcie ruchu: zjeżdżałby sam
+            // nagłówek z nazwą i wyglądałoby to jak zupełnie inny element.
             // Kolumna trzyma przez ten czas swoją wysokość, więc strona pod
             // warstwą nie drgnie. Zapasowy zegar na wypadek, gdyby przejście
             // nie wystartowało (ograniczony ruch w ustawieniach systemu).
@@ -239,7 +239,7 @@
      *
      * Panel jedzie z treścią, dopóki mieści się w oknie. Wyższy niż okno
      * zatrzymywałby się z przyciskiem zakupu pod dolną krawędzią i nie dałoby
-     * się do niego dojechać — wtedy przyklejenie się wyłącza.
+     * się do niego dojechać. Wtedy przyklejenie się wyłącza.
      *
      * O tym rozstrzyga zmierzona wysokość, a nie szerokość okna, więc nie da
      * się tego zapisać zapytaniem o nośnik. Mierzymy przy wejściu, przy zmianie
@@ -486,7 +486,7 @@
     function progi(panel) {
         /* Wszystko wyszukiwane przy każdym użyciu, a nie raz na starcie:
            rdzeń podmienia cały blok progów po zmianie wariantu, więc zapamiętany
-           węzeł zostawał poza stroną razem ze swoim nasłuchem. */
+           węzeł zostałby poza stroną razem ze swoim nasłuchem. */
         function szuflada() {
             return panel.querySelector('[data-q-tier-drawer]');
         }
@@ -614,7 +614,7 @@
      * Nazwa wybranego pliku na etykiecie.
      *
      * Pole `input type=file` jest schowane, bo przeglądarka rysuje przy nim
-     * własny przycisk z własnym napisem — nieostylowalny i nieprzetłumaczalny.
+     * własny przycisk z własnym napisem, nieostylowalny i nieprzetłumaczalny.
      * Skoro schowane, to ono nie pokaże nazwy pliku i musi zrobić to etykieta.
      */
     function wgrywanie(panel) {

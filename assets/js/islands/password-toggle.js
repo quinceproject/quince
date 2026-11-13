@@ -1,10 +1,10 @@
 /* ===================================================================
-   Quince — podgląd hasła
+   Quince: podgląd hasła
 
    Przycisk w polu hasła przełącza je między zasłoniętym a odsłoniętym.
    PrestaShop daje na ten przycisk zaczep `data-ps-action="toggle-password"`,
    ale obsługę trzyma w pakiecie skryptów swojego motywu, którego Quince nie
-   ładuje — przycisk stał martwy.
+   ładuje. Bez tego pliku przycisk nic nie robi.
 
    Wyspa: bez JavaScriptu przycisku nie ma po co pokazywać, więc skrypt sam
    go odsłania. Hasło zostaje wtedy zasłonięte, czyli tak, jak działa pole
@@ -56,8 +56,8 @@
        Pole hasła w kasie stoi schowane do chwili, w której klient zaznaczy
        „Załóż konto". Rdzeń daje na to zaczepy `js-password-form__check`
        i `js-password-form__input-wrapper`, ale obsługę trzyma w pakiecie
-       skryptów swojego motywu — bez niej pole nie wychodziło nigdy i konta
-       nie dało się założyć.
+       skryptów swojego motywu. Bez tej obsługi pole nie wychodzi nigdy i konta
+       nie da się założyć.
 
        Odznaczenie czyści wpisane hasło: hasło zostające w schowanym polu
        założyłoby konto, choć klient się z tego wycofał. */

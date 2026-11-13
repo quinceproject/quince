@@ -1,5 +1,5 @@
 {**
- * Quince — warstwa z panelem zakupu na telefonie.
+ * Quince: warstwa z panelem zakupu na telefonie.
  *
  * Skrypt PRZENOSI do niej panel zakupu na czas otwarcia i oddaje go kolumnie
  * przy zamknięciu. Przenoszony jest ten sam węzeł, nie kopia: wybrany wariant,
@@ -9,7 +9,7 @@
  *
  * Warstwa stoi WEWNĄTRZ `.product-container`, choć rysuje się nad całą stroną.
  * PrestaShop po zmianie wariantu podmienia bloki panelu tylko w obrębie tego
- * kontenera; warstwa postawiona obok niego zostawiała w panelu stary wariant,
+ * kontenera; warstwa postawiona obok niego zostawia w panelu stary wariant,
  * starą cenę i stary stan przycisku. Położenie w kodzie nie zmienia wyglądu,
  * bo `dialog` otwarty przez `showModal()` idzie na wierzch niezależnie od tego,
  * gdzie stoi.
@@ -23,9 +23,8 @@
 
     {* Ta sama krawędź co u paska: półkolista nisza z kołem w barwie marki.
        Pasek i warstwa to dwa stany jednej rzeczy, więc mają ten sam znak.
-       Krzyżyka nie ma — koło ze strzałką JEST zamknięciem, a dwa przyciski
-       robiące to samo w jednym nagłówku to pytanie bez odpowiedzi. Zostają
-       jeszcze Escape i kliknięcie w tło. *}
+       Krzyżyka nie ma: koło ze strzałką JEST zamknięciem. Zamyka też Escape
+       i kliknięcie w tło. *}
     <span class="q-sheet__nisza">
       <span class="q-sheet__luk">
         <button class="q-sheet__chwyt" type="button" data-q-sheet-close

@@ -162,10 +162,9 @@
         {* Enforce policy check only for new passwords (autocomplete="new-password") existing ones may predate the current policy and must stay usable. *}
         {assign var='apply_password_policy' value=($field.autocomplete|default:'') === 'new-password'}
 
-        {* Podgląd hasła stoi W POLU, przy jego prawym końcu — jak przycisk
+        {* Podgląd hasła stoi W POLU, przy jego prawym końcu, jak przycisk
            pobrania danych przy NIP-ie. Rdzeń stawia go OBOK pola, jako drugi
-           człon `input-group`, i daje mu wygląd przycisku głównego: pole
-           hasła wyglądało wtedy jak pole z doklejonym żółtym klockiem.
+           człon `input-group`, i daje mu wygląd przycisku głównego.
 
            Znak rysuje wpisany tu SVG, a nie krój znaków PrestaShopa:
            Quince go nie ładuje, więc znak z kroju jest pustym kwadratem. *}
@@ -273,7 +272,7 @@
     {/if}
 
     {* Zdanie mówiące, po co pole. Stoi W GRUPIE POLA, nad komunikatem
-       o błędzie — tak ma prototyp kasy. Doklejone za grupą lądowałoby przy
+       o błędzie. Doklejone za grupą lądowałoby przy
        polu poniżej, bo to grupa niesie odstęp do następnego wiersza.
 
        Pisze je ten szablon, a nie nadpisanie w `customer-form.tpl`:
@@ -290,9 +289,8 @@
     {* Przykład formatu stoi POD polem, nie w nim: pole ma już napis w środku,
        a druga podpowiedź w tym samym miejscu przebijałaby spod niego.
 
-       Pole urodzin ma już ten sam format w `comment` wyżej („Np.: 1970-05-31”) —
-       nie dokładamy więc tu drugiej linijki z gołym wzorcem („RRRR-MM-DD”),
-       bo mówi dokładnie to samo drugi raz. *}
+       Pole urodzin ma już ten sam format w `comment` wyżej („Np.: 1970-05-31”),
+       więc tu go pomijamy. *}
     {block name='form_field_placeholder'}
       {if isset($field.availableValues.placeholder) && $qPlywa && $field.name !== 'birthday'}
         <div class="form-text">{$field.availableValues.placeholder}</div>

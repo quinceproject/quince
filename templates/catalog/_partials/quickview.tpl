@@ -1,5 +1,5 @@
 {**
- * Quince — szybki podgląd produktu.
+ * Quince: szybki podgląd produktu.
  *
  * Treść okna, które otwiera oko na zajawce. Rdzeń renderuje ten szablon
  * w odpowiedzi na `action=quickview` i oddaje go jako `quickview_html`;

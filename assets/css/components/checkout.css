@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — kasa
+   Quince: kasa
 
    Oba warianty kasy: krokowy, czyli natywny checkout PrestaShopa, i kasa
    jednostronicowa z modułu `ps_onepagecheckout`. Wyglądają tak samo; różnią
@@ -10,7 +10,7 @@
    =================================================================== */
 
 /* ===================================================================
-   Quince — drobiazgi wspólne dla widoków zakupu
+   Quince: drobiazgi wspólne dla widoków zakupu
 
    Rzeczy, których używa więcej niż jeden widok, a które przy wdrożeniu
    trafią do komponentów motywu, nie do arkusza pojedynczego ekranu.
@@ -58,7 +58,7 @@
 
 
 /* ===================================================================
-   Quince — kolumna zamówienia
+   Quince: kolumna zamówienia
 
    Z prototypu checkoutu, mierzonego w przeglądarce.
    Układ: zwijana głowa, ciało z pozycjami i kwotami netto, kwota do
@@ -190,7 +190,7 @@
     }
 
     /* Na stronie koszyka ciało zaczyna się tu wprost pod nagłówkiem karty
-       (bez listy pozycji i bez „Products (N)" nad nim) — kreska oddzielałaby
+       (bez listy pozycji i bez „Products (N)" nad nim), więc kreska oddzielałaby
        wtedy nagłówek od niczego. Na potwierdzeniu zamówienia ten sam blok
        stoi pod listą kupionych pozycji i kreska tam zostaje. */
     .js-cart-detailed-totals .q-ordersum__tot { border-block-start: 0; }
@@ -213,7 +213,7 @@
     }
 
     /* Kreska nad kwotą taka sama jak pozostałe w karcie. Prototyp rysuje
-       tu grubą, ciemną — motyw nie ma takiego stylu i jedna gruba kreska
+       tu grubą, ciemną, ale motyw nie ma takiego stylu i jedna gruba kreska
        w całym sklepie czytałaby się jak błąd, a nie jak akcent. */
     .q-ordersum--open .q-ordersum__grand {
         margin-inline: var(--q-space-md);
@@ -229,8 +229,8 @@
         color: var(--q-meta-color);
     }
 
-    /* Strona koszyka pokazuje VAT pod kwotą, kasa nie — tam go nie było
-       w projekcie i kolumna jest ciaśniejsza. */
+    /* Strona koszyka pokazuje VAT pod kwotą, kasa nie: w projekcie kasy
+       go nie ma i kolumna jest ciaśniejsza. */
     .q-ordersum__tax {
         margin: 0;
         padding: 0 var(--q-space-md) var(--q-space-md);
@@ -240,7 +240,7 @@
     }
 
     /* Na stronie koszyka głowa stoi zawsze otwarta i jest zwykłym nagłówkiem,
-       nie przyciskiem — bez wskaźnika klikalności, którego tu nie ma. */
+       nie przyciskiem, bez wskaźnika klikalności. */
     .q-cart__side .q-ordersum__head { cursor: default; }
 
     .q-ordersum__grand-value {
@@ -283,9 +283,9 @@
         cursor: not-allowed;
     }
 
-    /* Nieużywane w checkoucie krokowym — klauzula o danych przeszła do
-       kroku 1. Zostaje dla checkoutu jednostronicowego (OPC), gdzie nie ma
-       osobnego kroku 1 i ta klauzula wraca na swoje miejsce z prototypu. */
+    /* Nieużywane w checkoucie krokowym: tam klauzula o danych stoi w kroku 1.
+       Zostaje dla checkoutu jednostronicowego (OPC), gdzie nie ma osobnego
+       kroku 1 i klauzula stoi tu, jak w prototypie. */
     .q-ordersum__clause {
         margin: var(--q-space-xs) 0 0;
         padding: var(--q-space-sm) var(--q-space-sm);
@@ -296,7 +296,7 @@
     }
 
     /* OPC: psgdpr i ps_dataprivacy wyświetlone razem (patrz
-       `one-page-checkout.tpl`) — każdy w swoim akapicie, żeby teksty
+       `one-page-checkout.tpl`): każdy w swoim akapicie, żeby teksty
        dwóch modułów nie sklejały się w jedno zdanie bez odstępu. */
     .q-ordersum__clause p { margin: 0 0 var(--q-space-xs); }
 
@@ -314,10 +314,10 @@
     }
 
     /* Kreska nad przełącznikiem oddziela go od listy już naliczonych kodów
-       wyżej w `.q-voucher-wrap` — potrzebna tylko, gdy ta lista istnieje.
-       Bez warunku rysowała się też wtedy, gdy przełącznik jest jedynym
-       dzieckiem (kod jeszcze niedodany): tuż pod własną kreską
-       `.q-ordersum__foot`, dwie kreski jedna pod drugą zamiast jednej. */
+       wyżej w `.q-voucher-wrap`, więc rysuje się tylko, gdy ta lista istnieje.
+       Gdy przełącznik jest jedynym dzieckiem (kod jeszcze niedodany), stoi
+       tuż pod kreską `.q-ordersum__foot` i druga dałaby dwie kreski jedna
+       pod drugą. */
     .q-voucher-wrap > .q-voucher:not(:first-child) {
         border-block-start: 1px solid var(--q-card-border);
         padding-block-start: var(--q-space-sm);
@@ -372,14 +372,14 @@
         .q-ordersum--open .q-ordersum__grand { margin-inline: var(--q-space-sm); }
         /* Stopka kolumny zostaje, bo na wąskim ekranie trzyma klauzulę;
            znika z niej tylko zapowiedź zapłaty. Zgoda i prawdziwy przycisk
-           stoją wtedy w kroku płatności — kolumna jest nad formularzem. */
+           stoją wtedy w kroku płatności, a kolumna jest nad formularzem. */
         .q-ordersum__foot .q-ordersum__pay { display: none; }
     }
 }
 
 
 /* ===================================================================
-   Quince — kasa
+   Quince: kasa
 
    Kroki zamówienia: dane osobowe, adres, dostawa, płatność. Te same cztery,
    które wystawia PrestaShop 9.2 pod identyfikatorami
@@ -391,7 +391,7 @@
    akceptowanych płatności. Bez menu i bez wyszukiwarki: na tym ekranie nie
    ma już czego szukać, a każde wyjście z niego to porzucony koszyk.
 
-   Nowe jest tu OPAKOWANIE kroków. Pola, zgody, komunikaty, przyciski,
+   Plik buduje opakowanie kroków. Pola, zgody, komunikaty, przyciski,
    plakietki i ceny to komponenty motywu i nie są przerabiane.
    =================================================================== */
 
@@ -413,8 +413,8 @@
     }
 
     /* Logo skraca się do wysokości paska, a szerokość idzie za nim.
-       Bez `inline-size: auto` obrazek zostawał przy szerokości z atrybutu
-       i ściskał się w pionie — 315×70 rysowało się jako 315×40. */
+       Bez `inline-size: auto` obrazek zostaje przy szerokości z atrybutu
+       i ściska się w pionie (315×70 rysuje się jako 315×40). */
     .q-checkout-head__logo img {
         display: block;
         inline-size: auto;
@@ -439,8 +439,8 @@
 
     .q-checkout-head__item svg { flex: none; }
 
-    /* Tylko odstęp od treści nad nią — tło, obramowanie i układ środka
-       niesie `.q-footer__bar`, bo to on jest teraz w środku: ten sam pasek,
+    /* Tylko odstęp od treści nad nią. Tło, obramowanie i układ środka
+       niesie `.q-footer__bar` w środku: ten sam pasek,
        co w prawdziwej stopce sklepu, z tymi samymi danymi z panelu. */
     .q-checkout-foot {
         margin-block-start: var(--q-space-xl);
@@ -546,8 +546,8 @@
 
     /* Karta kroku z prototypu: wyściółka na całej karcie, nazwa i czynność
        obok niej w jednym rzędzie, treść niżej. Żadnej kreski między głową
-       a treścią — kartę zamyka obramowanie. Zmierzone 24px/18px podciągnięte
-       pod najbliższy stopień skali silnika, zamiast zostawać poza nią. */
+       a treścią: kartę zamyka obramowanie. Zmierzone 24px/18px podciągnięte
+       pod najbliższy stopień skali silnika. */
     .q-step { padding: var(--q-space-md); }
 
     .q-step__head {
@@ -559,7 +559,7 @@
         padding: 0;
     }
 
-    /* Nazwa kroku: krój nagłówkowy, nie krój tekstu — zmierzone w makiecie kasy
+    /* Nazwa kroku: krój nagłówkowy, nie krój tekstu, zmierzone w makiecie kasy
        (21,16px / 700 / Lexend), identycznie w kroku bieżącym i zwiniętym.
        Rozmiar nie maleje, gdy krok przestaje być bieżący: w prototypie
        jedyna różnica to kolor, i to tylko dla kroku nieosiągalnego. */
@@ -588,7 +588,7 @@
         vertical-align: middle;
     }
 
-    /* Podsumowanie kroku ukończonego: zdanie pod nazwą, nie obok niej —
+    /* Podsumowanie kroku ukończonego: zdanie pod nazwą, nie obok niej,
        zmierzone w prototypie (`.sub` pod `<h2>`, nie w jednym wierszu z nim).
        „Zmień" stoi przy prawej krawędzi samej nazwy, bo to ona jest tytułem
        wiersza; zdanie pod spodem już nic nie rozpycha. */
@@ -604,7 +604,7 @@
         border: 0;
     }
 
-    /* Krok ukończony pokazuje tylko nazwę i zdanie — pełny formularz
+    /* Krok ukończony pokazuje tylko nazwę i zdanie. Pełny formularz
        zostaje w DOM-ie (kasa i tak chowa kroki nieaktualne tą samą regułą
        co karty na innych stronach), ale nie na oczach klienta. */
     .q-step--done .q-step__body { display: none; }
@@ -808,7 +808,7 @@
 
     /* Na telefonie przycisk zostaje tutaj, nie w kolumnie (patrz
        `checkout-summary.js`). `#payment-confirmation` jest elementem flex
-       bez własnej szerokości, więc samo sizuje się do treści — procent na
+       bez własnej szerokości, więc samo sizuje się do treści, więc procent na
        przycisku liczy się wtedy względem już skurczonego rodzica i nic nie
        zmienia. Rozciągamy cały łańcuch, nie tylko przycisk. */
     .q-checkout__order #payment-confirmation {
@@ -864,7 +864,7 @@
 
 
 /* ===================================================================
-   Quince — kasa, układ wspólny dla obu wariantów
+   Quince: kasa, układ wspólny dla obu wariantów
 
    Przeniesienie prototypu checkoutu na tokeny i komponenty
    Quince. Układ, kolejność pól i zachowanie zostają z prototypu; zmienia
@@ -887,8 +887,8 @@
         display: grid;
         /* Podział szerokości bierzemy ze strony produktu: ta sama siatka, te
            same zmienne i to samo ustawienie w panelu, co panel zakupu. Kolumna
-           zamówienia i buybox to w oczach klienta to samo miejsce — szpalta
-           z ceną i przyciskiem — więc nie mają powodu mieć dwóch pokręteł.
+           zamówienia i buybox to w oczach klienta to samo miejsce (szpalta
+           z ceną i przyciskiem), więc nie mają powodu mieć dwóch pokręteł.
            Wartości `--q-pdp-glowna` i `--q-pdp-panel` dokłada szablon. */
         grid-template-columns:
             minmax(0, var(--q-pdp-glowna, 2fr))
@@ -923,10 +923,9 @@
     }
 
     /* Odstęp od nagłówka strony niesie kontener, tą samą wartością, co na
-       karcie produktu i na listingu (`.q-pdp`, `.q-listing`) —
-       `padding-block: var(--q-space-md) ...`. Prototyp tego odstępu nie miał
-       w ogóle (sam znacznik nagłówka bez tokenów), więc tutaj się nie liczy
-       jako źródło; liczy się konwencja już ustalona w reszcie sklepu. */
+       karcie produktu i na listingu (`.q-pdp`, `.q-listing`):
+       `padding-block: var(--q-space-md) ...`. Prototyp tego odstępu nie
+       definiuje, więc wartość idzie za konwencją reszty sklepu. */
     .q-checkout2-page {
         padding-block: var(--q-space-md) var(--q-space-xl);
     }
@@ -974,13 +973,10 @@
         gap: var(--q-space-md);
     }
 
-    /* Sekcja jeszcze niedostępna: w kasie jednostronicowej dostawa
-       i płatność czekają na adres. Kreska przerywana mówi, że to miejsce
-       się wypełni, a nie że coś się zepsuło. */
-    /* Krok, do którego klient jeszcze nie doszedł. Ta sama karta co reszta
-       sekcji, bo to ten sam krok kasy; nieaktywność niesie przygaszony
-       nagłówek. Prototyp źródłowy miał tu ramkę z przerywanej kreski bez tła,
-       ale bez zdania w środku czytało się to jak puste miejsce. */
+    /* Sekcja jeszcze niedostępna (w kasie jednostronicowej dostawa
+       i płatność czekają na adres) albo krok, do którego klient jeszcze nie
+       doszedł. Ta sama karta co reszta sekcji, bo to ten sam krok kasy;
+       nieaktywność niesie przygaszony nagłówek. */
     .q-checkout2__section--pending {
         padding-block: var(--q-space-md);
     }
@@ -1071,8 +1067,8 @@
     .q-linkbtn:hover { color: var(--q-link-hover); }
 
     /* „Wstecz" przy przycisku „Dalej": zwykły odnośnik, nie przycisk
-       z ramką — zmierzone w prototypie. Mikro-strzałka mówi „cofam", bo sam
-       napis „Wstecz" tego nie pokazuje— krok, do którego wraca, stoi już
+       z ramką (zmierzone w prototypie). Mikro-strzałka mówi „cofam", bo sam
+       napis „Wstecz" tego nie pokazuje. Krok, do którego wraca, stoi już
        w nazwie przycisku „Dalej" obok, nie trzeba go powtarzać. */
     .q-linkbtn--back {
         display: inline-flex;
@@ -1130,7 +1126,7 @@
     .q-checkout2__bank dd { margin: 0; font-weight: var(--q-weight-medium); }
 
     /* Strona potwierdzenia stoi w pełnym układzie sklepu (nagłówek, menu,
-       stopka), nie w skróconej oprawie kasy — czyści domyślne okruszki
+       stopka), nie w skróconej oprawie kasy. Czyści domyślne okruszki
        layoutu i sama je włącza, jak każda inna podstrona. Bez tego
        odstępu okruszki stoją tuż pod paskiem menu. */
     .order-confirmation__crumbs { padding-block-start: var(--q-space-md); }
@@ -1382,10 +1378,9 @@
    pogrubienie i kreske w barwie marki, bo stoi w zdaniu i pozycja nic
    o nim nie mowi.
 
-   Lista selektorow w motywie jest celowo waska i nie obejmuje kasy.
-   Dlatego „regulamin sklepu", „polityke prywatnosci" i „Zaloguj sie"
-   wygladaly jak zwykly tekst. Dopisujemy konteksty kasy; przy wdrozeniu
-   ta sama lista idzie do `theme.css`.
+   Lista selektorow w `theme.css` jest celowo waska i nie obejmuje kasy,
+   wiec konteksty kasy („regulamin sklepu", „polityka prywatnosci",
+   „Zaloguj sie") sa dopisane tutaj.
    =================================================================== */
 
 @layer quince.elements {
@@ -1455,8 +1450,7 @@
    przy czym obrot stoi na zerze. Zaznaczone pole pokazuje przez to dwie
    pionowe kreski zamiast ptaszka.
 
-   Ponizsza regula jest przepisana WPROST z motywu. Zniknie stad w chwili,
-   gdy odswiezymy arkusz w makiecie kategorii.
+   Ponizsza regula jest przepisana WPROST z motywu.
    =================================================================== */
 
 @layer quince.components {
@@ -1608,8 +1602,8 @@
     .delivery-option__carrier-logo img { max-block-size: 1.75rem; inline-size: auto; }
 
     /* Kwota na wąskim ekranie schodzi pod treść, zamiast ściskać się
-       w trzeciej kolumnie obok terminu dostawy i nachodzić na tekst —
-       ten sam wzorzec, co makieta stosuje dla `.q-option__item`. */
+       w trzeciej kolumnie obok terminu dostawy i nachodzić na tekst.
+       Ten sam wzorzec, co makieta stosuje dla `.q-option__item`. */
     @media (max-width: 767px) {
         .delivery-option__label,
         .payment-option label,
@@ -1623,7 +1617,7 @@
 
     /* Treść doklejana przez moduł przewoźnika, np. wybór paczkomatu. Rdzeń
        renderuje ten kontener dla każdego przewoźnika, z treścią w środku
-       albo bez niej — kreska i odstęp mają sens tylko wtedy, gdy faktycznie
+       albo bez niej, a kreska i odstęp mają sens tylko wtedy, gdy faktycznie
        jest co oddzielić. */
     .delivery-option__extra:has(.delivery-option__extra-content),
     .payment-option__additional-information {
@@ -1639,7 +1633,7 @@
        w oknie modalnym Bootstrapa, otwieranym linkiem, który pojawia się
        tylko przy skonfigurowanym dodatkowym tekście. Bez niego modal nie ma
        czym się otworzyć, a Quince i tak nie ładuje stylu chowającego okna
-       Bootstrapa (ma własny system `.q-modal`) — treść wychodzi więc zawsze
+       Bootstrapa (ma własny system `.q-modal`), więc treść wychodzi zawsze
        widoczna, co jest poprawne, ale z przyciskiem zamknięcia, który nie ma
        podpiętego skryptu i tylko myli. */
     .payment-option__additional-information .modal .close {
@@ -1756,7 +1750,7 @@
     .q-checkout2__form .tab-pane.active { display: block; }
 
     /* Krok ukończony zostaje widoczny, w odróżnieniu od tych, do których
-       klient jeszcze nie doszedł — pokazuje nazwę i jedno zdanie, a pełne
+       klient jeszcze nie doszedł. Pokazuje nazwę i jedno zdanie, a pełne
        ciało chowa osobna reguła (`.q-step--done .q-step__body`). */
     .q-checkout2__form .tab-pane.q-step--done { display: block; }
 
@@ -1803,7 +1797,7 @@
 @layer quince.layout {
 
     /* Znaczki z kroju PrestaShopa: Quince go nie ładuje, więc każdy rysowałby
-       się pustym kwadratem — na przyciskach przejścia dalej i powrotu,
+       się pustym kwadratem: na przyciskach przejścia dalej i powrotu,
        przy podglądzie hasła, przy pozycji z prezentem. Tak samo robi stopka. */
     .q-checkout2-page .material-icons,
     .q-float .material-icons {
@@ -1914,7 +1908,7 @@
 }
 
 /* ===================================================================
-   Wejscie do konta w kroku pierwszym — przeniesione z makiety
+   Wejscie do konta w kroku pierwszym (przeniesione z makiety)
    =================================================================== */
 
 @layer quince.layout {
@@ -2034,8 +2028,8 @@
     .q-checkout2__form .mb-3:has(> .q-choice) { margin-block-end: var(--q-space-sm); }
 
     /* Rząd przycisków kroków: „Wstecz" przy lewej krawędzi, „Dalej" przy
-       prawej, bez kreski nad nimi — rozsunięte na boki w jednym rzędzie.
-       Bez kreski, bo nie ma jej w prototypie checkoutu. */
+       prawej, rozsunięte na boki w jednym rzędzie. Bez kreski nad nimi,
+       bo nie ma jej w prototypie checkoutu. */
     .q-checkout2__form .buttons-wrapper {
         justify-content: flex-end;
         margin-block-start: var(--q-space-md);
@@ -2057,7 +2051,7 @@
 
    Węzły przychodzą z kroku płatności przeniesione przez wyspę, więc niosą
    klasy rdzenia (`form-check`, `q-btn`) i trzeba im w kolumnie ustawić
-   rozmiar i rytm — w kroku stały w szerokim rzędzie, tu w wąskiej szpalcie.
+   rozmiar i rytm: w kroku stały w szerokim rzędzie, tu w wąskiej szpalcie.
    =================================================================== */
 
 @layer quince.components {
@@ -2082,7 +2076,7 @@
 
     /* OPC: `.q-choice` niesie własny odstęp dotykowy (`--q-touch-target`)
        w `padding-block`, a `.mb-3` z newslettera/ofert (`{form_field}`,
-       klasy rdzenia) własny spory margines — tutaj, w wąskiej stopce zgód,
+       klasy rdzenia) własny spory margines. Tutaj, w wąskiej stopce zgód,
        rytm daje sam `gap` powyżej, więc oba zerujemy, tak jak krok
        płatności zeruje margines `.form-check`. */
     .q-ordersum__foot #conditions-to-approve .q-choice,
@@ -2095,8 +2089,8 @@
     .one-page-checkout__footer #conditions-to-approve .mb-3 { margin-block-end: 0; }
 
     /* Ten sam przycisk, dwa możliwe id zależnie od wariantu kasy
-       (`checkout-summary.js` przenosi oba tym samym mechanizmem —
-       patrz komentarz przy liście `PRZENOSZONE` w tym pliku): krokowa
+       (`checkout-summary.js` przenosi oba tym samym mechanizmem,
+       patrz komentarz przy liście `PRZENOSZONE` w tamtym pliku): krokowa
        zostaje przy `#payment-confirmation`, bo to węzeł, którym i tak
        zarządza rdzeń; OPC ma własny `#opc-payment-confirmation-wrap`
        (patrz tam, dlaczego). Reguła szerokości musi znać oba. */
@@ -2121,7 +2115,7 @@
 @layer quince.components {
 
     /* Klauzula o danych w kroku 1. Nie jest zgodą do zaznaczenia, tylko
-       zdaniem o tym, po co te dane zbieramy — czyta się jak nota, nie jak
+       zdaniem o tym, po co te dane zbieramy: czyta się jak nota, nie jak
        kolejne pole do odhaczenia. */
     .q-checkout2__notice {
         margin: 0 0 var(--q-space-sm);
@@ -2136,7 +2130,7 @@
 @layer quince.components {
 
     /* Podgląd zgody na regulamin w kolumnie, zanim klient dojdzie do kroku
-       płatności — ten sam odnośnik, zaszarzony i nieklikalny, żeby kolumna
+       płatności: ten sam odnośnik, zaszarzony i nieklikalny, żeby kolumna
        nie zmieniała układu dopiero na ostatnim kroku. */
     .q-choice--preview {
         opacity: .55;
@@ -2147,10 +2141,10 @@
 }
 
 /* ===================================================================
-   Quince — kasa jednostronicowa (moduł ps_onepagecheckout)
+   Quince: kasa jednostronicowa (moduł ps_onepagecheckout)
 
    Moduł dostarcza własny szablon dla każdej sekcji, ale karta, tytuł, pole
-   i wiersz pól to te same komponenty, co w kasie krokowej — nie przepisujemy
+   i wiersz pól to te same komponenty, co w kasie krokowej. Nie przepisujemy
    znaczników modułu, dopisujemy jego klasy do istniejących reguł. Tak samo
    jak `.delivery-options__list`/`.payment-options__list` wyżej w tym pliku.
 
@@ -2165,14 +2159,13 @@
 
     /* Rdzeń modułu (`views/public/one-page-checkout.css`, plik niezastąpiony
        nadpisaniem motywu) niesie `@media(min-width:992px){.one-page-checkout{
-       padding-right:2em}}` — miejsce pod BRAKIEM własnego stylu w stockowym
-       OPC. U nas robi inną szkodę: sekcja płatności stoi POZA `#opc-form`
+       padding-right:2em}}`. Sekcja płatności stoi POZA `#opc-form`
        (`one-page-checkout.tpl`, komentarz „żeby nie zagnieżdżać formularza
-       płatności"), więc nie dziedziczy tego paddingu — i wychodzi szersza
+       płatności"), więc nie dziedziczy tego paddingu i wychodzi szersza
        o 32px od sekcji 1-3, które stoją W formularzu.
 
        `!important` konieczny, nie tylko wyższa specyficzność: plik modułu
-       nie stoi w żadnej warstwie (`@layer`), a cała nasza kaskada tak —
+       nie stoi w żadnej warstwie (`@layer`), a cała nasza kaskada tak, więc
        niewarstwowa reguła rdzenia wygrywa z KAŻDĄ naszą, bez względu na
        specyficzność, dopóki i ona nie dostanie `!important`. */
     #opc-form.one-page-checkout { padding-right: 0 !important; }
@@ -2191,12 +2184,12 @@
         box-shadow: var(--q-shadow-sm);
     }
 
-    /* Nie `:last-child`: moduł stawia każdą sekcję w osobnym opakowaniu
-       (`js-opc-contact-section`, `js-opc-addresses-section`...), więc
-       sekcja jest „ostatnim dzieckiem" swojego jednoelementowego rodzica
-       nawet w środku strony — reguła zerowała odstęp po kroku 1, mimo że
-       krok 2 szedł zaraz po nim. Dodatkowy odstęp przed stopką jest
-       nieszkodliwy, bo ona i tak ma własny `margin-block-start`. */
+    /* Bez zerowania odstępu przez `:last-child`: moduł stawia każdą sekcję
+       w osobnym opakowaniu (`js-opc-contact-section`,
+       `js-opc-addresses-section`...), więc sekcja jest „ostatnim dzieckiem"
+       swojego jednoelementowego rodzica nawet w środku strony. Dodatkowy
+       odstęp przed stopką jest nieszkodliwy, bo ona i tak ma własny
+       `margin-block-start`. */
 
     /* Numer sekcji liczony przez CSS, nie wpisany w każdym z czterech
        szablonów modułu: jedna reguła ponumeruje tyle sekcji, ile akurat
@@ -2206,13 +2199,10 @@
         counter-reset: q-opc-section;
     }
 
-    /* Wiersz nazwy sekcji z linkiem logowania przy prawej krawędzi —
+    /* Wiersz nazwy sekcji z linkiem logowania przy prawej krawędzi:
        ten sam układ, co `.q-step__head` w kasie krokowej (flex,
        `justify-content: space-between`, `.q-checkout2__aside` dosuwa się
-       sam przez własny `margin-inline-start: auto`). Osobna reguła zamiast
-       reużycia `.q-step__head`: ta sama mechanika, własna nazwa dla
-       kontekstu modułu, zgodnie z resztą klas `.one-page-checkout__*`
-       w tym pliku. */
+       sam przez własny `margin-inline-start: auto`). */
     .one-page-checkout__head {
         display: flex;
         flex-wrap: wrap;
@@ -2253,15 +2243,15 @@
 
     .one-page-checkout__link:hover { color: var(--q-link-hover); }
 
-    /* Pole pojedyncze poza wierszem — samo `{form_field}` już daje odstęp
+    /* Pole pojedyncze poza wierszem: samo `{form_field}` już daje odstęp
        (`.q-float` w `mb-3`), więc opakowanie modułu nie dokłada drugiego. */
     .one-page-checkout__field { margin: 0; }
 
     .one-page-checkout__field + .one-page-checkout__field { margin-block-start: var(--q-space-md); }
 
-    /* Wiersz kilku pól obok siebie — ten sam wzorzec co `.q-kasa2__row`:
+    /* Wiersz kilku pól obok siebie, ten sam wzorzec co `.q-kasa2__row`:
        BEZ własnego marginesu na dole. Każde pole w środku ma już swój
-       `.mb-3` z `{form_field}` — własny margines wiersza dokładałby się
+       `.mb-3` z `{form_field}`, a własny margines wiersza dokładałby się
        do tego, dając podwójny odstęp pod wierszem z dwiema kolumnami,
        dwa razy większy niż pod zwykłym pojedynczym polem. */
     .opc-form-fields-row {
@@ -2296,7 +2286,7 @@
     }
 
     /* `checkout-summary.js` (`ustawKlaseStopki`) przenosi tę klasę na sam
-       `#conditions-to-approve`, gdy węzeł stoi w kolumnie zamówienia — tam
+       `#conditions-to-approve`, gdy węzeł stoi w kolumnie zamówienia. Tam
        odstęp od góry daje `gap` rodzica (`.q-ordersum__foot`), reguła wyżej
        dokładałaby drugi, własny. */
     #conditions-to-approve.one-page-checkout__footer { margin-block-start: 0; }
@@ -2365,7 +2355,7 @@
 
     /* ── skorupka narzędziowa modułu ─────────────────────────────────
        Moduł zakłada kilka klas Bootstrapa dla samego pokazywania/ukrywania
-       i pozycjonowania nakładki ładowania — nie całego frameworka, tylko
+       i pozycjonowania nakładki ładowania: nie całego frameworka, tylko
        tych kilku. Ta sama zasada, co `.d-none` wyżej w pliku. */
     .position-relative { position: relative; }
     .position-absolute { position: absolute; }

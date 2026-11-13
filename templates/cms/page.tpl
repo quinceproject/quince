@@ -4,13 +4,11 @@
  *}
 
 {**
- * Quince — strona CMS.
+ * Quince: strona CMS.
  *
- * Ten sam problem i to samo lekarstwo co na kategorii CMS: goły `page.tpl`
- * nie daje okruszkom odstępu, a treść z edytora reagowała na `rich-text`,
- * którego nasz arkusz w ogóle nie zna — nagłówki z edytora wychodziły
- * gołym stylem przeglądarki, bez normalizacji rozmiaru i bez odstępu od
- * tytułu strony.
+ * Jak na kategorii CMS: goły `page.tpl` nie daje okruszkom odstępu. Treść
+ * z edytora dostaje `q-prose`, bo arkusz motywu nie zna klasy `rich-text`
+ * i bez tego nagłówki z edytora mają goły styl przeglądarki.
  *}
 {extends file='page.tpl'}
 

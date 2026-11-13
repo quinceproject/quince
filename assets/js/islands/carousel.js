@@ -1,5 +1,5 @@
 /**
- * Quince — karuzela zajawek produktu.
+ * Quince: karuzela zajawek produktu.
  *
  * Taśma przewija się sama: palcem, kółkiem myszy i klawiaturą, bo to zwykłe
  * przewijanie w poziomie. Skrypt dokłada tylko dwie rzeczy, których CSS nie

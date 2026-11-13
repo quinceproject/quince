@@ -1,14 +1,14 @@
 /**
- * Quince — podpowiedzi w wyszukiwarce
+ * Quince: podpowiedzi w wyszukiwarce
  *
  * Lista produktów pod polem, w trakcie pisania. Wyspa siedzi na FORMULARZU, bo
- * to on zna adres wyszukiwania, wybrany zakres i pole tekstowe — a formularzy
+ * to on zna adres wyszukiwania, wybrany zakres i pole tekstowe, a formularzy
  * wyszukiwania na stronie jest kilka (nagłówek, wiersz telefonu) i każdy ma mieć
  * własny stan zamiast jednego wspólnego na całą stronę.
  *
  * Trzy rzeczy, na których zwykle wykłada się taka lista:
  *
- * 1. Kolejność odpowiedzi. Zapytania idą co kilka znaków i wracają, kiedy chcą —
+ * 1. Kolejność odpowiedzi. Zapytania idą co kilka znaków i wracają, kiedy chcą:
  *    odpowiedź na „kompu" potrafi przyjść po odpowiedzi na „komputer" i nadpisać
  *    dobrą listę złą. Dlatego każde nowe zapytanie przerywa poprzednie.
  *
@@ -73,7 +73,7 @@
             pole.setAttribute('aria-activedescendant', pozycje[wybrana].id);
 
             // Zaznaczenie strzałką musi być widoczne także wtedy, gdy lista jest
-            // dłuższa niż jej okno — inaczej klient przewija w ciemno.
+            // dłuższa niż jej okno. Inaczej klient przewija w ciemno.
             if (pozycje[wybrana].scrollIntoView) {
                 pozycje[wybrana].scrollIntoView({ block: 'nearest' });
             }
@@ -250,7 +250,7 @@
                 zdarzenie.preventDefault();
                 zaznacz(wybrana - 1 < 0 ? pozycje.length - 1 : wybrana - 1);
             } else if (zdarzenie.key === 'Enter' && pozycje[wybrana]) {
-                // Enter bez zaznaczonej pozycji ma wysłać formularz — tak działa
+                // Enter bez zaznaczonej pozycji ma wysłać formularz. Tak działa
                 // pole wyszukiwania wszędzie i nie ma powodu tego zmieniać.
                 zdarzenie.preventDefault();
                 pozycje[wybrana].click();
@@ -258,7 +258,7 @@
         });
 
         // Zmiana zakresu przy wpisanej frazie zmienia wyniki, więc lista musi się
-        // przeliczyć — inaczej pokazuje odpowiedź na poprzednie pytanie.
+        // przeliczyć. Inaczej pokazuje odpowiedź na poprzednie pytanie.
         if (zakres) {
             formularz.addEventListener('click', function (zdarzenie) {
                 if (zdarzenie.target.closest('[data-q-scope-option]')) {

@@ -1,16 +1,16 @@
 /**
- * Quince — nagłówek
+ * Quince: nagłówek
  *
  * Dwie rzeczy, obie krótkie:
  *
- * 1. Zakres wyszukiwania. Otwieranie listy robi wyspa selecta (picker.js) — tutaj
+ * 1. Zakres wyszukiwania. Otwieranie listy robi wyspa selecta (picker.js), tutaj
  *    zostaje sam wybór: zapisanie klucza w polu ukrytym i pokazanie nazwy na
  *    przycisku. Bez skryptu formularz nadal się wysyła, tylko z zakresem
  *    ustawionym na pierwszy z listy.
  *
  * 2. Licznik koszyka. Po dodaniu produktu przez AJAX PrestaShop rozgłasza
  *    `updateCart` razem z odpowiedzią serwera. Bez tego liczba w nagłówku
- *    zostawałaby stara aż do przeładowania strony — a to jest liczba, którą
+ *    zostawałaby stara aż do przeładowania strony, a to jest liczba, którą
  *    klient sprawdza właśnie po dodaniu.
  *
  * Projekt: widok nagłówka.
@@ -37,11 +37,11 @@
            i pozycja listy mają inne odstępy wewnętrzne, więc ten sam napis daje
            w nich dwie różne szerokości i krawędzie i tak by się nie zeszły.
 
-           Pomiar wymaga odsłonięcia listy — schowana nie ma wymiarów. Robimy to
+           Pomiar wymaga odsłonięcia listy, bo schowana nie ma wymiarów. Robimy to
            niewidocznie i w jednym takcie, więc przeglądarka nie zdąży jej
            narysować. */
         function zmierz() {
-            // Otwartej listy nie mierzymy — zniknęłaby pod ręką osobie, która
+            // Otwartej listy nie mierzymy: zniknęłaby pod ręką osobie, która
             // właśnie z niej wybiera.
             if (!menu.hidden) {
                 return;
@@ -64,7 +64,7 @@
 
         // Powtórka po dojechaniu krojów pisma. Pierwszy pomiar wypada, zanim
         // przeglądarka podmieni pismo zastępcze na nasze, a te mają inne
-        // szerokości znaków — bez powtórki przycisk zostaje na wymiarze
+        // szerokości znaków. Bez powtórki przycisk zostaje na wymiarze
         // policzonym z cudzego pisma.
         if (document.fonts && document.fonts.ready) {
             document.fonts.ready.then(zmierz);

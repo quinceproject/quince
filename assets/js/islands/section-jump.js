@@ -1,13 +1,13 @@
 /**
  * Skok do sekcji akordeonu na karcie produktu.
  *
- * Sam skok pod kotwicę zostawiał zwiniętą sekcję: klient trafiał na nagłówek
- * akordeonu i musiał kliknąć drugi raz, żeby zobaczyć to, po co przyszedł.
+ * Sam skok pod kotwicę zostawia zwiniętą sekcję: klient trafia na nagłówek
+ * akordeonu i musi kliknąć drugi raz, żeby zobaczyć to, po co przyszedł.
  * Otwieramy ją więc od razu.
  *
- * Jedna wyspa na wszystkie takie odnośniki — „Pełna specyfikacja" pod cechami,
- * ocena pod nazwą produktu — bo robią dokładnie to samo. Osobne pliki
- * rozjeżdżały się przy pierwszej poprawce.
+ * Jedna wyspa na wszystkie takie odnośniki („Pełna specyfikacja" pod cechami,
+ * ocena pod nazwą produktu), bo robią dokładnie to samo. Osobne pliki
+ * rozjechałyby się przy pierwszej poprawce.
  *
  * Odstęp od przyklejonego nagłówka robi arkusz (`scroll-margin`), a nie
  * przeliczanie pozycji w skrypcie: przeglądarka zna wysokość paska i sama

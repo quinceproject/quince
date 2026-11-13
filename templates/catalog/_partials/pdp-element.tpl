@@ -1,18 +1,16 @@
 {**
- * Quince — jeden element strony produktu.
+ * Quince: jeden element strony produktu.
  *
  * Strefy renderują listę identyfikatorów, którą przysyła silnik; ten plik jest
  * jedynym miejscem, gdzie identyfikator zamienia się w treść. Dzięki temu
  * przestawienie elementu w panelu nie wymaga zmiany w żadnym szablonie, a
  * dołożenie nowego elementu to jedna gałąź tutaj.
  *
- * Element jeszcze niezbudowany nie renderuje nic i nie przerywa strony —
- * przebudowa karty idzie po jednym elemencie, a strona ma działać przez cały
- * ten czas.
+ * Identyfikator bez gałęzi nie renderuje nic i nie przerywa strony.
  *
- * Zmienne: $qEl — element z katalogu silnika: `id`, `label`, `on` oraz `options`
+ * Zmienne: $qEl, element z katalogu silnika: `id`, `label`, `on` oraz `options`
  * (włączniki szczegółów, np. `omnibus` przy cenie). Rozgałęziamy się po `id`.
- * $qStrefa — nazwa strefy, w której element stoi. Większości jest obojętna;
+ * $qStrefa: nazwa strefy, w której element stoi. Większości jest obojętna;
  * dostępność zmienia po niej układ, bo w wąskiej kolumnie zakupu idzie jedną
  * linijką zamiast tabelą.
  *}
@@ -66,9 +64,9 @@
 {elseif $qId == 'price'}
   {include file='catalog/_partials/product-prices.tpl'}
 
-  {* Nota o najniższej cenie: własny wiersz POD blokiem ceny, tak jak w makiecie.
+  {* Nota o najniższej cenie: własny wiersz POD blokiem ceny.
      Włącznik stoi przy elemencie ceny w mapie strony produktu, a treść przynosi
-     moduł historii cen — bez niego nie ma czego liczyć i wiersz nie powstaje. *}
+     moduł historii cen. Bez niego nie ma czego liczyć i wiersz nie powstaje. *}
   {if $qEl.options.omnibus}
     {hook h='displayQuinceOmnibus' product=$product}
   {/if}

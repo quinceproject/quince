@@ -1,8 +1,8 @@
 {**
- * Quince — poziom kaskady
+ * Quince: poziom kaskady
  *
  * Wywołuje sam siebie dla każdego poziomu w głąb. Głębokość ograniczył już
- * silnik, budując drzewo — szablon idzie po tym, co dostał, i nie ma jak
+ * silnik, budując drzewo. Szablon idzie po tym, co dostał, i nie ma jak
  * zejść głębiej, niż sklep sobie ustawił.
  *
  * Pozycja i wysuwany poziom są RODZEŃSTWEM, nie zagnieżdżeniem: odnośnik nie

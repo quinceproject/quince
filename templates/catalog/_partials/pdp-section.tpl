@@ -5,8 +5,8 @@
  * klawiatury, ogłaszanie stanu w czytniku ekranu i otwieranie sekcji przy
  * szukaniu tekstu (Ctrl+F). Bez JavaScriptu sekcje dalej się rozwijają.
  *
- * Zmienne: $qId — człon identyfikatora, $qTytul — nagłówek, $qOtwarta — czy
- * rozwinięta na wejściu, $qLiczba — liczba przy nagłówku (opcjonalna). Treść
+ * Zmienne: $qId (człon identyfikatora), $qTytul (nagłówek), $qOtwarta (czy
+ * rozwinięta na wejściu), $qLiczba (liczba przy nagłówku, opcjonalna). Treść
  * przychodzi z sekcji dopasowanej do $qId.
  *}
 <details class="q-accordion__item" id="q-section-{$qId}"{if isset($qOtwarta) && $qOtwarta} open{/if}>

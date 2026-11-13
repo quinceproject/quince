@@ -1,5 +1,5 @@
 {**
- * Quince — jeden element listingu.
+ * Quince: jeden element listingu.
  *
  * Strefy renderują listę identyfikatorów, którą przysyła silnik; ten plik jest
  * jedynym miejscem, gdzie identyfikator zamienia się w treść. Przestawienie
@@ -9,10 +9,10 @@
  *
  * Jeden zestaw gałęzi obsługuje siedem stron z listą produktów: kategorię,
  * markę, dostawcę, wyszukiwarkę, nowości, promocje i bestsellery. Element,
- * który na danej stronie nie ma czego pokazać — podkategorie poza kategorią,
- * opis poza kategorią i marką — nie renderuje nic i nie przerywa strony.
+ * który na danej stronie nie ma czego pokazać (podkategorie poza kategorią,
+ * opis poza kategorią i marką), nie renderuje nic i nie przerywa strony.
  *
- * Zmienne: $qEl — element z katalogu silnika: `id`, `hook`, `options`.
+ * Zmienne: $qEl, element z katalogu silnika: `id`, `hook`, `options`.
  *}
 
 {assign var=qId value=$qEl.id}
@@ -37,9 +37,9 @@
 {elseif $qId == 'title'}
   {* Tytuł bierze się z kontrolera: nazwa kategorii, marki albo dostawcy siedzi
      już w `listing.label`. Wyjątkiem jest wyszukiwarka, gdzie tytuł niesie samą
-     odpowiedź: czy coś znaleziono i dla jakiej frazy. Ta treść stała dotąd
-     w `search.tpl` i nadpisywała cały blok nagłówka, przez co ustawienia stref
-     nie działały na wynikach wyszukiwania. *}
+     odpowiedź: czy coś znaleziono i dla jakiej frazy. Nie przenosić tego do
+     `search.tpl`: nadpisanie bloku nagłówka wyłącza ustawienia stref na
+     wynikach wyszukiwania. *}
   {if isset($search_string)}
     {* Tytuł mówi, na jakiej stronie klient jest, a nie jaki jest wynik.
        O wyniku mówi komunikat pod nim i przy zerze trafień trzy zdania pod rząd
@@ -50,7 +50,7 @@
       {assign var=qTytul value={l s='Search results for "%search_term%"' sprintf=['%search_term%' => $search_string] d='Shop.Theme.Catalog'}}
     {/if}
   {* Nazwa strony przed etykietą listingu. `listing.label` to zdanie rdzenia
-     w rodzaju „Kategoria: Clothes" albo „Lista produktów marki X" — dobre jako
+     w rodzaju „Kategoria: Clothes" albo „Lista produktów marki X", dobre jako
      opis wyniku wyszukiwania, ale nie jako nagłówek strony, na której klient
      już wie, gdzie jest. *}
   {elseif isset($category.name)}

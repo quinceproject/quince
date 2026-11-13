@@ -3,7 +3,7 @@
  * i szuflada pisania opinii.
  *
  * Pierwsza porcja i podsumowanie wychodzą z serwera, więc bez tego pliku sekcja
- * nadal pokazuje opinie — znika tylko doładowanie, głosowanie i formularz.
+ * nadal pokazuje opinie. Znika tylko doładowanie, głosowanie i formularz.
  *
  * Znaczniki doładowanych opinii przychodzą gotowe z kontrolera silnika, a nie
  * powstają tutaj: gdyby opinię rysował także JavaScript, dwa zapisy tego samego
@@ -132,7 +132,7 @@
                 }
 
                 // Liczba jedzie w atrybucie, a zdanie powstaje ze wzorca
-                // z tłumaczenia. Wydłubywanie cyfr z gotowego zdania psuło się
+                // z tłumaczenia. Wydłubywanie cyfr z gotowego zdania psułoby się
                 // w każdym języku, który zapisuje liczby inaczej.
                 var ile = parseInt(licznik.getAttribute('data-count'), 10) + 1;
                 var wzorzec = korzen.getAttribute('data-msg-helpful') || '';
@@ -269,7 +269,7 @@
             }).then(function (wynik) {
                 if (!wynik || !wynik.success) {
                     // Komunikat modułu bywa ze znacznikami w środku, a wypisujemy
-                    // go jako tekst — bez tego klient zobaczyłby gołe `<a href>`.
+                    // go jako tekst. Bez tego klient zobaczyłby gołe `<a href>`.
                     pokazPodpowiedz(
                         bezZnacznikow(wynik && wynik.error)
                         || korzen.getAttribute('data-msg-failure')

@@ -1,12 +1,10 @@
 /* ===================================================================
-   Quince — nagłówek
+   Quince: nagłówek
 
    Znak firmowy, wyszukiwanie i akcje klienta. Projekt: widok nagłówka.
 
-   Stylistyka przeniesiona z Flavora (style nagłówka i listy rozwijanej)
-   i wyrażona tokenami: tam wartości stoją wpisane w arkuszu, tutaj każda wskazuje
-   rolę, więc zmienia się razem z ustawieniami sklepu — także tam, gdzie pas
-   nagłówka jest ciemny albo w barwie marki, czego Flavor nie przewidywał.
+   Każda wartość wskazuje rolę z tokenów, więc zmienia się razem z ustawieniami
+   sklepu, także gdy pas nagłówka jest ciemny albo w barwie marki.
 
    Kolejność elementów w kodzie jest ustalona raz: znak firmowy, wyszukiwanie,
    akcje. Tą kolejnością idzie tabulator i czytnik ekranu.
@@ -18,7 +16,7 @@
 
     /* Nagłówek stoi WYŻEJ niż pas nawigacji, choć jest nad nim w kodzie: panel
        konta wysuwa się poniżej nagłówka i musi zakryć pas, a nie chować się pod
-       nim. Na telefonie kolejność się odwraca — patrz próg 767 px. */
+       nim. Na telefonie kolejność się odwraca (patrz próg 767 px). */
     .q-header {
         position: relative;
         z-index: 42;
@@ -41,8 +39,8 @@
         inline-size: 100%;
         max-inline-size: var(--q-container);
         margin-inline: auto;
-        /* Ten sam gutter-tylko-gdy-trzeba co `.q-container` w theme.css —
-           inaczej margines z wyśrodkowania i ten padding doliczałyby się
+        /* Ten sam gutter-tylko-gdy-trzeba co `.q-container` w theme.css.
+           Inaczej margines z wyśrodkowania i ten padding doliczałyby się
            do siebie, gdy okno jest szersze od pojemnika. */
         padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
         padding-block: var(--q-header-pad-block);
@@ -64,7 +62,7 @@
         white-space: nowrap;
     }
 
-    /* Wysokość znaku firmowego jest ustawieniem sklepu — nagłówek wpisuje ją
+    /* Wysokość znaku firmowego jest ustawieniem sklepu: nagłówek wpisuje ją
        w token przy elemencie, a szerokość wynika z pliku. */
     .q-header__logo img {
         display: block;
@@ -73,7 +71,7 @@
         max-inline-size: 100%;
     }
 
-    /* Na stronie głównej znak firmowy jest nagłówkiem pierwszego stopnia — to
+    /* Na stronie głównej znak firmowy jest nagłówkiem pierwszego stopnia. To
        wymóg struktury dokumentu, nie decyzja o wyglądzie, więc h1 nie wnosi
        tu żadnych własnych odstępów ani rozmiaru. */
     .q-header__logo-h1 {
@@ -120,10 +118,9 @@
     }
 
     /* Krzyżyk czyszczący i ozdobniki, które przeglądarka sama dokłada do pola
-       typu `search`. Rysuje je silnik przeglądarki własną barwą — niebieską,
-       niezależnie od ustawień sklepu — i nie da się ich pomalować. Wchodzą
-       w pole dopiero po wpisaniu znaku, więc pokazują się w chwili, gdy nikt
-       ich nie zamawiał. Zdejmujemy je: w polu nie ma stać znak spoza projektu. */
+       typu `search`. Rysuje je silnik przeglądarki własną barwą (niebieską,
+       niezależnie od ustawień sklepu) i nie da się ich pomalować. Pojawiają się
+       po wpisaniu znaku, dlatego są zdjęte. */
     .q-search__input::-webkit-search-cancel-button,
     .q-search__input::-webkit-search-decoration,
     .q-search__input::-webkit-search-results-button {
@@ -169,7 +166,7 @@
         inset-block-start: calc(100% + 1px);
     }
 
-    /* Szerokość zablokowana na najdłuższej pozycji listy — wylicza ją wyspa
+    /* Szerokość zablokowana na najdłuższej pozycji listy, wylicza ją wyspa
        header.js. Bez tego wybór dłuższej nazwy zwęża pole wyszukiwania
        i kontrolka skacze pod kursorem. */
     .q-search__scope {
@@ -183,7 +180,7 @@
 
         border: 0;
         border-inline-start: 1px solid var(--q-search-border);
-        /* Zakres stoi wewnątrz pola i ma własne tło o jeden krok od kartki —
+        /* Zakres stoi wewnątrz pola i ma własne tło o jeden krok od kartki:
            tyle, żeby było widać, że to osobna kontrolka, a nie miejsce do pisania. */
         background: var(--q-search-sunken);
         font: inherit;
@@ -209,9 +206,8 @@
         border-start-end-radius: var(--q-field-radius);
         border-end-end-radius: var(--q-field-radius);
         /* Wyróżnienie pasa, tak samo jak koszyk i katalog. Lupa stoi wprawdzie
-           w białym polu, ale jest przyciskiem tego samego nagłówka — na pasie
-           w barwie marki reszta przycisków robi się ciemna i sama lupa zostawała
-           wtedy jedyną żółtą bryłą w wierszu. */
+           w białym polu, ale jest przyciskiem tego samego nagłówka i musi zmieniać
+           barwę razem z pozostałymi, gdy pas jest w barwie marki. */
         background: var(--q-header-solid);
         color: var(--q-header-on-solid);
         cursor: pointer;
@@ -266,14 +262,14 @@
         flex: none;
     }
 
-    /* Podpis przy ikonie znika pierwszy przy zwężaniu — ikona koszyka jest
+    /* Podpis przy ikonie znika pierwszy przy zwężaniu: ikona koszyka jest
        rozpoznawalna, a nazwa zabiera miejsce potrzebne wyszukiwarce. */
     .q-action__label {
         white-space: nowrap;
     }
 
     /* Licznik stoi za podpisem, a nie nad ikoną. Nad ikoną ma sens dopiero wtedy,
-       gdy podpisu nie ma — inaczej ląduje na literach sąsiedniej akcji. */
+       gdy podpisu nie ma. Inaczej ląduje na literach sąsiedniej akcji. */
     .q-action__count {
         display: inline-flex;
         align-items: center;
@@ -285,8 +281,8 @@
         margin-inline-start: 2px;
 
         /* Licznik leży wprost na pasie, więc bierze wyróżnienie pasa. Barwa marki
-           wpisana wprost znikała na nagłówku ustawionym w tej samej barwie.
-           Wyjątkiem jest licznik w koszyku — ten stoi na przycisku, nie na pasie,
+           wpisana wprost znika na nagłówku ustawionym w tej samej barwie.
+           Wyjątkiem jest licznik w koszyku: stoi na przycisku, nie na pasie,
            i ma własną regułę niżej. */
         background: var(--q-header-solid);
         color: var(--q-header-on-solid);
@@ -303,12 +299,9 @@
         display: none;
     }
 
-    /* Akcja z rozwijaną listą — konto. Panel wisi pod przyciskiem, więc kontener
-       musi być punktem odniesienia. Nic poza tym: o odstęp między panelem a polem
-       wyszukiwania dba różnica wysokości, nie pozycjonowanie. */
-    /* Licznik siedzi NA ikonie, nie za podpisem: w wierszu rozpychał akcję i
-       czytał się jak część nazwy. Kreska w barwie pasa odcina krążek od ikony
-       pod nim — bez niej cyfra zlewa się z kreską ikony. */
+    /* Licznik siedzi NA ikonie, nie za podpisem, żeby nie rozpychał akcji
+       i nie czytał się jak część nazwy. Kreska w barwie pasa odcina krążek od
+       ikony pod nim, bez niej cyfra zlewa się z kreską ikony. */
     .q-header__actions .q-action .q-action__count {
         position: absolute;
         inset-block-start: 4px;
@@ -324,6 +317,8 @@
         line-height: 1;
     }
 
+    /* Akcja z rozwijaną listą (konto). Panel wisi pod przyciskiem, więc kontener
+       musi być punktem odniesienia. */
     .q-action-wrap {
         position: relative;
         display: flex;
@@ -335,16 +330,16 @@
         inset-inline-end: 0;
 
         /* Karta zaczyna się w połowie odstępu między dnem wiersza a pasem
-           nawigacji — tam kończy się rozciągnięty przycisk konta (patrz jego
-           ujemny odstęp). Do dna wiersza przyklejałaby się do wyszukiwarki,
-           do dna pasa — do pasa nawigacji; pół odstępu odsuwa ją od obu. */
+           nawigacji, tam kończy się rozciągnięty przycisk konta (patrz jego
+           ujemny odstęp). Przy dnie wiersza przyklejałaby się do wyszukiwarki,
+           przy dnie pasa do pasa nawigacji; pół odstępu odsuwa ją od obu. */
         inset-block-start: calc(100% + var(--q-header-pad-block) / 2);
     }
 
     /* Rozciągnięcie musi objąć cały łańcuch: pas akcji i opakowanie akcji są
        dziećmi wiersza wyśrodkowanego w pionie, więc bez `stretch` na każdym z nich
        przycisk nie ma do czego urosnąć. Dzieci zostają wyśrodkowane, bo oba mają
-       własne `align-items: center` — rośnie pudełko, nie zawartość. */
+       własne `align-items: center`: rośnie pudełko, nie zawartość. */
     .q-header__actions,
     .q-action-wrap {
         align-self: stretch;
@@ -357,13 +352,13 @@
            wygrywa z rozciąganiem. */
         block-size: auto;
 
-        /* `stretch` sięga tylko do dna wiersza, a wiersz kończy się nad dnem pasa —
+        /* `stretch` sięga tylko do dna wiersza, a wiersz kończy się nad dnem pasa
            o odstęp nagłówka. Przycisk schodzi więc o połowę tego odstępu i karta
            zaczyna się w połowie drogi między wyszukiwarką a pasem nawigacji,
            zamiast przyklejać się do jednego albo drugiego. */
         margin-block-end: calc(-1 * var(--q-header-pad-block) / 2);
 
-        /* Głowa rozwiniętego panelu stoi na pasie i ma się z niego wybijać —
+        /* Głowa rozwiniętego panelu stoi na pasie i ma się z niego wybijać:
            to ta sama rola co przycisk koszyka i katalogu. */
         background: var(--q-header-solid);
         color: var(--q-header-on-solid);
@@ -396,8 +391,7 @@
 
     /* Plakietka stoi przy prawej krawędzi ikony, liczona od wcięcia przycisku.
        Koszyk ma na szerokim ekranie większe wcięcie niż pozostałe akcje, więc
-       odstęp wzięty z nich stawiał jego plakietkę na środku ikony zamiast przy
-       jej prawym brzegu, jak przy sercu. Poniżej 1200 px koszyk wraca do
+       odstęp wzięty z nich postawiłby jego plakietkę na środku ikony. Poniżej 1200 px koszyk wraca do
        zwykłego wcięcia i reguła ogólna trafia sama. */
     @media (min-width: 1200px) {
         .q-header__actions .q-action--cart .q-action__count {
@@ -406,13 +400,13 @@
     }
 
     /* --- do 1199 px ---
-       Podpisy przy ikonach znikają pierwsze — ikona konta i serca są rozpoznawalne,
+       Podpisy przy ikonach znikają pierwsze: ikona konta i serca są rozpoznawalne,
        a miejsce jest potrzebne na to, co niesie treść. */
     @media (max-width: 1199px) {
         .q-action__label { display: none; }
 
         /* Bez podpisu zostaje sama ikona i akcja robi się wąskim, wysokim
-           prostokątem — a to ma być pole do dotknięcia, więc szerokość musi
+           prostokątem, a to ma być pole do dotknięcia, więc szerokość musi
            dorównać wysokości. */
         .q-action {
             min-inline-size: var(--q-touch-target);
@@ -427,7 +421,7 @@
             margin-inline-start: 0;
         }
 
-        /* Koszyk zostaje przyciskiem z podpisem — tam podpis niesie kwotę,
+        /* Koszyk zostaje przyciskiem z podpisem: tam podpis niesie kwotę,
            a nie powtarza ikonę. */
         .q-action--cart .q-action__label { display: inline; }
 
@@ -446,11 +440,11 @@
 
        Pudełko listy to wspólny komponent (.q-dropdown z wariantami --wide,
        --attached, --scroll), więc podpowiedzi wyglądają tak samo jak każda inna
-       lista w sklepie. Nowy jest wyłącznie WIERSZ: miniatura, nazwa, kategoria
+       lista w sklepie. Własny jest wyłącznie WIERSZ: miniatura, nazwa, kategoria
        i cena nie mieszczą się w jednolinijkowej pozycji listy. */
 
     .q-suggest {
-        /* Lista wychodzi spod pola i ma być nad wszystkim, co pod nią stoi —
+        /* Lista wychodzi spod pola i ma być nad wszystkim, co pod nią stoi,
            także nad pasem menu, który leży zaraz poniżej nagłówka. */
         z-index: 41;
     }
@@ -469,8 +463,8 @@
         border-block-start: 1px solid var(--q-border-subtle);
     }
 
-    /* Najechanie i zaznaczenie strzałką znaczą to samo — jedna pozycja czeka
-       na wybór — więc wyglądają tak samo. */
+    /* Najechanie i zaznaczenie strzałką znaczą to samo (jedna pozycja czeka
+       na wybór), więc wyglądają tak samo. */
     .q-suggest__item:hover,
     .q-suggest__item.is-current {
         background: var(--q-dropdown-option-bg-hover);
@@ -615,8 +609,8 @@
 
     /* Pełna nazwa dostaje szerokość przycisku z pasa menu, bo panel wychodzi spod
        niego tak samo: kolumna działów ma się kończyć dokładnie tam, gdzie przycisk,
-       który ją otworzył. Krótsza nazwa i sama ikona tego nie robią — sklep wybrał
-       je właśnie po to, żeby zająć mniej. */
+       który ją otworzył. Krótsza nazwa i sama ikona tego nie robią: ich zadaniem
+       jest zająć mniej miejsca. */
     .q-header__cats--full {
         min-inline-size: var(--q-navbar-trigger-w);
         justify-content: space-between;
@@ -670,15 +664,15 @@
         box-shadow: var(--q-shadow-md);
     }
 
-    /* Przyklejony nagłówek ma własne tło — ustawienie sklepu. Podmieniamy tokeny
-       komponentu, a nie poszczególne reguły: wszystko, co rysuje nagłówek, czyta
-       z nich i tak. Przy tym samym wyborze w obu polach nie zmienia się nic. */
     /* Logo po przewinięciu: obróbka pliku, bo plik jest jeden, a pas bywa wtedy
        innej barwy niż zwykle. Bez ustawienia nie dzieje się nic. */
     .q-header.is-stuck .q-header__logo img {
         filter: var(--q-header-logo-stuck-filter, none);
     }
 
+    /* Przyklejony nagłówek ma własne tło (ustawienie sklepu). Podmieniane są tokeny
+       komponentu, a nie poszczególne reguły: wszystko, co rysuje nagłówek, czyta
+       z nich i tak. */
     .q-header.is-stuck {
         --q-header-solid:          var(--q-band-header-stuck-solid);
         --q-header-on-solid:       var(--q-band-header-stuck-on-solid);
@@ -702,13 +696,12 @@
 
     /* Akcje zwinięte do ikon w przyklejonym nagłówku.
 
-       W locie dochodzi przycisk katalogu, a szerokość nagłówka się nie zmienia —
-       coś musi ustąpić. Podpisy kont i ulubionych ustępują pierwsze, bo ikona
+       W locie dochodzi przycisk katalogu, a szerokość nagłówka się nie zmienia,
+       więc coś musi ustąpić. Podpisy kont i ulubionych ustępują pierwsze, bo ikona
        osoby i serce są rozpoznawalne same z siebie. Koszyk podpis zachowuje:
        tam podpis niesie kwotę, a nie powtarza ikonę.
 
-       Zwężenie jest ustawieniem sklepu — sklep, w którym klient loguje się do
-       swojego konta, może woleć trzymać jego imię na widoku. */
+       Zwężenie jest ustawieniem sklepu (klasa `q-header--scroll-icons`). */
     .q-header--scroll-icons.is-stuck .q-action:not(.q-action--cart) .q-action__label {
         display: none;
     }
@@ -719,7 +712,7 @@
         padding-inline: var(--q-space-xs);
     }
 
-    /* Poniżej 1200 px zostaje sama ikona, cokolwiek sklep wybrał — na tym samym
+    /* Poniżej 1200 px zostaje sama ikona, cokolwiek sklep wybrał. Na tym samym
        progu znikają podpisy akcji po prawej. Nazwa katalogu zajmuje tu tyle, co
        pole wyszukiwania, a pole jest w nagłówku ważniejsze. */
     @media (max-width: 1199px) {
@@ -736,7 +729,7 @@
     }
 
     /* Na telefonie pasa menu nie ma w ogóle, a katalog stoi pod hamburgerem
-       we własnym wierszu nagłówka — drugi przycisk nie miałby czego dokładać. */
+       we własnym wierszu nagłówka, więc drugi przycisk nie miałby czego dokładać. */
     @media (max-width: 767px) {
         .q-header.is-stuck .q-header__cats {
             display: none;
@@ -773,7 +766,7 @@
     }
 
     /* Wiersz wyszukiwania na telefonie. Nosi barwy pasa nawigacji, bo należy do
-       nawigacji, a nie do nagłówka — hamburger i pole prowadzą do tego samego.
+       nawigacji, a nie do nagłówka: hamburger i pole prowadzą do tego samego.
        Pole jest tu płaskie: bez ramki i bez własnego tła, wtopione w pas. */
     .q-header__mobile-search {
         display: none;
@@ -825,8 +818,7 @@
 
     /* Szukanie jest tu samą ikoną, a nie przyciskiem w barwie marki. Pole obok
        nie ma ani ramki, ani własnego tła, więc wypełniony prostokąt na jego końcu
-       byłby jedyną bryłą w całym pasie i przeciągał na siebie wzrok — a to nie
-       on jest tu celem, tylko wpisanie frazy. Symetrycznie do hamburgera: po obu
+       byłby jedyną bryłą w całym pasie i przeciągał na siebie wzrok. Symetrycznie do hamburgera: po obu
        stronach wiersza stoi goła ikona w barwach pasa. */
     .q-header__mobile-search .q-search__submit {
         inline-size: var(--q-touch-target);
@@ -866,20 +858,19 @@
         }
 
         /* Razem z polem znikają jego odstępy automatyczne, które trzymały akcje
-           przy prawej krawędzi — dlatego przejmuje to opakowanie akcji. */
+           przy prawej krawędzi, dlatego przejmuje to opakowanie akcji. */
         .q-header__search { display: none; }
 
         .q-header__actions { margin-inline-start: auto; }
 
         /* Karta konta zostaje kartą, ale przestaje wisieć pod samym przyciskiem.
            Ma 300 px i prawą krawędź przy przycisku, a przycisk stoi jako pierwszy
-           z trzech akcji — jej lewy bok wychodził poza ekran, na węższym telefonie
-           razem z treścią.
+           z trzech akcji, więc jej lewy bok wychodziłby poza ekran.
 
            Prawą krawędź bierze więc od całego pasa akcji, czyli od prawego
            marginesu nagłówka, i nie może być szersza niż ekran bez marginesów.
            Dzięki temu nie ma czego przycinać przy żadnej szerokości, a karta dalej
-           wychodzi spod przycisku — jest szersza niż pas akcji, więc jej górna
+           wychodzi spod przycisku: jest szersza niż pas akcji, więc jej górna
            krawędź i tak biegnie pod nim. */
         .q-header__actions { position: relative; }
 

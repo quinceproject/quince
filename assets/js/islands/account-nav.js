@@ -1,17 +1,14 @@
 /**
- * Quince — sidebar konta na telefonie
+ * Quince: sidebar konta na telefonie
  *
- * Na szerokim ekranie to zwykła, pionowa lista — nic do zrobienia. Poniżej
+ * Na szerokim ekranie to zwykła, pionowa lista, nic do zrobienia. Poniżej
  * 992px staje się rozwijaną listą: przycisk pokazuje bieżącą pozycję,
  * kliknięcie otwiera resztę jako panel nad treścią.
  *
  * Etykieta przycisku bierze się z pozycji oznaczonej `is-active` w samej
- * liście, nie z osobnego źródła — dwa miejsca z tą samą nazwą prędzej czy
+ * liście, nie z osobnego źródła: dwa miejsca z tą samą nazwą prędzej czy
  * później się rozjadą. Bez skryptu przycisk pokazuje stałe „Moje konto”
- * (patrz szablon) i lista jest zawsze widoczna — tyle, że bez rozwijania.
- *
- * Projekt: wymaganie „dropdown na telefonie” z sesji — Flavor miał to samo
- * w produkcji, prototyp zostawiał pasek do przewijania w poziomie.
+ * (patrz szablon) i lista jest zawsze widoczna, tyle że bez rozwijania.
  */
 (function () {
     'use strict';
@@ -57,7 +54,7 @@
             }
         });
 
-        // Wybór pozycji z poziomu panelu zamyka go — inaczej lista zostaje
+        // Wybór pozycji z poziomu panelu zamyka go. Inaczej lista zostaje
         // rozwinięta nad nową treścią, kiedy strona wczyta się z pamięci wstecz.
         list.addEventListener('click', function (event) {
             if (event.target.closest('a, button')) {

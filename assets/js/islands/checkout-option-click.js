@@ -2,7 +2,7 @@
     'use strict';
 
     /* Kursor "pointer" ze stylu obejmuje całą kartę, ale klikalny `<label>`
-       rdzenia — mniej. Dla płatności owija samą nazwę metody, pomijając
+       rdzenia mniej. Dla płatności owija samą nazwę metody, pomijając
        resztę karty. Dla przewoźnika owija treść, ale nie dopełnienie wokół
        niej (karta ma padding, którego label nie wypełnia), więc brzegi karty
        też nie reagują na klik. */

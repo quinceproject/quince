@@ -4,13 +4,12 @@
  *}
 
 {**
- * Adres dostawy + opcjonalny adres rozliczeniowy — wbudowany mechanizm
+ * Adres dostawy + opcjonalny adres rozliczeniowy: wbudowany mechanizm
  * modułu (`#opc-use-same-address`, `#opc-billing-section`), tylko
- * ostylowany. Panel rozliczeniowy w rdzeniu stał jako OSOBNA, ponumerowana
- * sekcja (`one-page-checkout__section`) obok sekcji dostawy; w makiecie kasy
- * to jeden szary panel WEWNĄTRZ tej samej karty, więc przenosimy go do
- * środka i zdejmujemy mu numerację, zachowując identyfikatory, po których
- * chodzi JS modułu (`opc-address.bundle.js`) — on szuka ich po `id`,
+ * ostylowany. W module panel rozliczeniowy jest OSOBNĄ, ponumerowaną
+ * sekcją (`one-page-checkout__section`) obok sekcji dostawy; tu stoi jako
+ * szary panel WEWNĄTRZ tej samej karty, bez numeracji. Identyfikatory
+ * zostają, bo JS modułu (`opc-address.bundle.js`) szuka ich po `id`,
  * nie po miejscu w drzewie ani klasie.
  *}
 

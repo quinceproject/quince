@@ -27,8 +27,7 @@
         {/block}
       {/if}
 
-      {* Pole kodu rozwija natywny `<details>` — bez JS, tak jak w projekcie
-         koszyka. Ikona, tekst i szewron w `<summary>`; przeglądarka sama
+      {* Pole kodu rozwija natywny `<details>`, bez JS. Ikona, tekst i szewron w `<summary>`; przeglądarka sama
          obsługuje rozwijanie i stan `[open]`. *}
       <details class="q-voucher" id="q-voucher-form">
         <summary class="q-voucher__toggle">

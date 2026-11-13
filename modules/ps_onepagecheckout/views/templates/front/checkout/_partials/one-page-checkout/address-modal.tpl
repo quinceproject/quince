@@ -5,7 +5,7 @@
 
 {**
  * Okno dodania/edycji adresu na `<dialog class="q-modal">`, zamiast na
- * znacznikach Bootstrapa — otwiera je i zamyka `bootstrap-modal-shim.js`.
+ * znacznikach Bootstrapa. Otwiera je i zamyka `bootstrap-modal-shim.js`.
  * Wszystkie zaczepy JS modułu (`id`, `data-title-*`, `.js-opc-address-modal-fields`,
  * `#submit-address-modal`, spinner) zostają bez zmian, zmienia się tylko
  * opakowanie wizualne.

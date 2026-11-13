@@ -1,9 +1,8 @@
 {**
- * Quince — wybór wariantu w panelu zakupu.
+ * Quince: wybór wariantu w panelu zakupu.
  *
- * Kafelki zamiast pól wyboru: przy pięciu opcjach w rzędzie klient ma zobaczyć
- * wybraną, a nie jej szukać. Wybrany kafelek jest wypełniony barwą marki,
- * niedostępny — przekreślony.
+ * Kafelki zamiast pól wyboru. Wybrany kafelek jest wypełniony barwą marki,
+ * niedostępny jest przekreślony.
  *
  * Rodzaj grupy ustawia sklep w katalogu i to on decyduje o kontrolce:
  *   `radio` i `color` → kafelki, przy barwie z kropką w tej barwie,
@@ -11,7 +10,7 @@
  *
  * Pod kafelkiem siedzi zwykłe pole wyboru z nazwą `group[<id>]`. To ono niesie
  * wybór do formularza i to na jego zmianie PrestaShop przeładowuje cenę,
- * dostępność i zdjęcia — kafelek jest tylko jego etykietą.
+ * dostępność i zdjęcia. Kafelek jest tylko jego etykietą.
  *
  * Klasa `js-product-variants` zostaje na korzeniu: po niej rdzeń podmienia blok
  * po zmianie wariantu i po niej rozpoznaje pola wewnątrz.

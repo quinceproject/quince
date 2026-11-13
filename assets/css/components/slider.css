@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — slajder
+   Quince: slajder
 
    Pas zapowiedzi na górze strony. Trzy rzeczy ustawia się na slajdzie
    niezależnie od siebie, zamiast wybierać jeden z gotowych układów:
@@ -13,13 +13,13 @@
    je z trzech wyborów w panelu.
 
    Wtapianie krawędzi (`--fade-*`) wygasza tło w barwę strony przy wskazanej
-   krawędzi — zdjęcie przechodzi wtedy w stronę zamiast kończyć się kreską.
+   krawędzi: zdjęcie przechodzi wtedy w stronę zamiast kończyć się kreską.
    Przyciemnienie (`--shade`) kładzie zasłonę na całym kadrze i jest po to,
    żeby tekst dało się czytać nad jasnym środkiem zdjęcia; samo wtapianie
    z boków temu nie zaradzi.
 
    Wideo pochodzi z YouTube albo Vimeo i siedzi w ramce o proporcji 16:9
-   rozciągniętej do pokrycia pasa — ramki nie da się przyciąć tak jak znacznika
+   rozciągniętej do pokrycia pasa. Ramki nie da się przyciąć tak jak znacznika
    `video`, więc bez tego zostałyby czarne pasy.
    =================================================================== */
 
@@ -90,7 +90,7 @@
     /* --- wideo z serwisu --- */
 
     /* Ramka rozciąga się do pokrycia pasa: szerokość liczona z wysokości przez
-       proporcję obrazu i odwrotnie — bierzemy większą z dwóch. Bez tego film
+       proporcję obrazu i odwrotnie, bierzemy większą z dwóch. Bez tego film
        16:9 w pasie 30 rem zostawia czarne pasy u góry i u dołu. */
     .q-slider__video {
         position: absolute;
@@ -175,14 +175,14 @@
         inline-size: 100%;
         max-inline-size: var(--q-container-width);
         margin-inline: auto;
-        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
-           ten sam wzorzec co `.q-container` w theme.css. */
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
+           Ten sam wzorzec co `.q-container` w theme.css. */
         padding-inline: clamp(0px, calc((var(--q-container-width) - 100%) * 999), var(--q-space-md));
         padding-block: var(--q-space-xl);
     }
 
     /* Zdjęcie po lewej, treść po prawej. Gdy zdjęcia nie ma, treść zajmuje
-       slajd na pełnej szerokości — stąd siatka opisana modyfikatorem, a nie
+       slajd na pełnej szerokości, stąd siatka opisana modyfikatorem, a nie
        stałą liczbą kolumn. */
     .q-slider__layout {
         display: grid;
@@ -219,7 +219,7 @@
     }
 
     /* Ułożenie na środku: treść i każdy jej wiersz. Dotyczy też slajdu ze
-       zdjęciem — wtedy środkuje się kolumna tekstu obok zdjęcia. */
+       zdjęciem: wtedy środkuje się kolumna tekstu obok zdjęcia. */
     .q-slider__slide--center .q-slider__body {
         justify-items: center;
         text-align: center;
@@ -228,7 +228,7 @@
 
     /* Rząd przycisków wyrównuje się tak samo jak reszta treści. Sam `justify-items`
        środkuje rząd jako całość, ale gdy przyciski się zawiną, drugi wiersz
-       zostaje przy lewej krawędzi rzędu — stąd osobne wyrównanie w poprzek. */
+       zostaje przy lewej krawędzi rzędu. Stąd osobne wyrównanie w poprzek. */
     .q-slider__slide--center .q-slider__actions {
         justify-content: center;
     }
@@ -294,7 +294,7 @@
     /* Połowa z treścią niesie własne tło i trzyma linię pojemnika strony:
        treść zaczyna się tam, gdzie nagłówki sekcji pod slajderem.
 
-       Wcięcie liczy się od szerokości POŁOWY — ta ma 100% = W/2, a margines
+       Wcięcie liczy się od szerokości POŁOWY: ta ma 100% = W/2, a margines
        zewnętrzny pojemnika to W/2 − C/2. Wyrażenie w jednej linii, bo sklejarka
        arkuszy zjada spacje wokół „+" w zapisie rozbitym na kilka wierszy. */
     .q-slider__panel {
@@ -363,9 +363,8 @@
 
     /* --- licznik kampanii ---
        Stoi w rogu slajdu, a nie w kolumnie treści. Licznik wstawiony między
-       zdanie a przycisk brał tę samą wysokość i to samo wypełnienie co przycisk
-       pod nim i czytał się jak druga akcja — a jest informacją o terminie,
-       nie rzeczą do kliknięcia.
+       zdanie a przycisk czyta się jak druga akcja, a jest informacją
+       o terminie, nie rzeczą do kliknięcia.
 
        Dlatego też nie bierze wyglądu licznika z karty produktu ani z zajawki:
        tam leży w rzędzie z ceną i wypełnienie barwą marki jest tam potrzebne,
@@ -432,7 +431,7 @@
     }
 
     /* Napis na zdjęciu dostaje cień. Zasłona radzi sobie z ciemnym kadrem, ale
-       nie z jasnym fragmentem pod jedną linijką — wtedy znika sam napis, nie
+       nie z jasnym fragmentem pod jedną linijką, gdzie znika sam napis, nie
        cały blok. */
     :is(.q-slider__slide--photo, .q-slider__slide--video) .q-slider__slide--light,
     :is(.q-slider__slide--photo, .q-slider__slide--video).q-slider__slide--light
@@ -441,7 +440,7 @@
     }
 
     /* Przycisk konturowy na ciemnym tle. Barwy idą przez zmienne przycisku,
-       te same, których używają jego odmiany — więc to nadal ten sam przycisk,
+       te same, których używają jego odmiany, więc to nadal ten sam przycisk,
        tylko w innym otoczeniu. */
     .q-slider__slide--light .q-btn--secondary {
         --btn-bg: var(--q-slider-action-bg);
@@ -456,8 +455,8 @@
     /* --- sterowanie ---
        Strzałki i kropki w jednym rzędzie przy dolnej krawędzi, nie po bokach.
        Pojemnik strony bywa szeroki na 1520 px i przy oknie 1600 px zostaje po
-       jego bokach 40 px — mniej, niż zajmuje strzałka, która wchodziła wtedy
-       na pierwszy wiersz zdania.
+       jego bokach 40 px, mniej, niż zajmuje strzałka. Strzałka po boku
+       wchodziłaby wtedy na pierwszy wiersz zdania.
 
        Rząd ma własny podkład, bo stoi raz na ciemnym zdjęciu, raz na jasnym
        tle slajdu w barwie marki. */
@@ -531,7 +530,7 @@
         outline-offset: 2px;
     }
 
-    /* Wyłączony ruch: taśma przeskakuje bez animacji, a film nie startuje —
+    /* Wyłączony ruch: taśma przeskakuje bez animacji, a film nie startuje:
        zamiast niego zostaje plakat, który i tak leży pod ramką. */
     @media (prefers-reduced-motion: reduce) {
         .q-slider__track {
@@ -548,7 +547,7 @@
     }
 
     /* Telefon: zdjęcie wraca nad treść, bo w dwóch kolumnach ani ono, ani
-       zdanie nie mieszczą się w swojej połowie. Strzałki zostają — stoją
+       zdanie nie mieszczą się w swojej połowie. Strzałki zostają, bo stoją
        w rzędzie na dole i niczego nie zasłaniają. */
     @media (max-width: 991px) {
         .q-slider__slide {

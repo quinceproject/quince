@@ -1,20 +1,19 @@
 {**
- * Quince — plakietki produktu
+ * Quince: plakietki produktu
  *
  * PrestaShop podaje gotową listę w `$product.flags`, gdzie `type` to jedna
  * z wartości: new, on-sale, discount, pack, out_of_stock, online-only, used,
- * refurbished oraz — od 9.2 — open_box, damaged, new_with_defects.
+ * refurbished oraz (od 9.2) open_box, damaged, new_with_defects.
  *
  * Rozdzielamy je na dwie grupy, bo znaczą co innego:
- *   handlowe  — zachęta do zakupu, kolor z palety promocji i statusów,
- *   stan      — informacja o towarze, celowo neutralna, żeby nie konkurowała
- *               z rabatem o uwagę klienta.
+ *   handlowe: zachęta do zakupu, kolor z palety promocji i statusów,
+ *   stan:     informacja o towarze, celowo neutralna, żeby nie konkurowała
+ *             z rabatem o uwagę klienta.
  *
  * Klasa listy przychodzi z zewnątrz (`$qBadgesClass`), bo miejsce jest różne:
  * na kafelku plakietki leżą NA zdjęciu (warstwa bezwzględna w rogu kadru),
- * a na stronie produktu płyną w kolumnie opisu. Jedna klasa dla obu miejsc
- * ustawiała je na stronie produktu bezwzględnie względem przypadkowego
- * przodka — wisiały nad inną treścią, zamiast stać w swoim wierszu.
+ * a na stronie produktu płyną w kolumnie opisu. Klasa kafelka na stronie
+ * produktu pozycjonowałaby je bezwzględnie względem przypadkowego przodka.
  *
  * Klasy: components/badge.css
  *}

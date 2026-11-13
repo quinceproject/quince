@@ -1,17 +1,16 @@
 {**
- * Quince — jedna opinia o produkcie.
+ * Quince: jedna opinia o produkcie.
  *
  * Osobny plik, bo rysują z niego dwa miejsca: pierwsza porcja wypisana przez
- * serwer i każda kolejna doładowana przyciskiem. Gdyby opinię rysował jeszcze
- * JavaScript, dwa zapisy tego samego rozjechałyby się przy pierwszej poprawce.
+ * serwer i każda kolejna doładowana przyciskiem. Nie rysować opinii drugi raz
+ * w JavaScripcie.
  *
  * Opinia jest jednym obiektem, nie zbiorem wierszy: nagłówek z inicjałami
  * otwiera wpis, ocena stoi w osobnej linii pod nazwiskiem, a stopka rozdziela
- * dwie rzeczy, które wcześniej robił jeden element — informację, ilu osobom
- * opinia pomogła, i przycisk, którym się to zgłasza.
+ * informację, ilu osobom opinia pomogła, i przycisk, którym się to zgłasza.
  *
- * Zmienne: $qOpinia — jedna pozycja z `Quince\Engine\Product\Reviews`,
- * $qPrzydatnosc — czy sklep zbiera głosy „przydatne".
+ * Zmienne: $qOpinia: jedna pozycja z `Quince\Engine\Product\Reviews`,
+ * $qPrzydatnosc: czy sklep zbiera głosy „przydatne".
  *}
 
 <article class="q-review" data-q-review="{$qOpinia.id|intval}">

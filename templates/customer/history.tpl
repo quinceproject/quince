@@ -4,8 +4,8 @@
  *}
 {extends 'customer/page.tpl'}
 
-{* Własny nagłówek zamiast domyślnego `page-title-section.tpl` — ten sam
-   powód co w `order-detail.tpl`: makieta stawia link powrotu NAD tytułem,
+{* Własny nagłówek zamiast domyślnego `page-title-section.tpl`, z tego samego
+   powodu co w `order-detail.tpl`: makieta stawia link powrotu NAD tytułem,
    domyślny układ bloków w `page.tpl` rysuje je w odwrotnej kolejności. *}
 {block name='page_header_container'}
   <div class="q-order-header">

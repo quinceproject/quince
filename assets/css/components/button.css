@@ -1,15 +1,15 @@
 /* ===================================================================
-   Quince — przycisk
+   Quince: przycisk
 
    Wzorzec dla wszystkich komponentów motywu:
 
-   1. Cały arkusz siedzi w warstwie `quince.components` — dzięki temu
+   1. Cały arkusz siedzi w warstwie `quince.components`, dzięki temu
       wygrywa ze stylami modułów bez ani jednego `!important`.
    2. Sięga WYŁĄCZNIE po tokeny `--q-btn-*` z tokens.css. Zero wartości
       hex, zero odwołań do stopni skali, zero liczb wziętych z powietrza.
-      Brakuje czegoś — rozbudowujemy kontrakt tokenów, nie ten plik.
+      Gdy czegoś brakuje, rozbudowujemy kontrakt tokenów, nie ten plik.
    3. Odstępy i wymiary w jednostkach logicznych (`inline-size`,
-      `padding-inline`) — układ odwraca się dla języków pisanych od prawej
+      `padding-inline`): układ odwraca się dla języków pisanych od prawej
       bez osobnego arkusza RTL.
 
    Warianty: primary, secondary, ghost, destructive, link.
@@ -29,7 +29,7 @@
     .q-btn,
     .btn,
     .wishlist-add-to-new {
-        /* Zmienne lokalne — wariant nadpisuje je i nie dotyka reguł niżej.
+        /* Zmienne lokalne: wariant nadpisuje je i nie dotyka reguł niżej.
            Ten sam mechanizm co w Bootstrapie 5.3, tylko na naszych tokenach. */
         --btn-bg: transparent;
         --btn-label: var(--q-body-color);
@@ -42,7 +42,7 @@
         gap: var(--q-space-xs);
 
         /* Wysokość i szerokość celu dotykowego wymagane przez WCAG 2.1.
-           To nie jest ustawienie sprzedawcy — to warunek dostępności. */
+           To nie jest ustawienie sprzedawcy, tylko warunek dostępności. */
         min-block-size: var(--q-btn-height);
         min-inline-size: var(--q-btn-height);
         padding-inline: var(--q-space-md);
@@ -82,8 +82,8 @@
     }
 
     /* Napis idzie za stanem, bo stan zmienia tło. Wzięty raz, od koloru spoczynku,
-       potrafi spaść poniżej progu czytelności — i spadał: żółte wypełnienie po
-       wciśnięciu dawało z ciemnym napisem 3,71 zamiast wymaganych 4,5. */
+       potrafi spaść poniżej progu czytelności (żółte wypełnienie po wciśnięciu
+       daje z ciemnym napisem 3,71 zamiast wymaganych 4,5). */
     .q-btn--primary:hover {
         --btn-bg: var(--q-btn-primary-bg-hover);
         --btn-label: var(--q-btn-primary-label-hover);
@@ -148,7 +148,7 @@
         --btn-border: var(--q-btn-destructive-bg);
 
         /* Pierścień focusu w kolorze intencji, nie marki. Żółta obwódka wokół
-           czerwonego przycisku „Usuń" myli sygnał — kolor ma ostrzegać także
+           czerwonego przycisku „Usuń" myli sygnał: kolor ma ostrzegać także
            wtedy, gdy element jest wybrany klawiaturą. */
         --btn-ring: var(--q-btn-destructive-focus-ring);
     }
@@ -191,7 +191,7 @@
 
     /* --- stan ładowania ---
        Sygnał, że kliknięcie zadziałało. Bez niego klient klika „Zamawiam"
-       drugi raz, bo przez dwie sekundy nic się nie dzieje — i sklep dostaje
+       drugi raz, bo przez dwie sekundy nic się nie dzieje, i sklep dostaje
        zdublowane zamówienie. Napis zostaje na miejscu, żeby przycisk nie
        zmienił szerokości i nie przesunął sąsiadów. */
     .q-btn[data-loading="true"] {
@@ -233,7 +233,7 @@
     }
 
     /* Ikona sama w sobie nic nie mówi czytnikowi ekranu, więc przy przycisku
-       ikonowym napis nie znika — chowa się wyłącznie dla oka. */
+       ikonowym napis nie znika, chowa się wyłącznie dla oka. */
     .q-btn--icon .q-btn__label {
         position: absolute;
         inline-size: 1px;
@@ -246,7 +246,7 @@
     /* --- rozmiary --- */
     /* Mały przycisk stoi tam, gdzie nie jest głównym działaniem strony: w liście
        rozwijanej, w karcie, w wierszu tabeli. Cel dotykowy 44 px go tam nie
-       obowiązuje, bo obok stoi większy odpowiednik tej samej akcji — a przycisk
+       obowiązuje, bo obok stoi większy odpowiednik tej samej akcji, a przycisk
        tej wysokości w panelu wygląda na wciśnięty na siłę.
        Zaokrąglenie mniejsze niż w dużym: przy niskiej wysokości to samo
        zaokrąglenie zjada róg i robi z przycisku pigułkę. */
@@ -265,7 +265,7 @@
         padding-inline: var(--q-space-lg);
     }
 
-    /* Przycisk na całą szerokość — na telefonie standard w koszyku i kasie. */
+    /* Przycisk na całą szerokość, na telefonie standard w koszyku i kasie. */
     .q-btn--block {
         display: flex;
         inline-size: 100%;

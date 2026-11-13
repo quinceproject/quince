@@ -3,7 +3,7 @@
        Zapytanie do specjalisty: przycisk na karcie produktu i szuflada z kartą
        człowieka.
 
-       Treść przynosi moduł `quince_contacts`, wygląd jest tutaj — moduł bez
+       Treść przynosi moduł `quince_contacts`, wygląd jest tutaj. Moduł bez
        motywu ma wyglądać jak reszta sklepu, a nie jak wtrącona wyspa.
     */
 
@@ -18,7 +18,7 @@
 
     /* Metryka dotyczy samych przycisków otwierających, po ich zaczepie, a nie
        wszystkiego, co stoi w slocie: znaczniki szuflady leżą w tym samym slocie
-       i drobne pismo schodziło wcześniej także na przyciski w jej stopce. */
+       i drobne pismo zeszłoby także na przyciski w jej stopce. */
     [data-q-offer-open],
     [data-q-expert-open] {
         inline-size: 100%;
@@ -80,8 +80,8 @@
     /* ── telefon i adres ────────────────────────────────────────────────
        Kafle, a nie przyciski. Numer i adres są w nich WYPISANE, więc da się je
        przeczytać, przepisać albo podyktować, a przy okazji jest w co trafić
-       palcem. Pełna metryka przycisku, którą miały wcześniej, przykrywała
-       formularz stojący pod nimi — a to on jest w tej szufladzie treścią.
+       palcem. Pełna metryka przycisku przykryłaby formularz stojący pod nimi,
+       a to on jest w tej szufladzie treścią.
 
        Miary z makiety strony produktu, klasa `q-drawer__kontakt`. */
 
@@ -112,7 +112,7 @@
     }
 
     /* Pod kursorem zapala się sama kreska. Napis zostaje atramentowy, bo to
-       numer i adres — mają być czytelne w każdym stanie. */
+       numer i adres, które mają być czytelne w każdym stanie. */
     .q-expert__contact:hover {
         border-color: var(--q-fill-primary);
         color: var(--q-text-strong);

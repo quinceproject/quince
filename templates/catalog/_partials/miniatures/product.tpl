@@ -1,5 +1,5 @@
 {**
- * Quince — zajawka produktu
+ * Quince: zajawka produktu
  *
  * Używana wszędzie, gdzie sklep pokazuje produkt na liście: kategoria, wyniki
  * wyszukiwania, nowości, promocje, akcesoria, ostatnio oglądane.
@@ -15,7 +15,7 @@
  * Hooki: displayProductPriceBlock (before_price, custom_price, unit_price,
  * weight, old_price), displayProductListReviews.
  *
- * Klasy pochodzą z tokens.css — patrz components/product-card.css.
+ * Klasy pochodzą z tokens.css, patrz components/product-card.css.
  * W szablonie nie ma logiki obliczeniowej: wszystko, co widać, przychodzi
  * gotowe z kontrolera.
  *}
@@ -47,18 +47,14 @@
     {block name='product_miniature_body'}
       <div class="q-pcard__body">
         {* Dalej idą cztery rzeczy, których w kafelku NIE WIDAĆ: gasi je arkusz.
-           Są w znacznikach, bo widok listy pokazuje je z tych samych kart —
-           dwa zestawy znaczników na dwa widoki znaczyłyby dwa razy tyle pracy
-           przy każdej zmianie. Tak samo rozwiązał to Flavor. *}
+           Są w znacznikach, bo widok listy pokazuje je z tych samych kart. *}
         {* Plakietki nad tytułem: w rzędzie kadr ma 256 px i słupek plakietek
            na zdjęciu zasłaniałby towar, więc schodzą do kolumny treści.
 
-           Ta sama lista co na zdjęciu, tylko z inną klasą — nie kopia. Wcześniej
-           stał tu pojemnik z listą `q-pcard__badges` w środku, a arkusz gasi tę
-           klasę w rzędzie, więc plakietki znikały razem z nią i rabat ani
-           „Nowość" nie pojawiały się nigdzie. Warunek na obniżkę też wypadł:
-           plakietki niosą też nowość, pakiet i stan towaru, a lista, która nie
-           ma czego pokazać, nie renderuje się wcale. *}
+           Ta sama lista co na zdjęciu, tylko z inną klasą. Nie opakowywać jej
+           w `q-pcard__badges`: arkusz gasi tę klasę w rzędzie. Bez warunku na
+           obniżkę, bo plakietki niosą też nowość, pakiet i stan towaru, a lista,
+           która nie ma czego pokazać, nie renderuje się wcale. *}
         {block name='product_topline'}
           {include file='catalog/_partials/product-flags.tpl' qBadgesClass='q-pcard__topline'}
         {/block}
@@ -90,7 +86,7 @@
           {/if}
         {/block}
 
-        {* Opis i cechy — widok listy. W kafelku nie ma na nie miejsca. *}
+        {* Opis i cechy: widok listy. W kafelku nie ma na nie miejsca. *}
         {block name='product_description'}
           {if $product.description_short}
             <p class="q-pcard__description">{$product.description_short|strip_tags|truncate:260:'…'}</p>
@@ -106,11 +102,8 @@
            Bez odnośnika „Pełna specyfikacja": on prowadzi do sekcji na karcie
            produktu, a stąd do tej karty prowadzi już nazwa. *}
         {block name='product_facts'}
-          {* Jedno zestawienie, złamane na dwie kolumny — tak jak w makiecie.
-             Cechy, marka i kody idą w nim jednym ciągiem, więc podział wypada
-             w połowie WIERSZY. Przy dwóch osobnych zestawieniach wypadał między
-             nimi i przy jednej cesze zostawała kolumna z jednym wierszem
-             naprzeciw kolumny z czterema. *}
+          {* Jedno zestawienie, złamane na dwie kolumny. Cechy, marka i kody idą
+             w nim jednym ciągiem, więc podział wypada w połowie WIERSZY. *}
           <dl class="q-facts__list q-pcard__fakty">
             {include file='catalog/_partials/product-key-features.tpl' qWiersze=true qKolejnosc=$product.id_product|qcechy
               qIle=$modules.quince_engine.listing.options.products.features|default:6}
@@ -147,9 +140,9 @@
 
         {* Pojemnik decyzji. W kafelku jest PRZEZROCZYSTY (`display: contents`),
            więc cena, nota i przycisk zachowują się tak, jakby go nie było.
-           W rzędzie staje się słupkiem po prawej. Bez niego te elementy trafiały
-           do osobnych rzędów siatki, a ich wysokości dyktowała kolumna treści —
-           stąd dziury między ceną, notą i przyciskiem. *}
+           W rzędzie staje się słupkiem po prawej. Bez niego te elementy trafiają
+           do osobnych rzędów siatki, których wysokość dyktuje kolumna treści,
+           i między ceną, notą i przyciskiem powstają dziury. *}
         <div class="q-pcard__decyzja">
 
         {* Licznik do końca promocji. W kafelku leży na zdjęciu, tuż nad słupkiem
@@ -183,7 +176,7 @@
           {/if}
         {/if}
 
-        {* Dostępność i termin wysyłki — widok listy. Stan rysuje ten sam
+        {* Dostępność i termin wysyłki: widok listy. Stan rysuje ten sam
            komponent co panel zakupu na karcie produktu: kropka i podpis,
            nigdy sama barwa. Nazwy stanów przychodzą z rdzenia, więc mapowanie
            na klasę motywu jest tu takie samo jak tam. *}
@@ -243,8 +236,8 @@
               {hook h='displayProductPriceBlock' product=$product type='weight'}
             </div>
 
-            {* Nota o najniższej cenie stoi na KAŻDEJ karcie, także bez obniżki —
-               wtedy pusta. To rezerwacja miejsca, nie treść: bez niej karta
+            {* Nota o najniższej cenie stoi na KAŻDEJ karcie, także bez obniżki
+               (wtedy pusta). To rezerwacja miejsca, nie treść: bez niej karta
                z obniżką jest o wiersz wyższa od sąsiadek, a że wszystkie mają
                wspólną wysokość, przycisk zjeżdża na niej niżej niż na pozostałych.
 
@@ -278,7 +271,7 @@
                 </button>
               </form>
             {else}
-              {* Produkt niedostępny do kupienia z listingu — wariantowy, na zamówienie
+              {* Produkt niedostępny do kupienia z listingu: wariantowy, na zamówienie
                  albo wyprzedany. Zamiast wyszarzonego przycisku prowadzimy na kartę,
                  gdzie klient zobaczy powód. *}
               <a href="{$product.url}" class="q-btn q-btn--secondary">

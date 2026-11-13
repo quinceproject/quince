@@ -1,9 +1,9 @@
 /* ===================================================================
-   Quince — ulubione na karcie produktu
+   Quince: ulubione na karcie produktu
 
    Serce zapisuje produkt na liście klienta. Listy prowadzi moduł list
    życzeń: jego tabele, jego adresy działań. Nasza jest tylko warstwa
-   widoczna — jego własna jest aplikacją Vue budującą przyciski
+   widoczna. Jego własna jest aplikacją Vue budującą przyciski
    w znacznikach motywu klasycznego, których Quince nie ma.
 
    Strona działa bez tego pliku: bez skryptu serce po prostu nic nie robi,
@@ -52,7 +52,7 @@
     /**
      * Numer listy klienta.
      *
-     * Moduł list zakłada listę domyślną sam, gdy klient nie ma żadnej — dzięki
+     * Moduł list zakłada listę domyślną sam, gdy klient nie ma żadnej. Dzięki
      * temu nie wymyślamy tu własnej nazwy ani własnego momentu jej powstania.
      */
     function listaKlienta() {
@@ -105,7 +105,7 @@
             .then(function (wynik) {
                 if (!wynik || wynik.success === false) {
                     // Odpowiedź „nie jesteś zalogowany" przychodzi tą samą drogą
-                    // co każdy inny błąd, więc pytanie o konto stawiamy tutaj —
+                    // co każdy inny błąd, więc pytanie o konto stawiamy tutaj,
                     // po kliknięciu, nie przed nim.
                     window.location.href = dane.logowanie;
 

@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — sprawdzanie formularza przy wysyłaniu
+   Quince: sprawdzanie formularza przy wysyłaniu
 
    Przeglądarka sama pilnuje pól `required`, ale pokazuje własny dymek:
    znika po kilku sekundach, wygląda jak komunikat systemu operacyjnego,
    nie da się go ustawić ani przetłumaczyć razem ze stroną, a przy kilku
    pustych polach pokazuje tylko pierwsze. Prototyp ma zamiast tego czerwoną
-   ramkę pola i jedno zdanie pod nim — i tak to tu działa.
+   ramkę pola i jedno zdanie pod nim, i tak to tu działa.
 
    Formularz dostaje `novalidate`, żeby dymek się nie pokazał, a sprawdzanie
    przejmuje ten skrypt. Reguły zostają te same, co w znacznikach: `required`,

@@ -1,25 +1,23 @@
 {**
- * Quince — cechy podstawowe produktu
+ * Quince: cechy podstawowe produktu
  *
- * Krótka lista „nazwa — wartość" pod opisem skróconym, żeby odpowiedzieć na
- * pytanie „czym to właściwie jest", zanim klient sięgnie do specyfikacji.
+ * Krótka lista „nazwa: wartość" pod opisem skróconym.
  *
- * Kolejność podaje silnik w `$modules.quince_engine.features` — to lista nazw
+ * Kolejność podaje silnik w `$modules.quince_engine.features`: to lista nazw
  * cech ustawiona przez moduł rankingu, który liczy, które cechy naprawdę
  * odróżniają produkty w tej kategorii. Gdy modułu nie ma, lista jest pusta
- * i bierzemy cechy w kolejności katalogu, tak jak działało wcześniej.
+ * i bierzemy cechy w kolejności katalogu.
  *
  * To NIE jest tabela specyfikacji, choć pokazuje to samo w tej samej postaci.
- * Tam struktura bywa dowolna, więc rysuje siatkę; tutaj jest znana z góry —
- * po lewej nazwa, po prawej wartość — więc struktury nie trzeba obrysowywać.
+ * Tam struktura bywa dowolna, więc rysuje siatkę; tutaj jest znana z góry
+ * (po lewej nazwa, po prawej wartość), więc struktury nie trzeba obrysowywać.
  *
- * Zmienne: $qLink — włącznik odnośnika „Pełna specyfikacja",
- *          $qIle  — ile wierszy pokazujemy (ustawienie elementu w panelu),
- *          $qWiersze — same wiersze, bez własnego zestawienia i bez odnośnika.
- *                      Zajawka w widoku listy wkłada je do JEDNEGO zestawienia
- *                      razem z marką i kodami, tak jak w makiecie: przy dwóch
- *                      osobnych listach podział na kolumny wypadał między nimi,
- *                      a nie w połowie wierszy.
+ * Zmienne: $qLink:    włącznik odnośnika „Pełna specyfikacja",
+ *          $qIle:     ile wierszy pokazujemy (ustawienie elementu w panelu),
+ *          $qWiersze: same wiersze, bez własnego zestawienia i bez odnośnika.
+ *                     Zajawka w widoku listy wkłada je do JEDNEGO zestawienia
+ *                     razem z marką i kodami, żeby podział na kolumny wypadał
+ *                     w połowie wierszy.
  *}
 
 {if $product.grouped_features}
@@ -35,11 +33,9 @@
   {* Gdy kategoria ma ranking, pokazujemy WYŁĄCZNIE cechy z niego. Dopychanie
      listy do limitu resztą z katalogu wracałoby dokładnie tym, co ranking
      odrzucił: cechą o jednej wartości u wszystkich i numerem katalogowym.
-     Krótsza lista jest tu poprawną odpowiedzią — pięć wierszy, z których dwa
-     nic nie mówią, jest gorsze niż trzy, które mówią wszystko.
 
      Bez rankingu (brak modułu albo kategoria nieprzeliczona) bierzemy cechy
-     w kolejności katalogu, tak jak działało wcześniej. *}
+     w kolejności katalogu. *}
   {assign var=qCechy value=[]}
   {if $qKolejnosc}
     {foreach from=$qKolejnosc item=qNazwa}

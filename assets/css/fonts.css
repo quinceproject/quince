@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — kroje pisma
+   Quince: kroje pisma
 
    Sklep serwuje własne pliki, a nie odsyła do Google Fonts. Trzy powody:
    strona ładuje się bez rozmowy z cudzym serwerem, wygląd nie zależy od tego,
@@ -12,9 +12,8 @@
    i `--q-font-body`, a reszta dzieje się sama.
 
    Pliki Lexend i Nunito Sans pochodzą z makiet projektu, żeby sklep i makieta
-   miały te same metryki pionowe. Bez nich przeglądarka podstawiała krój
-   o innym stosunku wydłużeń górnych do dolnych i tekst w plakietkach siadał
-   o dwa piksele za nisko.
+   miały te same metryki pionowe. Krój zastępczy ma inny stosunek wydłużeń
+   górnych do dolnych i tekst w plakietkach siada na nim za nisko.
 
    Dołożenie kroju: plik `.woff2` do `assets/fonts/quince/`, deklaracja niżej
    i nazwa do listy w panelu (`views/templates/admin/appearance.html.twig`).
@@ -85,8 +84,8 @@
 
 /* ── Inter ───────────────────────────────────────────────────────────
    Pliki zostały w motywie po Hummingbirdzie i są rozbite na podzbiory znaków.
-   Bierzemy dwa: łaciński podstawowy i rozszerzony — ten drugi niesie polskie
-   znaki diakrytyczne. Zakres znaków przy każdej deklaracji jest po to, żeby
+   Bierzemy dwa: łaciński podstawowy i rozszerzony (ten drugi niesie polskie
+   znaki diakrytyczne). Zakres znaków przy każdej deklaracji jest po to, żeby
    przeglądarka pobrała plik z ogonkami dopiero wtedy, gdy tekst ich potrzebuje. */
 
 @font-face {

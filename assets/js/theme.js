@@ -1,14 +1,12 @@
 /* ===================================================================
-   Quince — warstwa JavaScript
+   Quince: warstwa JavaScript
 
    Architektura wysp: strona przychodzi z serwera jako gotowy HTML i działa
    bez ani jednej linijki skryptu. JavaScript dokłada się tylko tam, gdzie
    potrzebna jest interakcja, której nie da się zrobić inaczej.
 
-   Konsekwencja praktyczna: wyłączony JS nie psuje sklepu. Roboty — w tym
-   te od modeli językowych, które nie czekają na hydrację — widzą pełną
-   treść. To także powód, dla którego nie ma tu frameworka: nie ma czego
-   hydratować.
+   Wyłączony JS nie psuje sklepu. Roboty (także te od modeli językowych,
+   które nie czekają na hydrację) widzą pełną treść.
 
    Zero zależności. Bez jQuery, bez Bootstrapa. PrestaShop ładuje jQuery
    globalnie dla własnych modułów i my z tego nie korzystamy.
@@ -18,7 +16,7 @@
    Szyna zdarzeń PrestaShopa
 
    Rdzeń i moduły rozmawiają ze sklepem przez `prestashop.on()`
-   i `prestashop.emit()` — odświeżenie koszyka, podmiana wariantu, lista
+   i `prestashop.emit()`: odświeżenie koszyka, podmiana wariantu, lista
    życzeń. Sam obiekt `prestashop` wypisuje PrestaShop w nagłówku, ale jako
    zwykły zbiór danych: bez `on` i bez `emit`. Te dwie metody dokłada motyw
    i żaden motyw ich za nas nie doda.
@@ -31,7 +29,7 @@
    rdzeń woła `emit` już w uchwycie DOM-ready, więc szyna musi istnieć wcześniej
    niż cokolwiek, co jej używa.
 
-   Obiekt uzupełniamy, a nie tworzymy od nowa — dane sklepu wypisane
+   Obiekt uzupełniamy, a nie tworzymy od nowa: dane sklepu wypisane
    w nagłówku muszą zostać na miejscu.
    ------------------------------------------------------------------- */
 
@@ -89,7 +87,7 @@
             try {
                 uchwyt(dane);
             } catch (e) {
-                // Awaria jednego słuchacza nie może zatrzymać pozostałych —
+                // Awaria jednego słuchacza nie może zatrzymać pozostałych,
                 // inaczej błąd w module gasi odświeżanie koszyka w motywie.
                 if (window.console) {
                     console.error('[Quince] słuchacz zdarzenia ' + nazwa + ':', e);
@@ -106,13 +104,13 @@
 
     /**
      * Rejestr wysp. Każda to para: selektor i funkcja uruchamiana dla każdego
-     * pasującego elementu. Wyspa dostaje swój element i nic więcej — nie zna
+     * pasującego elementu. Wyspa dostaje swój element i nic więcej. Nie zna
      * reszty strony, więc jej awaria nie unieruchamia pozostałych.
      *
      * Lista, nie mapa po selektorze: jeden element bywa obsługiwany przez kilka
      * wysp naraz. Zakres wyszukiwarki jest jednocześnie `[data-q-picker]`
      * (otwieranie listy) i `[data-q-scope]` (wybór pozycji), a dwie wyspy potrafią
-     * też dzielić ten sam selektor. Mapa po selektorze cicho gubiła tę drugą.
+     * też dzielić ten sam selektor. Mapa po selektorze cicho gubiłaby tę drugą.
      */
     var islands = [];
 
@@ -135,7 +133,7 @@
         islands.forEach(function (island) {
             (root || document).querySelectorAll(island.selector).forEach(function (el) {
                 // Element mógł już zostać obsłużony, gdy fragment strony wrócił
-                // z AJAX-a — drugie uruchomienie podpięłoby zdarzenia dwa razy.
+                // z AJAX-a. Drugie uruchomienie podpięłoby zdarzenia dwa razy.
                 if (island.ready.has(el)) {
                     return;
                 }
@@ -158,7 +156,7 @@
     });
 
     /**
-     * PrestaShop podmienia fragmenty strony przez AJAX — listing po zmianie
+     * PrestaShop podmienia fragmenty strony przez AJAX: listing po zmianie
      * filtrów, koszyk po dodaniu produktu. Nowy HTML nie ma podpiętych zdarzeń,
      * więc po każdej takiej podmianie wyspy trzeba uruchomić ponownie.
      */
@@ -175,8 +173,8 @@
      *
      * Formularz wysłany zwykłym przyciskiem dostawca obsługuje sam, na zdarzeniu
      * `submit`. Szuflady wysyłają jednak swoje formularze w tle i tego zdarzenia
-     * nie ma, więc pole dostawcy nie trafiało do zgłoszenia, a sklep z włączoną
-     * oceną je odrzucał. Szuflada woła `prepareForm(dane)` tuż przed wysyłką
+     * nie ma. Bez dodatkowego kroku pole dostawcy nie trafiłoby do zgłoszenia,
+     * a sklep z włączoną oceną by je odrzucił. Szuflada woła `prepareForm(dane)` tuż przed wysyłką
      * i czeka, aż każdy dostawca dopisze swoje pola.
      *
      * Dostawca dostaje dane wysyłki (`URLSearchParams`) i może zwrócić obietnicę.

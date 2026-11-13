@@ -1,11 +1,11 @@
 {**
- * Quince — pasek zakupu na telefonie.
+ * Quince: pasek zakupu na telefonie.
  *
  * Leży przy dolnej krawędzi i pokazuje się wtedy, gdy panelu zakupu NIE widać:
  * i przed dojechaniem do niego, i po minięciu. Niesie to, po co klient wraca
  * na górę: kwotę i przycisk.
  *
- * Schowany pasek nie znika całkiem — zostaje samo koło z uchwytem, wystające
+ * Schowany pasek nie znika całkiem: zostaje samo koło z uchwytem, wystające
  * ponad krawędź. Dzięki temu rozwinięcie panelu jest w zasięgu kciuka na każdej
  * wysokości strony, także wtedy, gdy pasek nie ma czego pokazywać, bo cenę
  * widać obok. Uchwyt otwiera warstwę z `product-buy-sheet.tpl`.

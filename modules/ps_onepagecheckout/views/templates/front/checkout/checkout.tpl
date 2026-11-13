@@ -13,7 +13,7 @@
 {block name='content_columns'}
 
   {* Ta sama skrócona oprawa, co w kasie krokowej (`checkout/checkout.tpl`):
-     bez menu i bez wyszukiwarki. Pasek kroków tu nie stoi — w jednej stronie
+     bez menu i bez wyszukiwarki. Pasek kroków tu nie stoi: w jednej stronie
      nie ma kroków do pokazania, więc `.q-checkout-steps` zostaje pominięty. *}
   <header class="q-checkout-head">
     <div class="q-container q-checkout-head__in">
@@ -44,7 +44,7 @@
       {include file='_partials/notifications.tpl'}
     {/block}
 
-    {* Przyciski portfeli nad formularzem — ten sam hook i te same klasy
+    {* Przyciski portfeli nad formularzem: ten sam hook i te same klasy
        `.q-express-btn*`, co na stronie koszyka. Osobny wiersz, bo moduł
        pokazuje je tylko tutaj, nie w kasie krokowej. *}
     {capture name='qOpcExpress'}{hook h='displayExpressCheckout'}{/capture}
@@ -71,7 +71,7 @@
 
       {* Kolumna zamówienia: ta sama `.q-ordersum`, co wszędzie indziej.
          Zgoda, newsletter i prawdziwy przycisk zamówienia stoją w stopce
-         formularza (`one-page-checkout.tpl`) — tylko ten szablon zna listę
+         formularza (`one-page-checkout.tpl`), bo tylko ten szablon zna listę
          zgód i metodę płatności. Wyspa `checkout-summary.js` przenosi je
          tutaj tymi samymi węzłami DOM, co w kasie krokowej. *}
       <aside class="q-checkout__side" aria-label="{l s='Your order' d='Shop.Theme.Checkout'}">

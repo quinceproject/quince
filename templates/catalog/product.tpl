@@ -29,12 +29,12 @@
 {/block}
 
 {* Okruszki idą do środka kontenera strony produktu, więc miejsce z układu
-   zostaje puste — inaczej ścieżka renderuje się dwa razy, raz poza kontenerem. *}
+   zostaje puste. Inaczej ścieżka renderuje się dwa razy, raz poza kontenerem. *}
 {block name='breadcrumb'}{/block}
 
 {block name='content'}
   {* Strefy przychodzą z silnika jako listy identyfikatorów w kolejności. Szablon
-     nie wie, co w nich stoi ani gdzie — układ, kolejność i proporcje są
+     nie wie, co w nich stoi ani gdzie: układ, kolejność i proporcje są
      ustawieniem sklepu.
 
      Siatka ma dwa tory: lewy i panel zakupu. Układy różni zawartość lewego toru,
@@ -84,7 +84,7 @@
           </div>
 
           {* Pas pod galerią i opisem, na szerokość obu kolumn. Silnik nie stawia
-             tu nic własnego — miejsce jest po to, żeby sklep wpiął w nie hooka
+             tu nic własnego. Miejsce jest po to, żeby sklep wpiął w nie hooka
              ze swoją treścią, więc opakowanie powstaje dopiero wtedy, gdy coś
              się w nim wypisało. Pusta strefa nie ma zostawiać odstępu. *}
           {if $qPdp.zones.stopka}
@@ -100,7 +100,7 @@
           {/if}
         </div>
       {else}
-        {* Lewy tor: sama galeria. Reszta karty — nazwa, opis, kody — wchodzi
+        {* Lewy tor: sama galeria. Reszta karty (nazwa, opis, kody) wchodzi
            do panelu zakupu, więc stref `naglowek` i `opis` w tym układzie nie ma. *}
         <div class="q-pdp__gallery">
           {foreach from=$qPdp.zones.galeria item=qEl}
@@ -114,7 +114,7 @@
            kolejność elementów, więc pole ilości i warianty mogą wylądować
            w każdym miejscu strefy, a muszą trafić do tego samego wysłania.
 
-           `product-actions` na opakowaniu, nie na formularzu — skrypt PrestaShopa
+           `product-actions` na opakowaniu, nie na formularzu: skrypt PrestaShopa
            szuka formularza WEWNĄTRZ elementu z tą klasą. *}
         <div class="q-buy product-actions js-product-actions">
           {* Pas promocji stoi PRZED formularzem, na samej górze panelu, bo jest
@@ -132,8 +132,7 @@
 
           {* Reszta panelu w osobnym pudełku, bo przy pasie to ONO niesie białą
              powierzchnię: wjeżdża na pas o wysokość zakładki i pokazuje na nim
-             swoje górne rogi. Bez pasa pudełko nie ma żadnego wyglądu i cały
-             panel wygląda tak jak wcześniej. *}
+             swoje górne rogi. Bez pasa pudełko nie ma żadnego wyglądu. *}
           <div class="q-buy__karta">
             <form action="{$urls.pages.cart}" method="post" id="add-to-cart-or-refresh">
               <input type="hidden" name="token" value="{$static_token}">
@@ -147,16 +146,14 @@
 
               {* Panel idzie wierszami, nie elementami: sklep może postawić dwa
                  elementy obok siebie (para „Pobierz ofertę" i „Zapytaj
-                 specjalistę") i wtedy wiersz dzieli się na dwa tory. Wiersz
-                 z jednym elementem wygląda tak jak wcześniej. *}
+                 specjalistę") i wtedy wiersz dzieli się na dwa tory. *}
               {foreach from=$qPdp.rows.zakup item=qWiersz}
                 {capture name='qWierszPanelu'}
                   {foreach from=$qWiersz item=qEl}
                     {if $qEl.id != 'promo_bar'}
                       {* Opakowanie powstaje dopiero wtedy, gdy element cokolwiek wypisał.
-                         Element jeszcze niezbudowany nie renderuje nic, a puste opakowanie
-                         i tak zabierało odstęp — panel zakupu rozjeżdżał się o wysokość
-                         rzeczy, których na stronie nie ma. *}
+                         Puste opakowanie zabierałoby odstęp za element, który nic
+                         nie wyrenderował. *}
                       {capture name='qSlot'}{include file='catalog/_partials/pdp-element.tpl' qEl=$qEl qStrefa='zakup'}{/capture}
                       {* `data-q-variant` znaczy bloki zależne od wariantu, których rdzeń
                          po zmianie wariantu nie odświeża. Podmienia je wariant.js. *}
@@ -223,15 +220,13 @@
       {/if}
     {/if}
 
-    {* Zajawki: oferta obok tego produktu. Silnik nazywa te strefe `zajawki` —
-       wczesniej stalo tu `dol`, ktorego w silniku nie ma, wiec blok nie
-       renderowal sie nigdy i zostawial ostrzezenie o brakujacym kluczu. *}
     {* Warstwa z panelem zakupu na telefonie. Musi stać w tym kontenerze: rdzeń
        odświeża bloki panelu po zmianie wariantu tylko w obrębie
-       `.product-container`, a panel pożyczony do warstwy obok kontenera zostawał
+       `.product-container`, a panel pożyczony do warstwy obok kontenera zostaje
        ze starym wariantem i starą ceną. Na wierzch wynosi ją `showModal()`. *}
     {include file='catalog/_partials/product-buy-sheet.tpl'}
 
+    {* Zajawki: oferta obok tego produktu (strefa silnika `zajawki`). *}
     {if $qPdp.zones.zajawki}
       <div class="q-pdp__dol">
         {foreach from=$qPdp.zones.zajawki item=qEl}

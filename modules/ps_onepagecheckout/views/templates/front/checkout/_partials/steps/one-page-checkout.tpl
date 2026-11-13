@@ -6,8 +6,8 @@
 {**
  * Szkielet całej kasy jednostronicowej. Sekcje renderuje moduł, nowe tutaj
  * jest tylko to, czego moduł nie przewiduje: zgoda na newsletter i oferty
- * partnerów (makieta, tylko gość) oraz przeniesienie zgody na regulamin
- * i przycisku zamówienia do kolumny — robi to `checkout-summary.js`, ten sam
+ * partnerów (tylko gość) oraz przeniesienie zgody na regulamin
+ * i przycisku zamówienia do kolumny. Robi to `checkout-summary.js`, ten sam
  * skrypt, co w kasie krokowej, po węźle `#conditions-to-approve` i po
  * `#opc-payment-confirmation-wrap` (OPC ma własny id tego węzła, patrz
  * niżej przy jego znaczniku).
@@ -40,7 +40,7 @@
   {/if}
 </form>
 
-{* Płatność poza głównym formularzem — tak jak w module — żeby nie
+{* Płatność poza głównym formularzem (tak jak w module), żeby nie
    zagnieżdżać formularza płatności w formularzu kasy. *}
 {include file='module:ps_onepagecheckout/views/templates/front/checkout/_partials/one-page-checkout/payment-section.tpl'
   payment_options=$payment_options|default:[]
@@ -70,10 +70,10 @@
         </label>
       {/foreach}
 
-      {* Newsletter i oferty partnerów: prawdziwy, opcjonalny wybór —
-         zostają checkboxami. Z projektu stoją tutaj, w stopce kolumny,
-         i tylko dla gościa — klient zalogowany ustawił to już na koncie.
-         Kolejność z ustaleń: najpierw newsletter, potem oferty partnerów. *}
+      {* Newsletter i oferty partnerów: prawdziwy, opcjonalny wybór, więc
+         zostają checkboxami. Stoją tutaj, w stopce kolumny, i tylko dla
+         gościa: klient zalogowany ustawia to na koncie. Najpierw newsletter,
+         potem oferty partnerów. *}
       {if !$customer.is_logged}
         <div class="q-checkout2__optins">
           {foreach from=$additionalCustomerFields|default:[] item="field"}
@@ -94,11 +94,11 @@
      rdzeń (`themes/_core/js/checkout-payment.js`, dołączony globalnie,
      na każdej stronie kasy) zarządza przyciskiem WYŁĄCZNIE przez ten id
      (`prestashop.selectors.checkout.confirmationSelector`), bez sprawdzania,
-     na którym wariancie kasy stoi. Ten sam id tutaj dawał dwa niezależne
-     skrypty na jednym przycisku: `opc-submit.js` liczył stan poprawnie,
-     a rdzeń chwilę po nim nadpisywał `disabled` swoją, inną logiką
-     (zwracaną przez `getSelectedOption()`, liczoną pod kasę krokową) —
-     efekt: przycisk zostawał zablokowany, mimo że krok był kompletny.
+     na którym wariancie kasy stoi. Ten sam id tutaj daje dwa niezależne
+     skrypty na jednym przycisku: `opc-submit.js` liczy stan poprawnie,
+     a rdzeń chwilę po nim nadpisuje `disabled` swoją logiką
+     (`getSelectedOption()`, liczoną pod kasę krokową), więc przycisk
+     zostaje zablokowany, mimo że krok jest kompletny.
      Własny id tutaj czyni OPC niewidzialnym dla tego skryptu rdzenia;
      `checkout-summary.js` i tak przenosi węzeł do kolumny, bo szuka
      obu wariantów id (patrz tam). *}
@@ -111,16 +111,16 @@
     </div>
 
     {* Zgoda na politykę prywatności (`psgdpr`) i klauzula informacyjna
-       (`ps_dataprivacy`), pod przyciskiem — tak jak w makiecie. Ani jedna,
+       (`ps_dataprivacy`), pod przyciskiem. Ani jedna,
        ani druga nie jest zgodą do zaznaczenia: przetwarzanie danych do
        realizacji zamówienia nie jest wyborem klienta (RODO art. 6 ust. 1
        lit. b). Treść zostaje widoczna i dalej edytowalna w natywnych
-       ekranach ustawień tych modułów — nic tu nie jest dopisane na sztywno.
+       ekranach ustawień tych modułów; nic tu nie jest dopisane na sztywno.
        W środku `#opc-payment-confirmation-wrap`, bo tylko ten węzeł (i
        `#conditions-to-approve`) `checkout-summary.js` przenosi do kolumny
        zamówienia na szerokim ekranie. *}
     {* `additionalCustomerFields` to płaskie tablice (nie obiekty `FormField`)
-       kluczowane `modul_nazwaPola` — sprawdzone zrzutem na żywej stronie.
+       kluczowane `modul_nazwaPola`.
        `name`/`label` to klucze tablicy, nie metody. Kolejność w bloku
        ustalona z nazwy, nie z kolejności w tablicy: najpierw `psgdpr`
        (zgoda na politykę prywatności), potem `customer_privacy` (klauzula). *}

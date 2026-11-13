@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_bestsellers.
+ * Quince: nadpisanie modułu ps_bestsellers.
  *
  * Bestsellery na stronie głównej, w tej samej karuzeli, co pozostałe zajawki.
  *}

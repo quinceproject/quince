@@ -4,9 +4,9 @@
  *}
 
 {**
- * Quince — mapa strony.
+ * Quince: mapa strony.
  *
- * Ten sam problem i to samo lekarstwo co na kategorii/stronie CMS: goły
+ * Jak na kategorii i stronie CMS: goły
  * `page.tpl` nie daje okruszkom odstępu od paska nawigacji.
  *}
 {extends file='page.tpl'}

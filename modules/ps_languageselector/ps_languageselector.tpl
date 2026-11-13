@@ -1,9 +1,8 @@
 {**
- * Quince — wybór języka
+ * Quince: wybór języka
  *
- * Mały select w pasie: na przycisku i na liście stoi sam kod języka.
- * Pełne nazwy nic tu nie wnoszą — kto szuka „EN", rozpozna „EN", a lista
- * na dwie pozycje nie ma prawa być szersza od tego, co pokazuje.
+ * Mały select w pasie: na przycisku i na liście stoi sam kod języka, bez
+ * pełnych nazw.
  *
  * Pozycje są odnośnikami, nie przyciskami: zmiana języka to przejście pod inny
  * adres. Działa otwarcie w nowej karcie i przełączenie bez JavaScriptu.

@@ -1,20 +1,20 @@
 /**
- * Quince — strona z listą produktów.
+ * Quince: strona z listą produktów.
  *
  * Cztery rzeczy, których nie da się zrobić samym HTML-em i CSS-em:
  *
- *  — ZAWĘŻANIE LISTY BEZ PRZEŁADOWANIA STRONY. Rdzeń robi tylko połowę roboty:
+ *  - ZAWĘŻANIE LISTY BEZ PRZEŁADOWANIA STRONY. Rdzeń robi tylko połowę roboty:
  *    `core.js` umie wysłać zapytanie po zdarzeniu `updateFacets` i rozgłasza
  *    wynik jako `updateProductList`, ale kto ma to zdarzenie nadać i co potem
  *    podmienić na stronie, wie wyłącznie motyw. Bez tego kliknięcie w pole
- *    wyboru filtra nie robiło nic;
- *  — panel filtrów jedzie do szuflady na wąskim ekranie. Przeniesieniem węzła,
+ *    wyboru filtra nie robi nic;
+ *  - panel filtrów jedzie do szuflady na wąskim ekranie. Przeniesieniem węzła,
  *    a nie drugą kopią znaczników: dwie kopie tych samych pól wyboru znaczyłyby
  *    dwa różne stany zawężeń i dwa razy te same identyfikatory w kodzie strony.
  *    Tak samo robi to rdzeń PrestaShopa z `#_desktop_faceted`;
- *  — w wariancie „pas nad listą" przycisk filtrów rozwija panel zamiast
+ *  - w wariancie „pas nad listą" przycisk filtrów rozwija panel zamiast
  *    otwierać szufladę;
- *  — przełącznik siatka/lista, którego wybór zostaje w przeglądarce klienta.
+ *  - przełącznik siatka/lista, którego wybór zostaje w przeglądarce klienta.
  *
  * Po zawężeniu listy podmieniane są kawałki strony, więc panel filtrów jest
  * wtedy nowym węzłem. Stąd ustawianie miejsca po każdej podmianie, a nie raz
@@ -97,7 +97,7 @@
 
         if (cel.hasAttribute('data-q-filters-open')) {
             /* W pasie nad listą przycisk rozwija panel w miejscu. Na wąskim
-               ekranie pasa nie ma w żadnym wariancie — wtedy zawsze szuflada. */
+               ekranie pasa nie ma w żadnym wariancie, wtedy zawsze szuflada. */
             if (wariant() === 'bar' && !waski()) {
                 var p = panel();
 
@@ -127,8 +127,8 @@
 
     /**
      * Siatka albo lista. Wybór zostaje u klienta, bo to jego nawyk czytania,
-     * a nie ustawienie sklepu. Zapis w przeglądarce może być niedostępny —
-     * w oknie prywatnym albo przy zablokowanych danych stron — więc widok ma
+     * a nie ustawienie sklepu. Zapis w przeglądarce może być niedostępny
+     * (w oknie prywatnym albo przy zablokowanych danych stron), więc widok ma
      * działać także wtedy, tylko bez pamiętania.
      */
     function ustawWidok(widok) {
@@ -150,7 +150,7 @@
         try {
             window.localStorage.setItem(KLUCZ_WIDOKU, widok);
         } catch (e) {
-            /* zapis niedostępny — widok działa, tylko nie przeżyje odświeżenia */
+            /* zapis niedostępny: widok działa, tylko nie przeżyje odświeżenia */
         }
     }
 
@@ -170,7 +170,7 @@
             zapisany = null;
         }
 
-        /* Brak zapisu znaczy, że ten klient jeszcze nie wybierał — zostaje
+        /* Brak zapisu znaczy, że ten klient jeszcze nie wybierał. Zostaje
            widok domyślny ustawiony przez sklep, który jest już w znacznikach.
            Zapis klienta przykrywa go w obie strony. */
         if (zapisany === 'list' || zapisany === 'grid') {
@@ -312,10 +312,10 @@
     /**
      * Czy właśnie wciskane jest inne zawężenie.
      *
-     * Pole zakresu oddaje swoją wartość, gdy traci ognisko — a traci je także
+     * Pole zakresu oddaje swoją wartość, gdy traci ognisko, a traci je także
      * wtedy, gdy klient klika obok: w pole wyboru albo w „Wyczyść wszystko".
-     * Bez tego kliknięcie w czyszczenie najpierw kasowało zawężenia, a zaraz
-     * potem pole zakresu zakładało nowe z liczbą, którą klient właśnie porzucił.
+     * Bez tego kliknięcie w czyszczenie najpierw kasuje zawężenia, a zaraz
+     * potem pole zakresu zakłada nowe z liczbą, którą klient właśnie porzucił.
      *
      * `pointerdown` wyprzedza i zmianę ogniska, i kliknięcie, więc w chwili
      * oddawania wartości wiadomo już, że klient sięgnął po co innego.
@@ -397,7 +397,7 @@
     /**
      * Liczba wyników na przycisku zamykającym szufladę. Szuflada stoi poza
      * kawałkami strony, które przychodzą po zawężeniu, więc liczbę trzeba w niej
-     * przestawić samemu. Skrypt nie zna napisu w żadnym języku — zna tylko
+     * przestawić samemu. Skrypt nie zna napisu w żadnym języku, zna tylko
      * liczbę, którą ma w nim znaleźć.
      */
     function przestawLiczbeWSzufladzie(ile) {
@@ -500,7 +500,7 @@
      * Stan przycisku po każdej zmianie listy: po doładowaniu porcji i po
      * zawężeniu filtrami.
      *
-     * Odpowiedź rdzenia nie zawiera listy stron — ma tylko numer bieżącej,
+     * Odpowiedź rdzenia nie zawiera listy stron. Ma tylko numer bieżącej,
      * liczbę wszystkich i zakres pokazanych pozycji. Adres kolejnej porcji
      * składamy więc z adresu listy, a nie z gotowego odnośnika.
      *
@@ -593,7 +593,7 @@
             zamien('#js-product-list', dane.rendered_products);
             zamien('#js-product-list-bottom', dane.rendered_products_bottom);
 
-            /* Panel i pigułki stoją w belce tylko w części wariantów — w reszcie
+            /* Panel i pigułki stoją w belce tylko w części wariantów, w reszcie
                są poza nią i trzeba je podmienić osobno. */
             zamien('#search-filters', dane.rendered_facets);
             zamien('#js-active-search-filters', dane.rendered_active_filters);

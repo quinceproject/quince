@@ -1,11 +1,11 @@
 /**
- * Quince — bloki karty produktu po zmianie wariantu
+ * Quince: bloki karty produktu po zmianie wariantu
  *
  * Po wyborze innego wariantu rdzeń pobiera świeże fragmenty strony i podmienia
  * tylko swoje: ceny, warianty, wiersz „Do koszyka", szczegóły i plakietki.
- * Bloki motywu, które też zależą od wariantu, zostawały przy poprzednim:
- * dostępność mówiła „Dostępny" przy rozmiarze bez stanu, obok stał „Kup teraz"
- * zamiast „Powiadom", a kod SKU i EAN należał do innego wariantu.
+ * Bloki motywu, które też zależą od wariantu, zostałyby przy poprzednim:
+ * dostępność mówiłaby „Dostępny" przy rozmiarze bez stanu, obok stałby „Kup teraz"
+ * zamiast „Powiadom", a kod SKU i EAN należałby do innego wariantu.
  *
  * Te bloki mają w szablonie `data-q-variant`. Po odświeżeniu rdzenia pobieramy
  * stronę produktu z nowym wariantem i podmieniamy każdy oznaczony blok na jego

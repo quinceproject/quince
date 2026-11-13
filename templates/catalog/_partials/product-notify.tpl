@@ -1,15 +1,14 @@
 {**
- * Quince — zapis na powiadomienie o dostępności.
+ * Quince: zapis na powiadomienie o dostępności.
  *
- * Szuflada, nie formularz w kolumnie: formularz modułu zajmował w panelu tyle
- * miejsca co cały blok cech, a dotyczy sytuacji, w której klient i tak nie kupi
- * teraz. Zostaje przycisk w wierszu zakupu, treść wchodzi po kliknięciu.
+ * Szuflada, nie formularz w kolumnie: w wierszu zakupu stoi przycisk, treść
+ * wchodzi po kliknięciu.
  *
  * Hook zostaje w szufladzie, a nie jest z niej wyjęty: wypisują się w nim także
  * inne moduły sklepu i one mają się gdzie pokazać.
  *
  * Osobny plik, bo szuflada należy do wiersza zakupu, ale otwiera ją też karta
- * z innego miejsca — jeden zapis znaczników na obie drogi.
+ * z innego miejsca: jeden zapis znaczników na obie drogi.
  *
  * Zachowanie: assets/js/islands/notify.js
  *}

@@ -10,8 +10,8 @@
  * niego szablonu nagłówka, który by mu to podał.
  *
  * Zmienne wejściowe:
- *   `qFormClass` — klasa formularza, bo w nagłówku i pod listą ma inną szerokość,
- *   `qFormId`    — człon identyfikatora listy podpowiedzi; dwa pola na jednej
+ *   `qFormClass`: klasa formularza, bo w nagłówku i pod listą ma inną szerokość,
+ *   `qFormId`:    człon identyfikatora listy podpowiedzi; dwa pola na jednej
  *                  stronie nie mogą mieć tego samego `id`.
  *
  * Klasy: components/search.css

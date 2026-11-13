@@ -13,7 +13,7 @@
  *
  * Projekt: makieta strony produktu.
  *
- * Zmienne: $qMarka, $qLogo, $qSku, $qEan, $qMpn, $qStan — włączniki z panelu.
+ * Zmienne: $qMarka, $qLogo, $qSku, $qEan, $qMpn, $qStan: włączniki z panelu.
  *}
 
 {* Kody z PrestaShopa przychodzą pod PRZETŁUMACZONYMI kluczami: presenter

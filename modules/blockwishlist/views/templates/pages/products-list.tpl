@@ -3,10 +3,10 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 {**
- * Quince — produkty jednej listy życzeń.
+ * Quince: produkty jednej listy życzeń.
  *
  * Kontroler dziedziczy po `ProductListingFrontController`, tym samym, po którym
- * dziedziczy kategoria, marka i reszta siedmiu stron z listą produktów — stąd
+ * dziedziczy kategoria, marka i reszta siedmiu stron z listą produktów. Stąd
  * `$listing` ma tu dokładnie ten sam kształt (produkty, sortowanie, stronicowanie,
  * fasety) i zajawki renderują się tym samym partialem, co wszędzie indziej.
  *

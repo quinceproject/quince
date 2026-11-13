@@ -5,7 +5,7 @@
  * przekierowaniu ma być widoczny także wtedy, gdy JavaScript nie wstanie.
  * Wyspa dokłada tylko zamykanie i samoznikanie.
  *
- * Błąd i ostrzeżenie dostają `role="alert"` — czytnik ekranu przerywa wtedy
+ * Błąd i ostrzeżenie dostają `role="alert"`: czytnik ekranu przerywa wtedy
  * to, co czyta. Sukces i informacja idą przez `aria-live="polite"` na
  * opakowaniu, więc doczekają końca zdania.
  *}

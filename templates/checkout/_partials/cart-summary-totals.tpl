@@ -4,10 +4,10 @@
  *}
 
 {* Kwota do zapłaty stoi POZA zwijanym ciałem kolumny: po zwinięciu klient
-   ma dalej widzieć, ile płaci. Dopisek pod napisem mówi, że w kwocie nie ma
-   jeszcze dostawy — dopóki przewoźnik nie jest wybrany.
+   ma dalej widzieć, ile płaci. Dopóki przewoźnik nie jest wybrany, dopisek
+   pod napisem mówi, że w kwocie nie ma jeszcze dostawy.
 
-   Dwa źródła prawdy — ten sam powód co w `cart-summary-subtotals.tpl`:
+   Dwa źródła prawdy, z tego samego powodu co w `cart-summary-subtotals.tpl`:
    `$checkout_steps` istnieje tylko w krokowej, OPC rozpoznaje przewoźnika
    po niepustym `$delivery_option`. *}
 {assign var=qDostawaZnana value=false}

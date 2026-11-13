@@ -1,19 +1,18 @@
 /* ===================================================================
-   Quince — konto klienta
+   Quince: konto klienta
 
    Układ wzięty z prototypu konta klienta motywu Flavor, przełożony
-   na tokeny Quince. Sidebar
-   i siatka kart obsługują wszystkie podstrony konta — ten sam komplet
-   klas wraca na historii zamówień, adresach, danych osobowych itd.,
-   w miarę jak powstają.
+   na tokeny Quince. Sidebar i siatka kart obsługują wszystkie podstrony
+   konta: ten sam komplet klas wraca na historii zamówień, adresach,
+   danych osobowych itd.
    =================================================================== */
 
 @layer quince.layout {
 
-    /* Układ dwóch kolumn z `customer/page.tpl`: sidebar 3/12, treść 9/12 —
-       te same proporcje co `.col-lg-3`/`.col-lg-9` z Hummingbirda, które
+    /* Układ dwóch kolumn z `customer/page.tpl`: sidebar 3/12, treść 9/12.
+       Te same proporcje co `.col-lg-3`/`.col-lg-9` z Hummingbirda, których
        nic w motywie nie styluje (zero Bootstrapa), więc bez tej siatki
-       obie kolumny stały pod sobą na pełnej szerokości. */
+       obie kolumny stałyby pod sobą na pełnej szerokości. */
     .q-account {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
@@ -30,8 +29,8 @@
 
     /* `minmax(0, 1fr)`, nie goły `1fr`: domyślne minimum toru siatki to
        `auto`, czyli szerokość treści. Sidebar na wąskim ekranie ma w środku
-       poziomo przewijaną listę (patrz niżej) — bez `minmax(0, …)` jej
-       naturalna, nierozwinięta szerokość rozpychała całą stronę zamiast
+       poziomo przewijaną listę (patrz niżej). Bez `minmax(0, …)` jej
+       naturalna, nierozwinięta szerokość rozpycha całą stronę zamiast
        przewijać się we własnym pudełku. */
     @media (max-width: 991px) {
         .q-account {
@@ -51,19 +50,18 @@
 
     /* ── sidebar ─────────────────────────────────────── */
 
-    /* Tło/ramka/promień z `.q-card` (card.css) — tu dokładany jest tylko
-       cień, ten sam token wprost co karta produktu (product-card.css), bez
-       pośredniego `--q-blok-cien`, którego tu nie ma: to osobny system
-       (`SurfaceStyle`), nazwane powierzchnie z własnym przedrostkiem per
-       ekran (np. `--q-pdp-karta-shadow`), nie jeden uniwersalny token na
-       cały sklep. Panel konta nie ma dziś takiej rejestracji, więc bierze
-       to samo globalne `--q-shadow-sm`, co każdy inny blok bez niej. */
+    /* Tło/ramka/promień z `.q-card` (card.css). Tu dokładany jest tylko
+       cień, ten sam token wprost co w karcie produktu (product-card.css).
+       Panel konta nie jest zarejestrowany jako powierzchnia w `SurfaceStyle`
+       (nazwane powierzchnie z przedrostkiem per ekran, np.
+       `--q-pdp-karta-shadow`), więc bierze globalne `--q-shadow-sm`, jak
+       każdy inny blok bez takiej rejestracji. */
     .q-account-nav {
         box-shadow: var(--q-shadow-sm);
         overflow: hidden;
     }
 
-    /* Bez wewnętrznego odstępu — ta sama zasada co w `.q-dropdown`: pierwsza
+    /* Bez wewnętrznego odstępu, ta sama zasada co w `.q-dropdown`: pierwsza
        i ostatnia pozycja dotykają ramki, inaczej zostaje szpara nad/pod
        podświetleniem pozycji aktywnej albo pod kursorem. */
     .q-account-nav__list {
@@ -91,11 +89,8 @@
         transition: background 150ms ease-out, color 150ms ease-out;
     }
 
-    /* Pod kursorem dokładnie to samo co pozycja aktywna — pełne tło marki,
-       ten sam zabieg co bieżąca strona w paginacji
-       (`.q-pagination__page.is-active`): jedno, już przyjęte rozwiązanie
-       dla „to jest pozycja, na której teraz stoisz" w liście opcji, zamiast
-       osobnego, słabszego wariantu tylko dla stanu hover.
+    /* Pod kursorem dokładnie to samo co pozycja aktywna: pełne tło marki,
+       jak bieżąca strona w paginacji (`.q-pagination__page.is-active`).
 
        Druga wersja selektora celuje w `a.is-active` wprost: pozycje
        z hooka `displayCustomerAccount` (wishlist, RODO, powiadomienia,
@@ -132,7 +127,7 @@
         background: var(--q-card-border);
     }
 
-    /* Ikona modułów (lista życzeń, RODO, powiadomienia) — ten sam rozmiar,
+    /* Ikona modułów (lista życzeń, RODO, powiadomienia): ten sam rozmiar,
        barwa i zachowanie pod kursorem co ikony pozostałych wierszy menu,
        żeby nie wyróżniały się niczym poza treścią odnośnika. */
     .q-account-nav__item .account-menu__icon {
@@ -147,7 +142,7 @@
         color: var(--q-on-fill-primary);
     }
 
-    /* W sidebarze to jeden wiersz jak każdy inny — podpis modułu (widoczny
+    /* W sidebarze to jeden wiersz jak każdy inny. Podpis modułu (widoczny
        niżej w siatce kart) tu się chowa, żeby nie dublować wysokości rzędu. */
     .q-account-nav__item .account-menu__desc {
         display: none;
@@ -165,7 +160,7 @@
         color: var(--q-fill-primary);
     }
 
-    /* Wyloguj — jedyny czerwony wiersz w menu. */
+    /* Wyloguj: jedyny czerwony wiersz w menu. */
     .q-account-nav__item--logout a { color: var(--q-text-danger); }
     .q-account-nav__item--logout a:hover { background: var(--q-surface-danger); }
     .q-account-nav__item--logout .q-account-nav__icon { color: var(--q-text-danger); }
@@ -177,14 +172,14 @@
     }
 
     /* Pionowa kolumna 3/12 na ekranie 768px zjadałaby za dużo miejsca nad
-       treścią — poniżej 992px sidebar składa się do jednego przycisku,
+       treścią. Poniżej 992px sidebar składa się do jednego przycisku,
        a pełna lista wysuwa się nad treścią jako panel, dokładnie tak jak
        każda inna rozwijana lista w motywie (`.q-dropdown`). */
     @media (max-width: 991px) {
-        /* Karta sidebara znika — na szerokim ekranie to ona ramkuje całą
+        /* Karta sidebara znika. Na szerokim ekranie to ona ramkuje całą
            listę, ale na telefonie widać tylko przycisk, a jego własna ramka
-           (`.q-select__button`) w cudzej ramce robiła podwójne obramowanie,
-           pudełko w pudełku. Ramkę i tło niesie teraz wyłącznie przycisk
+           (`.q-select__button`) w cudzej ramce dawałaby podwójne obramowanie,
+           pudełko w pudełku. Ramkę i tło niesie wyłącznie przycisk
            (zamknięta) albo panel listy (otwarta), nigdy oba naraz. */
         .q-account-nav {
             position: relative;
@@ -195,10 +190,9 @@
 
         /* Kształt pola bierze z `.q-select__button` (field.css), ale kolor
            swój: pełne tło marki, jak pozycja aktywna w rozwiniętej liście
-           (ten sam sygnał — „to jest nawigacja konta"). Neutralne pole
-           w barwach formularza ginęło na białym tle strony; sama ramka —
-           patrz poprzednia wersja — nie wystarczała, żeby czytać się jako
-           kontrolka, a nie kolejny wiersz treści. */
+           (ten sam sygnał: „to jest nawigacja konta"). Neutralne pole
+           w barwach formularza ginie na białym tle strony i nie czyta się
+           jako kontrolka, tylko jako kolejny wiersz treści. */
         .q-account-nav__trigger {
             display: flex;
             font-weight: var(--q-weight-semibold);
@@ -212,7 +206,7 @@
             border-color: var(--q-fill-primary-hover);
         }
 
-        /* Zamknięta: nie zajmuje miejsca i nie stoi w kolejności tabulatora —
+        /* Zamknięta: nie zajmuje miejsca i nie stoi w kolejności tabulatora:
            `display:none`, nie sama widoczność. Otwarta wysuwa się NAD treścią,
            więc jej rozwinięcie nie przesuwa niczego poniżej. */
         .q-account-nav__list {
@@ -259,14 +253,14 @@
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
         /* Ten sam odstęp co między zajawkami produktów (`.q-grid` w theme.css):
-           md na szerokim ekranie, sm poniżej 768px — jedna miara siatki
-           kafli w całym sklepie, a nie osobna dla każdej strony. */
+           md na szerokim ekranie, sm poniżej 768px. Jedna miara siatki
+           kafli w całym sklepie. */
         gap: var(--q-space-md);
         margin-block-end: var(--q-space-lg);
     }
 
-    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
-       tu dokładany jest tylko układ kafla i cień. */
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl).
+       Tu dokładany jest tylko układ kafla i cień. */
     .q-account-stat {
         display: flex;
         align-items: center;
@@ -283,8 +277,8 @@
         flex: 1;
     }
 
-    /* Jedna, neutralna para teł/ikony dla wszystkich trzech kafli — ten sam
-       zabieg co ikona karty niżej. Prototyp daje każdej roli osobny kolor
+    /* Jedna, neutralna para teł/ikony dla wszystkich trzech kafli, jak
+       ikona karty niżej. Prototyp daje każdej roli osobny kolor
        (zamówienia niebieski, adresy zielony, kupony żółty); tu jeden
        atrament na szarym tle, bo reszta panelu nie miesza żadnych innych
        barw poza marką. */
@@ -322,8 +316,8 @@
         margin-block-end: var(--q-space-lg);
     }
 
-    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
-       tu dokładany jest tylko układ karty, cień i stan hover. */
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl).
+       Tu dokładany jest tylko układ karty, cień i stan hover. */
     .q-account-card {
         display: flex;
         align-items: flex-start;
@@ -336,7 +330,7 @@
         transition: border-color 150ms ease-out;
     }
 
-    /* Pod kursorem tylko ramka, cień zostaje bez zmian — ten sam efekt
+    /* Pod kursorem tylko ramka, cień zostaje bez zmian: ten sam efekt
        co karta produktu (`.q-pcard:hover` w product-card.css). */
     .q-account-card:hover {
         border-color: var(--q-fill-primary);
@@ -359,10 +353,10 @@
         color: var(--q-on-fill-primary);
     }
 
-    /* Domyślne minimum elementu flex to `auto` (szerokość treści), nie `0` —
-       dokładnie ten sam powód co `minmax(0, …)` w siatkach wyżej. Bez tego
-       długi tytuł („Moje pokwitowania - korekty płatności”) próbował
-       zmieścić się jednym ciągiem i rozpychał kartę, a za nią siatkę
+    /* Domyślne minimum elementu flex to `auto` (szerokość treści), nie `0`.
+       Powód ten sam co przy `minmax(0, …)` w siatkach wyżej: bez tego
+       długi tytuł („Moje pokwitowania - korekty płatności”) próbuje
+       zmieścić się jednym ciągiem i rozpycha kartę, a za nią siatkę
        i całą stronę, szerzej niż ekran, zamiast złamać się w przydzielonej
        szerokości. */
     .q-account-card__body {
@@ -385,7 +379,7 @@
     }
 
     /* Te same moduły, co w sidebarze (lista życzeń, RODO, powiadomienia)
-       dokładają odnośnik też tutaj, przez ten sam hook — własną klasą
+       dokładają odnośnik też tutaj, przez ten sam hook, z własną klasą
        (`account-menu__link`), bez niczego wspólnego z `.q-account-card`.
        Ubieramy ją w tę samą kartę, żeby nie wyłamywała się z siatki. */
     .q-account-cards .account-menu__link {
@@ -408,8 +402,8 @@
     }
 
     /* Tytuł i podpis jeden nad drugim, tą samą czcionką nagłówkową co
-       `<h2 class="q-account-card__title">` w pozostałych kartach — bez
-       tego link modułu czytał się lżej, bo pismo podstawowe jest cieńsze
+       `<h2 class="q-account-card__title">` w pozostałych kartach. Bez
+       tego link modułu czyta się lżej, bo pismo podstawowe jest cieńsze
        od nagłówkowego przy tej samej wadze. */
     .q-account-cards .account-menu__text {
         display: flex;
@@ -432,8 +426,8 @@
 
     /* ── ostatnie zamówienia ──────────────────────────── */
 
-    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl) —
-       tu dokładany jest tylko cień. */
+    /* Tło/ramka/promień z `.q-card` (klasa w markupie my-account.tpl).
+       Tu dokładany jest tylko cień. */
     .q-account-section {
         box-shadow: var(--q-shadow-sm);
         overflow: hidden;
@@ -449,7 +443,7 @@
     }
 
     /* Nagłówek przed kartą zamiast w jej pasku (np. „Ostatnie zamówienia”
-       nad tabelą) — sam układ zostaje, ale bez wewnętrznych odstępów karty
+       nad tabelą): sam układ zostaje, ale bez wewnętrznych odstępów karty
        i linii, które miały sens tylko w środku. */
     .q-account-section__header--standalone {
         padding: 0;
@@ -457,7 +451,7 @@
         border-block-end: 0;
     }
 
-    /* Ten sam krój co nagłówek sekcji w karcie — dane osobowe (niżej) stawiają
+    /* Ten sam krój co nagłówek sekcji w karcie. Dane osobowe (niżej) stawiają
        go PRZED kartą, nie w jej pasku, ale liternictwo zostaje takie samo. */
     .q-account-section__title,
     .q-identity-heading {
@@ -466,17 +460,13 @@
         font-weight: var(--q-weight-bold);
     }
 
-    /* Status zamówienia: kropka + ciemny tekst — ten sam wzorzec co dostępność magazynowa
-       (`.q-stock`), nie pełna plakietka. Kolor przychodzi inline z
+    /* Status zamówienia: kropka i ciemny tekst, ten sam wzorzec co dostępność
+       magazynowa (`.q-stock`), nie pełna plakietka. Kolor przychodzi inline z
        `$order.history.current.color`: statusy zamówień są dowolne, ustawia
        je sklepikarz w panelu, więc tu nie ma stałej listy nazw jak
-       w prototypie. Wzięty wprost na duże pole plakietki wyglądał obco przy
-       reszcie strony, bo nic innego tu nie miesza barw poza marką — jako
-       mała kropka ten sam kolor dalej rozróżnia status na pierwszy rzut
-       oka, nie narzucając się. Tekst stoi już na białym tle karty, nie na
-       kolorze statusu, więc nie potrzeba osobnej pary kontrastu
-       (`contrast`/`--dark`/`--bright` z rdzenia) — zawsze ten sam, nasz
-       atrament. */
+       w prototypie. Tekst stoi na białym tle karty, nie na kolorze statusu,
+       więc nie potrzeba osobnej pary kontrastu (`contrast`/`--dark`/`--bright`
+       z rdzenia): zawsze ten sam atrament. */
     .q-recent-order__status {
         display: inline-flex;
         align-items: center;
@@ -488,7 +478,7 @@
 
         /* Bez `nowrap`: nazwę statusu ustawia sklepikarz w panelu i może
            być dowolnej długości. Jedna za długa nazwa, która nie mogłaby
-           się złamać, rozpychała cały wiersz — a za nim całą stronę —
+           się złamać, rozepchnęłaby cały wiersz (a za nim całą stronę)
            szerzej niż ekran. */
         white-space: normal;
         overflow-wrap: break-word;
@@ -501,12 +491,12 @@
         flex: none;
     }
 
-    /* Cztery odcienie z naszej palety — rozstrzyga `OrderStatusTone::forState()`
+    /* Cztery odcienie z naszej palety. Rozstrzyga `OrderStatusTone::forState()`
        (modyfikator Smarty `qstatustone`) po wbudowanych statusach rdzenia
        (`PS_OS_*`), nie po kolorze z panelu. Ten sam modyfikator i te same
        cztery klasy wraca na podglądzie zamówienia (plakietka i oś czasu).
        Własny status sklepu bez dopasowania nie dostaje żadnej z tych klas
-       i zostaje bez kropki — zwykły, ciemny napis jak reszta wiersza. */
+       i zostaje bez kropki: zwykły, ciemny napis jak reszta wiersza. */
     .q-recent-order__status--success .q-recent-order__status-dot { background: var(--q-fill-success); }
     .q-recent-order__status--danger  .q-recent-order__status-dot { background: var(--q-fill-danger); }
     .q-recent-order__status--warning .q-recent-order__status-dot { background: var(--q-fill-warning); }
@@ -583,7 +573,7 @@
         margin-block-end: var(--q-space-lg);
     }
 
-    /* Dwie kolumny 8/4, ten sam podział co `.q-checkout__layout` — kolumna
+    /* Dwie kolumny 8/4, ten sam podział co `.q-checkout__layout`: kolumna
        boczna ma stałą szerokość, główna bierze resztę. */
     .q-order-layout {
         display: grid;
@@ -592,7 +582,7 @@
         align-items: start;
     }
 
-    /* Pionowy stos kart z odstępem — ten sam wzorzec dla dwóch kolumn
+    /* Pionowy stos kart z odstępem. Ten sam wzorzec dla dwóch kolumn
        podglądu zamówienia i dla sekcji dowolnej innej podstrony konta
        (np. danych osobowych), nie osobna reguła na każdą. */
     .q-order-layout__main,
@@ -604,7 +594,7 @@
     }
 
     /* Ta sama siatka 2-kolumnowa, co lista zapisanych adresów klienta
-       (`.addresses__list` niżej) — jeden wspólny wzorzec „dwie karty adresu
+       (`.addresses__list` niżej): jeden wspólny wzorzec „dwie karty adresu
        obok siebie", nie dwa osobne. */
     .q-order-addresses,
     .addresses__list {
@@ -614,7 +604,7 @@
     }
 
     /* Ten sam wygląd bloku adresu co w karcie zapisanego adresu klienta
-       (`.address-card__content` niżej) — jedna reguła na obie. */
+       (`.address-card__content` niżej), jedna reguła na obie. */
     .q-order-address,
     .address-card__content {
         font-size: var(--q-fs-sm);
@@ -625,7 +615,7 @@
     .q-order-address { padding: var(--q-space-md); }
 
     /* Pierwsza linia adresu z rdzenia to zawsze imię i nazwisko (albo nazwa
-       firmy, zależnie od formatu kraju) — `::first-line` zaznacza ją bez
+       firmy, zależnie od formatu kraju). `::first-line` zaznacza ją bez
        oddzielnego pola, bo rdzeń łączy całość przez `<br>` w jeden ciąg,
        nie w osobne znaczniki. */
     .q-order-address::first-line,
@@ -639,10 +629,10 @@
 
     .grid-table { font-size: var(--q-fs-sm); }
 
-    /* Siatka kolumn wspólna dla nagłówka i każdego wiersza pod nim — bez niej
-       (flex, szerokość komórki liczona z własnej treści) kolumny w ogóle się
-       nie trzymały: „Nazwa" w nagłówku i „Nazwa" w wierszu wychodziły innej
-       szerokości, bo każdy wiersz liczył swoją osobno. Liczbę kolumn niesie
+    /* Siatka kolumn wspólna dla nagłówka i każdego wiersza pod nim. Bez niej
+       (flex, szerokość komórki liczona z własnej treści) kolumny się nie
+       trzymają: „Nazwa" w nagłówku i „Nazwa" w wierszu wychodzą innej
+       szerokości, bo każdy wiersz liczy swoją osobno. Liczbę kolumn niesie
        modyfikator `grid-table__inner--N`, już używany w znacznikach (rdzeń
        i nasze szablony), jako zmienna CSS, którą dziedziczy nagłówek
        i każdy wiersz w środku. */
@@ -653,24 +643,21 @@
     .grid-table__inner--6 { --q-grid-cols: repeat(6, minmax(0, 1fr)); }
     .grid-table__inner--7 { --q-grid-cols: repeat(7, minmax(0, 1fr)); }
 
-    /* Kupony: siedem kolumn równej szerokości ściskało „Nazwa" tak samo
-       mocno, jak „Ilość" czy „Łącznie" — te ostatnie nigdy nie potrzebują
-       więcej niż kilku znaków, a nazwa kuponu łamała się bez potrzeby.
-       Jedna elastyczna kolumna (nazwa) bierze resztę miejsca, reszta ma
-       stałą szerokość dopasowaną do treści. Nadpisuje `--7` wyżej: ta sama
+    /* Kupony: jedna elastyczna kolumna (nazwa) bierze resztę miejsca, reszta
+       ma stałą szerokość dopasowaną do treści. „Ilość" czy „Łącznie" nigdy
+       nie potrzebują więcej niż kilku znaków, a przy siedmiu równych
+       kolumnach nazwa kuponu łamałaby się bez potrzeby. Nadpisuje `--7` wyżej: ta sama
        zmienna, więcej niż jeden selektor, wygrywa kolejność w arkuszu. */
     .grid-table__inner--vouchers {
         --q-grid-cols: 7rem minmax(0, 1fr) 3.5rem 6rem 6rem 4.5rem 6rem;
     }
 
-    /* Nagłówek kolumn zostaje widoczny i klikalny — wariant zwrotu (core:
+    /* Nagłówek kolumn zostaje widoczny i klikalny: wariant zwrotu (core:
        `order-detail-return.tpl`) chowa w pierwszej komórce prawdziwy
        checkbox „zaznacz wszystkie", nie samą etykietę, więc całego wiersza
        nie można schować tak jak `.visually-hidden` (odebrałoby to też
-       klawiaturze). Ta sama wysokość w pionie co wiersze z danymi —
-       `--q-space-sm`, nie węższe `--q-space-xs`: pasek nagłówka węższy niż
-       to, co pod nim, wyglądał ścieśniony (ten sam powód co `.q-order-table
-       th`, ujednolicone tutaj). */
+       klawiaturze). Ta sama wysokość w pionie co wiersze z danymi
+       (`--q-space-sm`), jak w `.q-order-table th`. */
     .grid-table__header,
     .grid-table__row {
         display: grid;
@@ -698,7 +685,7 @@
         color: var(--q-text-strong);
     }
 
-    /* Wiersze podsumowania (drugi `.grid-table`, patrz niżej) — jedna
+    /* Wiersze podsumowania (drugi `.grid-table`, patrz niżej): jedna
        komórka na cały wiersz, nie kolumna siatki: wyciszone jak w makiecie,
        dopóki `:last-child` (suma) nie przeważy pogrubieniem. */
     .grid-table__cell--label-value {
@@ -743,7 +730,7 @@
     .order-product__name:hover { color: var(--q-link-hover); }
 
     /* Kaseta produktów w wariancie zwrotu (core: `order-detail-return.tpl`)
-       dokłada znacznik wyboru i select ilości — ten sam wiersz, dwa
+       dokłada znacznik wyboru i select ilości: ten sam wiersz, dwa
        dodatkowe cele dotykowe. */
     .grid-table__cell:has(> input[type="checkbox"]) {
         flex: none;
@@ -751,11 +738,9 @@
     }
 
     /* Podsumowanie zamówienia (core: `order-detail-return.tpl` i warianty bez
-       zwrotu) — 1:1 z prototypu (`_account.css` → `.order-totals`), nie
-       tabela: etykieta i kwota stoją obok siebie, widoczne obie, bez
-       `visually-hidden`. Poprzednia wersja chowała etykietę i dokładała
-       osobną kreskę nad wierszem sumy OBOK kreski pod wierszem nad nim —
-       dwie kreski obok siebie czytały się jak jedna, podwojona. */
+       zwrotu): 1:1 z prototypu (`_account.css` → `.order-totals`), nie
+       tabela. Etykieta i kwota stoją obok siebie, widoczne obie, bez
+       `visually-hidden`. */
     .q-order-totals {
         padding: var(--q-space-sm) var(--q-space-md);
         background: var(--q-surface-sunken);
@@ -779,7 +764,7 @@
         color: var(--q-text-strong);
     }
 
-    /* Zgłoszenie zwrotu (core: `order-detail-return.tpl`) — ten sam odstęp
+    /* Zgłoszenie zwrotu (core: `order-detail-return.tpl`): ten sam odstęp
        od tabeli nad nim co pozostałe sekcje karty. */
     .order-merchandise-return {
         padding: var(--q-space-md);
@@ -794,9 +779,9 @@
 
     /* --- oś czasu statusu --- */
 
-    /* Kolejność od najstarszego na górze do najnowszego na dole —
+    /* Kolejność od najstarszego na górze do najnowszego na dole.
        `$order.history` z rdzenia idzie od najnowszego, więc odwracamy
-       samym układem zamiast dowolnej funkcji PHP w szablonie. */
+       samym układem, bez funkcji PHP w szablonie. */
     .q-order-timeline {
         display: flex;
         flex-direction: column-reverse;
@@ -810,8 +795,8 @@
         padding-block-end: var(--q-space-md);
     }
 
-    /* Ostatnie dziecko w DOM-ie to pierwsza pozycja na osi (patrz wyżej) —
-       ono stoi na dole po odwróceniu, więc to ono nie dostaje łącznika. */
+    /* Ostatnie dziecko w DOM-ie to pierwsza pozycja na osi (patrz wyżej).
+       Po odwróceniu stoi na dole, więc to ono nie dostaje łącznika. */
     .q-order-timeline__item:not(:first-child)::before {
         content: '';
         position: absolute;
@@ -923,7 +908,7 @@
 
     /* ── historia zamówień ───────────────────────────── */
 
-    /* Tylko tabela może przewijać się w poziomie, nigdy cała strona —
+    /* Tylko tabela może przewijać się w poziomie, nigdy cała strona:
        ta sama zasada co przy szerokich tabelach w panelu. */
     .q-order-table-wrap {
         overflow-x: auto;
@@ -985,7 +970,7 @@
     /* Siatka zdefiniowana wyżej, wspólnie z `.q-order-addresses`. */
 
     /* Tło/ramka/promień z `.q-card` (klasa dopisana w markupie
-       `block-address.tpl`) — tu dokładany jest tylko wewnętrzny odstęp. */
+       `block-address.tpl`). Tu dokładany jest tylko wewnętrzny odstęp. */
     .address-card {
         padding: var(--q-space-md);
     }
@@ -1000,8 +985,8 @@
     }
 
     /* Reszta wyglądu wyżej, wspólnie z `.q-order-address`. Tu tylko reset
-       kursywy — `<address>` jest kursywą domyślnie, `<div>` w order-detail
-       nie, więc tamta reguła tego nie potrzebowała. */
+       kursywy: `<address>` jest kursywą domyślnie, `<div>` w order-detail
+       nie. */
     .address-card__content {
         font-style: normal;
     }
@@ -1015,7 +1000,7 @@
     }
 
     /* `.link-danger` obok: ten sam odnośnik „ikona + napis, wyciszony,
-       czerwienieje pod kursorem", co „Usuń" na karcie adresu — rdzeń
+       czerwienieje pod kursorem", co „Usuń" na karcie adresu. Rdzeń
        używa tej klasy też w kasie (wybór adresu, podsumowanie) i w liście
        powiadomień e-mail, więc jeden styl na wszystkie, nie cztery kopie. */
     .address-card__edit,
@@ -1034,7 +1019,7 @@
     .address-card__edit:hover { color: var(--q-link-hover); }
     .link-danger:hover { color: var(--q-text-danger); }
 
-    /* Karta „dodaj nowy adres" — obrys kreskowany, bez wypełnienia, ikona
+    /* Karta „dodaj nowy adres": obrys kreskowany, bez wypełnienia, ikona
        i napis wyśrodkowane. Ta sama wysokość co karta z treścią obok niej
        w siatce (`align-items: stretch` domyślne w grid), więc nie trzeba
        osobnego `min-block-size`. */
@@ -1060,13 +1045,13 @@
         font-weight: var(--q-weight-semibold);
     }
 
-    /* Formularz adresu nie ma własnej makiety — ta sama karta co reszta
+    /* Formularz adresu nie ma własnej makiety: ta sama karta co reszta
        konta; odstęp wewnętrzny bierze wprost z `.q-card__body` (klasa
        w markupie `address.tpl`), bez osobnej reguły. */
 
     /* ── dane osobowe ─────────────────────────────────── */
 
-    /* Nagłówek sekcji PRZED kartą, nie w jej pasku — ciaśniejszy odstęp do
+    /* Nagłówek sekcji PRZED kartą, nie w jej pasku. Ciaśniejszy odstęp do
        własnej karty niż do następnej sekcji, więc para nagłówek+karta ma
        swój osobny, mniejszy `gap`, zagnieżdżony w większym `gap`
        `.q-account-stack`. */
@@ -1075,7 +1060,7 @@
         gap: var(--q-space-sm);
     }
 
-    /* `.q-account-stack` daje `--q-space-md` między każdą parą — za mało,
+    /* `.q-account-stack` daje `--q-space-md` między każdą parą. To za mało,
        żeby pogrubiony nagłówek odkleił się od karty NAD nim, skoro ten sam
        odstęp (tylko mniejszy, `--q-space-sm`) dzieli go już od WŁASNEJ
        karty pod spodem. Druga i kolejne sekcje dostają dodatkowy odstęp nad
@@ -1084,7 +1069,7 @@
         margin-block-start: var(--q-space-sm);
     }
 
-    /* Przyciski pobrania danych (RODO) — stoją pod akapitem, nie na końcu
+    /* Przyciski pobrania danych (RODO) stoją pod akapitem, nie na końcu
        formularza: `.buttons-wrapper` jest do tego za ciężki (duży odstęp
        nad sobą, dosuwa się do prawej krawędzi), więc to osobna, lekka
        reguła, nie ten komponent. */
@@ -1161,7 +1146,7 @@
         .q-account-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    /* Kolumna boczna (status, śledzenie, wiadomości) pod główną, nie obok —
+    /* Kolumna boczna (status, śledzenie, wiadomości) pod główną, nie obok:
        ten sam próg co `.q-checkout__layout`. */
     @media (max-width: 991px) {
         .q-order-layout { grid-template-columns: minmax(0, 1fr); }
@@ -1177,7 +1162,7 @@
         }
 
         /* Ta sama tabela stoi w `history.tpl` i w „Ostatnich zamówieniach”
-           na pulpicie konta (`my-account.tpl`) — jeden styl, nie dwa. Na
+           na pulpicie konta (`my-account.tpl`): jeden styl, nie dwa. Na
            telefonie wiersz staje się kartą: numer, data i kwota w jednym
            wierszu, status pod spodem, każde zamówienie jako osobny
            „klocek” z odstępem, nie linia między wierszami. */
@@ -1189,13 +1174,13 @@
             inline-size: 100%;
         }
 
-        /* `minmax(0, 1fr)`, nie goły `1fr` ani domyślny `auto` — ten sam
+        /* `minmax(0, 1fr)`, nie goły `1fr` ani domyślny `auto`. Ten sam
            powód co w `.q-account`/`.q-account-cards` wyżej: bez tego jedyny
            tor siatki rośnie do szerokości najszerszej karty zamówienia. */
         .q-order-table tbody { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--q-space-sm); }
 
-        /* Karta znika z zewnętrznego opakowania na telefonie — każde
-           zamówienie niesie teraz własną, osobną kartę, zamiast jednej
+        /* Karta znika z zewnętrznego opakowania na telefonie: każde
+           zamówienie niesie własną, osobną kartę, zamiast jednej
            wspólnej karty dookoła całej listy (dwie ramki jedna w drugiej). */
         .q-account-section:has(.q-order-table) {
             background: none;
@@ -1219,25 +1204,25 @@
         .q-order-table tr:hover { background: var(--q-surface-sunken); }
 
         /* Reguła wyżej (`.q-order-table td`, poza media query) daje każdej
-           komórce linię pod spodem — na szerokiej tabeli niewidoczne, bo
-           komórki stoją w rzędzie. Tu `<td>` to osobny wiersz flexa, więc ta
-           sama linia wychodziła pod KAŻDYM polem karty. Karta ma już własną
+           komórce linię pod spodem. Na szerokiej tabeli to nie przeszkadza,
+           bo komórki stoją w rzędzie. Tu `<td>` to osobny wiersz flexa, więc
+           ta sama linia wychodziłaby pod KAŻDYM polem karty. Karta ma już własną
            ramkę dookoła, więc komórki jej nie potrzebują. */
         .q-order-table td {
             padding: 0;
             border-block-end: 0;
 
             /* Domyślne minimum elementu flex to `auto` (szerokość treści),
-               nie `0` — ten sam powód co `.q-account-card__body` wyżej.
-               Długa, nieprzełamywalna wartość w jednej komórce (np. nazwa
-               metody płatności) potrafiła rozepchnąć cały wiersz, a za nim
+               nie `0`. Ten sam powód co `.q-account-card__body` wyżej:
+               długa, nieprzełamywalna wartość w jednej komórce (np. nazwa
+               metody płatności) potrafi rozepchnąć cały wiersz, a za nim
                całą stronę, szerzej niż ekran, zamiast złamać się albo
                skurczyć w przydzielonej szerokości karty. */
             min-inline-size: 0;
             overflow-wrap: break-word;
         }
 
-        /* Etykieta znika domyślnie — numer, data, kwota i status czyta się
+        /* Etykieta znika domyślnie: numer, data, kwota i status czyta się
            bez niej. Zostaje tylko tam, gdzie sama wartość nic by nie
            znaczyła („2" bez kontekstu). */
         .q-order-table td[data-label]::before { content: none; }
@@ -1248,7 +1233,7 @@
         }
 
         /* Krój/kolor numeru zamówienia niesie już `.q-order-table__ref`
-           (działa na każdej szerokości) — tu tylko kolejność. */
+           (działa na każdej szerokości). Tu tylko kolejność. */
         .q-order-table__cell--ref { order: 1; }
         .q-order-table__cell--date { order: 2; color: var(--q-text-muted); }
         .q-order-table__cell--price { order: 3; color: var(--q-text-strong); }
@@ -1264,10 +1249,10 @@
         .q-order-table__cell--actions { order: 6; }
     }
 
-    /* `minmax(0, 1fr)`, nie goły `1fr` — ten sam powód co w siatce `.q-account`:
+    /* `minmax(0, 1fr)`, nie goły `1fr`. Ten sam powód co w siatce `.q-account`:
        domyślne minimum toru to `auto`, czyli szerokość treści. Długi tytuł
        karty („Moje pokwitowania - korekty płatności") albo odnośnik modułu
-       bez przełamania rozpychał kartę szerzej niż ekran i całą stronę
+       bez przełamania rozpycha kartę szerzej niż ekran i całą stronę
        w poziomy scroll. */
     @media (max-width: 767px) {
         .q-account-stats { grid-template-columns: minmax(0, 1fr); gap: var(--q-space-sm); }
@@ -1277,8 +1262,7 @@
             gap: 6px var(--q-space-sm);
         }
 
-        /* Pełna szerokość własnego wiersza, ale przycisk w nim do prawej —
-           przyciski przyklejone do lewej krawędzi nie są tu naturalne. */
+        /* Pełna szerokość własnego wiersza, ale przycisk w nim do prawej. */
         .q-order-table__cell--actions {
             display: flex;
             justify-content: flex-end;
@@ -1292,11 +1276,11 @@
 
     /* Znaczki z kroju PrestaShopa (Material Icons): Quince go nie ładuje,
        więc każdy rysowałby się jako goły podpis („share", „add_circle_outline",
-       „chevron_left") — ten sam zabieg co w kasie i stopce. */
+       „chevron_left"). Ten sam zabieg co w kasie i stopce. */
     .wishlist-container .material-icons { display: none; }
 
     /* Moduł rysuje przez Vue własny `<h1>` i link „Nowa lista" prosto do
-       `.wishlist-container` — ten sam układ co nasz
+       `.wishlist-container`. Ten sam układ co nasz
        `.q-account-section__header--standalone` (tytuł + akcja, bez karty),
        inna tylko nazwa klasy, bo przychodzi z modułu, nie z naszego
        szablonu. */
@@ -1315,12 +1299,12 @@
 
     /* Przycisk „Create new list": ten sam przepis co `.q-btn--secondary
        .q-btn--sm` w `button.css` (klasa dodana tam do selektora, nie
-       powielona tutaj) — element rysuje Vue z własną nazwą klasy, więc nie
+       powielona tutaj). Element rysuje Vue z własną nazwą klasy, więc nie
        da się podmienić jej w szablonie na naszą. */
 
-    /* Każda lista to osobna karta w siatce, nie jeden pełny pasek — ten sam
+    /* Każda lista to osobna karta w siatce, nie jeden pełny pasek: ten sam
        wzorzec co kafelki adresów (`.address-card`)/konta (`.q-account-card`).
-       `minmax(0, 1fr)`, nie goły `1fr`: ten sam powód co w resztcie siatek
+       `minmax(0, 1fr)`, nie goły `1fr`: ten sam powód co w reszcie siatek
        w tym pliku. */
     .wishlist-container .page-content {
         background: none;
@@ -1344,8 +1328,8 @@
         border-radius: var(--q-card-radius);
         box-shadow: var(--q-shadow-sm);
 
-        /* Róg karty jest zaokrąglony, tło na hover (na linku w środku) —
-           prostokątne; bez przycięcia tło wychodziło poza promień rogu. */
+        /* Róg karty jest zaokrąglony, a tło na hover (na linku w środku)
+           prostokątne. Bez przycięcia tło wychodzi poza promień rogu. */
         overflow: hidden;
     }
 
@@ -1401,15 +1385,15 @@
         color: var(--q-text-strong);
     }
 
-    /* Ikony bez treści do podmiany w szablonie (rysuje je Vue) — maska tym
+    /* Ikony bez treści do podmiany w szablonie (rysuje je Vue): maska tym
        samym rysunkiem co znak w `data-label`, kolorowana `background-color`,
        zamiast pustego kwadratu po ukryciu zepsutego napisu Material Icons
        wyżej. Rozróżnienie przez kontekst w znacznikach, bo CSS nie umie
        dobrać się po treści tekstowej ikony: „Udostępnij" wprost na liście
        domyślnej (jedyna jej akcja), kebab po własnej klasie modułu na
-       pozostałych — „Zmień nazwę"/„Usuń" stoją pod nim w naszym
+       pozostałych. „Zmień nazwę"/„Usuń" stoją pod nim w naszym
        `.q-dropdown` (assets/js/islands/wishlist-lists.js), nie obok niego:
-       trzy ikony w rzędzie łamały się już przy dwóch kartach w siatce. */
+       trzy ikony w rzędzie łamią się już przy dwóch kartach w siatce. */
     .wishlist-list-item-right .material-icons {
         display: block;
         inline-size: 18px;
@@ -1434,7 +1418,7 @@
     }
 
     /* Przycisk „Usuń", który moduł rysuje zawsze wprost (bez menu) na liście
-       innej niż domyślna — u nas ta akcja stoi pod kebabem, razem ze
+       innej niż domyślna. U nas ta akcja stoi pod kebabem, razem ze
        „Zmień nazwę", więc ten drugi, osobny przycisk znika. */
     .wishlist-list-item:not(.wishlist-list-item-default) .wishlist-list-item-right > button:last-child {
         display: none;
@@ -1451,24 +1435,24 @@
 
 /* Poniższe reguły stoją celowo poza `@layer quince.components`. Moduł listy
    życzeń dokłada do strony WŁASNY, wstrzyknięty w locie przez Vue arkusz
-   (osobny od pliku `wishlist.css`, nigdzie niewidoczny w źródłach) — reguła
+   (osobny od pliku `wishlist.css`, nigdzie niewidoczny w źródłach). Reguła
    bez warstwy zawsze wygrywa z regułą w warstwie, niezależnie od
    specyficzności selektora, więc żadna reguła w warstwie by tu nie
    wystarczyła. */
 
 /* Kolor na hover: rozjaśniony atrament, ten sam token co nazwa produktu
-   w zajawce (`.q-pcard:hover .q-pcard__name`), nie barwa odnośnika —
+   w zajawce (`.q-pcard:hover .q-pcard__name`), nie barwa odnośnika:
    inaczej stan spoczynku i najazd wyglądają identycznie i interakcja
    znika. Wstrzyknięty arkusz: `.wishlist-list-item:hover .wishlist-list-item-title{color:#2fb5d2}`. */
 .wishlist-container .wishlist-list-item:hover .wishlist-list-item-title {
     color: var(--q-neutral-8);
 }
 
-/* Menu modułu pod kebabem (`.dropdown-menu`) nie jest już w użyciu — „Zmień
+/* Menu modułu pod kebabem (`.dropdown-menu`) nie jest w użyciu: „Zmień
    nazwę"/„Udostępnij"/„Usuń" stoją pod WŁASNYM `.q-dropdown`
    (`assets/js/islands/wishlist-lists.js`), nie pod oryginalnym mechanizmem
    Vue. Kliknięcie kebaba jest przechwytywane, zanim dotrze do Vue, więc
-   `.dropdown-menu` w praktyce nigdy się nie wyrenderuje — to ukrycie jest
+   `.dropdown-menu` w praktyce nigdy się nie wyrenderuje. To ukrycie jest
    tylko zabezpieczeniem na wypadek, gdyby jednak się pojawiło. Selektor
    o wyższej specyficzności niż wstrzyknięty arkusz modułu z tego samego
    powodu co reguła hover wyżej. */

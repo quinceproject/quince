@@ -1,13 +1,12 @@
 {**
- * Quince — sortowanie listy.
+ * Quince: sortowanie listy.
  *
  * Pole wyboru motywu, a nie natywny `select`: natywna lista wygląda inaczej
- * w każdej przeglądarce i nie da się jej podpiąć pod tokeny, więc jedyne
- * miejsce w sklepie z obcą stylistyką byłoby akurat w pasku narzędzi.
+ * w każdej przeglądarce i nie da się jej podpiąć pod tokeny.
  *
  * Pozycje są odnośnikami, nie przyciskami: bez JavaScriptu sortowanie ma
  * działać jak zwykłe przejście między stronami. Klasa `js-search-link` to
- * kontrakt z rdzeniem — po niej podpina się zmiana kolejności bez przeładowania.
+ * kontrakt z rdzeniem: po niej podpina się zmiana kolejności bez przeładowania.
  *
  * Klasy: components/field.css (q-select), components/dropdown.css
  *}

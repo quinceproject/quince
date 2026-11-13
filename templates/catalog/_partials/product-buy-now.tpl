@@ -1,19 +1,18 @@
 {**
- * Quince — ulubione i drugie wezwanie pod wierszem zakupu.
+ * Quince: ulubione i drugie wezwanie pod wierszem zakupu.
  *
  * Wiersz ma zawsze ten sam kształt: serce o stałej szerokości po lewej,
  * przycisk biorący resztę wiersza po prawej. Zmienia się tylko to, co ten
  * przycisk robi.
  *
  * Przy produkcie do kupienia jest to „Kup teraz": prowadzi prosto do kasy, więc
- * jest wypełniony atramentem — ma wyglądać na przycisk równie realny co
- * „Do koszyka", tylko o innym ciężarze. Kontur czytał się jak akcja poboczna.
+ * jest wypełniony atramentem, jak „Do koszyka", tylko o innym ciężarze.
  *
  * Przy produkcie, którego nie da się zamówić, w to samo miejsce wchodzi prośba
  * o wiadomość i bierze barwę marki, bo zostaje jedynym działaniem na karcie.
  * Wiersz zakupu wtedy nie powstaje, więc klient nie ma czym kliknąć obok.
  *
- * Serce NIE stoi na wariantach `q-btn` i to jest decyzja: warianty przycisku
+ * Serce NIE stoi na wariantach `q-btn`: warianty przycisku
  * ustawiają barwę napisu z warstwy nadpisań, a warstwa bije swoistość, więc
  * reguła stanu `aria-pressed` nie miałaby szans i serce po dodaniu do ulubionych
  * zostawałoby szare.
@@ -21,7 +20,7 @@
  * Zachowanie: assets/js/islands/wishlist.js (serce), islands/buybox.js („Kup
  * teraz") oraz islands/notify.js (szuflada zapisu).
  *
- * Zmienne: $qUlubione, $qKupTeraz, $qPowiadom — włączniki z panelu.
+ * Zmienne: $qUlubione, $qKupTeraz, $qPowiadom: włączniki z panelu.
  *}
 
 {assign var=qMaUlubione value=($qUlubione && isset($modules.quince_engine.header.wishlist) && $modules.quince_engine.header.wishlist.visible)}

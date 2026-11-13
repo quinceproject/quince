@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_newproducts.
+ * Quince: nadpisanie modułu ps_newproducts.
  *
  * Nowości na stronie głównej, w tej samej karuzeli, co pozostałe zajawki.
  *}

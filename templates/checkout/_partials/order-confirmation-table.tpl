@@ -33,7 +33,7 @@
   </div>
 {/foreach}
 
-{* Suma do zapłaty stoi poza tym blokiem, w `.q-ordersum__grand` — tu zostaje
+{* Suma do zapłaty stoi poza tym blokiem, w `.q-ordersum__grand`. Tu zostaje
    tylko rozbicie na składowe, tak jak w kolumnie kasy. *}
 <div class="q-ordersum__tot">
   {foreach $subtotals as $subtotal}

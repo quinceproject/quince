@@ -1,9 +1,9 @@
 {**
- * Quince — wybór waluty
+ * Quince: wybór waluty
  *
  * Ten sam mały select co przy języku.
  *
- * Kod stoi przed znakiem, bo sam znak bywa niejednoznaczny — „$" to dolar
+ * Kod stoi przed znakiem, bo sam znak bywa niejednoznaczny: „$" to dolar
  * amerykański, kanadyjski i australijski naraz.
  *
  * Klasy: assets/css/components/picker.css (przycisk), dropdown.css (lista)

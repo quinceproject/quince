@@ -1,14 +1,14 @@
 /* ===================================================================
-   Quince — tokeny motywu
+   Quince: tokeny motywu
 
-   Warstwa druga i trzecia systemu. Warstwę pierwszą — role kolorystyczne
-   i wartości bazowe — wypisuje silnik do <head> sklepu, bo zależą od ustawień
+   Warstwa druga i trzecia systemu. Warstwę pierwszą (role kolorystyczne
+   i wartości bazowe) wypisuje silnik do <head> sklepu, bo zależą od ustawień
    sprzedawcy i zmieniają się bez przebudowy plików.
 
-   Zawartość odwzorowuje mapę tokenów projektu — komplet, nie wybór.
+   Zawartość odwzorowuje mapę tokenów projektu: komplet, nie wybór.
 
    ŻADEN komponent motywu nie ma prawa użyć wartości spoza tego pliku.
-   Brakuje czegoś — rozbudowujemy kontrakt tutaj, nie dopisujemy liczby
+   Gdy czegoś brakuje, rozbudowujemy kontrakt tutaj, nie dopisujemy liczby
    w arkuszu komponentu.
 
    PLIK JEST GENEROWANY. Zmiany ręczne przepadną przy kolejnym przebudowaniu.
@@ -30,10 +30,9 @@
     --q-space-lg:            calc(var(--q-space-unit) * 2);
     --q-space-xl:            calc(var(--q-space-unit) * 3);
     /* Skala pisma siada na pełnych pikselach.
-       Stopnie liczą się mnożeniem, więc bez zaokrąglenia wychodziły wartości
-       w rodzaju 13,913 px czy 18,4 px — sklep pokazywał wtedy ułamki, których
-       nikt nie zamawiał, a sąsiadujące stopnie różniły się o ułamek piksela
-       i wyglądały na przypadkowe.
+       Stopnie liczą się mnożeniem, więc bez zaokrąglenia wychodzą wartości
+       w rodzaju 13,913 px czy 18,4 px, a sąsiadujące stopnie różnią się
+       o ułamek piksela.
 
        Każdy stopień liczy się od rozmiaru bazowego, a nie od stopnia obok:
        przy łańcuchu zaokrągleń błąd narastałby z każdym krokiem. Sposób
@@ -94,16 +93,15 @@
     /* Znaczek typu pliku w barwie atramentu, nie w barwie błędu. Czerwień
        znaczyłaby to samo co komunikat o błędzie, a rozszerzenie pliku niczego
        nie zgłasza. Atrament zostawia też barwę marki ramce, która zapala się
-       pod kursorem — dwa akcenty naraz zniosłyby ten sygnał. */
+       pod kursorem; dwa akcenty naraz zniosłyby ten sygnał. */
     --q-attach-badge-bg:     var(--q-neutral-12);
     --q-attach-badge-label:  #ffffff;
 
     /* --- Plakietki produktu --- */
-    /* Plakietki mają WŁASNE role w silniku i własną kartę w panelu — to je
-       sklep ustawia ołówkiem. Wcześniej brały tu kolory STATUSÓW: nowość barwę
-       informacji, bestseller barwę ostrzeżenia, wyprzedaż barwę błędu. Karta
-       w panelu nie robiła więc nic, a plakietka niosła znaczenie, którego nie
-       ma — „Pakiet" wyglądał jak komunikat systemu. */
+    /* Plakietki mają WŁASNE role w silniku i własną kartę w panelu. Nie
+       podpinać ich pod kolory statusów (informacja, ostrzeżenie, błąd):
+       karta w panelu przestałaby działać, a plakietka wyglądałaby jak
+       komunikat systemu. */
     --q-badge-discount-bg:   var(--q-badge-promo);
     --q-badge-discount-label: var(--q-on-badge-promo);
     --q-badge-new-bg:        var(--q-badge-new);
@@ -123,7 +121,7 @@
        Najcichsza linia w motywie: rozdziela wiersze WEWNĄTRZ jednego bloku,
        a nie bloki od siebie. Wiersz narzędzi od pigułek zawężeń, grupy filtrów,
        słupek zakupu od treści w widoku listy. `--q-border-subtle` jest na to
-       za mocna — obrysowuje bloki i przy kilku liniach w jednej karcie robiła
+       za mocna: obrysowuje bloki i przy kilku liniach w jednej karcie robi
        z niej kratkę. */
     --q-border-hairline:     var(--q-neutral-5);
 
@@ -256,7 +254,7 @@
     --q-header-control-h:    calc(var(--q-field-height) + 2px);
     --q-header-pad-block:    14px;
     /* Najechanie bierze rolę pasa. Na jasnym nagłówku jest to welon w barwie
-       pisma, na ciemnym barwa marki — rozstrzyga silnik, bo tylko on zna ton
+       pisma, na ciemnym barwa marki. Rozstrzyga silnik, bo tylko on zna ton
        tła pasa, a CSS nie umie się po nim rozgałęzić. */
     --q-header-hover:        var(--q-band-header-hover);
     --q-header-bg:           var(--q-band-header-bg);
@@ -265,14 +263,13 @@
     --q-header-border:       var(--q-band-header-border);
 
     /* Kreska pola wyszukiwania należy do pasa, w którym pole stoi: na jasnym
-       nagłówku jest jasna, na ciemnym ciemna. Globalna rola dawała na ciemnym
+       nagłówku jest jasna, na ciemnym ciemna. Globalna rola dałaby na ciemnym
        pasie szarą obwódkę. */
     /* Wyszukiwarka leży na pasie nagłówka, więc bierze barwy pasa, a nie karty.
-       Pas bywa jasny, ciemny albo w barwie marki i zmienia się po przewinięciu —
-       tło karty pasowałoby do jednego z trzech przypadków, a przy okazji
-       ustawienie „Tło kart" przemalowywałoby wyszukiwarkę. */
+       Pas bywa jasny, ciemny albo w barwie marki i zmienia się po przewinięciu,
+       a tło karty pasowałoby tylko do jednego z tych przypadków. */
     /* Wypełnienie przycisków stojących na pasie: katalog i koszyk. Barwa marki
-       przestaje być wyróżnieniem, gdy pas sam ją nosi — wtedy silnik podstawia
+       przestaje być wyróżnieniem, gdy pas sam ją nosi. Wtedy silnik podstawia
        kolor ciemny sklepu. Dlatego rola pasa, a nie `--q-fill-primary`. */
     --q-header-solid:        var(--q-band-header-solid);
     --q-header-on-solid:     var(--q-band-header-on-solid);
@@ -297,8 +294,8 @@
 
     /* --- Metadane --- */
     /* Drobne dopiski obok treści: marka na zajawce, numer katalogowy, nota
-       o najniższej cenie. Na stopniu ósmym dawały 2,44:1 na białym, czyli
-       poniżej progu czytelności — stąd stopień jedenasty. */
+       o najniższej cenie. Stopień jedenasty, bo ósmy daje 2,44:1 na białym,
+       poniżej progu czytelności. */
     --q-meta-color:          var(--q-neutral-11);
 
     /* --- modal --- */
@@ -323,8 +320,8 @@
     --q-navbar-link:         var(--q-band-nav-link);
     --q-navbar-hover:        var(--q-band-nav-hover);
     /* Napis na tle najechania idzie z TEJ SAMEJ pary co tło. Barwa odnośnika
-       jest dobrana pod tło pasa, nie pod tło najechania — na pasie ciemnym obie
-       wychodziły barwą marki i napis znikał w prostokącie pod sobą. */
+       jest dobrana pod tło pasa, nie pod tło najechania: na pasie ciemnym obie
+       wychodzą barwą marki i napis znika w prostokącie pod sobą. */
     --q-navbar-hover-label:  var(--q-band-nav-hover-fg);
     --q-navbar-border:       var(--q-band-nav-border);
     --q-navbar-solid:        var(--q-band-nav-solid);
@@ -339,13 +336,13 @@
 
     /* --- Karta produktu --- */
     /* Kadr zajawki bez szarej obwódki: przy szarym tle kadru i zdjęciu wpisanym
-       w kadr dookoła zostawał pasek innej barwy niż karta. Zdjęcia w sklepie
+       w kadr dookoła zostaje pasek innej barwy niż karta. Zdjęcia w sklepie
        i tak mają własny margines wpisany w plik. */
     --q-pcard-media-bg:      var(--q-surface-sunken);
     --q-pcard-media-placeholder: var(--q-neutral-7);
     /* Zdjęcie wypełnia kadr. Zajawki w rzędzie mają wtedy jednakowe,
        pełne kadry zamiast obrazków różnej wielkości pływających w pustym
-       polu — a że kadr jest kwadratowy, zdjęcie traci tylko brzegi. */
+       polu. Kadr jest kwadratowy, więc zdjęcie traci tylko brzegi. */
     --q-pcard-media-fit:     cover;
 
     /* --- picker --- */
@@ -389,7 +386,7 @@
 
     /* --- Slajder --- */
     /* Promień slajdera w odmianie stojącej w pojemniku strony. Przez całą
-       szerokość okna slajder rogów nie ma — nie ma czego zaokrąglać. */
+       szerokość okna slajder rogów nie ma. */
     --q-slider-radius:       var(--q-radius-panel);
     /* Tło pod ramką filmu: widać je, zanim serwis wczyta odtwarzacz, i w rogach,
        gdyby plakat miał inne proporcje niż pas. */
@@ -398,7 +395,7 @@
        bo odpowiada na inny kłopot: jasny środek kadru pod tekstem. */
     --q-slider-shade:        rgb(0 0 0 / .45);
     /* Cień pod napisem leżącym na materiale. Zasłona radzi sobie z ciemnym
-       kadrem, ale nie z jasnym fragmentem pod jedną linijką — wtedy znika sam
+       kadrem, ale nie z jasnym fragmentem pod jedną linijką, gdzie znika sam
        napis, nie cały blok. Cień działa punktowo i nie przyciemnia materiału. */
     --q-slider-text-shadow:  0 1px 3px rgb(0 0 0 / .85), 0 0 18px rgb(0 0 0 / .55);
     /* Pigułka cechy na slajdzie. Na jasnym tle powierzchnia wklęsła, na ciemnym

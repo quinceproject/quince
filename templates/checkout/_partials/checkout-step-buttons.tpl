@@ -2,7 +2,7 @@
  * For the full copyright and license information, please view the
  * LICENSE.md file that was distributed with this source code.
  *}
-{* Przyciski kroku: „Wstecz" przy lewej krawędzi, „Dalej" przy prawej —
+{* Przyciski kroku: „Wstecz" przy lewej krawędzi, „Dalej" przy prawej:
    ten sam rząd, rozsunięty na boki. Nazwa kroku, do którego prowadzą,
    stoi już w pasku kroków i w nagłówku sekcji, więc napis na przycisku
    zostaje krótki: samo „Dalej", samo „Wstecz". *}

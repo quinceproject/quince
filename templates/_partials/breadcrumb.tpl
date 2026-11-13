@@ -1,7 +1,7 @@
 {**
  * Okruszki.
  *
- * Ostatnia pozycja nie jest odnośnikiem — nie prowadzi nigdzie, bo klient już
+ * Ostatnia pozycja nie jest odnośnikiem: nie prowadzi nigdzie, bo klient już
  * na niej stoi. Separator rysuje CSS, nie szablon: to dekoracja, a czytnik
  * ekranu ma odczytać samą ścieżkę.
  *

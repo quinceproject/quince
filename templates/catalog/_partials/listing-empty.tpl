@@ -4,14 +4,14 @@
  * Dwa różne przypadki pod jednym adresem w kodzie, bo rdzeń renderuje to samo
  * miejsce w obu:
  *
- *  — KLIENT NIC NIE ZNALAZŁ. Wpisał frazę i dostał zero wyników. To nie jest
+ *  - KLIENT NIC NIE ZNALAZŁ. Wpisał frazę i dostał zero wyników. To nie jest
  *    stan pusty, tylko ślepy zaułek, z którego trzeba go wyprowadzić: stąd
  *    wskazówki, co zrobić inaczej, i rząd kategorii jako droga dalej. Treść
  *    pisze sklep w ustawieniach wyszukiwarki, bo tylko on wie, czego u niego
  *    szukają i gdzie to leży;
- *  — LISTA JEST PUSTA. Kategoria bez produktów, marka bez produktów, promocje
+ *  - LISTA JEST PUSTA. Kategoria bez produktów, marka bez produktów, promocje
  *    w dzień bez promocji. Klient niczego nie zrobił źle, więc nie ma mu czego
- *    podpowiadać — zostaje zdanie i droga powrotna.
+ *    podpowiadać: zostaje zdanie i droga powrotna.
  *
  * Rozróżnia je `$search_string`: ustawia go wyłącznie kontroler wyszukiwarki.
  *
@@ -26,8 +26,8 @@
 {assign var=qPusty value=null}
 
 {* Lista pusta, bo zawezil ja filtr. Klikaniem klient tu nie trafi: faceted
-   search pokazuje tylko opcje, ktore maja wyniki. Trafia starym adresem —
-   zakladka, link z maila, wynik w wyszukiwarce — gdy produkty w miedzyczasie
+   search pokazuje tylko opcje, ktore maja wyniki. Trafia starym adresem
+   (zakladka, link z maila, wynik w wyszukiwarce), gdy produkty w miedzyczasie
    zniknely. Przy zerze wynikow modul filtrow nie oddaje ani panelu, ani pigulek,
    wiec bez tego odnosnika klient nie ma czym zdjac zawezenia. *}
 {assign var=qZawezone value=$smarty.get.q|default:''}

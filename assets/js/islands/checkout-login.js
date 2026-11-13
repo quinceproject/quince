@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — szuflada logowania w kasie
+   Quince: szuflada logowania w kasie
 
    Klient, który ma konto, loguje się bez wychodzenia z kasy: szuflada
    dokłada się z boku i zostawia widoczne to, co już wypełnił. Rdzeń stawia

@@ -1,5 +1,5 @@
 /**
- * Quince — szuflada koszyka
+ * Quince: szuflada koszyka
  *
  * Treść szuflady to widżet ps_shoppingcart. Moduł koszyka po każdym zdarzeniu
  * `updateCart` sam pobiera widżet na nowo i podmienia element `.blockcart`,
@@ -10,7 +10,7 @@
  *    Musi być ustawione, zanim moduł koszyka odczyta je w swoim DOM-ready,
  *    dlatego stoi na najwyższym poziomie pliku, a nie w wyspie.
  * 2. Przycisk koszyka w nagłówku otwiera szufladę. Bez skryptu prowadzi na
- *    stronę koszyka, tak jak wcześniej.
+ *    stronę koszyka.
  * 3. Zmiana ilości i usunięcie pozycji. Wysyłamy je do kontrolera koszyka tak,
  *    jak robi to strona koszyka, i ogłaszamy `updateCart`: odświeżą się wtedy
  *    szuflada, licznik w nagłówku i strona koszyka, jeśli akurat jest otwarta.
@@ -145,7 +145,7 @@
         });
 
         // Po podmianie treści ognisko wraca na tę samą kontrolkę tej samej
-        // pozycji. Bez tego osoba na klawiaturze po każdym „+" lądowała na
+        // pozycji. Bez tego osoba na klawiaturze po każdym „+" lądowałaby na
         // początku strony, poza szufladą. Gdy kontrolki już nie ma (pozycja
         // usunięta, przycisk dokupki zniknął razem z podpowiedzią), ognisko
         // idzie na zamknięcie szuflady.

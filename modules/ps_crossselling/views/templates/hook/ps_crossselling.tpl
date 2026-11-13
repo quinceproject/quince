@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_crossselling.
+ * Quince: nadpisanie modułu ps_crossselling.
  *
  * Produkty kupowane razem z oglądanym. Moduł daje listę, motyw daje jej wygląd:
  * tę samą karuzelę, co pozostałe zajawki.

@@ -1,5 +1,5 @@
 {**
- * Quince — licznik ilości i przycisk zakupu.
+ * Quince: licznik ilości i przycisk zakupu.
  *
  * Licznik i przycisk stoją w jednym wierszu i mają tę samą wysokość. Wiersz umie
  * się zawinąć: element flexa domyślnie nie schodzi poniżej szerokości własnej
@@ -8,16 +8,16 @@
  *
  * Produktu, którego nie da się zamówić, ten blok nie obsługuje: licznik ilości
  * pytałby o coś, czego i tak nie można kupić. Prośba o wiadomość wchodzi wtedy
- * w wiersz ulubionych, w miejsce „Kup teraz" — `product-buy-now.tpl`.
+ * w wiersz ulubionych, w miejsce „Kup teraz" (`product-buy-now.tpl`).
  *
  * Wymagania rdzenia, których nie wolno ruszyć:
- *   `js-product-add-to-cart`  — po niej rdzeń podmienia blok po zmianie wariantu,
- *   `id="quantity_wanted"`    — po nim czyta ilość przy dodawaniu do koszyka,
- *   `data-button-action`      — po nim rozpoznaje przycisk zakupu.
+ *   `js-product-add-to-cart`: po niej rdzeń podmienia blok po zmianie wariantu,
+ *   `id="quantity_wanted"`:   po nim czyta ilość przy dodawaniu do koszyka,
+ *   `data-button-action`:     po nim rozpoznaje przycisk zakupu.
  *
  * Dostępność wypisuje osobny element panelu (`product-availability.tpl`), więc
- * tutaj jej nie ma. Rdzeń trzymał obie rzeczy razem, przez co stan magazynu nie
- * dawał się przestawić ani wyłączyć bez przycisku zakupu.
+ * tutaj jej nie ma: stan magazynu da się przestawić i wyłączyć niezależnie od
+ * przycisku zakupu.
  *
  * Zachowanie licznika: assets/js/islands/buybox.js
  *}
@@ -27,7 +27,7 @@
 
     {* Produktu nie da się zamówić: licznik i koszyk nie mają czego obsłużyć,
        więc wiersz zakupu nie powstaje. Prośba o wiadomość wchodzi w wiersz
-       ulubionych, w miejsce „Kup teraz" — patrz `product-buy-now.tpl`. *}
+       ulubionych, w miejsce „Kup teraz" (patrz `product-buy-now.tpl`). *}
     {if $product.add_to_cart_url}
     <div class="q-buy__cta">
       <div class="q-qty">

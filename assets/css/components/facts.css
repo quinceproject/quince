@@ -2,13 +2,13 @@
     /*
        Zestawienie nazwa-wartość: cechy podstawowe produktu, kody, dostępność.
        Własny plik, bo używa go nie tylko karta produktu, ale i zajawka
-       w widoku listy na listingu — a arkusz karty produktu jedzie tylko
-       ze stroną produktu i na listingu tych reguł po prostu nie było.
+       w widoku listy na listingu, a arkusz karty produktu jedzie tylko
+       ze stroną produktu.
     */
     /* --- cechy podstawowe ---
        To NIE jest tabela specyfikacji, choć pokazuje to samo w tej samej
-       postaci. Tam struktura bywa dowolna — porównanie modeli, wymiary,
-       zawartość zestawu — więc rysuje siatkę kresek. Tutaj struktura jest
+       postaci. Tam struktura bywa dowolna (porównanie modeli, wymiary,
+       zawartość zestawu), więc rysuje siatkę kresek. Tutaj struktura jest
        znana z góry: po lewej nazwa, po prawej wartość, zawsze. Pełna siatka
        postawiłaby w kolumnie opisu drugą tabelę tuż nad pierwszą i obie
        przestałyby coś znaczyć. */
@@ -21,7 +21,7 @@
        we własnej kolumnie, a nie oblewać nazwę. Nazwa dostaje mniej miejsca,
        bo to ona jest krótsza i to wartości chcemy dać oddech.
 
-       Bez kresek: rytm niesie odstęp, nie linia — ta sama zasada, co w panelu
+       Bez kresek: rytm niesie odstęp, nie linia. Ta sama zasada, co w panelu
        zakupu. Strukturę robią tu dwie rzeczy mocniejsze od kreski: wspólna oś,
        na której zaczynają się wszystkie wartości, i wyciszona nazwa przy pełnej
        sile wartości. */
@@ -34,15 +34,15 @@
 
     /* Nazwa cichsza od wartości, ale nadal do czytania. `--q-meta-color` jest
        barwą drobnych dopisków obok treści i przy palecie sklepu wychodzi
-       jasnoszara: przy nazwie cechy dawało to napis, który znika obok wartości.
+       jasnoszara: przy nazwie cechy dałaby napis, który znika obok wartości.
        Barwa tekstu drugorzędnego trzyma tę samą hierarchię i pozostaje czytelna. */
     .q-facts__key {
         color: var(--q-body-secondary-color);
     }
 
-    /* Wartość cięższa od nazwy. Nazwa jest etykietą — powtarza się w każdym
+    /* Wartość cięższa od nazwy. Nazwa jest etykietą: powtarza się w każdym
        produkcie i służy tylko do znalezienia wiersza; wartość jest tym, po co
-       ktoś tu patrzy. Przy jednakowej wadze oko musiało czytać obie kolumny,
+       ktoś tu patrzy. Przy jednakowej wadze oko musiałoby czytać obie kolumny,
        żeby wyłowić tę właściwą. */
     .q-facts__val {
         margin: 0;
@@ -53,8 +53,4 @@
     .q-facts__val a { color: var(--q-link); }
 
     .q-facts__val a:hover { color: var(--q-link-hover); }
-
-    /* Odnośnik JEST kreską rozdzielającą: napis wchodzi w linię, która zamyka
-       cechy i oddziela je od reszty. Jedna rzecz robi dwie roboty — rozdziela
-       i prowadzi dalej — zamiast osobnej kreski i osobnego odnośnika pod nią. */
 }

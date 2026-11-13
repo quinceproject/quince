@@ -1,13 +1,11 @@
 {**
- * Quince — szuflada „zadaj pytanie".
+ * Quince: szuflada „zadaj pytanie".
  *
- * Ten sam kształt, co szuflada oferty i kontaktu ze specjalistą: człowiek pyta
- * w tym samym oknie, w którym czyta odpowiedzi innych, i nie opuszcza karty.
+ * Ten sam kształt, co szuflada oferty i kontaktu ze specjalistą.
  *
- * Zalogowany nie podaje imienia ani adresu — sklep je zna, a pytanie o nie
- * drugi raz wygląda, jakby konto nic nie znaczyło.
+ * Zalogowany nie podaje imienia ani adresu: sklep je zna.
  *
- * Zmienne: $qIntro — zdanie wstępu ustawione w panelu, może być puste.
+ * Zmienne: $qIntro: zdanie wstępu ustawione w panelu, może być puste.
  *}
 
 <dialog class="q-modal q-modal--drawer" data-q-qa-form aria-labelledby="q-qa-form-title">

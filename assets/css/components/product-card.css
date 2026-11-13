@@ -1,17 +1,17 @@
 /* ===================================================================
-   Quince — karta produktu
+   Quince: karta produktu
 
    Najczęściej powtarzany element sklepu: listing kategorii, wyniki
    wyszukiwania, nowości, promocje, produkty podobne, ostatnio oglądane.
    Jedna definicja obsługuje wszystkie te miejsca.
 
    Karta reaguje na szerokość WŁASNEGO kontenera, nie okna. Ta sama karta
-   stoi w szerokim listingu i w wąskiej kolumnie bocznej — bez zapytań
+   stoi w szerokim listingu i w wąskiej kolumnie bocznej. Bez zapytań
    kontenerowych trzeba by dla każdego miejsca robić osobny wariant klasy.
 
    Odporność na niepełne dane jest wymogiem, nie dodatkiem: produkt bez
    zdjęcia, nazwa na cztery linijki, brak ceny promocyjnej obok produktu
-   z promocją — wszystko to zdarza się w każdym sklepie i karta musi
+   z promocją: wszystko to zdarza się w każdym sklepie i karta musi
    wyglądać poprawnie w każdym z tych przypadków.
    =================================================================== */
 
@@ -57,9 +57,8 @@
 
        Stały stosunek boków jest konieczny, żeby karty w rzędzie miały równą
        wysokość niezależnie od tego, jakie zdjęcia wgrał sprzedawca. */
-    /* Kadr zajawki bez szarej obwódki: szare tło kadru zostawiało wokół zdjęcia
-       ramkę, której nikt nie zamawiał — zdjęcia w sklepie i tak mają własny
-       margines wpisany w plik. Puste pole po bokach zdjęcia o innych
+    /* Kadr zajawki bez szarej obwódki: szare tło kadru zostawia wokół zdjęcia
+       ramkę, a zdjęcia w sklepie i tak mają własny margines wpisany w plik. Puste pole po bokach zdjęcia o innych
        proporcjach bierze barwę karty, więc go nie widać. */
     .q-pcard__media {
         --q-pcard-media-bg: var(--q-card-bg);
@@ -154,7 +153,7 @@
        w całości: „00 00 00" na zdjęciu czyta się jak zepsuty licznik. */
     /* Licznik w kafelku: nad przyciskami narzędzi, przy dolnej krawędzi
        kadru. Zegar siedzi w pojemniku decyzji, więc nie ma jak odbić się
-       od kadru — kadr jest kwadratem, czyli jego dół leży `100cqw` od góry
+       od kadru. Kadr jest kwadratem, czyli jego dół leży `100cqw` od góry
        karty, a karta jest kontenerem i to ona wyznacza układ odniesienia. */
     .q-pcard__countdown {
         position: absolute;
@@ -238,7 +237,7 @@
        przez silnik, więc 4,4 wygląda inaczej niż 4,8.
 
        Obie warstwy mają te same znaczniki i ten sam odstęp, a złota jest wyjęta
-       z potoku i przyklejona do lewej krawędzi — inaczej wystarczyłby piksel
+       z potoku i przyklejona do lewej krawędzi. Inaczej wystarczyłby piksel
        różnicy, żeby gwiazdki się rozjechały. */
     .q-pcard__stars {
         position: relative;
@@ -271,8 +270,8 @@
         fill: currentColor;
     }
 
-    /* Zajawka bez opinii nie renderuje wiersza oceny wcale — decyduje o tym
-       szablon, bo to on zna dane. CSS nie musi niczego zgadywać. */
+    /* Zajawka bez opinii nie renderuje wiersza oceny wcale. Decyduje o tym
+       szablon, bo to on zna dane. */
 
     /* Cena odsunięta do dołu karty: przy różnej długości nazw kwoty w całym
        rzędzie zostają wyrównane w pionie. */
@@ -337,7 +336,7 @@
        dopiero pod kursorem: na listingu z dwudziestoma produktami czterdzieści
        widocznych przycisków to szum, nie ułatwienie.
 
-       Na ekranie dotykowym kursora nie ma, więc tam zostają widoczne na stałe —
+       Na ekranie dotykowym kursora nie ma, więc tam zostają widoczne na stałe,
        inaczej byłyby nieosiągalne. */
     .q-pcard__tools {
         position: absolute;
@@ -358,7 +357,7 @@
         transition: opacity 150ms ease-out, transform 150ms ease-out;
     }
 
-    /* Wjeżdżają od dołu, czyli z tej krawędzi, przy której siadają — ruch
+    /* Wjeżdżają od dołu, czyli z tej krawędzi, przy której siadają. Ruch
        w stronę przeciwną do miejsca docelowego czyta się jak drganie, a nie
        jak pojawienie. */
     .q-pcard:hover .q-pcard__tools,
@@ -374,7 +373,7 @@
         }
     }
 
-    /* Zaokrąglony kwadrat, nie koło — ten sam kształt mają przyciski ikon przy
+    /* Zaokrąglony kwadrat, nie koło: ten sam kształt mają przyciski ikon przy
        galerii i udostępnianiu.
 
        Ramkę nosi SŁUPEK, nie każdy znak z osobna: dwa pudełka obok siebie czytają
@@ -404,7 +403,7 @@
         color: var(--q-on-fill-primary);
     }
 
-    /* Ulubione po dodaniu zostają wypełnione — stan musi być widoczny bez
+    /* Ulubione po dodaniu zostają wypełnione: stan musi być widoczny bez
        najeżdżania, bo klient wraca na listing sprawdzić, co już zaznaczył. */
     .q-pcard__wish[aria-pressed="true"] {
         background: var(--q-fill-primary);
@@ -429,7 +428,7 @@
     }
 
     /* --- nota o najniższej cenie ---
-       Stoi na KAŻDEJ karcie, także bez obniżki — wtedy pusta.
+       Stoi na KAŻDEJ karcie, także bez obniżki (wtedy pusta).
 
        To rezerwacja miejsca, nie treść: bez niej karta z obniżką jest o wiersz
        wyższa od sąsiadek, a że wszystkie mają wspólną wysokość, przycisk zjeżdża
@@ -458,17 +457,17 @@
 
     /* Pojemnik decyzji jest w kafelku PRZEZROCZYSTY: cena, nota i przycisk
        zachowują się tak, jakby go nie było, razem z odsunięciem ceny do dołu
-       karty. W widoku listy staje się słupkiem — patrz components/listing.css.
+       karty. W widoku listy staje się słupkiem (patrz components/listing.css).
 
-       Bez tego pojemnika trzy elementy trafiały w rzędzie do trzech osobnych
-       pól siatki, a ich wysokości dyktowała kolumna treści obok, więc między
-       ceną, notą i przyciskiem robiły się dziury. */
+       Bez tego pojemnika trzy elementy trafiają w rzędzie do trzech osobnych
+       pól siatki, a ich wysokości dyktuje kolumna treści obok, więc między
+       ceną, notą i przyciskiem robią się dziury. */
     .q-pcard__decyzja {
         display: contents;
     }
 
     /* Cztery rzeczy, które należą tylko do widoku listy. Są w znacznikach
-       każdej karty, bo oba widoki renderują się z tego samego szablonu —
+       każdej karty, bo oba widoki renderują się z tego samego szablonu;
        w kafelku nie ma dla nich miejsca i gasi je ta reguła. */
     .q-pcard__topline,
     .q-pcard__description,

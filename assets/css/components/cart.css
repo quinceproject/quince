@@ -1,14 +1,14 @@
 /* ===================================================================
-   Quince — koszyk
+   Quince: koszyk
 
-   Nowe jest tu tylko OPAKOWANIE: układ dwóch kolumn, szeroka odmiana
+   Plik buduje tylko opakowanie: układ dwóch kolumn, szeroka odmiana
    pozycji koszyka i blok podsumowania. Pozycja koszyka, pasek darmowej
    dostawy, licznik sztuk, cena, plakietka, stan magazynu i przyciski to
-   komponenty motywu i nie są tu przerabiane — strona koszyka sięga po nie
+   komponenty motywu i nie są tu przerabiane. Strona koszyka sięga po nie
    takie, jakie są w szufladzie koszyka i przy karcie produktu.
 
    Kolumna zamówienia bierze prawdziwy `.q-ordersum` z kasy, ale bez głowy
-   rozwijającej — na stronie koszyka podsumowanie ma stać zawsze otwarte.
+   rozwijającej: na stronie koszyka podsumowanie stoi zawsze otwarte.
 
    Barwy wyłącznie z palety silnika, żaden odcień nie jest wpisany wprost.
    =================================================================== */
@@ -133,7 +133,7 @@
 
     .q-cart__suggest-title svg { color: var(--q-fill-primary); }
 
-    /* Miejsce na hook pod dokupką: sam odstęp od sąsiada, bez karty — treść
+    /* Miejsce na hook pod dokupką: sam odstęp od sąsiada, bez karty. Treść
        modułu (np. baner WiseBlocka) zwykle niesie już własne tło na pełną
        szerokość, więc karta tylko dokładałaby ramkę i tło wokół czegoś, co
        jest już kompletnym blokiem. Ten sam margines co nad dokupką, żeby

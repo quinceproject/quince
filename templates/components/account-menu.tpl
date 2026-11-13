@@ -4,15 +4,14 @@
  *}
 {block name='account_menu'}
   <aside class="q-account-nav q-card" data-q-account-nav>
-    {* Widoczny tylko na telefonie (patrz account.css) — na szerokim ekranie
+    {* Widoczny tylko na telefonie (patrz account.css). Na szerokim ekranie
        lista stoi otwarta na stałe i ten przycisk nigdy się nie pokazuje.
        Etykieta startuje jako „Moje konto” i bez skryptu taka zostaje;
        `account-nav.js` podmienia ją na bieżącą pozycję z listy niżej.
 
-       Klasy `q-select__button`/`q-select__chev` — ten sam, gotowy wygląd
-       pola wyboru co w formularzach (field.css): widoczne tło i ramka,
-       żeby przycisk nie ginął jako kolejny wiersz treści, tylko czytał się
-       jako kontrolka do kliknięcia. *}
+       Klasy `q-select__button`/`q-select__chev` dają wygląd pola wyboru
+       z formularzy (field.css): widoczne tło i ramka, żeby przycisk czytał
+       się jako kontrolka, a nie kolejny wiersz treści. *}
     <button type="button" class="q-account-nav__trigger q-select__button" data-q-account-nav-trigger
             aria-expanded="false" aria-controls="q-account-nav-list">
       <span class="q-account-nav__trigger-label" data-q-account-nav-trigger-label>
@@ -70,7 +69,7 @@
         {/if}
 
         {* Podgląd pojedynczego zamówienia (`order-detail`) jest podstroną
-           historii, więc podświetla tę samą pozycję — tak jak w makiecie. *}
+           historii, więc podświetla tę samą pozycję. *}
         {if !$configuration.is_catalog}
           <li class="q-account-nav__item{if $page.page_name === 'history' || $page.page_name === 'order-detail'} is-active{/if}">
             <a
@@ -124,12 +123,12 @@
         {/if}
 
         {* Moduły (lista życzeń, RODO, powiadomienia e-mail) dokładają tu własne
-           odnośniki — surowe `<a>`, nie `<li>`. Jedno opakowanie na całość, żeby
+           odnośniki jako surowe `<a>`, nie `<li>`. Jedno opakowanie na całość, żeby
            `<ul>` nie dostawało dzieci spoza `<li>`; klasa `q-account-nav__item`
            ubiera je tym samym wierszem co pozostałe pozycje (reguła celuje
            w `a`/`button` wewnątrz, nie w konkretną ich nazwę klasy), bez
            ruszania plików modułów. Pusta ikona modułów (`account-menu__icon`,
-           bez treści — moduły liczą na czcionkę Material Icons, której motyw
+           bez treści: moduły liczą na czcionkę Material Icons, której motyw
            nie wczytuje) znika regułą niżej w arkuszu, żeby nie zostawiać
            pustego odstępu przed napisem. *}
         <li class="q-account-nav__item">

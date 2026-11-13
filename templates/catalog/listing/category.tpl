@@ -1,5 +1,5 @@
 {**
- * Quince — listing kategorii.
+ * Quince: listing kategorii.
  *
  * Nic własnego. Nagłówek i stopkę listingu składa silnik ze stref ustawionych
  * w panelu, a elementy „Tytuł listingu", „Opis" i „Opis dodatkowy" same biorą

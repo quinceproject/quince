@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_featuredproducts.
+ * Quince: nadpisanie modułu ps_featuredproducts.
  *
  * Produkty polecane na stronie głównej, w tej samej karuzeli, co zajawki pod
  * kartą produktu. Odnośnik do pełnej listy wchodzi do nagłówka sekcji: pod

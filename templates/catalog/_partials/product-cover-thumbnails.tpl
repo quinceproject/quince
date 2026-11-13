@@ -1,12 +1,12 @@
 {**
  * Galeria produktu: kadr, licznik, pas miniatur, kropki i podgląd na wierzchu.
  *
- * Zdjęcie jest jedno, a miniatura podmienia jego źródło — nie ma karuzeli
+ * Zdjęcie jest jedno, a miniatura podmienia jego źródło. Nie ma karuzeli
  * przesuwającej kadry obok siebie, więc szerokość kadru nie zależy od liczby
  * zdjęć. Bez JavaScriptu widać pierwsze zdjęcie i komplet miniatur.
  *
  * Rozmiary bierzemy skrótami rdzenia (`small`, `medium`, `large`), nie nazwami
- * presetów — motyw nie zależy wtedy od tego, jakie typy obrazów ma sklep.
+ * presetów, więc motyw nie zależy wtedy od tego, jakie typy obrazów ma sklep.
  *
  * Projekt: makieta strony produktu.
  *}
@@ -171,7 +171,7 @@
 
     <figcaption class="q-lightbox__caption" data-q-lightbox-caption hidden></figcaption>
 
-    {* Pasek miniatur buduje skrypt z miniatur galerii — jedno źródło prawdy:
+    {* Pasek miniatur buduje skrypt z miniatur galerii (jedno źródło prawdy):
        dziesiąte zdjęcie pojawi się w obu miejscach bez dopisywania czegokolwiek. *}
     <div class="q-lightbox__thumbs" data-q-lightbox-thumbs></div>
   </dialog>

@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — ilość i usuwanie pozycji na stronie koszyka
+   Quince: ilość i usuwanie pozycji na stronie koszyka
 
    Te same zaczepy (`data-q-cart-qty`, `data-q-cart-url`, `data-q-cart-input`,
    `data-q-cart-remove`, `data-q-cart-line`) i ten sam sposób wysyłki, co

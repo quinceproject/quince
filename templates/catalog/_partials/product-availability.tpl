@@ -19,7 +19,7 @@
  * panel ma 362 px, a forma „nazwa po lewej, wartość po prawej" zjada tam dwa
  * wiersze na to, co mieści się w jednym. Treść jest ta sama, zmienia się układ.
  *
- * Zmienne: $qStan, $qWysylka, $qIlosc — włączniki z panelu; $qZwarty — czy element
+ * Zmienne: $qStan, $qWysylka, $qIlosc: włączniki z panelu; $qZwarty: czy element
  * stoi w kolumnie zakupu.
  *}
 
@@ -27,8 +27,8 @@
 
 {* Nazwy stanów przychodzą z rdzenia: `in_stock` przy towarze na stanie,
    `last_remaining_items` przy końcówce, a przy braku `out_of_stock`,
-   `unavailable` albo `discontinued`. Sprawdzone na sklepie, bo w kodzie
-   presentera bywa też `available`. *}
+   `unavailable` albo `discontinued`. W kodzie presentera bywa też
+   `available`. *}
 {if $qDostepnosc == 'in_stock' || $qDostepnosc == 'available'}
   {assign var=qKlasaStanu value='q-stock--in'}
 {elseif $qDostepnosc == 'last_remaining_items'}
@@ -58,9 +58,8 @@
     {/if}
 
     {* Sam tekst z ustawień sklepu, bez dopisywanej nazwy. Całość wpisuje
-       sprzedawca w informacjach o produktach — globalnie albo przy produkcie —
-       więc to on decyduje, czy termin ma brzmieć „W 24 godziny", czy „Wysyłka
-       w 24 godziny". Nasza etykieta by mu to tylko dublowała. *}
+       sprzedawca w informacjach o produktach (globalnie albo przy produkcie),
+       więc etykieta motywu dublowałaby jego tekst. *}
     {if $qMaWysylke}
       <span class="q-stock-line__ship">{$product.delivery_information}</span>
     {/if}
@@ -73,9 +72,7 @@
         <div class="q-facts__row">
           <dt class="q-facts__key">{l s='Availability' d='Shop.Theme.Catalog'}</dt>
           {* Sam stan, bez zaproszenia do zapisu. Zapis na powiadomienie należy
-             do wiersza zakupu: to jest działanie, a stan jest faktem. Wcześniej
-             stały obok siebie dwa wejścia w to samo, w dwóch różnych miejscach
-             karty. *}
+             do wiersza zakupu. *}
           <dd class="q-facts__val">
             <span class="q-stock {$qKlasaStanu}">
               <span class="q-stock__dot" aria-hidden="true"></span>{$product.availability_message}
@@ -101,10 +98,9 @@
   </div>
 {/if}
 
-{* Zapis na powiadomienie przeniosł się do wiersza zakupu razem z przyciskiem:
-   szuflada stoi tam, gdzie stoi jej wyzwalacz, a stan magazynu jest faktem,
-   nie działaniem. Tutaj zostaje sam hook PrestaShopa — wypisują się w nim
-   także inne moduły sklepu i one mają się gdzie pokazać.
+{* Zapis na powiadomienie stoi w wierszu zakupu, przy swoim przycisku.
+   Tutaj zostaje sam hook PrestaShopa, bo wypisują się w nim także inne
+   moduły sklepu.
 
    Przy produkcie niedostępnym hook jedzie w szufladzie przy przycisku, więc
    tutaj wypada: dwa razy ten sam formularz na jednej karcie to dwa razy ten sam

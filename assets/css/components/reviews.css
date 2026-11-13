@@ -274,7 +274,7 @@
        potem zapalamy gwiazdkę pod kursorem i te słabsze od niej.
 
        „Słabsze" to w znacznikach te DALEJ, bo gwiazdki stoją od piątki do
-       jedynki — inaczej nie dałoby się ich złapać selektorem, który sięga
+       jedynki. Inaczej nie dałoby się ich złapać selektorem, który sięga
        tylko w przód. Wizualnie kolejność wraca przez `row-reverse`. */
     .q-stars__set:hover .q-stars__label {
         color: var(--q-border-subtle);

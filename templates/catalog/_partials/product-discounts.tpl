@@ -1,10 +1,8 @@
 {**
- * Quince — rabaty ilościowe w panelu zakupu.
+ * Quince: rabaty ilościowe w panelu zakupu.
  *
- * Rdzeń stawiał w tym miejscu gołą tabelę. Tabela odpowiada na pytanie „ile
- * dokładnie", a klient zadaje najpierw inne: „czy w ogóle się opłaca kupić
- * więcej". Dlatego w panelu stoi jeden wiersz z hasłem i progami, a szuflada
- * czeka dla tych, którzy chcą sprawdzić.
+ * W panelu stoi jeden wiersz z hasłem i progami, a pełna tabela czeka
+ * w szufladzie.
  *
  * W szufladzie każdy próg jest przyciskiem: klik ustawia tę ilość w liczniku.
  * Rdzeń podaje progi, ale nie mówi, przy którym klient właśnie jest, więc próg
@@ -12,7 +10,7 @@
  * wtedy z zachęty w potwierdzenie.
  *
  * Klasa `js-product-discounts` zostaje na korzeniu: po niej rdzeń podmienia
- * blok po zmianie wariantu. Znacznik `hidden` też jest jego — produkt bez
+ * blok po zmianie wariantu. Znacznik `hidden` też jest jego: produkt bez
  * progów ma zostawić puste miejsce, a nie znikającą sekcję.
  *
  * Zachowanie szuflady: assets/js/islands/buybox.js

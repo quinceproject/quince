@@ -1,18 +1,18 @@
 /* ===================================================================
-   Quince — arkusz główny
+   Quince: arkusz główny
 
    Plik ładowany jako pierwszy z motywu. Robi trzy rzeczy i nic ponadto:
    deklaruje kolejność warstw kaskady, zeruje domyślne style przeglądarki
    i ustawia elementy HTML na tokenach.
 
    Komponenty leżą w assets/css/components/ i są rejestrowane osobno
-   w config/theme.yml — dzięki temu przeglądarka pobiera je równolegle,
+   w config/theme.yml. Dzięki temu przeglądarka pobiera je równolegle,
    zamiast czekać na łańcuch @import.
    =================================================================== */
 
 /* --- kolejność warstw kaskady ---
    Deklaracja MUSI stać przed jakąkolwiek regułą i musi być w pierwszym
-   ładowanym arkuszu — kolejność ustala się tu raz i nie zależy od tego,
+   ładowanym arkuszu: kolejność ustala się tu raz i nie zależy od tego,
    w jakiej kolejności przeglądarka pobierze pozostałe pliki.
 
    Sens praktyczny: moduły PrestaShopa wstrzykują własny CSS o wysokiej
@@ -26,7 +26,7 @@
        quince.layout,      /* siatka, kontenery, pasy strony                */
        quince.components,  /* komponenty motywu                             */
        quince.modules,     /* nadpisania stylów modułów PrestaShopa         */
-       quince.utilities;   /* klasy pomocnicze — wygrywają ze wszystkim      */
+       quince.utilities;   /* klasy pomocnicze, wygrywają ze wszystkim       */
 
 @layer quince.reset {
     *,
@@ -37,14 +37,14 @@
 
     /* Element schowany atrybutem znika naprawdę.
        Przeglądarka wiąże z `hidden` zwykłe `display: none`, więc przegrywa
-       z każdą regułą komponentu, która nadaje elementowi własny `display` —
-       a takie mamy przy przyciskach, kartach i szufladach. Bez tego skrypt
-       „chował" rzeczy, które dalej stały na ekranie. */
+       z każdą regułą komponentu, która nadaje elementowi własny `display`
+       (przyciski, karty, szuflady). Bez tej reguły element schowany skryptem
+       zostaje na ekranie. */
     [hidden] {
         display: none !important;
     }
 
-    /* Marginesy zerujemy tylko tam, gdzie i tak je ustawiamy — nie hurtem,
+    /* Marginesy zerujemy tylko tam, gdzie i tak je ustawiamy, nie hurtem,
        bo treść z edytora WYSIWYG musi zachować odstępy między akapitami. */
     body,
     h1, h2, h3, h4, h5, h6,
@@ -129,7 +129,7 @@
     }
 
     /* Odnośnik interfejsu: bez kreski, pod kursorem rozjaśnienie. Klikalność
-       niesie tu pozycja — pozycja menu, nagłówek zajawki — a nie barwa. */
+       niesie tu pozycja (pozycja menu, nagłówek zajawki), a nie barwa. */
     a {
         color: var(--q-link);
         text-decoration: none;
@@ -140,7 +140,7 @@
     }
 
     /* Odnośnik w treści: pogrubienie i kreska w barwie marki. Oba naraz albo
-       żadne — sama żółta kreska ma 1,43:1 i jest ledwo widoczna, a sama barwa
+       żadne: sama żółta kreska ma 1,43:1 i jest ledwo widoczna, a sama barwa
        robi w akapicie cętki.
 
        Kreska rysowana tłem, a nie podkreśleniem, bo podkreślenie ma stałą
@@ -155,11 +155,10 @@
 
        Zakres celowo wąski: akordeon karty produktu i krótki opis. W akordeonie
        obejmuje akapity, listy, komórki tabel i definicje, czyli miejsca, gdzie
-       odnośnik stoi w zdaniu. Pozycje interfejsu w tym samym akordeonie —
-       wiersz załącznika, odnośnik pod opinią — zostają bez kreski, bo ich
-       klikalność niesie pozycja, a nie barwa. Klasy `rich-text` tu nie ma
-       świadomie: niesie ją też treść w stopce i na stronach CMS, a tam ten
-       wygląd nie był ustalany. */
+       odnośnik stoi w zdaniu. Pozycje interfejsu w tym samym akordeonie
+       (wiersz załącznika, odnośnik pod opinią) zostają bez kreski, bo ich
+       klikalność niesie pozycja, a nie barwa. Bez klasy `rich-text`: niesie
+       ją też treść w stopce i na stronach CMS, gdzie ten wygląd nie obowiązuje. */
     .q-prose a,
     .q-listing__description a,
     .q-listing__description-long a,
@@ -211,7 +210,7 @@
         background: var(--q-border-subtle);
     }
 
-    /* Pierścień focusu tylko dla klawiatury — mysz go nie wywołuje.
+    /* Pierścień focusu tylko dla klawiatury, mysz go nie wywołuje.
        Widoczny focus jest wymogiem dostępności, nie opcją. */
     :focus-visible {
         outline: 2px solid var(--q-focus-ring);
@@ -225,13 +224,12 @@
        Powód jest twardy: element przyklejony trzyma się tylko dopóki widać jego
        RODZICA. Pas informacyjny, nagłówek i pas menu siedzą razem w `#header`,
        więc przyklejony nagłówek odjeżdżałby razem z tym opakowaniem po niespełna
-       pięćdziesięciu pikselach przewinięcia — dokładnie tyle jest pod nim w środku.
+       pięćdziesięciu pikselach przewinięcia (tyle jest pod nim w środku).
        Z `display: contents` opakowanie znika z układu, jego dzieci stają się
        dziećmi strony i nagłówek ma przeciwko czemu stać przez całą jej długość.
 
        Sam element zostaje, bo `#header` i `data-ps-ref` to punkty zaczepienia
-       dla modułów PrestaShop. Flavor rozwiązał to samo inaczej — wyprowadzeniem
-       pasa menu poza `<header>` — czyli przebudową szablonu układu. */
+       dla modułów PrestaShop. */
     #header {
         display: contents;
     }
@@ -239,8 +237,8 @@
     /* Bez `padding-inline` w tym miejscu: pojemnik jest już wyśrodkowany
        marginesem i przycięty do `--q-container-width`, więc przy oknie
        szerszym niż pojemnik margines sam daje całą potrzebną przestrzeń.
-       Dodatkowy padding na to NIE jest marginesem zastępczym — DOLICZAŁ się
-       do niego, więc treść wewnątrz pojemnika była węższa, niż wynika
+       Dodatkowy padding nie zastępuje marginesu, tylko dolicza się do niego,
+       więc treść wewnątrz pojemnika byłaby węższa, niż wynika
        z `--q-container-width`. Gutter dla ekranów węższych od pojemnika
        (telefon) dostaje reguła niżej. */
     .q-container,
@@ -249,24 +247,23 @@
         max-inline-size: var(--q-container-width);
         margin-inline: auto;
 
-        /* Gutter TYLKO, gdy margines z wyśrodkowania jeszcze nic nie daje —
+        /* Gutter TYLKO, gdy margines z wyśrodkowania jeszcze nic nie daje,
            czyli gdy okno jest węższe od `--q-container-width` i pojemnik
            dotyka jego krawędzi (telefon ma już swój gutter niżej, ale tablet
            i wąski laptop między 768 px a szerokością pojemnika nie mają
            żadnego bez tej reguły). Gdy okno jest szersze, margines sam
-           odsuwa treść od krawędzi i ten padding musi zejść do zera — inaczej
+           odsuwa treść od krawędzi i ten padding musi zejść do zera, inaczej
            doliczałby się do marginesu, zamiast go zastępować.
            `--q-container-width` jest ustawieniem sklepu (960–1920 px), więc
-           sztywny punkt przełomu w pikselach by się z nim rozjeżdżał —
-           stąd `clamp()` liczony od samego tokenu, nie od stałej. */
+           sztywny punkt przełomu w pikselach by się z nim rozjeżdżał.
+           Stąd `clamp()` liczony od samego tokenu, nie od stałej. */
         padding-inline: clamp(0px, calc((var(--q-container-width) - 100%) * 999), var(--q-space-md));
     }
 
     /* Oprawa strony przychodząca z rdzenia. Szablony motywu podają ją
        w bloku `container_class` jako `container container--limited-*`, bo taką
-       nazwę rozpoznaje układ rdzenia. Nikt jej nigdy nie ubrał, więc osiem
-       stron stało rozciągniętych na całą szerokość okna: rejestracja,
-       logowanie, zamówienie jako gość, trzy ekrany hasła i dwie strony błędu.
+       nazwę rozpoznaje układ rdzenia. Używają jej: rejestracja, logowanie,
+       zamówienie jako gość, trzy ekrany hasła i dwie strony błędu.
 
        Progi idą za punktami zmiany układu motywu: sm 576, md 768, lg 992,
        xl 1200. Formularz na węższej mierze czyta się lepiej niż rozciągnięty
@@ -277,9 +274,8 @@
     .container--limited-xl  { max-inline-size: 75rem; }
     .container--limited-xxl { max-inline-size: 87.5rem; }
 
-    /* Na telefonie swiatlo strony schodzi o stopien. Przy 360 px marginesy po
-       20 px z kazdej strony zabieraly 40 px, czyli jedna dziewiata ekranu,
-       a przy dwoch zajawkach w rzedzie to po 20 px na kazda z nich. */
+    /* Na telefonie swiatlo strony schodzi o stopien: przy 360 px marginesy
+       po 20 px zabieralyby jedna dziewiata ekranu. */
     @media (max-width: 767px) {
         .q-container,
         .container {
@@ -291,15 +287,11 @@
         margin-block-start: var(--q-section-gap);
     }
 
-    /* Siatka listingu. Liczba kolumn pochodzi z ustawień sklepu, ale karta
-       nigdy nie schodzi poniżej 220 px — przy pięciu kolumnach na wąskim
-       ekranie zdjęcia zrobiłyby się nieczytelne. */
-    /* Liczbe kolumn podajemy wprost, a nie progiem szerokosci zajawki.
-       Prog liczyl sie od dostepnego miejsca, wiec ten sam telefon pokazywal
-       raz dwie zajawki, raz jedna: przy 390 px miescily sie dwie, przy 360 px
-       juz nie i pozycja listy zajmowala poltora ekranu. Dwie na telefonie,
+    /* Siatka listingu. Liczbe kolumn podajemy wprost dla kazdego progu,
+       a nie progiem szerokosci zajawki: prog liczony od dostepnego miejsca
+       dawal na telefonach raz dwie zajawki, raz jedna. Dwie na telefonie,
        trzy od malego tabletu, cztery od duzego, a powyzej 992 px decyduje
-       galka kolumn sklepu. */
+       ustawienie kolumn sklepu. */
     .q-grid {
         display: grid;
         gap: var(--q-space-md);
@@ -333,7 +325,7 @@
     }
 }
 
-/* Klasy pomocnicze o nazwach zgodnych z Bootstrapem — szablony pochodzą
+/* Klasy pomocnicze o nazwach zgodnych z Bootstrapem. Szablony pochodzą
    z Hummingbirda i odwołują się do nich wprost. Bez tych reguł odnośnik
    „przejdź do treści" stoi widoczny na środku strony. */
 @layer quince.utilities {
@@ -354,7 +346,7 @@
     }
 
     /* Pułapka strażnika formularzy. Odsunięta poza ekran, a nie schowana:
-       część skryptów pomija pola z `display: none`, a o to nam nie chodzi —
+       część skryptów pomija pola z `display: none`, a o to nam nie chodzi:
        pole ma być dla nich zwyczajne i kuszące. Człowiek go nie zobaczy i nie
        dojdzie do niego tabulatorem (`tabindex="-1"` w szablonie). */
     .q-formtrap {
@@ -365,7 +357,7 @@
         overflow: hidden;
     }
 
-    /* Po dotarciu tabulatorem odnośnik ma być widoczny i mieć gdzie stanąć —
+    /* Po dotarciu tabulatorem odnośnik ma być widoczny i mieć gdzie stanąć,
        inaczej jest bezużyteczny dla tych, dla których go dodano. */
     .skip-link:focus {
         position: fixed;

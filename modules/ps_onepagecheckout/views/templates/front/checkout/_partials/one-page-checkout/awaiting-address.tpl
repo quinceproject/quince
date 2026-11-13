@@ -4,7 +4,7 @@
  *}
 
 {**
- * OPC — Awaiting-address hint (section readiness).
+ * OPC: Awaiting-address hint (section readiness).
  *
  * Shown while a section (carriers / payment) cannot list its options because no usable delivery/tax
  * address exists yet. Soft, informational tone (the buyer has not done anything wrong). The runtime
@@ -14,9 +14,8 @@
  *   $message - the base guidance sentence
  *
  * Bez `alert alert-info mb-0` ze stocka: te klasy Bootstrapa nie stoją w żadnej
- * warstwie CSS, więc wygrywały z własnym stylem Quince (`.js-opc-awaiting-address`,
- * `checkout.css`) niezależnie od specyficzności — stąd niebieska ramka i tekst
- * zamiast spójnej, szarej podpowiedzi jak gdzie indziej w motywie.
+ * warstwie CSS, więc wygrywają z własnym stylem Quince (`.js-opc-awaiting-address`,
+ * `checkout.css`) niezależnie od specyficzności.
  *}
 <div class="js-opc-awaiting-address" role="status">
   <span class="js-opc-awaiting-address-message">{$message}</span>

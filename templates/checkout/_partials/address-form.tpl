@@ -4,9 +4,9 @@
   {if $field.name eq "alias" and $customer.is_guest}
     {* we don't ask for alias here if customer is not registered *}
   {elseif $type === "delivery" && ($field.name eq "firstname" or $field.name eq "lastname")}
-    {* Imię i nazwisko już mamy z kroku 1 — rdzeń dopisuje je sam przy
+    {* Imię i nazwisko już mamy z kroku 1. Rdzeń dopisuje je sam przy
        zapisie (`CheckoutAddressesStep::handleRequest`), więc tu ich nie
-       pytamy ponownie. Zmierzone w makiecie kasy. *}
+       pytamy ponownie. *}
   {else}
     {$smarty.block.parent}
   {/if}
@@ -22,11 +22,10 @@
 {/block}
 
 {* Nagłówek nad polami: „Adres dostawy" dla osoby prywatnej, „Dane firmy
-   (do faktury)" dla firmy — ten sam formularz renderuje się rdzeniowi
+   (do faktury)" dla firmy. Ten sam formularz renderuje się rdzeniowi
    zawsze jako „delivery", więc tylko ten nagłówek (i rola po zapisie,
    patrz override `CheckoutAddressesStep`) mówi, czym naprawdę jest.
-   Klasa `q-checkout2__h3`, nie `h3`: ta druga to duży tytuł strony i obok
-   „2. Adres" wyglądała jak drugi, konkurencyjny nagłówek kroku. *}
+   Klasa `q-checkout2__h3`, nie `h3`: ta druga to duży tytuł strony. *}
 {block name='quince_role_heading'}
   {if $type === "delivery"}
     <h3

@@ -3,17 +3,13 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 {**
- * Szczegóły produktu — JEDNA pozycja akordeonu, dwa źródła w środku.
+ * Szczegóły produktu: JEDNA pozycja akordeonu, dwa źródła w środku.
  *
  * Pola produktu (marka, referencja, dostępność, kody) i tabela cech z katalogu
- * to dwa różne źródła w PrestaShopie, ale dla kupującego jedno pytanie: czym
- * dokładnie jest ta rzecz. Osobne zakładki kazały mu szukać w dwóch miejscach.
+ * to dwa różne źródła w PrestaShopie, pokazane razem w jednej tabeli
+ * (nazwa i wartość w dwóch kolumnach).
  *
- * Jedna tabela, nie dwie listy: dane mają tu dwa wymiary — nazwę i wartość —
- * a lista tego nie oddaje. Wiersz nazwy i wartości w dwóch kolumnach daje się
- * przebiec wzrokiem w pionie, punktowana lista wymaga czytania każdej pozycji.
- *
- * Zmienne: $qPola, $qLogo, $qCechy — włączniki spod elementu `section_spec`
+ * Zmienne: $qPola, $qLogo, $qCechy: włączniki spod elementu `section_spec`
  * w mapie. `$qLogo` rozstrzyga to samo, co przełącznik przy marce w kolumnie
  * opisu: znak firmowy albo sama nazwa.
  *}

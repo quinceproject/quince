@@ -1,12 +1,12 @@
 {**
- * Quince — pola strażnika formularzy.
+ * Quince: pola strażnika formularzy.
  *
  * Wstawiane wewnątrz każdego formularza, który ma być chroniony:
  *
  *     {include file='_partials/form-guard.tpl' form_id='contact'}
  *
  * Trzy pola: znacznik strony, nazwa formularza (do limitu powtórzeń) i pułapka.
- * Pułapka wygląda jak zwykłe pole adresu strony — bot wypełnia wszystko, co
+ * Pułapka wygląda jak zwykłe pole adresu strony. Bot wypełnia wszystko, co
  * znajdzie, człowiek jej nie zobaczy i nie dojdzie do niej klawiszem Tab.
  *
  * Pod polami stoi miejsce na zapis dostawcy oceny (np. „chronione przez

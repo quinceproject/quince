@@ -4,7 +4,7 @@
  *}
 {extends file='customer/page.tpl'}
 
-{* Własny nagłówek zamiast domyślnego `page-title-section.tpl` — makieta
+{* Własny nagłówek zamiast domyślnego `page-title-section.tpl`: makieta
    stawia link powrotu NAD tytułem, a domyślny układ bloków w `page.tpl`
    rysuje je w odwrotnej kolejności (najpierw tytuł, potem `account_link`). *}
 {block name='page_header_container'}

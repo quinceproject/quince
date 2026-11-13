@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — stopka
+   Quince: stopka
 
    Cztery kolumny: pierwsza szersza, bo mieści dane firmy i kontakt,
    pozostałe to listy odnośników wstawiane przez moduły.
 
    Barwy biorą się z ról pasa stopki, więc jej tło ustawia się tam, gdzie
-   ustawia się pozostałe pasy — a nie osobnym kolorem tylko dla niej.
+   ustawia się pozostałe pasy, a nie osobnym kolorem tylko dla niej.
 
    Projekt: makieta strony produktu.
    =================================================================== */
@@ -29,7 +29,7 @@
     }
 
     /* Przez całą szerokość: tło przechodzi na pasek, a treść i tak zostaje
-       w kontenerze — inaczej rozjechałaby się z kolumnami pod nią. */
+       w kontenerze, inaczej rozjechałaby się z kolumnami pod nią. */
     .q-footer-strip--full {
         background: var(--q-band-footer-strip-bg);
         color: var(--q-band-footer-strip-fg);
@@ -96,8 +96,8 @@
     }
 
     /* Odnośnik bierze kolor tekstu pasa: na ciemnej stopce biały, na jasnej
-       ciemny, na stopce w barwie marki ten, który daje kontrast — na żółci
-       czarny. Barwa marki zostaje na stan pod kursorem, gdzie dotyczy jednej
+       ciemny, na stopce w barwie marki ten, który daje kontrast (na żółci
+       czarny). Barwa marki zostaje na stan pod kursorem, gdzie dotyczy jednej
        pozycji naraz, a nie całej kolumny. */
     .q-footer__link {
         display: block;
@@ -199,7 +199,7 @@
         color: var(--q-band-footer-bar-fg);
     }
 
-    /* Cztery kolumny mieszczą się do 992 px; niżej dwie, a na telefonie jedna —
+    /* Cztery kolumny mieszczą się do 992 px; niżej dwie, a na telefonie jedna:
        kolumna węższa niż nazwa działu przestaje być kolumną. */
     @media (max-width: 991px) {
         .q-footer__cols {
@@ -223,7 +223,7 @@
     }
 
     /* Trzy strefy nie mieszczą się w wierszu na telefonie i zbijają się w jeden
-       ciąg — ustawiamy je wtedy jedna pod drugą, wyśrodkowane. */
+       ciąg, więc ustawiamy je wtedy jedna pod drugą, wyśrodkowane. */
     @media (max-width: 767px) {
         .q-footer__bar-inner {
             grid-template-columns: minmax(0, 1fr);
@@ -265,7 +265,7 @@
         border-inline-end: 1.5px solid currentColor;
         border-block-end: 1.5px solid currentColor;
 
-        /* Chevron w prawo przy sekcji zwiniętej, w dół przy rozwiniętej —
+        /* Chevron w prawo przy sekcji zwiniętej, w dół przy rozwiniętej:
            obrót zamiast drugiego znaku, żeby ruch był ciągły. */
         transform: rotate(-45deg);
         opacity: .55;
@@ -318,7 +318,7 @@
     }
 
     /* Znaczki z kroju PrestaShopa: Quince go nie ładuje, więc każdy rysowałby
-       się pustym kwadratem — przy nazwie działu, przy telefonie, przy adresie. */
+       się pustym kwadratem (przy nazwie działu, przy telefonie, przy adresie). */
     .q-footer__nav .material-icons {
         display: none;
     }
@@ -329,7 +329,7 @@
         display: none;
     }
 
-    /* Bloki stopki przychodzą z klasami siatki Bootstrapa — chcą być ćwiartką
+    /* Bloki stopki przychodzą z klasami siatki Bootstrapa, które chcą być ćwiartką
        szerokości ekranu. Kolumnę wyznacza tutaj stopka, więc blok zajmuje ją
        całą i nie odsuwa się od jej krawędzi. */
     .q-footer__nav [class*="col-"] {
@@ -344,7 +344,7 @@
         color: var(--q-band-footer-link);
     }
 
-    /* Moduł może przynieść kilka bloków do jednej kolumny — oddziela je odstęp,
+    /* Moduł może przynieść kilka bloków do jednej kolumny. Oddziela je odstęp,
        nie kreska: kolumna z kreskami czyta się jak tabela. */
     .q-footer__nav > * + * {
         margin-block-start: var(--q-space-lg);
@@ -383,8 +383,7 @@
 
     /* ---- powrót na górę ----
        Przycisk pokazuje się po przewinięciu strony i wraca na jej początek.
-       Sprzedawca może go wyłączyć — sklep działa wtedy tak samo, tylko bez
-       skrótu. Projekt: makieta kategorii. */
+       Do wyłączenia w ustawieniach. Projekt: makieta kategorii. */
     .q-totop {
         position: fixed;
         inset-block-end: var(--q-space-md);
@@ -419,7 +418,7 @@
         color: var(--q-fill-primary);
     }
 
-    /* Na wąskim ekranie niżej czeka pasek zakupu — przycisk siada nad nim,
+    /* Na wąskim ekranie niżej czeka pasek zakupu, przycisk siada nad nim,
        zamiast go zasłaniać. */
     @media (max-width: 991px) {
         .q-totop {

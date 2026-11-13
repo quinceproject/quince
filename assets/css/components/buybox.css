@@ -4,7 +4,7 @@
 
        Reguły przepisane z makiety strony produktu. Panel składa się
        z bloków, które sklep przestawia z panelu administracyjnego, więc odstępy
-       między nimi ustawia wyłącznie opakowanie bloku — nigdy sam blok.
+       między nimi ustawia wyłącznie opakowanie bloku, nigdy sam blok.
     */
 
     /* ── odstęp między blokami ───────────────────────────────────────────
@@ -29,13 +29,13 @@
        wychodzi poza jego wcięcie na pełną szerokość i przejmuje jego górne rogi.
 
        Kreska panelu przechodzi wtedy w barwę marki. Pas i obrys są jedną
-       obwódką, tylko na górze grubszą i podpisaną — sam pas bez domknięcia
+       obwódką, tylko na górze grubszą i podpisaną. Sam pas bez domknięcia
        wyglądałby jak urwany. */
 
     /* Zakładka: o tyle biała powierzchnia wjeżdża na pas. Równa się jej
        zaokrągleniu, bo ma nachodzić dokładnie tyle, ile trzeba, żeby jej górne
        rogi były widoczne w całości. Przy wyłączonych zaokrągleniach schodzi do
-       zera i biel styka się z pasem płasko — nie ma już rogów do pokazania. */
+       zera i biel styka się z pasem płasko, bo nie ma już rogów do pokazania. */
     .q-pdp__aside:has(.q-buy__pas) {
         --q-buy-zakladka: var(--q-radius-lg);
 
@@ -68,7 +68,7 @@
 
            Wartość zapasowa jest konieczna: promień panelu zakupu istnieje tylko
            w kolumnie zakupu, a ten sam pas stoi też w szybkim podglądzie i na
-           słupku z ceną zestawu — tam bez zapasu zostawał bez zaokrągleń. */
+           słupku z ceną zestawu. Tam bez zapasu zostałby bez zaokrągleń. */
         border-radius:
             calc(var(--q-pdp-radius, var(--q-radius-md)) - 1px)
             calc(var(--q-pdp-radius, var(--q-radius-md)) - 1px) 0 0;
@@ -184,7 +184,7 @@
     }
 
     /* ── cena ────────────────────────────────────────────────────────────
-       Kto wszedł na kartę produktu, zna już nazwę — szuka kwoty. Dlatego cena
+       Kto wszedł na kartę produktu, zna już nazwę i szuka kwoty. Dlatego cena
        jest o stopień większa od tytułu i idzie krojem nagłówkowym: to liczba
        do rzucenia okiem, nie zdanie do przeczytania. */
 
@@ -217,7 +217,7 @@
     }
 
     /* Trzy części jednej informacji w jednym wierszu: od ile, o ile w procentach,
-       o ile w złotych. Każda z osobna zmuszała do szukania punktu odniesienia
+       o ile w złotych. Każda z osobna zmuszałaby do szukania punktu odniesienia
        gdzie indziej w bloku. */
     .q-buy__promo-row {
         display: flex;
@@ -230,7 +230,7 @@
     }
 
     /* Plakietka z procentem. Barwy tu NIE ma: idzie z tokenu plakietki, wspólnego
-       z zajawkami — wpisana z ręki rozjeżdżała tę samą plakietkę w panelu zakupu
+       z zajawkami. Wpisana z ręki rozjechałaby tę samą plakietkę w panelu zakupu
        i na karcie produktu w karuzeli. */
     .q-buy__promo-row .q-badge {
         padding: 2px 8px;
@@ -543,11 +543,9 @@
         border-radius: var(--q-radius-sm);
     }
 
-    /* `.q-upload` (wgrywanie pliku na etykiecie) przeniesione do `field.css`:
-       drugi konsument poza personalizacją produktu to załącznik w formularzu
-       kontaktowym, a to już nie jest sprawa samego panelu zakupu. */
+    /* `.q-upload` (wgrywanie pliku na etykiecie) jest w `field.css`. */
 
-    /* Dwa elementy panelu obok siebie — tak, jak ustawił je sklep w panelu
+    /* Dwa elementy panelu obok siebie, tak jak ustawił je sklep w panelu
        strony produktu. Tory są równe, bo to para równorzędnych wezwań
        („Pobierz ofertę" i „Zapytaj specjalistę"), a nie główne i poboczne.
        Odstęp pionowy niesie wiersz, więc slot w środku go nie dokłada. */
@@ -697,8 +695,8 @@
         min-inline-size: 0;
     }
 
-    /* Napis w jednym wierszu, a przy tłumaczeniu dłuższym niż miejsce — ucięty
-       wielokropkiem. Bez tego napis, który nie łamie się z założenia, rozpychał
+    /* Napis w jednym wierszu, a przy tłumaczeniu dłuższym niż miejsce ucięty
+       wielokropkiem. Bez tego napis, który nie łamie się z założenia, rozpycha
        wiersz, panel i całą stronę w bok. */
     .q-buy__buy-row .q-btn__label {
         min-inline-size: 0;

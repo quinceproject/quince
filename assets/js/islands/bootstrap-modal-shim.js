@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — zamiennik okna modalnego Bootstrapa
+   Quince: zamiennik okna modalnego Bootstrapa
 
    Kilka szablonów przychodzących z rdzenia i z modułów (personalizacja
    produktu, zwrot zamówienia, adres w kasie jednostronicowej) rysuje okno
    znacznikami Bootstrapa (`data-bs-toggle="modal"`, `data-bs-dismiss="modal"`,
    czasem wprost `window.bootstrap.Modal`), bo tak wygląda ich oryginalny
-   szablon. Quince nie ładuje JS Bootstrapa — ma własne okno na `<dialog>`
+   szablon. Quince nie ładuje JS Bootstrapa, ma własne okno na `<dialog>`
    (`.q-modal`, patrz `checkout-login.js` dla tej samej obsługi w szufladzie
    logowania). Zamiast przerabiać każdy szablon, podstawiamy pod te same
    zaczepy nasz mechanizm: okno samo musi być w znacznikach `<dialog
@@ -13,7 +13,7 @@
    `window.bootstrap.Modal`, którego niektóre moduły (np. ps_onepagecheckout)
    wprost sprawdzają przed użyciem jQuery.
 
-   Wyspa: bez JavaScriptu przycisk nic nie robi. To nie jest awaria okna —
+   Wyspa: bez JavaScriptu przycisk nic nie robi. To nie jest awaria okna:
    samo okno w znacznikach `<dialog>` i tak nie ma jak się otworzyć bez JS,
    tak samo jak żadne inne okno w motywie.
    =================================================================== */
@@ -45,8 +45,8 @@
         okno.dataset.qModalGotowe = '1';
 
         /* Kliknięcie w tło: przy <dialog> zdarzenie z ::backdrop przychodzi
-           na samym oknie, więc rozpoznaje się je po celu kliknięcia —
-           ten sam wzorzec, co w szufladzie logowania. */
+           na samym oknie, więc rozpoznaje się je po celu kliknięcia
+           (ten sam wzorzec, co w szufladzie logowania). */
         okno.addEventListener('click', function (zdarzenie) {
             if (zdarzenie.target === okno) zamknij(okno);
         });
@@ -106,7 +106,7 @@
     /* Obiekt zgodny z API Bootstrapa 5, na tyle, ile moduły faktycznie
        wywołują: `getOrCreateInstance(el).show()` i `getInstance(el).hide()`.
        Część szablonów (np. ps_onepagecheckout) sprawdza `window.bootstrap`
-       przed sięgnięciem po wtyczkę jQuery — ten obiekt wygrywa tę kontrolę
+       przed sięgnięciem po wtyczkę jQuery. Ten obiekt wygrywa tę kontrolę
        i JS modułu dalej nie szuka Bootstrapa. */
     var instancje = new WeakMap();
 

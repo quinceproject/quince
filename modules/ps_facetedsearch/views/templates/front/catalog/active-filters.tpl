@@ -1,5 +1,5 @@
 {**
- * Quince — wybrane zawężenia modułu filtrów.
+ * Quince: wybrane zawężenia modułu filtrów.
  *
  * Ten sam wygląd co `catalog/_partials/active_filters.tpl` w motywie. Dwa
  * pliki, bo pigułki renderuje albo rdzeń, albo ten moduł, zależnie od tego,
@@ -18,9 +18,9 @@
 
     {foreach from=$activeFilters item="filter"}
       {block name='active_filters_item'}
-        {* Sama wartość, bez nazwy grupy: w makiecie pigułka to „JALTEST", a nie
+        {* Sama wartość, bez nazwy grupy: pigułka to „JALTEST", a nie
            „Marka: JALTEST". Nazwa grupy stoi przy filtrze, z którego pigułka
-           powstała, a tu liczy się zwięzłość — wierszy bywa kilka. *}
+           powstała. *}
         <a class="q-chip js-search-link" href="{$filter.nextEncodedFacetsURL}" rel="nofollow"
            aria-label="{l s='Remove %1$s filter: %2$s' d='Shop.Theme.Catalog' sprintf=[$filter.facetLabel|lower, $filter.label]}">
           {$filter.label}

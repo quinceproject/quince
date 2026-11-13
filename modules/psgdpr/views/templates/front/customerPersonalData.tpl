@@ -4,8 +4,7 @@
  *}
  {extends file='customer/page.tpl'}
 
- {* Własny nagłówek — ten sam wzorzec co w pozostałych podstronach konta;
-    ta strona nie ma własnej makiety. *}
+ {* Własny nagłówek, ten sam wzorzec co w pozostałych podstronach konta. *}
  {block name='page_header_container'}
    <div class="q-order-header">
      <a class="q-order-back" href="{$urls.pages.my_account}">

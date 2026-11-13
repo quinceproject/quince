@@ -66,7 +66,7 @@ global_settings:
         # Keep existing hooks and append them after
         - ~
       # Konto i koszyk stoją w nagłówku Quince i biorą się z ustawień silnika,
-      # nie z modułów PrestaShopa — w sekcji górnej nie mają czego szukać.
+      # nie z modułów PrestaShopa. W sekcji górnej nie mają czego szukać.
       displayNav2:
         - ps_languageselector
         - ps_currencyselector
@@ -257,8 +257,8 @@ assets:
         path: assets/css/components/reassurance.css
         media: all
         priority: 40
-      # Zajawki bloga (quince_blog) osadzają się hookiem na dowolnej stronie —
-      # stronie głównej, karcie produktu, gdziekolwiek — więc arkusz jedzie
+      # Zajawki bloga (quince_blog) osadzają się hookiem na dowolnej stronie
+      # (strona główna, karta produktu, gdziekolwiek), więc arkusz jedzie
       # globalnie, tak jak karuzele i dokupka.
       - id: quince-blog
         path: assets/css/components/blog.css
@@ -345,9 +345,8 @@ assets:
     prices-drop: *quince-listing-css
     best-sales: *quince-listing-css
 
-    # Konto klienta. Jeden arkusz dla sidebara i wszystkich podstron — reszta
-    # dochodzi w miarę budowy (ta sama kotwica, ten sam wzorzec co przy
-    # stronach z listą produktów wyżej).
+    # Konto klienta. Jeden arkusz dla sidebara i wszystkich podstron (ta sama
+    # kotwica, ten sam wzorzec co przy stronach z listą produktów wyżej).
     my-account: &quince-account-css
       - id: quince-account
         path: assets/css/components/account.css
@@ -381,18 +380,18 @@ assets:
         priority: 40
 
     # 404, mapa strony, kontakt: grupowane w panelu razem z CMS jako
-    # „Strony CMS / Statyczne” — ten sam arkusz (okruszki, nagłówki sekcji,
+    # „Strony CMS / Statyczne”. Ten sam arkusz (okruszki, nagłówki sekcji,
     # pusty stan z listingu dla 404), bez osobnego kompletu reguł.
     pagenotfound: *quince-cms-css
     sitemap: *quince-cms-css
     contact: *quince-cms-css
   js:
     all:
-      # Jawny wpis, nie konwencja: bez niego PrestaShop dokładał ten plik do
-      # sklejanego pliku na dole strony, ZA jQuery i jQuery Migrate — a szyna
+      # Jawny wpis, nie konwencja: bez niego PrestaShop dokłada ten plik do
+      # sklejanego pliku na dole strony, ZA jQuery i jQuery Migrate, a szyna
       # zdarzeń (`prestashop.on`/`.emit`) musi istnieć PRZED nimi, bo jQuery
       # Migrate sam czyta `prestashop.debug` zaraz po starcie. Priorytet w tym
-      # samym pliku `bottom` nie wystarczał: rdzeń (jQuery, Migrate) zawsze
+      # samym pliku `bottom` nie wystarcza: rdzeń (jQuery, Migrate) zawsze
       # ląduje przed plikami motywu bez względu na priorytet, więc jedyny
       # sposób, żeby wyprzedzić rdzeń, to osobny plik w `<head>`. Bezpieczne:
       # plik czeka na `DOMContentLoaded`, nie dotyka DOM-u od razu.
@@ -584,8 +583,8 @@ assets:
     prices-drop: *quince-listing-js
     best-sales: *quince-listing-js
 
-    # Sidebar konta jako rozwijana lista na telefonie — reszta podstron konta
-    # dochodzi w miarę budowy (ten sam wzorzec co przy arkuszu CSS wyżej).
+    # Sidebar konta jako rozwijana lista na telefonie (ten sam wzorzec co przy
+    # arkuszu CSS wyżej).
     my-account: &quince-account-js
       - id: quince-account-nav
         path: assets/js/islands/account-nav.js
@@ -600,7 +599,7 @@ assets:
     order-follow: *quince-account-js
     order-slip: *quince-account-js
 
-    # Podpis pola wgrywania pliku (załącznik) na etykiecie — ta sama wyspa
+    # Podpis pola wgrywania pliku (załącznik) na etykiecie. Ta sama wyspa
     # co przy personalizacji produktu, zarejestrowana osobno: `buybox.js`
     # wiąże się tylko z panelem zakupu, którego tu nie ma.
     contact:

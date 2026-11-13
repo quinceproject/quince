@@ -1,16 +1,15 @@
 {**
- * Quince — menu na telefonie
+ * Quince: menu na telefonie
  *
  * Panel wysuwany od lewej krawędzi z całym katalogiem. Ten sam materiał, co
- * w pasie na dużym ekranie — różni je wyłącznie układ.
+ * w pasie na dużym ekranie; różni je wyłącznie układ.
  *
  * Poziomy rozwijają się znacznikiem <details>, a nie skryptem: przeglądarka
  * robi to sama, działa przed wczytaniem JavaScriptu i po jego awarii, a czytnik
  * ekranu zna ten znacznik bez dodatkowych opisów.
  *
- * Same poziomy rysuje `navbar-mobile-level.tpl`, który wywołuje sam siebie —
- * dzięki temu telefon schodzi dokładnie tak głęboko, jak ustawiono w panelu,
- * a nie na sztywno dwa poziomy.
+ * Same poziomy rysuje `navbar-mobile-level.tpl`, który wywołuje sam siebie.
+ * Dzięki temu telefon schodzi dokładnie tak głęboko, jak ustawiono w panelu.
  *
  * Klasy: assets/css/components/navbar.css
  *}
@@ -40,13 +39,12 @@
     </div>
 
     <div class="q-modal__body q-navmob" tabindex="-1" autofocus>
-      {* Poziomy renderuje szablon wywołujący sam siebie — ten sam sposób co
+      {* Poziomy renderuje szablon wywołujący sam siebie, tak samo jak
          w kaskadzie na dużym ekranie. Pętla rozpisana na stałą liczbę poziomów
          zignorowałaby ustawienie „poziomy menu" powyżej tej liczby. *}
       {if $qn.panel == 'tiles'}
         {* Kafelki: same działy główne, wybierane wzrokiem po zdjęciu. Kafelek
-           prowadzi na stronę działu — podkategorie pokazuje ona, i to lepiej,
-           niż zrobiłoby to menu. *}
+           prowadzi na stronę działu, a podkategorie pokazuje ta strona. *}
         <div class="q-navmob__tiles{if $qn.tile_mobile == 'grid'} q-navmob__tiles--grid{/if}">
           {foreach from=$qn.branches item=branch}
             <a class="q-navmob__tile" href="{$branch.url}">

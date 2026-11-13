@@ -1,8 +1,8 @@
 /* ===================================================================
-   Quince — galeria produktu
+   Quince: galeria produktu
 
    Kadr ze zdjęciem, licznik, pas miniatur, kropki na telefonie i podgląd
-   na wierzchu. Zdjęcia nie przesuwają się obok siebie — miniatura podmienia
+   na wierzchu. Zdjęcia nie przesuwają się obok siebie: miniatura podmienia
    źródło jednego obrazu, więc szerokość kadru nie zależy od ich liczby.
 
    Projekt: makieta strony produktu.
@@ -34,7 +34,7 @@
         object-fit: contain;
     }
 
-    /* Licznik zdjęć w rogu kadru. Lewy dolny, bo prawy dolny należy do lupy —
+    /* Licznik zdjęć w rogu kadru. Lewy dolny, bo prawy dolny należy do lupy,
        a to jest podpis, nie przycisk, więc nie ma prawa stać w miejscu,
        w które klient celuje palcem. */
     .q-gallery__counter {
@@ -187,7 +187,7 @@
 
     /* --- podgląd na wierzchu ---
        Zdjęcie nie powiększa się w kadrze: w trzech kolumnach kadr ma nieco ponad
-       400 px, a zdjęcie w nim jeszcze mniej — powiększenie z takiego kadru daje
+       400 px, a zdjęcie w nim jeszcze mniej, więc powiększenie z takiego kadru daje
        obraz mniejszy niż plik źródłowy. Podgląd wychodzi więc na całe okno. */
 
     .q-modal--lightbox {
@@ -209,8 +209,8 @@
     }
 
     /* Scena: strzałka, kadr, strzałka. Kadr bierze całą wolną wysokość, a pasek
-       miniatur pod spodem ma swoją — bez tego zdjęcie wyższe od okna wychodziło
-       poza warstwę i było przycięte. */
+       miniatur pod spodem ma swoją. Bez tego zdjęcie wyższe od okna wychodzi
+       poza warstwę i jest przycięte. */
     .q-lightbox__stage {
         flex: 1 1 auto;
         min-block-size: 0;
@@ -224,8 +224,8 @@
     }
 
     /* Wiersz podpisu trzyma wysokość jednej linii, także pusty. Bez tego
-       przejście ze zdjęcia z podpisem na pozycję bez podpisu skracało scenę
-       i strzałki po bokach przesuwały się w pionie. Pusty wiersz na ciemnym
+       przejście ze zdjęcia z podpisem na pozycję bez podpisu skraca scenę
+       i strzałki po bokach przesuwają się w pionie. Pusty wiersz na ciemnym
        tle okna i tak nie jest widoczny. */
     .q-lightbox__caption[hidden] {
         display: block;
@@ -240,8 +240,8 @@
         position: relative;
 
         /* Kadr bierze całą wysokość sceny, a nie wysokość swojej treści.
-           Film leży w nim bezwzględnie, więc bez tego kadr zapadał się przy
-           przejściu ze zdjęcia na film i strzałki po bokach skakały w pionie. */
+           Film leży w nim bezwzględnie, więc bez tego kadr zapada się przy
+           przejściu ze zdjęcia na film i strzałki po bokach skaczą w pionie. */
         align-self: stretch;
         block-size: 100%;
         min-block-size: 0;
@@ -251,7 +251,7 @@
 
     /* Bezwzględnie w kadrze, nie na procentach: reguła zerująca motywu ustawia
        `img { block-size: auto }`, a przy `object-fit` i własnych proporcjach
-       zdjęcie brało wysokość równą swojej szerokości — czyli dół poza oknem.
+       zdjęcie bierze wysokość równą swojej szerokości, czyli dół wypada poza oknem.
        Przy `inset: 0` rozmiar wynika z krawędzi kadru. */
     .q-lightbox__img {
         position: absolute;
@@ -290,9 +290,8 @@
         z-index: 2;
     }
 
-    /* Podpis bierze się z pola `legend` przy zdjęciu — tego samego, z którego
-       powstaje `alt`. Większość sklepów zostawia je puste, więc wiersz znika,
-       gdy podpisu nie ma; zarezerwowane puste miejsce wyglądałoby na usterkę. */
+    /* Podpis bierze się z pola `legend` przy zdjęciu, tego samego, z którego
+       powstaje `alt`. */
     .q-lightbox__caption {
         flex: none;
         padding-inline: var(--q-space-md);

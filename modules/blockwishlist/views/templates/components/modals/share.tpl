@@ -3,9 +3,9 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 
-{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu — ten sam standard
-   co `create.tpl`. Link jest już znany (dane listy po stronie klienta), więc
-   nie ma tu żadnego zapytania do serwera — tylko pole do odczytu i kopiowanie.
+{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu, jak w `create.tpl`.
+   Link jest już znany (dane listy po stronie klienta), więc nie ma tu
+   zapytania do serwera, tylko pole do odczytu i kopiowanie.
    Prowadzi je w całości `assets/js/islands/wishlist-lists.js`. *}
 <div class="wishlist-share" data-url="{$url}">
   <dialog class="q-modal q-modal--drawer" data-q-wishlist-share aria-labelledby="q-wishlist-share-title">

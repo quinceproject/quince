@@ -1,9 +1,9 @@
 {**
- * Quince — treść sekcji opinii w akordeonie karty produktu.
+ * Quince: treść sekcji opinii w akordeonie karty produktu.
  *
  * Podsumowanie ocen i pierwsza porcja opinii wychodzą z serwera, więc widać je
  * bez JavaScriptu i czyta je wyszukiwarka. Przycisk dokłada kolejne porcje
- * w tym samym miejscu, bez szuflady i bez osobnej strony — obsługuje go wyspa
+ * w tym samym miejscu, bez szuflady i bez osobnej strony. Obsługuje go wyspa
  * `islands/reviews.js`, która woła kontroler `quince_engine/reviews`.
  *
  * Dane liczy silnik: `Product\Rating` (średnia i rozkład) oraz `Product\Reviews`
@@ -33,7 +33,7 @@
 
     {* Podsumowanie: średnia po lewej, rozkład ocen po prawej. Paski porównują
        oceny między sobą, dlatego liczy je silnik od najliczniejszej, a nie od
-       sumy — inaczej przy rozkładzie 37/7/2/1/0 widać byłoby tylko piątkę. *}
+       sumy. Inaczej przy rozkładzie 37/7/2/1/0 widać byłoby tylko piątkę. *}
     <div class="q-reviews__summary">
       <div class="q-reviews__avg">
         <div class="q-reviews__avg-number">{$qOcena.averageText}</div>

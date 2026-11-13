@@ -1,13 +1,12 @@
 {**
- * Quince — słupek narzędzi karty produktu
+ * Quince: słupek narzędzi karty produktu
  *
  * Szybki podgląd i ulubione siedzą razem przy dolnej krawędzi kadru. Ramkę nosi
  * słupek, nie każdy znak z osobna: to jedna grupa narzędzi do tego produktu,
  * a dwa oddzielne pudełka czytałyby się jak dwie niezależne rzeczy.
  *
  * Serce wysyła zapis do modułu list życzeń. Bez zalogowania prowadzi na
- * logowanie i wraca tutaj — dodanie do listy wymaga konta, więc pytanie o nie
- * pada w chwili, w której klient czegoś chce, a nie wcześniej.
+ * logowanie i wraca tutaj, bo dodanie do listy wymaga konta.
  *
  * Zachowanie: assets/js/islands/wishlist.js
  *}
@@ -15,8 +14,8 @@
 <div class="q-pcard__tools">
   {include file='catalog/_partials/miniatures/product-quickview.tpl'}
 
-  {* Serce stoi tylko wtedy, gdy sklep ma moduł list życzeń — ta sama decyzja,
-     która stawia serce w nagłówku. Bez modułu nie ma gdzie zapisać. *}
+  {* Serce stoi tylko wtedy, gdy sklep ma moduł list życzeń (ta sama decyzja,
+     która stawia serce w nagłówku). Bez modułu nie ma gdzie zapisać. *}
   {if isset($modules.quince_engine.header.wishlist) && $modules.quince_engine.header.wishlist.visible}
     <button type="button"
             class="q-pcard__tool q-pcard__wish"

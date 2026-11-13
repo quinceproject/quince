@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — zakup na firmę w formularzu adresu
+   Quince: zakup na firmę w formularzu adresu
 
    Dwie rzeczy: przełącznik „Kupuję jako" odsłania NIP i nazwę firmy, a
    przycisk w polu NIP pobiera z rejestru nazwę i adres siedziby.
@@ -8,8 +8,8 @@
    `quince_buyer` i czyta go silnik (`quince_engine`) przy zapisie adresu.
 
    Wyspa: działa tylko tam, gdzie formularz adresu stoi na stronie. Bez
-   JavaScriptu widoczne zostają wszystkie pola, razem z NIP-em i nazwą firmy
-   — klient wypełni je ręcznie. To nie jest awaria, tylko brak udogodnienia.
+   JavaScriptu widoczne zostają wszystkie pola, razem z NIP-em i nazwą firmy,
+   i klient wypełnia je ręcznie. To nie jest awaria, tylko brak udogodnienia.
    =================================================================== */
 
 (function () {
@@ -21,8 +21,8 @@
 
     /* Szukamy w otoczeniu przełącznika, nie w całym formularzu: kasa
        jednostronicowa trzyma w jednym `<form>` zarówno wbudowany formularz
-       adresu, jak i ukryty formularz w oknie modalnym „Dodaj adres" —
-       oba mają pola o tych samych nazwach. Szukanie po całym formularzu
+       adresu, jak i ukryty formularz w oknie modalnym „Dodaj adres".
+       Oba mają pola o tych samych nazwach. Szukanie po całym formularzu
        trafiałoby w pierwszą pasującą nazwę w dokumencie, czyli w modal,
        a nie w ten formularz, który klient naprawdę widzi. Rodzic
        przełącznika to zarazem rodzic pól: oba stoją w płaskim wyjściu
@@ -32,7 +32,7 @@
         return pole ? pole.closest('.q-float') : null;
     }
 
-    /* Wiersz, w którym stoi pole — razem z sąsiadem, jeśli para dzieli wiersz. */
+    /* Wiersz, w którym stoi pole, razem z sąsiadem, jeśli para dzieli wiersz. */
     function wierszPola(zasieg, nazwa) {
         var grupa = grupaPola(zasieg, nazwa);
         if (!grupa) return null;
@@ -62,7 +62,7 @@
     /* Nagłówek nad polami, etykieta checkboxa „inny adres" i nagłówek panelu
        pod nim zmieniają tekst z rolą kupującego: oba warianty stoją gotowe
        w `data-text-priv`/`data-text-firm` (wpisane przez Smarty, przetłumaczone),
-       JS tylko wybiera właściwy — żeby nie trzymać tłumaczeń w skrypcie. */
+       JS tylko wybiera właściwy, żeby nie trzymać tłumaczeń w skrypcie. */
     function przelaczTeksty(zasieg, firma) {
         zasieg.querySelectorAll('[data-text-priv][data-text-firm]').forEach(function (el) {
             el.textContent = firma ? el.dataset.textFirm : el.dataset.textPriv;
@@ -70,7 +70,7 @@
     }
 
     /* Telefon przy drugim adresie pokazuje się tylko wtedy, gdy ten adres
-       jest adresem dostawy — czyli przy firmie. Dla osoby prywatnej drugi
+       jest adresem dostawy, czyli przy firmie. Dla osoby prywatnej drugi
        adres jest fakturą, telefon zostaje przy adresie dostawy u góry. */
     function pokazTelefonDrugiegoAdresu(zasieg, firma) {
         var wiersz = zasieg.querySelector('[data-q-other-phone-row]');
@@ -92,7 +92,7 @@
         var panel = zasieg.querySelector('[data-q-other-panel]');
 
         /* Nagłówek roli, etykieta checkboxa i nagłówek panelu stoją POZA
-           `kto.parentElement` w OPC (ten jest zawężony celowo, patrz wyżej) —
+           `kto.parentElement` w OPC (ten jest zawężony celowo, patrz wyżej),
            ale ich zamiana tekstu nie koliduje z polami w oknie modalnym, bo
            modal nigdy nie renderuje przełącznika „Kupuję jako" ani tych
            nagłówków. Dlatego dla samej zamiany tekstu bierzemy szerszy
@@ -112,7 +112,7 @@
         odswiez();
 
         /* Checkbox „inny adres": odkrywa/chowa panel od razu, bez wysyłania
-           formularza — to on, nie „Dalej", robi tu robotę. */
+           formularza. To on, nie „Dalej", robi tu robotę. */
         if (inny && panel) {
             inny.addEventListener('change', function () {
                 panel.hidden = !inny.checked;
@@ -227,7 +227,7 @@
     /* Kasa krokowa przerysowuje krok adresu po zmianie kraju i po przejściu
        dalej; kasa jednostronicowa (moduł `ps_onepagecheckout`) przebudowuje
        samą sekcję adresu dostawy po tych samych okazjach, ale własnym
-       zdarzeniem — oba nasłuchy muszą stać obok siebie, bo każda kasa gada
+       zdarzeniem. Oba nasłuchy muszą stać obok siebie, bo każda kasa gada
        innym słownikiem zdarzeń `prestashop`. */
     if (window.prestashop && typeof prestashop.on === 'function') {
         prestashop.on('updatedAddressForm', start);

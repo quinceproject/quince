@@ -1,11 +1,11 @@
 {**
- * Quince — szybki podgląd produktu
+ * Quince: szybki podgląd produktu
  *
  * Przycisk otwierający okno z podglądem, bez opuszczania listingu. Pojawia się
  * na warstwie zdjęcia, więc ma własny wariant przycisku ikonowego.
  *
  * PrestaShop podpina zachowanie po klasie `js-quickview` i atrybucie
- * `data-ps-action` — obu nie wolno zmienić, bo to kontrakt z rdzeniem.
+ * `data-ps-action`. Obu nie wolno zmienić, bo to kontrakt z rdzeniem.
  *
  * Jeden przycisk zamiast dwóch: Hummingbird ma osobne warianty dla myszy
  * i dotyku, ale ten sam element obsługuje oba wejścia, a duplikat oznaczałby

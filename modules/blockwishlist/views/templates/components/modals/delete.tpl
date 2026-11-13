@@ -3,11 +3,10 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 
-{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu — ten sam standard
-   co `create.tpl`. Dziś tylko usunięcie całej listy (strona `lists.tpl`) —
-   usunięcie pojedynczego produktu z listy to inny widok (`products-list.tpl`),
-   jeszcze nieostylowany, więc ten modal go na razie nie obsługuje. Prowadzi
-   go w całości `assets/js/islands/wishlist-lists.js`. *}
+{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu, jak w `create.tpl`.
+   Obsługuje tylko usunięcie całej listy (strona `lists.tpl`); usunięcia
+   pojedynczego produktu (`products-list.tpl`) nie obsługuje. Prowadzi go
+   w całości `assets/js/islands/wishlist-lists.js`. *}
 <div class="wishlist-delete" data-url="{$url}">
   <dialog class="q-modal q-modal--drawer" data-q-wishlist-delete aria-labelledby="q-wishlist-delete-title">
     <div class="q-modal__head">
@@ -21,9 +20,8 @@
       </button>
     </div>
 
-    {* Bez zdania potwierdzenia — nie ma go nigdzie w tłumaczeniach modułu
-       (sprawdzone), a wymyślać własnego nie wolno. Tytuł okna i czerwony
-       przycisk już mówią, o co chodzi; nazwa listy daje kontekst, który. *}
+    {* Bez zdania potwierdzenia: moduł nie ma go w tłumaczeniach. Tytuł okna
+       i czerwony przycisk mówią, o co chodzi; nazwa listy mówi, której. *}
     <div class="q-modal__body">
       <p><strong data-q-wishlist-delete-name></strong></p>
     </div>

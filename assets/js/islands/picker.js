@@ -1,8 +1,8 @@
 /**
- * Quince — select (język, waluta, kraj dostawy)
+ * Quince: select (język, waluta, kraj dostawy)
  *
  * Otwiera i zamyka listę przy przycisku. Sama zmiana jest przejściem pod adres
- * pozycji, więc skrypt nie odpowiada za nic poza pokazaniem listy — bez niego
+ * pozycji, więc skrypt nie odpowiada za nic poza pokazaniem listy. Bez niego
  * przełączenie języka nadal działa, tylko lista zostaje rozwinięta na stałe.
  *
  * Projekt: widok paska górnego.
@@ -49,7 +49,7 @@
             }
         });
 
-        // Escape zamyka i oddaje ognisko przyciskowi — bez tego osoba
+        // Escape zamyka i oddaje ognisko przyciskowi. Bez tego osoba
         // poruszająca się klawiaturą zostaje wewnątrz zamkniętej listy.
         picker.addEventListener('keydown', function (event) {
             if (event.key === 'Escape' && !menu.hidden) {

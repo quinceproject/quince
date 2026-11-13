@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — powiadomienia
+   Quince: powiadomienia
 
    PrestaShop wypisuje komunikaty przy okruszkach, na całą szerokość treści.
    U nas wychodzą jako toasty przy prawej górnej krawędzi: komunikat po dodaniu
    do koszyka albo po zalogowaniu dotyczy czynności, którą klient właśnie
-   wykonał, a nie strony, na którą wszedł — a pas nad treścią spycha przy tym
-   całą stronę w dół i klient traci miejsce, na które patrzył.
+   wykonał, a nie strony, na którą wszedł. Pas nad treścią spychałby przy tym
+   całą stronę w dół i klient traciłby miejsce, na które patrzył.
 
    Toast ma jedno tło dla wszystkich rodzajów. Rodzaj niesie znacznik przy
    krawędzi i ikona: cztery komunikaty jeden pod drugim czytają się wtedy jako
@@ -61,7 +61,7 @@
     .q-toast--warning { --toast-accent: var(--q-toast-accent-warning); }
     .q-toast--danger { --toast-accent: var(--q-toast-accent-danger); }
 
-    /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku — przy
+    /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku: przy
        komunikacie na trzy linie ikona przy środku wygląda jak zgubiona. */
     .q-toast__icon {
         inline-size: 18px;

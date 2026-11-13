@@ -6,9 +6,8 @@
 {**
  * One Page Checkout - Address List
  *
- * Akcje przy adresie jako zwykłe, widoczne odnośniki (makieta kasy,
- * „Edytuj" przy prawej krawędzi), nie menu „..." Bootstrapa — Quince nie
- * ładuje jego JS, a dwie czynności nie potrzebują chowania pod menu.
+ * Akcje przy adresie jako zwykłe, widoczne odnośniki („Edytuj" przy prawej
+ * krawędzi), nie menu „..." Bootstrapa: Quince nie ładuje jego JS.
  *}
 
 <div class="d-flex flex-column mb-3">

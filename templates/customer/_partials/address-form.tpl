@@ -25,12 +25,10 @@
          firmy albo numer VAT. *}
       {block name='quince_buyer_type'}
         {* Konto klienta (strona „Moje adresy") nie pokazuje tego przełącznika:
-           zapisany tu adres nie jest ani adresem dostawy, ani faktury z góry —
-           o tym decyduje klient dopiero przy składaniu zamówienia. „Kupuję
-           jako" ma sens tylko w kasie, gdzie naprawdę coś się kupuje i gdzie
-           ten wybór steruje rolami adresów (patrz `CheckoutAddressesStep`
-           override). Pola firmowe (NIP, nazwa) zostają na obu stronach —
-           usuwamy tylko przełącznik, nie same pola. *}
+           zapisany tu adres nie jest z góry ani adresem dostawy, ani faktury.
+           „Kupuję jako" działa tylko w kasie, gdzie steruje rolami adresów
+           (patrz override `CheckoutAddressesStep`). Pola firmowe (NIP, nazwa)
+           zostają na obu stronach; znika tylko przełącznik. *}
         {if $page.page_name !== 'address'}
           {assign var=qFirma value=(!empty($formFields.company.value) || !empty($formFields.vat_number.value))}
           <div class="q-checkout2__buyer" data-q-buyer>
@@ -59,7 +57,7 @@
 
              Parę otwiera pierwsze pole, zamyka drugie. Jeśli sprzedawca wyłączy
              jedno z nich w formacie adresu, drugie zostaje samo i wiersz się
-             nie otworzy — dlatego sprawdzamy OBA przed otwarciem. *}
+             nie otworzy. Dlatego sprawdzamy OBA przed otwarciem. *}
           {block name='form_fields'}
             {assign var=qPary value=[
               'firstname' => 'lastname',

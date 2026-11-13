@@ -6,12 +6,11 @@
 {extends file=$layout}
 
 {* Układ obu kolumn (`layout-both-columns.tpl`) rysuje okruszki bez
-   `.q-container` — treść pod spodem ma go przez `#center-column`, więc nigdy
-   tego nie brakowało. Tu, na pełną szerokość strony, bez tego opakowania
-   okruszki stały przy lewej krawędzi okna, nie nad sidebarem.
+   `.q-container` (treść pod spodem ma go przez `#center-column`). Na pełnej
+   szerokości strony bez tego opakowania okruszki stoją przy lewej krawędzi
+   okna, nie nad sidebarem.
 
-   Odstęp od paska menu ten sam problem i to samo lekarstwo, co na
-   potwierdzeniu zamówienia (`.order-confirmation__crumbs`): goły layout
+   Odstęp od paska menu: to samo rozwiązanie co na potwierdzeniu zamówienia (`.order-confirmation__crumbs`): goły layout
    nie daje okruszkom żadnego górnego marginesu, bo na innych stronach
    dostają go przez wspólny kontener z resztą treści, a tu stoją osobno. *}
 {block name='breadcrumb'}

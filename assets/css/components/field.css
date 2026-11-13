@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — pola formularza
+   Quince: pola formularza
 
    Jeden komplet dla całego sklepu: logowanie, rejestracja, adres, kontakt,
    newsletter, kod rabatowy, dostawa i płatność w kasie, warianty
@@ -9,7 +9,7 @@
      .q-field          pole tekstowe, e-mail, hasło, obszar tekstowy
      .q-field-label    etykieta nad polem
      .q-field-help     podpowiedź pod polem, także w odmianie błędu
-     .q-select         select — przycisk w kształcie pola + lista z dropdown.css
+     .q-select         select: przycisk w kształcie pola + lista z dropdown.css
      .q-choice         pole wyboru i wybór jednokrotny
      .q-switch         przełącznik dwustanowy
      .q-qty            licznik ilości
@@ -34,7 +34,7 @@
         color: var(--q-field-label);
     }
 
-    /* Gwiazdka przy polu wymaganym nie wystarcza sama — obok formularza stoi
+    /* Gwiazdka przy polu wymaganym nie wystarcza sama: obok formularza stoi
        zdanie wyjaśniające, co ona znaczy. Kolor nie niesie tu treści. */
     .q-field-label__required {
         color: var(--q-text-danger);
@@ -161,9 +161,8 @@
     }
 
     /* --- plik ---
-       Przeniesione z `buybox.css`: ten sam komponent co przy personalizacji
-       produktu (wgrywanie zdjęcia), teraz drugi konsument (załącznik
-       w formularzu kontaktowym). Etykieta, nie goły `input type=file` —
+       Wspólny dla personalizacji produktu (wgrywanie zdjęcia) i załącznika
+       w formularzu kontaktowym. Etykieta, nie goły `input type=file`:
        przeglądarka rysuje na nim własny przycisk z własnym, nieprzetłuma-
        czalnym napisem, którego nie da się ostylować. Znaczniki:
        `catalog/_partials/product-customization.tpl`.
@@ -247,8 +246,8 @@
     }
 
     /* Wybrana opcja bywa długim zdaniem (sortowanie listingu). Bez tego
-       przycisk zawijał tekst na kilka wierszy i puchł, rozwalając pasek
-       narzędzi na wąskim ekranie — jak każdy zwykły select, ma zostać jednej,
+       przycisk zawija tekst na kilka wierszy i puchnie, rozwalając pasek
+       narzędzi na wąskim ekranie. Jak każdy zwykły select ma zostać jednej,
        stałej wysokości, a nadmiar ucina się wielokropkiem. */
     .q-select__button [data-q-select-label] {
         overflow: hidden;
@@ -295,7 +294,7 @@
         align-items: flex-start;
         gap: var(--q-choice-gap);
 
-        /* Cały wiersz z napisem jest celem kliknięcia, nie sam kwadracik —
+        /* Cały wiersz z napisem jest celem kliknięcia, nie sam kwadracik:
            dwadzieścia pikseli to za mało, żeby trafić w niego na telefonie. */
         min-block-size: var(--q-touch-target);
         padding-block: calc((var(--q-touch-target) - var(--q-choice-size)) / 2);
@@ -551,7 +550,7 @@
     }
 
     /* Odstęp pod polem. Rdzeń i moduły zawijają każde pole w `mb-3`, czyli
-       nazwę odstępu z Bootstrapa, którego nie wgrywamy — bez tego pola stały
+       nazwę odstępu z Bootstrapa, którego nie wgrywamy. Bez tego pola stoją
        jedno przy drugim, bez przerwy. */
     .mb-3 { margin-block-end: var(--q-space-md); }
     .mb-2 { margin-block-end: var(--q-space-sm); }

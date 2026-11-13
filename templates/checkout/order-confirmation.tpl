@@ -6,8 +6,8 @@
 {extends file=$layout}
 {$componentName = 'order-confirmation'}
 
-{* Okruszki idą do środka strony, tak jak na każdej innej podstronie —
-   inaczej zostają bez górnego odstępu, bo goły layout im go nie daje. *}
+{* Okruszki idą do środka strony, tak jak na każdej innej podstronie.
+   Inaczej zostają bez górnego odstępu, bo goły layout im go nie daje. *}
 {block name='breadcrumb'}{/block}
 
 {block name='content'}
@@ -108,19 +108,17 @@
         </section>
       {/block}
 
-      {* Miejsce na dowolny hook pod „Order details" — ten sam mechanizm, co
+      {* Miejsce na dowolny hook pod „Order details". Ten sam mechanizm, co
          hook w elementach strony produktu (`ProductPageSettings`): sklep sam
          wpisuje nazwę w ustawieniach Checkout, a tu tylko ją wywołujemy.
 
          Bez karty `.q-checkout2__section`, w odróżnieniu od
          `hook_payment_return`/`hook_order_confirmation` wyżej w tym pliku:
-         tamte niosą zwykły tekst modułu, więc karta ma sens. Tu docelowa
-         treść (np. baner WiseBlocka) zwykle ma już własne tło na pełną
-         szerokość — karta dokładałaby białą ramkę i padding wokół czegoś,
-         co już jest kompletnym blokiem, tak jak robi to `hook_order_confirmation_2`
-         niżej dla karuzel. Odstęp od sąsiadów i tak liczy `gap` na
-         `.q-checkout2__form`, nie margines karty — nieopakowany hook dostaje
-         go tak samo. Przechwycone, żeby pusty hook nie zostawiał żadnego
+         tamte niosą zwykły tekst modułu. Tu docelowa treść (np. baner
+         WiseBlocka) zwykle ma już własne tło na pełną szerokość, tak jak
+         `hook_order_confirmation_2` niżej dla karuzel. Odstęp od sąsiadów
+         liczy `gap` na `.q-checkout2__form`, nie margines karty, więc
+         nieopakowany hook dostaje go tak samo. Przechwycone, żeby pusty hook nie zostawiał żadnego
          elementu w siatce. *}
       {block name='hook_order_confirmation_column'}
         {if $modules.quince_engine.checkout.orderConfirmationHook|default:''}

@@ -40,10 +40,10 @@
         // miejsce kliknięcia z prostokątem okna.
         okno.addEventListener('click', function (zdarzenie) {
             // Tło to samo okno: `dialog` maluje je własnym pseudoelementem, więc
-            // kliknięcie w tło ma za cel `dialog`, a kliknięcie w treść — element
+            // kliknięcie w tło ma za cel `dialog`, a kliknięcie w treść element
             // w środku. Sam pomiar współrzędnych nie wystarczy: klawisz Enter na
             // przycisku wysyła kliknięcie w punkcie (0, 0), czyli „poza oknem",
-            // i zamykał szufladę osobie obsługującej sklep klawiaturą.
+            // i zamknąłby szufladę osobie obsługującej sklep klawiaturą.
             if (zdarzenie.target !== okno) {
                 return;
             }

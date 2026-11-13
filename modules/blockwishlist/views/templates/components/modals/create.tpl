@@ -4,12 +4,9 @@
  *}
 
 {* Okno w naszej szufladzie (`.q-modal.q-modal--drawer`), nie w mechanizmie
-   Vue modułu — ten sam standard co reszta sklepu: w całym projekcie nie ma
-   ani jednego `.q-modal` bez `--drawer`, więc wyśrodkowany dialog byłby
-   własnym, nowym wzorcem, nie powtórzeniem istniejącego. Pokazywanie,
-   zamykanie i wysyłkę prowadzi w całości `assets/js/islands/wishlist-create.js`;
-   Vue modułu się na tym elemencie nadal montuje, ale nie ma już żadnych
-   własnych znaczników do przejęcia. *}
+   Vue modułu, jak każde okno w motywie. Pokazywanie, zamykanie i wysyłkę
+   prowadzi w całości `assets/js/islands/wishlist-create.js`; Vue modułu
+   montuje się na tym elemencie, ale nie ma własnych znaczników do przejęcia. *}
 <div class="wishlist-create" data-url="{$url}">
   <dialog class="q-modal q-modal--drawer" data-q-wishlist-create aria-labelledby="q-wishlist-create-title">
     <div class="q-modal__head">
@@ -33,8 +30,8 @@
       </div>
     </div>
 
-    {* Potwierdzenie pierwsze w znacznikach — w szufladzie stoi na górze
-       stosu przycisków, tam gdzie kciuk sięga najłatwiej. *}
+    {* Potwierdzenie pierwsze w znacznikach: w szufladzie stoi na górze
+       stosu przycisków. *}
     <div class="q-modal__foot">
       <button type="button" class="q-btn q-btn--primary" data-q-wishlist-create-submit>
         {l s='Create wishlist' d='Modules.Blockwishlist.Shop'}

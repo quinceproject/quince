@@ -1,5 +1,5 @@
 {**
- * Quince — personalizacja produktu w panelu zakupu.
+ * Quince: personalizacja produktu w panelu zakupu.
  *
  * Jedyny blok panelu z własnym tłem, i to jest decyzja: to formularz do
  * wypełnienia, a nie informacja do przeczytania, a PrestaShop bez niego nie

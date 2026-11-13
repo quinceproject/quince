@@ -1,16 +1,15 @@
 {**
- * Quince — jedno pytanie o produkt razem z odpowiedzią sklepu.
+ * Quince: jedno pytanie o produkt razem z odpowiedzią sklepu.
  *
  * Osobny plik, bo rysują z niego dwa miejsca: pierwsza porcja wypisana przy
- * wydaniu strony i każda kolejna doładowana przyciskiem. Gdyby pytanie rysował
- * jeszcze JavaScript, dwa zapisy tego samego rozjechałyby się przy pierwszej
- * poprawce wyglądu.
+ * wydaniu strony i każda kolejna doładowana przyciskiem. Nie rysować pytania
+ * drugi raz w JavaScripcie.
  *
  * Pytanie i odpowiedź to JEDEN wątek, nie dwa wiersze obok siebie. Nagłówek
  * z inicjałami trzyma pytanie razem, a odpowiedź stoi w oddzielnym bloku
- * z własnym tłem i kreską — wtedy widać dwa głosy i widać, że należą do siebie.
+ * z własnym tłem i kreską.
  *
- * Zmienne: $qPytanie — jedna pozycja z `Quince\Qa\Settings\QaPresenter`.
+ * Zmienne: $qPytanie: jedna pozycja z `Quince\Qa\Settings\QaPresenter`.
  *}
 
 <article class="q-qa__thread" data-q-qa-item="{$qPytanie.id|intval}">

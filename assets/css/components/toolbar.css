@@ -1,9 +1,9 @@
 /* ===================================================================
-   Quince — pasek narzędzi listingu
+   Quince: pasek narzędzi listingu
 
    Sortowanie, liczba wyników, chipy aktywnych filtrów. Cztery role z mapy.
 
-   Pasek ma własną powierzchnię (stopień 2), a nie tło strony — inaczej
+   Pasek ma własną powierzchnię (stopień 2), a nie tło strony. Inaczej
    przestaje być czytelny jako osobny obszar i sortowanie wygląda, jakby
    wisiało w powietrzu nad listą produktów.
    =================================================================== */

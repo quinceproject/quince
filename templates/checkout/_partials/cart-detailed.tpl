@@ -8,7 +8,7 @@
     tabindex="-1"
   >
     {if $cart.products}
-      {* Ten sam pasek, co w szufladzie koszyka — ten sam modyfikator danych
+      {* Ten sam pasek, co w szufladzie koszyka: ten sam modyfikator danych
          (`|qfreeshipping`), ta sama treść, tylko inne opakowanie wizualne. *}
       {assign var=qDostawa value=$cart|qfreeshipping}
       {if $qDostawa}

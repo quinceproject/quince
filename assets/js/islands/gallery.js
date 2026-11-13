@@ -1,12 +1,12 @@
 /**
- * Quince — galeria produktu
+ * Quince: galeria produktu
  *
  * Przełączanie zdjęcia miniaturą i kropką, licznik, zanik na krawędziach pasa
  * miniatur oraz podgląd na wierzchu ze strzałkami, podpisem i własnym paskiem
  * miniatur.
  *
  * Bez tej wyspy strona pokazuje pierwsze zdjęcie i komplet miniatur, więc
- * produkt da się obejrzeć — tylko bez przełączania.
+ * produkt da się obejrzeć, tylko bez przełączania.
  *
  * Projekt: makieta strony produktu.
  */
@@ -232,7 +232,7 @@
 
             if (licznik) {
                 // Licznik obejmuje wszystko, co jest w pasie: zdjęcia i filmy.
-                // Osobne liczenie zdjęć dawało „1 / 1" przy jednym zdjęciu
+                // Osobne liczenie zdjęć dałoby „1 / 1" przy jednym zdjęciu
                 // i jednym filmie, czyli mówiło, że nie ma nic dalej.
                 licznik.textContent = (teraz + 1) + ' / ' + miniatury.length;
             }
@@ -273,7 +273,7 @@
            Nie bierzemy go wprost z miniatur, bo miniatur bywa ZERO: PrestaShop
            pokazuje w galerii tylko zdjęcia przypisane do wybranego wariantu,
            a przy jednym zdjęciu na wariant pas miniatur w ogóle nie powstaje.
-           Podgląd czytał wtedy adres z niczego i otwierał się pusty — bez
+           Podgląd czytałby wtedy adres z niczego i otwierał się pusty: bez
            zdjęcia, bez miniatur i bez podpisu.
 
            Kadr istnieje zawsze, więc przy braku miniatur spis ma jedną pozycję
@@ -288,7 +288,7 @@
                     mala: mala ? mala.getAttribute('src') : '',
 
                     // Film idzie do podglądu tak samo jak zdjęcie: bez tego
-                    // miniatura filmu w pasku podglądu prowadziła do pustego
+                    // miniatura filmu w pasku podglądu prowadziłaby do pustego
                     // obrazka z nazwą produktu zamiast do filmu.
                     film: czyFilm(mini) ? mini.getAttribute('data-q-film') : null,
                     plakat: mini.getAttribute('data-q-poster') || '',
@@ -301,7 +301,7 @@
             }];
 
         /* Pasek miniatur i strzałki mają sens dopiero od dwóch zdjęć. Przy jednym
-           zostaje samo zdjęcie — strzałka wracająca do tego samego kadru jest
+           zostaje samo zdjęcie. Strzałka wracająca do tego samego kadru jest
            obietnicą, że jest coś dalej. */
         var jestCoPrzelaczac = zdjecia.length > 1;
 
@@ -377,9 +377,9 @@
 
                     zaznacz(miniPodgladu, wPodgladzie);
 
-                    // Film też dostaje podpis: bez niego wiersz podpisu zapadał
+                    // Film też dostaje podpis: bez niego wiersz podpisu zapada
                     // się przy przejściu ze zdjęcia na film i strzałki po bokach
-                    // przesuwały się o jego wysokość.
+                    // przesuwają się o jego wysokość.
                     if (podpis) {
                         podpis.textContent = miniatury[wPodgladzie]
                             ? (miniatury[wPodgladzie].getAttribute('aria-label') || '')
@@ -408,8 +408,8 @@
         }
 
         function otworzPodglad() {
-            // Okno ma się otworzyć zawsze, nawet pustе, gdy coś w wypełnianiu
-            // go zawiedzie — ciche „nic się nie dzieje" po kliknięciu jest
+            // Okno ma się otworzyć zawsze, nawet puste, gdy coś w wypełnianiu
+            // go zawiedzie. Ciche „nic się nie dzieje" po kliknięciu jest
             // gorsze niż podgląd bez zdjęcia.
             try {
                 pokazWPodgladzie(teraz);
@@ -424,7 +424,7 @@
 
         kadr.addEventListener('click', function () {
             // Przy filmie kadr nie prowadzi do podglądu: kliknięcie w obraz ma
-            // włączyć film, a nie otworzyć okno, i jedno z drugim wychodziło
+            // włączyć film, a nie otworzyć okno; inaczej jedno z drugim wychodzi
             // naraz. Do okna prowadzi wtedy lupa, tak samo jak przy zdjęciu.
             if (galeria.classList.contains('is-video')) {
                 return;
@@ -442,7 +442,7 @@
             });
         }
 
-        /* Strzałki chowamy przy jednym zdjęciu — obrót po jednoelementowej liście
+        /* Strzałki chowamy przy jednym zdjęciu: obrót po jednoelementowej liście
            wraca do tego samego kadru i wygląda jak zepsute przejście. */
         [].forEach.call(podglad.querySelectorAll('[data-q-lightbox-prev], [data-q-lightbox-next]'),
             function (strzalka) {

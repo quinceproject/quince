@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu blockwishlist, hook nagłówka.
+ * Quince: nadpisanie modułu blockwishlist, hook nagłówka.
  *
  * Pusto z zamiaru. Moduł wypisuje tu okna swojej aplikacji Vue: wybór listy,
  * zakładanie nowej, logowanie i powiadomienie. Quince ma własne serce na karcie

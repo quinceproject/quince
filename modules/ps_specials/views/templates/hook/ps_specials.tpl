@@ -1,5 +1,5 @@
 {**
- * Quince — nadpisanie modułu ps_specials.
+ * Quince: nadpisanie modułu ps_specials.
  *
  * Promocje na stronie głównej, w tej samej karuzeli, co pozostałe zajawki.
  *}

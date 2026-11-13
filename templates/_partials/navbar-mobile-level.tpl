@@ -1,16 +1,14 @@
 {**
- * Quince — poziom menu na telefonie
+ * Quince: poziom menu na telefonie
  *
  * Wywołuje sam siebie dla każdego poziomu w głąb, tak samo jak kaskada na dużym
- * ekranie (`navbar-level.tpl`). Głębokość ograniczył już silnik, budując drzewo
- * — szablon idzie po tym, co dostał i nie ma jak zejść głębiej, niż sklep sobie
+ * ekranie (`navbar-level.tpl`). Głębokość ograniczył już silnik, budując drzewo.
+ * Szablon idzie po tym, co dostał, i nie ma jak zejść głębiej, niż sklep sobie
  * ustawił. Dzięki temu ustawienie „poziomy menu" działa na telefonie i na
- * desktopie tak samo, zamiast obowiązywać tylko w jednym z nich.
+ * desktopie tak samo.
  *
  * Wcięcie niesie zmienna `--q-navmob-poziom`, a nie osobna klasa na poziom:
- * poziomów jest tyle, ile sklep ustawi, więc klasa per poziom kończy się listą
- * `--poziom-1`, `--poziom-2`, `--poziom-3`, którą trzeba dopisywać za każdym
- * razem, gdy silnik pozwoli zejść głębiej.
+ * poziomów jest tyle, ile sklep ustawi.
  *
  * Klasy: assets/css/components/navbar.css
  *}

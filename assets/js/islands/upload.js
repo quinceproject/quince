@@ -1,13 +1,13 @@
 /**
- * Quince — podpis pola wgrywania pliku (`.q-upload`).
+ * Quince: podpis pola wgrywania pliku (`.q-upload`).
  *
  * Ta sama logika co `wgrywanie()` w `buybox.js`, wyniesiona osobno: tamta
  * wyspa wiąże się tylko z panelem zakupu produktu (`.q-buy`), a `.q-upload`
- * ma teraz drugiego konsumenta — załącznik w formularzu kontaktowym — poza
- * kartą produktu.
+ * ma też drugiego konsumenta poza kartą produktu (załącznik w formularzu
+ * kontaktowym).
  *
  * Pole `input type=file` jest schowane, bo przeglądarka rysuje przy nim
- * własny przycisk z własnym napisem — nieostylowalny i nieprzetłumaczalny.
+ * własny przycisk z własnym napisem, nieostylowalny i nieprzetłumaczalny.
  * Skoro schowane, to ono nie pokaże nazwy pliku i musi zrobić to etykieta.
  */
 (function () {

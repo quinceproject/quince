@@ -1,17 +1,16 @@
 {**
- * Quince — zdjęcie w zajawce produktu
+ * Quince: zdjęcie w zajawce produktu
  *
  * Opieramy się na typach obrazu, które PrestaShop tworzy przy instalacji
  * (home_default, medium_default, large_default), a nie na własnych typach motywu.
- * Powód jest praktyczny: motyw ma działać zaraz po wgraniu, a dołożenie nowego
- * typu wymaga przegenerowania wszystkich miniatur w sklepie — przy kilku tysiącach
- * produktów to godziny pracy serwera i puste obrazki w międzyczasie.
+ * Motyw ma działać zaraz po wgraniu, a dołożenie nowego typu wymaga
+ * przegenerowania wszystkich miniatur w sklepie.
  *
  * Każdy rozmiar sprawdzamy przed użyciem: sprzedawca może usunąć albo przemianować
  * typ obrazu w Design → Image Settings i szablon nie ma prawa się wtedy wysypać.
  *
  * Proporcję kontenera trzyma token --q-pcard-media-ratio, liczony przez silnik
- * z ps_image_type — karty w rzędzie mają równą wysokość niezależnie od zdjęć.
+ * z ps_image_type, więc karty w rzędzie mają równą wysokość niezależnie od zdjęć.
  *
  * width i height na <img> są obowiązkowe: bez nich przeglądarka nie rezerwuje
  * miejsca i strona skacze w trakcie wczytywania.
@@ -57,8 +56,7 @@
         data-full-size-image-url="{if isset($cover.large_default.url)}{$cover.large_default.url}{else}{$cover.home_default.url}{/if}">
     </picture>
   {else}
-    {* Produkt bez zdjęcia — jeden z zadeklarowanych stanów brzegowych.
-       Zastępnik zajmuje dokładnie tyle samo miejsca, więc rząd kart się nie rozjeżdża. *}
+    {* Produkt bez zdjęcia. Zastępnik zajmuje dokładnie tyle samo miejsca, więc rząd kart się nie rozjeżdża. *}
     <img
       class="q-pcard__image"
       src="{$urls.no_picture_image.bySize.home_default.url}"

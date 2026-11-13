@@ -1,16 +1,16 @@
 /* ===================================================================
-   Quince — lista rozwijana
+   Quince: lista rozwijana
 
    Jedna lista dla wszystkiego, co się otwiera: wybór języka i waluty w sekcji
    górnej, select w formularzu, sortowanie na listingu, kraj dostawy,
    podpowiedzi wyszukiwarki.
 
-   Różni je wyłącznie przycisk, który je otwiera — sama lista wygląda wszędzie
+   Różni je wyłącznie przycisk, który je otwiera. Sama lista wygląda wszędzie
    tak samo i ma jeden zestaw tokenów, a nie jeden na komponent.
 
    Przyciski otwierające:
-     .q-picker__button — w sekcji górnej, bez ramki, barwy sekcji (picker.css)
-     .q-select__button — w formularzu, wygląda jak pole tekstowe (field.css)
+     .q-picker__button: w sekcji górnej, bez ramki, barwy sekcji (picker.css)
+     .q-select__button: w formularzu, wygląda jak pole tekstowe (field.css)
 
    Tokeny komponentu (--q-dropdown-*) definiuje tokens.css.
    =================================================================== */
@@ -23,7 +23,7 @@
         inset-inline-start: 0;
         z-index: 40;
 
-        /* Szerokość z treści — lista pokazująca kody walut nie ma powodu być
+        /* Szerokość z treści: lista pokazująca kody walut nie ma powodu być
            szersza od najdłuższego z nich. Odmiana --wide bierze szerokość
            przycisku, bo tam pozycje są zdaniami, nie skrótami. */
         min-inline-size: max-content;
@@ -34,8 +34,8 @@
         box-shadow: var(--q-dropdown-shadow);
 
         /* Bez odstępu wewnętrznego: pierwsza i ostatnia pozycja dotykają ramki.
-           Odstęp zostawiał przy zaokrąglonym rogu szparę, która czytała się jak
-           niedopasowanie. Przycinanie jest tu konieczne, nie kosmetyczne —
+           Odstęp zostawia przy zaokrąglonym rogu szparę, która czyta się jak
+           niedopasowanie. Przycinanie jest tu konieczne, nie kosmetyczne:
            inaczej prostokątne podświetlenie pozycji wystaje poza zaokrąglony róg. */
         overflow: hidden;
     }
@@ -59,7 +59,7 @@
 
     /* Lista wysunięta wprost z kontrolki, a nie wisząca pod nią.
        Kiedy lista należy do pola albo do przycisku z ramką, odstęp między nimi
-       czyta się jak dwa osobne prostokąty — a to jest jedna kontrolka w dwóch
+       czyta się jak dwa osobne prostokąty, a to jest jedna kontrolka w dwóch
        stanach. Zaokrąglenie od strony kontrolki znika, żeby krawędzie się zeszły.
 
        Ramka nachodzi o piksel na ramkę kontrolki: dwie linie stykające się
@@ -71,9 +71,9 @@
         border-start-end-radius: 0;
 
         /* Rozpięta od krawędzi do krawędzi kontrolki, z której wychodzi. Sama
-           treść bywa krótsza niż pole: przy sortowaniu lista schodziła do
-           szerokości najdłuższej opcji i kończyła się kilkanaście pikseli przed
-           prawą krawędzią pola, więc dwa stany tej samej kontrolki miały dwie
+           treść bywa krótsza niż pole: przy sortowaniu lista schodziłaby do
+           szerokości najdłuższej opcji i kończyła kilkanaście pikseli przed
+           prawą krawędzią pola, więc dwa stany tej samej kontrolki miałyby dwie
            różne szerokości. Dłuższa opcja nadal rozpycha listę poza tę
            szerokość, bo `min-inline-size: max-content` z reguły podstawowej
            wygrywa z szerokością wyliczoną z krawędzi. */
@@ -83,7 +83,7 @@
     /* Razem z `--end`: kontrolka stoi przy prawej krawędzi paska narzędzi
        (sortowanie), więc lista ma rosnąć w lewo, a nie w prawo poza ekran.
        `min-inline-size: max-content` z reguły podstawowej i tak przebija
-       wyliczoną szerokość przy długiej opcji — chodzi tu wyłącznie o to, od
+       wyliczoną szerokość przy długiej opcji. Chodzi tu wyłącznie o to, od
        której krawędzi kontrolki ten nadmiar rośnie. */
     .q-dropdown--attached.q-dropdown--end {
         inset-inline-start: auto;
@@ -96,8 +96,8 @@
         overscroll-behavior: contain;
     }
 
-    /* Pismo zwykłej wagi, nie średniej: waga miała mówić, że pozycja jest
-       klikalna — mówi to już kursor i podświetlenie, a wszystkie pozycje
+    /* Pismo zwykłej wagi, nie średniej. To, że pozycja jest klikalna, mówi
+       już kursor i podświetlenie, a wszystkie pozycje
        pogrubione naraz nie wyróżniają żadnej. Pogrubiona zostaje tylko bieżąca. */
     .q-dropdown__option {
         display: flex;
@@ -160,7 +160,7 @@
 
     /* --- panel z trzema strefami ---
        Odmiana dla konta: powitanie w barwie marki, pozycje, przyciski na
-       przygaszonym. Panel NIE ma jednej ramki dookoła — kreska biegnąca przez
+       przygaszonym. Panel NIE ma jednej ramki dookoła: kreska biegnąca przez
        strefę w barwie marki odcinałaby ją od przycisku, z którego panel wychodzi,
        a to ma być jeden kształt. Każda strefa nosi więc własną: górna w swojej
        barwie, czyli niewidoczną, reszta cichą kreską. */
@@ -208,7 +208,7 @@
         flex: 1;
     }
 
-    /* Nagłówek grupy w długiej liście — kraje w regionach, kategorie w działach. */
+    /* Nagłówek grupy w długiej liście: kraje w regionach, kategorie w działach. */
     .q-dropdown__group {
         padding-block: 6px;
         padding-inline: var(--q-dropdown-option-pad-inline);

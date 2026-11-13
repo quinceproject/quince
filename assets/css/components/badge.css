@@ -1,15 +1,15 @@
 /* ===================================================================
-   Quince — plakietki produktu
+   Quince: plakietki produktu
 
    Pięć rodzajów z mapy: rabat, nowość, bestseller, zestaw, wyprzedaż.
    Każdy ma parę tło + napis, liczoną przez silnik z gwarantowanym
-   kontrastem — plakietka nigdy nie wyjdzie nieczytelna, niezależnie od
+   kontrastem, więc plakietka nigdy nie wyjdzie nieczytelna, niezależnie od
    koloru marki i promocji.
 
    PrestaShop 9.2 rozszerzył stany produktu do sześciu: new, used,
    refurbished oraz nowe open_box, damaged, new_with_defects. Stan produktu
    to co innego niż plakietka handlowa, więc dostaje własny, neutralny
-   wariant — nie konkuruje o uwagę z rabatem.
+   wariant, który nie konkuruje o uwagę z rabatem.
    =================================================================== */
 
 @layer quince.components {
@@ -31,8 +31,8 @@
     }
 
     /* Plakietki na stronie produktu: wiersz w kolumnie obok zdjęcia, zawijany.
-       Na kafelku ta sama lista leży NA zdjęciu i ma własną klasę — patrz
-       `.q-pcard__badges` w product-card.css.
+       Na kafelku ta sama lista leży NA zdjęciu i ma własną klasę (patrz
+       `.q-pcard__badges` w product-card.css).
 
        Bez własnego odsunięcia: kolumna z plakietkami i kadr zdjęcia zaczynają
        się na tej samej wysokości, więc równają się same. */

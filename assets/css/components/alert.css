@@ -1,12 +1,12 @@
 /* ===================================================================
-   Quince — alert
+   Quince: alert
 
    Komunikat o wyniku działania: dodano do koszyka, kod rabatowy nieaktualny,
    zamówienie przyjęte, brak dostawy pod wskazany adres.
 
    Występuje w 32 szablonach motywu i modułów. Klasy `.alert` i `.alert-*`
    są stylowane obok naszych, bo szablony PrestaShopa i modułów przychodzą
-   z nazwami z Bootstrapa, którego nie wgrywamy — bez tego mapowania komunikat
+   z nazwami z Bootstrapa, którego nie wgrywamy. Bez tego mapowania komunikat
    z cudzego modułu byłby gołym tekstem.
 
    Kolor nie jest jedynym nośnikiem znaczenia: obok koloru stoi ikona i treść.
@@ -51,7 +51,7 @@
         block-size: 18px;
         flex: none;
 
-        /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku —
+        /* Wyrównanie do pierwszej linii tekstu, nie do środka bloku:
            przy komunikacie na trzy linie ikona przy środku wygląda jak zgubiona. */
         margin-block-start: 1px;
         color: var(--alert-icon);

@@ -1,8 +1,8 @@
 {**
- * Quince — siatka zajawek produktu.
+ * Quince: siatka zajawek produktu.
  *
  * Liczba kolumn pochodzi z ustawień sklepu (token --q-grid-columns), ale karta
- * nigdy nie schodzi poniżej 220 px — patrz .q-grid w theme.css. Dzięki temu ta
+ * nigdy nie schodzi poniżej 220 px (patrz .q-grid w theme.css). Dzięki temu ta
  * sama siatka obsługuje pełną szerokość i układ z kolumną filtrów.
  *
  * Między kafle wchodzą miejsca promocyjne. Sklep podaje numer RZĘDU, po którym

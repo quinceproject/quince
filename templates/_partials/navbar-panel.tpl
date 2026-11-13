@@ -1,9 +1,9 @@
 {**
- * Quince — rozwinięcie nawigacji
+ * Quince: rozwinięcie nawigacji
  *
  * Jeden materiał, trzy układy. Wywoływany z navbar.tpl:
- *   qn       — ustawienia nawigacji
- *   branches — gałęzie do pokazania
+ *   qn       ustawienia nawigacji
+ *   branches gałęzie do pokazania
  *
  * Klasy: assets/css/components/navbar.css
  *}
@@ -23,7 +23,7 @@
 
 {* ── kafelki ──
    Dla płaskiego katalogu: obrazek i nazwa zamiast listy, bo przy kilkunastu
-   kategoriach wybiera się wzrokiem, nie czytaniem. Jednopoziomowe z założenia —
+   kategoriach wybiera się wzrokiem, nie czytaniem. Jednopoziomowe z założenia:
    kafelek jest zajawką kategorii, a nie węzłem drzewa. *}
 {elseif $qn.panel == 'tiles'}
   <div class="{$qPanelClass}" data-q-nav-panel hidden>
@@ -102,11 +102,11 @@
 
           <div class="q-nav__subs" style="column-count:{$qn.columns}">
           {* Podkategoria z własnymi dziećmi jest nagłówkiem grupy i zbiera je pod
-             sobą. Bez dzieci jest zwykłą pozycją — nagłówek, pod którym nic nie
+             sobą. Bez dzieci jest zwykłą pozycją, bo nagłówek, pod którym nic nie
              stoi, wygląda jak napis, w który nie da się kliknąć. *}
           {foreach from=$branch.children item=child}
             {if $child.children}
-              {* Nagłówek i jego pozycje w jednym bloku — dzięki temu przeglądarka
+              {* Nagłówek i jego pozycje w jednym bloku, dzięki temu przeglądarka
                  nie przetnie grupy między kolumnami. *}
               <div class="q-nav__group-block">
                 <div class="q-nav__group-title">

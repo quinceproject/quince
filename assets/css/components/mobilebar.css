@@ -39,7 +39,7 @@
         border-block-start: 1px solid var(--q-border);
         box-shadow: var(--q-shadow-lg);
 
-        /* Schowany pasek NIE ZNIKA całkiem — zostaje samo koło z uchwytem,
+        /* Schowany pasek NIE ZNIKA całkiem: zostaje samo koło z uchwytem,
            wystające ponad dolną krawędź. Dzięki temu rozwinięcie panelu jest
            w zasięgu kciuka na każdej wysokości strony, także wtedy, gdy pasek
            nie ma czego pokazywać, bo cenę widać obok. */
@@ -258,11 +258,11 @@
 
         /* Zwinięta warstwa nie znika za dolną krawędzią ekranu, tylko chowa się
            w pasek: jej górna krawędź zatrzymuje się tam, gdzie zaczyna się
-           widoczna część paska, a jej koło ląduje na kole paska. Zjeżdżając
-           za ekran, mijała po drodze pasek i odsłaniała go na końcu, więc
-           wyglądało to jak dwa różne panele, a nie jeden zwijany.
+           widoczna część paska, a jej koło ląduje na kole paska. Warstwa
+           zjeżdżająca za ekran mijałaby po drodze pasek i odsłaniała go na
+           końcu, więc wyglądałoby to jak dwa różne panele, a nie jeden zwijany.
 
-           Ile paska widać — cały albo samo koło — mierzy skrypt w chwili
+           Ile paska widać (cały albo samo koło), mierzy skrypt w chwili
            otwierania i zamykania. Ta sama wartość jest punktem startu przy
            rozwijaniu, więc warstwa wyrasta z paska. */
         translate: 0 calc(100% - var(--q-sheet-start, 0px));
@@ -342,8 +342,8 @@
     }
 
     /* Nazwa w jednym wierszu, reszta wielokropkiem. Nagłówek warstwy mówi tylko,
-       czego dotyczy panel — pełną nazwę klient ma na stronie pod spodem, a dwa
-       wiersze nazwy zabierały miejsce cenie i przyciskowi na niskim ekranie. */
+       czego dotyczy panel. Pełną nazwę klient ma na stronie pod spodem, a dwa
+       wiersze nazwy zabierają miejsce cenie i przyciskowi na niskim ekranie. */
     .q-sheet__title {
         flex: 1;
         min-inline-size: 0;
@@ -388,7 +388,7 @@
 
     /* Ramka istnieje tylko po to, żeby domknąć pas. Bez pasa nie ma czego
        domykać: blok cen zostaje zwykłym blokiem tekstu, bez obrysu i wcięcia.
-       Warunkiem jest sam pas, a nie obniżka — promocja bez terminu końca też
+       Warunkiem jest sam pas, a nie obniżka: promocja bez terminu końca też
        go nie ma. */
     [data-q-sheet] .q-buy:has(.q-buy__pas) .q-buy__slot--price {
         position: relative;

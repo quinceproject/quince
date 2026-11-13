@@ -1,8 +1,8 @@
 /**
- * Quince — pole wyboru z własną listą.
+ * Quince: pole wyboru z własną listą.
  *
  * Nakładka na listę pozycji: otwieranie, wybór, klawiatura. Sama nie decyduje,
- * co się dzieje po wyborze — pozycje są odnośnikami albo przyciskami i robią
+ * co się dzieje po wyborze: pozycje są odnośnikami albo przyciskami i robią
  * swoje. Dzięki temu bez JavaScriptu wszystko dalej działa, tylko lista stoi
  * rozwinięta.
  *
@@ -88,7 +88,7 @@
             return;
         }
 
-        /* Kliknięcie poza polem zamyka — najczęstszy odruch wyjścia. */
+        /* Kliknięcie poza polem zamyka, to najczęstszy odruch wyjścia. */
         document.querySelectorAll('[data-q-select]').forEach(function (p) {
             if (!p.contains(zdarzenie.target)) {
                 zamknij(p, false);

@@ -4,11 +4,10 @@
  *}
 {extends file='customer/page.tpl'}
 
-{* Własny nagłówek zamiast domyślnego `page-title-section.tpl` — ten sam
-   powód co w pozostałych podstronach konta: link powrotu NAD tytułem.
-   Ta strona nie ma własnej makiety — układ bierze dokładnie ten sam
-   wzorzec, co reszta konta (nagłówek, karta, `.grid-table` już ostylowany
-   przy podglądzie zamówienia). *}
+{* Własny nagłówek zamiast domyślnego `page-title-section.tpl`, jak
+   w pozostałych podstronach konta: link powrotu NAD tytułem. Układ jak
+   w reszcie konta (nagłówek, karta, `.grid-table` ostylowany przy
+   podglądzie zamówienia). *}
 {block name='page_header_container'}
   <div class="q-order-header">
     <a class="q-order-back" href="{$urls.pages.my_account}">

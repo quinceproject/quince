@@ -20,14 +20,14 @@
        karty, raz na szerokość telefonu.
 
        Kontener siedzi na opakowaniu, nie na znacznikach modułu, bo element nie
-       może pytać o własną szerokość — kwerenda działa wyłącznie na potomkach. */
+       może pytać o własną szerokość: kwerenda działa wyłącznie na potomkach. */
     .q-pdp__reas {
         container-type: inline-size;
         container-name: trust;
     }
 
     /* Skórę nosi sam pas, nie strefa, w której stoi. Gdyby tło siedziało na
-       opakowaniu strefy, dostałby je też każdy hook wpięty pod pasem — a to ma
+       opakowaniu strefy, dostałby je też każdy hook wpięty pod pasem, a to ma
        być osobna treść, nie dalszy ciąg tej karty. */
     .blockreassurance--product {
         display: grid;
@@ -79,7 +79,7 @@
     }
 
     /* Barwy samej ikony tu nie ma. Moduł wpisuje ją w atrybuty `fill` swoich
-       ścieżek i ma na nią własne ustawienie (`PSR_ICON_COLOR`) — tam się ją
+       ścieżek i ma na nią własne ustawienie (`PSR_ICON_COLOR`). Tam się ją
        zmienia, nie nadpisuje stąd. */
 
     .blockreassurance--product .reassurance__content {
@@ -134,8 +134,7 @@
         }
     }
 
-    /* Pas pod podsumowaniem koszyka. Makieta koszyka nie przewidywała
-       opisu przy pozycji, tylko ikonę i nagłówek — moduł daje też opis, więc
+    /* Pas pod podsumowaniem koszyka. Moduł daje przy pozycji także opis, więc
        pas przejmuje wygląd pasa ze strony produktu (ikona, tytuł, opis).
        Kolumna boczna koszyka jest wąska jak telefon, więc zostaje tu zawsze
        układ jednokolumnowy, bez progu `@container` z wariantu produktowego. */

@@ -1,10 +1,9 @@
 /* ===================================================================
-   Quince — strony CMS i statyczne (404, mapa strony, kontakt)
+   Quince: strony CMS i statyczne (404, mapa strony, kontakt)
 
-   W panelu grupowane razem jako „Strony CMS / Statyczne” — stąd jeden
-   arkusz. Podgląd i decyzja dla zajawki strony CMS:
-   makiety zajawki strony CMS (wariant B). Strona CMS nie ma
-   pola na zdjęcie ani na ikonę — stąd zajawka niesie wyłącznie typografię,
+   W panelu grupowane razem jako „Strony CMS / Statyczne”, stąd jeden
+   arkusz. Zajawka strony CMS: makiety zajawki strony CMS (wariant B).
+   Strona CMS nie ma pola na zdjęcie ani na ikonę, więc zajawka niesie wyłącznie typografię,
    bez karty, bez ramki, bez tła.
    =================================================================== */
 
@@ -13,7 +12,7 @@
     /* Ten sam problem i to samo lekarstwo co `.q-account__crumbs`
        w `customer/page.tpl`: goły `page.tpl` nie daje okruszkom żadnego
        górnego odstępu, bo na innych stronach dostają go przez wspólny
-       kontener z resztą treści. Własna klasa, nie `.q-account__crumbs` —
+       kontener z resztą treści. Własna klasa, nie `.q-account__crumbs`:
        ta strona nie wczytuje `account.css`, więc tamta reguła by tu
        nie zadziałała. */
     .q-cms-crumbs {
@@ -28,11 +27,11 @@
     }
 
     /* W karcie kontaktu i w formularzu nagłówek jest pierwszym elementem
-       pojemnika, który już ma własny padding — odstęp wyżej dokładał się
-       do niego i robił dziurę pod krawędzią karty. Tylko tutaj, nie wszędzie:
+       pojemnika, który już ma własny padding. Odstęp wyżej dokłada się
+       do niego i robi dziurę pod krawędzią karty. Tylko tutaj, nie wszędzie:
        na kategorii CMS ten sam nagłówek jest pierwszym DZIECKIEM `#content`,
        ale ma się odsunąć od tytułu strony, który stoi w INNEJ, wcześniejszej
-       sekcji — `:first-child` by tego nie odróżnił. */
+       sekcji, a `:first-child` by tego nie odróżnił. */
     .ps-contactinfo .q-section-title,
     .contact-form .q-section-title {
         margin-block-start: 0;
@@ -40,7 +39,7 @@
 
     /* Ten sam zabieg dla treści pojedynczej strony: `.q-prose` sama nie
        odsuwa się od góry (pierwszy element w treści jest bez górnego
-       marginesu — patrz `prose.css`), więc odstęp od tytułu strony niesie
+       marginesu, patrz `prose.css`), więc odstęp od tytułu strony niesie
        ten pojemnik. */
     .q-cms-content {
         margin-block-start: var(--q-space-xl);
@@ -84,7 +83,7 @@
         color: var(--q-text-strong);
     }
 
-    /* Tytuł się tylko rozjaśnia pod kursorem — ta sama reguła co nazwa
+    /* Tytuł się tylko rozjaśnia pod kursorem. Ta sama reguła co nazwa
        produktu na zajawce (`.q-pcard:hover .q-pcard__name`), nie barwa
        marki: nagłówek w zajawce jest tylko jeden i nie musi przedstawiać
        się jako odnośnik. */
@@ -102,8 +101,8 @@
     /* --- podkategorie CMS: karta, sam tytuł ---
        Odróżnia „wejście głębiej" (podkategoria) od „wejście na treść"
        (strona, `.q-cms-list` wyżej): karta zamiast gołego tekstu, ramka
-       na hover bierze barwę marki — ten sam mechanizm co karta produktu
-       (`.q-pcard:hover`). Liczba kolumn ta sama, co w siatce produktów
+       na hover bierze barwę marki (ten sam mechanizm co karta produktu
+       `.q-pcard:hover`). Liczba kolumn ta sama, co w siatce produktów
        (`--q-listing-cols` z ustawień sklepu), żeby kafelek miał tę samą
        szerokość, niezależnie od tego, gdzie akurat stoi. */
     .q-cms-cards {
@@ -150,18 +149,17 @@
 
     /* --- 404 / 410: strona nie znaleziona ---
        Makieta: prototyp strony 404. `.q-listing__empty` daje już karkas
-       (środek, odstępy, wyciszony kolor) — tu dochodzi tylko wielka liczba
+       (środek, odstępy, wyciszony kolor), tu dochodzi tylko wielka liczba
        i rząd dwóch przycisków, których tamten komponent nie przewiduje. */
     .q-cms-notfound-code {
         margin: 0;
         /* Okruszki na tej stronie są celowo wyłączone (rdzeń), więc nic nie
-           niesie odstępu od paska nawigacji — bez tego "404" stało tuż
-           pod nim. */
+           niesie odstępu od paska nawigacji. Ten margines go daje. */
         margin-block-start: var(--q-space-xl);
         text-align: center;
         font-family: var(--q-font-heading);
         font-size: 6rem;
-        /* Makieta: 800. Skala tokenów silnika kończy się na 700 (--q-weight-bold) —
+        /* Makieta: 800. Skala tokenów silnika kończy się na 700 (--q-weight-bold),
            to najmocniejszy dostępny stopień. */
         font-weight: var(--q-weight-bold);
         line-height: 1;
@@ -188,8 +186,8 @@
     }
 
     /* Przycisk zakresu (`.q-search__scope`) dostaje od JS sztywne
-       `min-width` dopasowane do najdłuższej opcji — w szerokim pasku
-       nagłówka nie przeszkadza, ale w tym wąskim polu wypychał całość poza
+       `min-width` dopasowane do najdłuższej opcji. W szerokim pasku
+       nagłówka nie przeszkadza, ale w tym wąskim polu wypycha całość poza
        ekran na telefonie. Zawężenie tylko tutaj, komponent w nagłówku
        zostaje nietknięty. */
     .q-cms-notfound-search .q-search__scope {
@@ -198,8 +196,8 @@
 
     /* --- kontakt ---
        `.row`/`#left-column`/`#center-column` to ambient znaczniki layoutu
-       rdzenia (`layouts/layout-left-column.tpl`) — Bootstrapa nie wgrywamy,
-       więc bez tej reguły stały jedna pod drugą, na pełną szerokość.
+       rdzenia (`layouts/layout-left-column.tpl`). Bootstrapa nie wgrywamy,
+       więc bez tej reguły stoją jedna pod drugą, na pełną szerokość.
        Proporcja 1/3–2/3 ta sama, co `.col-lg-3`/`.col-lg-9` w znacznikach. */
     .page-contact .row {
         display: grid;
@@ -216,8 +214,8 @@
     }
 
     /* `.q-account-section` niesie cień i `overflow:hidden` (account.css),
-       ale kontakt tego arkusza nie wczytuje — ten sam powód co `.q-cms-crumbs`
-       wyżej. Klasa w znaczniku zostaje, cień dokładamy tutaj. */
+       ale kontakt tego arkusza nie wczytuje (ten sam powód co `.q-cms-crumbs`
+       wyżej). Klasa w znaczniku zostaje, cień dokładamy tutaj. */
     .ps-contactinfo,
     .contact-form {
         box-shadow: var(--q-shadow-sm);
@@ -232,7 +230,7 @@
     }
 
     /* Barwa marki, ten sam token co ikona nagłówka sekcji
-       (`.q-section-title__icon` w section-title.css) — ikona jako znak
+       (`.q-section-title__icon` w section-title.css): ikona jako znak
        pozycji, nie wyciszony szczegół. */
     .ps-contactinfo__icon {
         flex: none;
@@ -262,11 +260,10 @@
        Makieta: prototyp mapy strony. Ten sam szkielet „nagłówek + lista
        linków" co w panelu kategorii (`.q-nav__group-title`/`.q-nav__sub`,
        navbar.css) i w kolumnach stopki (`.q-footer__title`/`.q-footer__link`,
-       footer.css) — reset listy, blokowy link, kolor na hover z tych samych
+       footer.css): reset listy, blokowy link, kolor na hover z tych samych
        tokenów. Żadne z dwóch nie pasuje wprost (nav bez podkreślenia i w
-       ciemnym panelu, stopka uppercase na ciemnym tle), więc trzecia,
-       osobna wersja dla jasnej strony treści — tak samo, jak nav i stopka
-       mają swoje osobne. */
+       ciemnym panelu, stopka uppercase na ciemnym tle), więc to osobna
+       wersja dla jasnej strony treści. */
     .q-sitemap {
         display: grid;
         grid-template-columns: repeat(4, minmax(0, 1fr));

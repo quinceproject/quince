@@ -37,7 +37,7 @@
     </div>
   </header>
 
-  {* Napis przy niezaznaczonej zgodzie bierzemy z rdzenia — ten sam, którego
+  {* Napis przy niezaznaczonej zgodzie bierzemy z rdzenia. To ten sam, którego
      PrestaShop używa przy brakującym polu wymaganym po stronie serwera, więc
      klient widzi to samo zdanie niezależnie od tego, kto sprawdził formularz.
      Wisi na całej stronie kasy, nie na kolumnie formularza: zgoda wędruje do
@@ -87,20 +87,18 @@
         {/block}
       </div>
 
-      {* Kolumna zamówienia z prototypu kasy. Stopka z przyciskiem
-         zapłaty stoi POZA zwijanym ciałem i poza krokiem: klient przez cały
-         czas widzi, czym zakup się skończy.
+      {* Kolumna zamówienia. Stopka z przyciskiem zapłaty stoi POZA zwijanym
+         ciałem i poza krokiem: klient przez cały czas widzi, czym zakup się
+         skończy.
 
-         Prawdziwy przycisk składający zamówienie zostaje w kroku płatności
-         — razem z nim idą pola wybranej metody i wyjęcie go stamtąd zrywa
+         Prawdziwy przycisk składający zamówienie zostaje w kroku płatności:
+         razem z nim idą pola wybranej metody i wyjęcie go stamtąd zrywa
          składanie zamówienia.
 
-         Klauzula „Administratorem Twoich danych jest..." pod przyciskiem,
-         obecna w prototypie, tutaj NIE WYSTĘPUJE: informacja o przetwarzaniu
-         danych stoi w kroku 1, przy zakładaniu konta — tam musi być, bo
-         zgoda RODO jest wymagana na tym etapie. Ta sama klauzula wraca
-         dopiero w checkoucie jednostronicowym (OPC), który nie ma osobnego
-         kroku 1 i potrzebuje jej właśnie w tym miejscu. *}
+         Klauzuli „Administratorem Twoich danych jest..." tu nie ma: informacja
+         o przetwarzaniu danych stoi w kroku 1, przy zakładaniu konta, bo tam
+         wymagana jest zgoda RODO. Pod przyciskiem stoi tylko w checkoucie
+         jednostronicowym (OPC), który nie ma osobnego kroku 1. *}
       <aside class="q-checkout__side" aria-label="{l s='Your order' d='Shop.Theme.Checkout'}">
         <div class="q-ordersum q-ordersum--open" data-q-sum>
           {block name='cart_summary'}
@@ -114,7 +112,7 @@
 
           <div class="q-ordersum__foot">
             {* Miejsce na zgodę i prawdziwy przycisk kończący zakup. Renderuje je
-               krok płatności — tylko on zna wybraną metodę i listę zgód — a wyspa
+               krok płatności (tylko on zna wybraną metodę i listę zgód), a wyspa
                `checkout-summary` przenosi je tutaj, do kwoty.
 
                Dopóki klient tam nie dojdzie, w DOM-ie nie ma czego przenieść:
@@ -125,7 +123,7 @@
             <div data-q-pay-slot></div>
 
             {* OPC nie ma kroku płatności, więc `$qPlatnosc` nigdy nie bywa
-               prawdziwe — bez dodatkowego warunku ten podgląd stałby tam
+               prawdziwe. Bez dodatkowego warunku ten podgląd stałby tam
                już ZAWSZE, obok prawdziwej treści, którą OPC renderuje od
                razu (nie dopiero w kroku 4). `$checkout_steps` zasila pasek
                kroków kawałek wyżej w tym samym pliku: w OPC jest pusty,
@@ -152,7 +150,7 @@
 
   {* Zapis o ochronie reCAPTCHA. Nie stoi przy zgodach w kroku 1: to nie jest
      zgoda, tylko informacja o zabezpieczeniu formularza, więc żyje poza
-     obszarem kroków, nad stopką — widoczna niezależnie od tego, który krok
+     obszarem kroków, nad stopką, widoczna niezależnie od tego, który krok
      jest akurat rozwinięty. Pola strażnika (token, pułapka) zostają tam,
      gdzie faktycznie chronią zgłoszenie: w formularzu kroku 1
      (`checkout/_partials/customer-form.tpl`). *}
@@ -160,12 +158,10 @@
     {hook h='displayQuinceFormNotice' form_id='checkout'}
   </div>
 
-  {* Sam dolny pasek prawdziwej stopki sklepu, nie cała stopka — kasa nie ma
-     po co pokazywać kolumn z kategoriami czy newsletterem. Klasy i dane te
-     same, co w `_partials/footer.tpl` (`q-footer__bar*`, `$qf.barLinks`,
+  {* Sam dolny pasek stopki sklepu, bez kolumn. Klasy i dane te same, co
+     w `_partials/footer.tpl` (`q-footer__bar*`, `$qf.barLinks`,
      `$qf.copyright`, `$qf.payments`): link do regulaminu, akceptowane
-     płatności i prawa autorskie ustawia się raz, w panelu silnika, nie
-     osobnym, wymyślonym tekstem kasy. *}
+     płatności i prawa autorskie ustawia się raz, w panelu silnika. *}
   {assign var=qf value=$modules.quince_engine.footer}
   <footer class="q-checkout-foot q-footer__bar">
     <div class="q-container q-footer__bar-inner">
@@ -186,9 +182,8 @@
   </footer>
 
   {* `checkout/_partials/modal-terms.tpl` (rdzeń) celowo pominięty: to okno
-     Bootstrapa, chowane jego własnym CSS-em, którego Quince nie ładuje —
-     bez tamtego arkusza zostawało widoczne jako goły przycisk „Close" pod
-     stopką. Nic go w naszym kodzie nie wywołuje: link do regulaminu już
-     prowadzi wprost na stronę CMS (patrz `conditions_to_approve`), więc
-     modala w ogóle nie potrzeba. *}
+     Bootstrapa, chowane jego własnym CSS-em, którego Quince nie ładuje, więc
+     zostaje widoczne jako goły przycisk „Close" pod stopką. Link do
+     regulaminu prowadzi wprost na stronę CMS (patrz `conditions_to_approve`),
+     więc modal nie jest potrzebny. *}
 {/block}

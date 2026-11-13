@@ -3,7 +3,7 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 {if $errors|count}
-  {* Błąd pola stoi pod tym polem, jednym zdaniem — tak jak w prototypie.
+  {* Błąd pola stoi pod tym polem, jednym zdaniem.
      Rdzeń rysuje tu ramkę alertu z przyciskiem zamknięcia; przy polu, które
      ma już czerwoną ramkę, drugie pudełko powtarza to samo i rozbija rząd. *}
   {block name='form_errors'}

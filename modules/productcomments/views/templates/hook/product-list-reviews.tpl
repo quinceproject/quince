@@ -1,7 +1,7 @@
 {**
- * Quince — ocena na zajawce produktu.
+ * Quince: ocena na zajawce produktu.
  *
- * Gwiazdki i ocena liczbowa z liczbą opinii w nawiasie, tak jak w makiecie:
+ * Gwiazdki i ocena liczbowa z liczbą opinii w nawiasie:
  * „4,8 (47)".
  *
  * Wartości przychodzą GOTOWE z silnika, policzone jednym zapytaniem dla całej

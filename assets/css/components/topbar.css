@@ -1,12 +1,12 @@
 /* ===================================================================
-   Quince — topbar
+   Quince: topbar
 
    Pas informacyjny sklepu i opcjonalny pasek komunikatu nad nim.
    Projekt: widok paska górnego.
 
    Klasy widoczności (q-hide-desktop, q-hide-phone) wypisuje silnik na podstawie
    ustawień sprzedawcy. Element niewidoczny na danym ekranie jest ukrywany, a nie
-   usuwany z dokumentu — dzięki temu obrót telefonu nie wymaga przeładowania strony.
+   usuwany z dokumentu, dzięki temu obrót telefonu nie wymaga przeładowania strony.
    =================================================================== */
 
 @layer quince.components {
@@ -35,12 +35,12 @@
         inline-size: 100%;
         max-inline-size: var(--q-container);
         margin-inline: auto;
-        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
-           ten sam wzorzec co `.q-container` w theme.css. */
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
+           Ten sam wzorzec co `.q-container` w theme.css. */
         padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
 
         /* Pas jest niski, ale wszystko, co się w nim klika, dostaje pełne 44 px
-           przez wewnętrzny odstęp — próg dotykowy wymagany przez WCAG. */
+           przez wewnętrzny odstęp (próg dotykowy wymagany przez WCAG). */
         min-block-size: var(--q-topbar-height);
     }
 
@@ -91,7 +91,7 @@
         font-weight: var(--q-weight-semibold);
     }
 
-    /* Treść wyśrodkowana niezależnie od krzyżyka — ten jest pozycjonowany
+    /* Treść wyśrodkowana niezależnie od krzyżyka: ten jest pozycjonowany
        bezwzględnie, więc włączenie zamykania nie przesuwa napisu w lewo. */
     .q-promobar__inner {
         position: relative;
@@ -103,8 +103,8 @@
         inline-size: 100%;
         max-inline-size: var(--q-container);
         margin-inline: auto;
-        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
-           ten sam wzorzec co `.q-container` w theme.css. */
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
+           Ten sam wzorzec co `.q-container` w theme.css. */
         padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
         min-block-size: var(--q-promobar-height);
     }
@@ -119,7 +119,7 @@
     }
 
     /* Jedyne miejsce w motywie, gdzie odnośnik jest podkreślony. Pas to jednolita
-       plama koloru — zmiana barwy pod kursorem nic tu nie da, a bez podkreślenia
+       plama koloru: zmiana barwy pod kursorem nic tu nie da, a bez podkreślenia
        nic nie sygnalizuje, że da się kliknąć. */
     a.q-promobar__text {
         color: inherit;
@@ -165,17 +165,16 @@
         }
     }
 
-    /* Na tablecie godziny pracy ustępują miejsca — najmniej pilna informacja,
-       bo klient i tak dzwoni albo pisze. To decyzja projektowa, nie ustawienie
-       sklepu: przy 768 px po prostu nie ma na nie miejsca. */
+    /* Na tablecie godziny pracy ustępują miejsca: przy 768 px nie ma na nie
+       miejsca. Reguła stała, nie ustawienie sklepu. */
     @media (min-width: 768px) and (max-width: 991px) {
         .q-topbar__item--hours { display: none; }
     }
 }
 
 /* Klasy ukrywające wypisuje silnik na podstawie ustawień sprzedawcy. Siedzą
-   w warstwie utilities, bo muszą przebić `display` ustawiony przez komponent —
-   warstwa załatwia to bez `!important`, wystarczy jej pozycja w kaskadzie. */
+   w warstwie utilities, bo muszą przebić `display` ustawiony przez komponent.
+   Warstwa załatwia to bez `!important`, wystarczy jej pozycja w kaskadzie. */
 @layer quince.utilities {
     @media (max-width: 767px) {
         .q-hide-phone { display: none; }

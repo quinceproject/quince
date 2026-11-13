@@ -1,13 +1,12 @@
 {**
- * Quince — panel zawężeń modułu filtrów.
+ * Quince: panel zawężeń modułu filtrów.
  *
  * Ten sam wygląd co `catalog/_partials/facets.tpl` w motywie. Dwa pliki, bo
  * zawężenia renderuje albo rdzeń, albo ten moduł, zależnie od tego, który
- * przejął wyszukiwanie — a sklep ma widzieć jedno i to samo.
+ * przejął wyszukiwanie.
  *
- * Grupa to `<details>`: zwijanie ma działać bez JavaScriptu, a znacznik
- * przeglądarki zna sam. Harmonijka Bootstrapa, którą to zastąpiło, wymagała
- * jego skryptu i klas, których w tym motywie nie ma.
+ * Grupa to `<details>`: zwijanie ma działać bez JavaScriptu. Harmonijka
+ * Bootstrapa wymaga jego skryptu i klas, których w tym motywie nie ma.
  *
  * KONTRAKT ZE SKRYPTEM LISTINGU, którego nie wolno ruszyć:
  *   `#search-filters`, `data-search-url` na polu wyboru, `js-search-link`
@@ -134,14 +133,14 @@
 
             {elseif $facet.widgetType == 'slider'}
               {block name='facet_item_slider'}
-                {* Dwa pola liczbowe i myślnik między nimi, tak jak w makiecie
-                   — nie suwak. Suwak modułu rysuje jQuery UI, którego ten motyw
-                   nie ładuje, więc w kolumnie zostawała pusta grupa „Cena".
+                {* Dwa pola liczbowe i myślnik między nimi, nie suwak. Suwak
+                   modułu rysuje jQuery UI, którego ten motyw nie ładuje, więc
+                   w kolumnie zostałaby pusta grupa „Cena".
                    Pola działają też bez myszy i bez JavaScriptu: klient wpisuje
                    kwotę z klawiatury, a zakres czyta wprost z liczb.
 
                    Atrybuty `data-slider-*` zostają: po nich skrypt listingu
-                   składa adres zawężenia, dokładnie tak jak robił to suwak. *}
+                   składa adres zawężenia, tak samo jak dla suwaka modułu. *}
                 {foreach from=$facet.filters item="filter"}
                   <div class="q-range" data-q-range
                        data-slider-min="{$facet.properties.min}"

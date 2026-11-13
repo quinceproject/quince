@@ -1,15 +1,14 @@
 {**
- * Quince — wybrane zawężenia jako pigułki.
+ * Quince: wybrane zawężenia jako pigułki.
  *
  * Klient widzi, co odciął, i zdejmuje to jednym kliknięciem, bez wracania do
  * panelu filtrów.
  *
  * Kontrakt z rdzeniem: `js-active-search-filters` na pojemniku i `js-search-link`
- * na odnośnikach — po nich podpina się zawężanie bez przeładowania strony.
+ * na odnośnikach. Po nich podpina się zawężanie bez przeładowania strony.
  *
  * Czyszczenie wszystkiego stoi TUTAJ, a nie w panelu filtrów: tu widać, co się
- * kasuje. Panel ma ten przycisk ukryty, bo dwa wejścia do jednej czynności,
- * w dwóch stylach, to nie wybór, tylko niezdecydowanie.
+ * kasuje. Panel ma ten przycisk ukryty.
  *
  * Klasy: components/listing.css
  *}
@@ -20,9 +19,9 @@
 
   {foreach from=$activeFilters item="filter"}
     {block name='active_filters_item'}
-        {* Sama wartość, bez nazwy grupy: w makiecie pigułka to „JALTEST", a nie
+        {* Sama wartość, bez nazwy grupy: pigułka to „JALTEST", a nie
            „Marka: JALTEST". Nazwa grupy stoi przy filtrze, z którego pigułka
-           powstała, a tu liczy się zwięzłość — wierszy bywa kilka. *}
+           powstała. *}
       <span class="q-chip">
         {$filter.label}
 

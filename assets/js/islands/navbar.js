@@ -1,17 +1,17 @@
 /**
- * Quince — pas nawigacji
+ * Quince: pas nawigacji
  *
  * Trzy zachowania, po jednym na każdy sposób pokazania katalogu:
  *
- * 1. Rozwinięcie panelu — kliknięciem, nie najechaniem. Panel katalogu zajmuje
+ * 1. Rozwinięcie panelu kliknięciem, nie najechaniem. Panel katalogu zajmuje
  *    pół ekranu i otwierany kursorem wyskakuje ludziom, którzy tylko przesuwali
  *    myszą nad paskiem.
  *
- * 2. Wybór działu w układzie kolumnowym — najechanie przełącza prawą stronę.
+ * 2. Wybór działu w układzie kolumnowym: najechanie przełącza prawą stronę.
  *    Tu najechanie jest w porządku: panel już jest otwarty, więc nic nie
  *    wyskakuje, a klient przegląda działy bez klikania w każdy.
  *
- * 3. Kaskada — kolejne poziomy wysuwają się w prawo. Zamknięcie jest opóźnione,
+ * 3. Kaskada: kolejne poziomy wysuwają się w prawo. Zamknięcie jest opóźnione,
  *    bo przejście kursorem po skosie do wysuniętej kolumny prowadzi nad sąsiednimi
  *    pozycjami; bez zwłoki kaskada zamyka się w drodze do celu i jest nie do obsługi.
  *
@@ -172,7 +172,7 @@
      *
      * Rozstrzyga pomiar, a nie szerokość ekranu: liczba i długość pozycji zależą
      * od sklepu i od języka, więc żaden stały próg nie trafia. Za dużo pozycji
-     * rozpychało całą stronę w bok na tablecie.
+     * rozpycha całą stronę w bok na tablecie.
      *
      * Pomiar zawsze na PRAWDZIWYM pasie: zdejmujemy klasę, czytamy, czy treść
      * wystaje, i od razu stawiamy klasę z powrotem. Wszystko w jednym kroku,
@@ -226,7 +226,7 @@
      *
      * Nagłówek zostaje przy górnej krawędzi, a pas menu odjeżdża razem ze stroną
      * i zabiera ze sobą jedyne dojście do katalogu. Przejmuje je przycisk w
-     * nagłówku — i otwiera DOKŁADNIE TEN SAM panel, bo drugi w kodzie strony
+     * nagłówku i otwiera DOKŁADNIE TEN SAM panel, bo drugi w kodzie strony
      * podwajałby cały katalog.
      *
      * Rozpoznanie stanu idzie obserwatorem przecięcia, nie nasłuchem przewijania:
@@ -279,7 +279,7 @@
 
         przycisk.addEventListener('click', function (zdarzenie) {
             // Bez zatrzymania kliknięcie doszłoby do dokumentu, a tam pas menu
-            // zamyka panel przy każdym kliknięciu poza sobą — przycisk stoi poza.
+            // zamyka panel przy każdym kliknięciu poza sobą, a przycisk stoi poza.
             zdarzenie.preventDefault();
             zdarzenie.stopPropagation();
 
@@ -317,7 +317,7 @@
         });
 
         /* Linia odcięcia zależy od wysokości nagłówka, a ta zmienia się razem
-           z ustawieniem znaku firmowego i z progiem szerokości ekranu — dlatego
+           z ustawieniem znaku firmowego i z progiem szerokości ekranu. Dlatego
            obserwator jest przestawiany, a nie zakładany raz na zawsze. */
         var obserwator = null;
 
@@ -338,7 +338,7 @@
                 naglowek.classList.toggle('is-stuck', przyklejony);
 
                 // Przejście w każdą stronę zamyka katalog: przycisk, spod którego
-                // panel wyszedł, właśnie zniknął z ekranu — panel zostałby otwarty
+                // panel wyszedł, właśnie zniknął z ekranu. Panel zostałby otwarty
                 // bez widocznego powodu, a przy powrocie zaczepiony w złym miejscu.
                 zamknij();
             }, { rootMargin: '-' + wysokosc + 'px 0px 0px 0px', threshold: 0 });

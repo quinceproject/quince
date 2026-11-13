@@ -145,7 +145,7 @@
             }
 
             // Pusta lista nie pokazuje się wcale. Nagłówek „Lista ofertowa (0)"
-            // nad zdaniem o pustej liście zajmował miejsce w oknie i mówił
+            // nad zdaniem o pustej liście zajmowałby miejsce w oknie i mówił
             // o czymś, czego klient jeszcze nie zaczął robić.
             if (blokListy) {
                 blokListy.hidden = ile === 0;
@@ -154,9 +154,6 @@
 
         /**
          * Widok po wysłaniu: formularz znika, zostaje potwierdzenie z numerem.
-         *
-         * Pasek nad przyciskiem zostawiał klienta w formularzu, który przed chwilą
-         * wysłał, i kazał mu się domyślać, czy coś jeszcze ma zrobić.
          */
         function pokazPotwierdzenie(adresEmail, numer, adresPliku) {
             var adresat = okno.querySelector('[data-q-offer-done-email]');
@@ -224,10 +221,10 @@
 
         okno.addEventListener('click', function (zdarzenie) {
             // Tło to samo okno: `dialog` maluje je własnym pseudoelementem, więc
-            // kliknięcie w tło ma za cel `dialog`, a kliknięcie w treść — element
+            // kliknięcie w tło ma za cel `dialog`, a kliknięcie w treść element
             // w środku. Sam pomiar współrzędnych nie wystarczy: klawisz Enter na
             // przycisku wysyła kliknięcie w punkcie (0, 0), czyli „poza oknem",
-            // i zamykał szufladę osobie obsługującej sklep klawiaturą.
+            // i zamknąłby szufladę osobie obsługującej sklep klawiaturą.
             if (zdarzenie.target !== okno) {
                 return;
             }

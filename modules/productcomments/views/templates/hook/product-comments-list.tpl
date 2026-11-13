@@ -1,5 +1,5 @@
 {**
- * Lista opinii modułu — celowo pusta.
+ * Lista opinii modułu: celowo pusta.
  *
  * Opinie rysuje motyw, w akordeonie karty produktu: podsumowanie ocen, listę
  * i doładowanie kolejnych porcji robi `catalog/_partials/product-reviews.tpl`

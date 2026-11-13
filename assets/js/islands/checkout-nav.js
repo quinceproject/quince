@@ -1,15 +1,14 @@
 /* ===================================================================
-   Quince — przejście między krokami wstecz
+   Quince: przejście między krokami wstecz
 
    Rdzeń renderuje wszystkie kroki naraz w jednej stronie i pokazuje
    bieżący klasami (`active`, `show`, `q-step--current`); przejście DALEJ to
    zwykłe wysłanie formularza i przeładowanie strony przez serwer, ale
-   przejścia WSTECZ serwer nie obsługuje wcale — dane wcześniejszego kroku
+   przejścia WSTECZ serwer nie obsługuje wcale. Dane wcześniejszego kroku
    już leżą w DOM-ie, więc trzeba tylko przełączyć, który krok jest widoczny.
 
-   Rdzeń liczy na to, że JS motywu to zrobi — stąd `js-back` i `data-step`
-   w znacznikach przycisku. W Quince dotąd nic tego nie obsługiwało: klik
-   w „Wstecz” nie robił nic.
+   Rdzeń liczy na to, że zrobi to JS motywu, stąd `js-back` i `data-step`
+   w znacznikach przycisku.
    =================================================================== */
 
 (function () {
@@ -17,7 +16,7 @@
 
     /* Nagłówek kroku ma trzy warianty tytułu i dwa warianty czynności przy
        nim ([]„Zmień" / „Zaloguj się" itp.) gotowe w DOM-ie naraz, chowane
-       atrybutem `hidden` — przełączenie kroku tu musi je odkryć/schować
+       atrybutem `hidden`. Przełączenie kroku tu musi je odkryć/schować
        razem z samymi klasami `q-step--*`, inaczej zostaje nagłówek
        z poprzedniego stanu, jak przy kroku bieżącym pokazanym z „Zmień"
        i bez „Zaloguj się". */
@@ -59,8 +58,8 @@
 
         if (biezacy) {
             biezacy.classList.remove('q-step--current', 'active', 'show');
-            /* Krok, z którego klient wraca, ma już zapisane dane —
-               zostaje oznaczony jako ukończony, nie jako nieosiągalny. */
+            /* Krok, z którego klient wraca, ma już zapisane dane,
+               więc zostaje oznaczony jako ukończony, nie jako nieosiągalny. */
             biezacy.classList.add('q-step--done');
             biezacy.classList.remove('q-step--upcoming');
             pokazJakoUkonczony(biezacy);

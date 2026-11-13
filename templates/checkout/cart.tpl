@@ -46,13 +46,13 @@
 
         {* Dokupka: krótka lista pod pozycjami (patrz `quince_crossselling`,
            PLACEMENT_CART). Karuzela rdzenia (`displayCrossSellingShoppingCart`)
-           celowo nie stoi na tej stronie — ta sama lista pokazana drugi raz
-           niżej była zbędnym powtórzeniem. *}
+           celowo nie stoi na tej stronie: pokazywałaby tę samą listę drugi
+           raz. *}
         {block name='hook_cart_suggest'}
           {hook h='displayQuinceCartSuggest'}
         {/block}
 
-        {* Miejsce na dowolny hook pod dokupką — ten sam mechanizm, co hook
+        {* Miejsce na dowolny hook pod dokupką. Ten sam mechanizm, co hook
            pod „Order details" na potwierdzeniu zamówienia (`CheckoutSettings`):
            sklep sam wpisuje nazwę w ustawieniach Cart, a tu tylko ją wywołujemy.
            Margines ten sam, co nad dokupką (`.q-cart__suggest`), żeby odstęp
@@ -71,7 +71,7 @@
       </div>
 
       {* ══ prawa kolumna: podsumowanie ══════════════════════════════════
-         Własny, zawsze otwarty `.q-ordersum` — nie ten z kasy, który się
+         Własny, zawsze otwarty `.q-ordersum`, nie ten z kasy, który się
          zwija i pokazuje miniaturki po zwinięciu. Na stronie koszyka
          pozycje są już widoczne w lewej kolumnie, więc nie ma czego
          zwijać ani powtarzać. *}

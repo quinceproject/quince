@@ -1,11 +1,8 @@
 {**
- * Quince — blok ceny w panelu zakupu.
+ * Quince: blok ceny w panelu zakupu.
  *
  * Cztery wiersze, po jednej sprawie na wiersz: cena netto, cena do zapłaty,
- * obniżka, drobny druk. Rdzeń stawiał cenę przed obniżką dwa razy — raz obok
- * ceny bieżącej, raz jako „Zamiast" — a wielkość obniżki także dwa razy, jako
- * procent i jako kwotę. Cztery liczby w jednej płatwie kazały czytać blok od
- * nowa, żeby ustalić, która jest ta do zapłaty.
+ * obniżka, drobny druk.
  *
  * Włączniki szczegółów czytamy z ustawień silnika, a NIE z parametrów wywołania:
  * PrestaShop po zmianie wariantu renderuje ten plik osobno, bez strefy dookoła,

@@ -1,10 +1,10 @@
 /* ===================================================================
-   Quince — pasy strony głównej
+   Quince: pasy strony głównej
 
    Przeniesione z makiety strony głównej. Nowe jest tu wyłącznie
    OPAKOWANIE: tło pasa, układ kolumn, kafel działu, duża zajawka i bohater
    pasa. Zajawka produktu, cena, plakietka, przycisk i taśma to komponenty
-   motywu i nie są tu powtarzane — pas sięga po nie takie, jakie są na
+   motywu i nie są tu powtarzane: pas sięga po nie takie, jakie są na
    listingu.
 
    Pas ma skóry: --mist, --stone, --ink, --brand, --gradient, --photo.
@@ -15,7 +15,7 @@
     :root {
         /* Cień pod napisem leżącym na fotografii. Zasłona gradientowa radzi
         sobie z ciemnym zdjęciem, ale nie z jasnym fragmentem pod jedną
-        linijką — wtedy znika sam napis, nie cały blok. Cień działa punktowo
+        linijką, gdzie znika sam napis, nie cały blok. Cień działa punktowo
         i nie przyciemnia materiału. */
         --q-ps-text-shadow: 0 1px 3px rgb(0 0 0 / .85), 0 0 18px rgb(0 0 0 / .55);
         --q-ps-pad: var(--q-space-xl);
@@ -32,11 +32,11 @@
 
     /* `clip`, nie `hidden`: nie tworzy nowego kontekstu przewijania (CSS
        dopisuje `overflow-y: auto`, gdy jedna oś zostaje `visible` a druga
-       nie — `clip` na obu osiach tego unika).
+       nie; `clip` na obu osiach tego unika).
        Bez tego pas `--bleed` (bez `.q-container`, czyli bez podbitki, którą
-       tor karuzeli zakłada do zniesienia swojego ujemnego marginesu —
-       patrz `.q-carousel__track` w carousel.css) rozpychał stronę w poziomie
-       dokładnie o `--q-space-md`, bo ujemny margines nie miał czego znieść. */
+       tor karuzeli zakłada do zniesienia swojego ujemnego marginesu, patrz
+       `.q-carousel__track` w carousel.css) rozpycha stronę w poziomie
+       dokładnie o `--q-space-md`, bo ujemny margines nie ma czego znieść. */
     .q-ps__in {
         position: relative;
         z-index: 1;
@@ -91,7 +91,7 @@
     }
 
     /* Gradient jako tło pasa: dwie barwy z palety sklepu i kąt. Ta sama
-           mechanika, co na slajdzie — pas i slajd mają wyglądać tak samo, gdy
+           mechanika, co na slajdzie: pas i slajd mają wyglądać tak samo, gdy
            sprzedawca ustawi im to samo tło. */
     .q-ps--gradient {
         background: linear-gradient(
@@ -131,7 +131,7 @@
         color: var(--q-neutral-1);
     }
 
-    /* Zdjęcie pod spodem z zasłoną: ta sama zasada, co w slajderze — gradient,
+    /* Zdjęcie pod spodem z zasłoną: ta sama zasada, co w slajderze. Gradient,
            nie płaska warstwa, żeby materiał był nadal widoczny. */
     .q-ps--photo {
         position: relative;
@@ -213,8 +213,8 @@
            znacznik, czyli ta sama rzecz co plakietka na zajawce.
     
            `align-self` jest konieczne, bo nadtytuł stoi raz w siatce, raz w pasie
-           elastycznym — a tam dziecko rozciąga się na całą szerokość i napis na
-           trzy słowa zajmował cały kafel. */
+           elastycznym, a tam dziecko rozciąga się na całą szerokość i napis na
+           trzy słowa zajmuje cały kafel. */
     .q-ps__over {
         display: inline-block;
         align-self: start;
@@ -239,11 +239,10 @@
 
     /* ── pojedynczy produkt na całą szerokość ────────────────────────
            Zdjęcie w jednej kolumnie, cała reszta w drugiej: hasło, zdanie, cechy,
-           cena i akcja. To jest ta forma, której nie dawała żadna siatka kart —
-           produkt dostaje tu tyle miejsca, co cała sekcja. */
-    /* Zdjęcie bierze prawie połowę pasa. Przy stałych 26 rem kolumna tekstu
-           robiła się tak szeroka, że zdanie kończyło się w jej połowie i prawa
-           strona pasa świeciła pustką. */
+           cena i akcja. Produkt dostaje tu tyle miejsca, co cała sekcja. */
+    /* Zdjęcie bierze prawie połowę pasa. Przy stałej szerokości kolumna tekstu
+           robi się tak szeroka, że zdanie kończy się w jej połowie i prawa
+           strona pasa zostaje pusta. */
     .q-ps__hero {
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
@@ -256,7 +255,7 @@
         place-items: center;
 
         /* Kadr prostokątny, nie kwadratowy: kolumna ma tu około 660 px, więc
-        kwadrat dawał 660 px wysokości i pod treścią obok zostawał pusty pas. */
+        kwadrat dałby 660 px wysokości i pod treścią obok zostałby pusty pas. */
         aspect-ratio: 4 / 3;
         background: var(--q-ps-media-bg, var(--q-surface-raised));
         border-radius: var(--q-ps-radius);
@@ -264,10 +263,10 @@
 
     /* Obraz wpisuje się w kadr, zamiast go rozpychać.
     
-           Samo `max-block-size` nie wystarczyło: element siatki ma domyślnie
+           Samo `max-block-size` nie wystarcza: element siatki ma domyślnie
            `min-block-size: auto`, czyli nie wolno mu zmaleć poniżej własnej
-           wysokości — zdjęcie 600 px narzucało ją kadrowi i proporcja 4:3 nie
-           miała żadnego skutku. Dopiero wyzerowany rozmiar najmniejszy oddaje
+           wysokości. Zdjęcie narzuca ją wtedy kadrowi i proporcja 4:3 nie
+           ma skutku. Dopiero wyzerowany rozmiar najmniejszy oddaje
            rozstrzygnięcie proporcji kadru. */
     .q-ps__hero-media img {
         min-inline-size: 0;
@@ -312,8 +311,8 @@
         --q-ps-spec-bg: rgb(255 255 255 / .1);
     }
 
-    /* Welon na żółtym dawał pigułkę o ton jaśniejszą od tła — na zrzucie nie
-           dało się jej odróżnić od pasa. Pełna biel robi z niej osobny element. */
+    /* Welon na żółtym daje pigułkę ledwie jaśniejszą od tła, nie do odróżnienia
+           od pasa. Pełna biel robi z niej osobny element. */
     .q-ps--brand .q-ps__spec {
         --q-ps-spec-bg: var(--q-surface-raised);
     }
@@ -500,7 +499,7 @@
            szerokość co karta w siatce obok.
     
            Miara `cqi` zamiast procentu, bo procent w zmiennej rozwiązuje się
-           dopiero w miejscu użycia — w taśmie odnosiłby się do taśmy, nie do rzędu.
+           dopiero w miejscu użycia: w taśmie odnosiłby się do taśmy, nie do rzędu.
            Wyrażenia w jednej linii, bo sklejarka arkuszy zjada spacje wokół „+”
            w zapisie rozbitym na kilka wierszy. */
     .q-ps__mix {
@@ -555,7 +554,7 @@
     }
 
     /* Kafel argumentu: na ciemnym pasie welon w barwie napisu, na jasnym
-           powierzchnia karty. Jedna wartość nie obsłuży obu — welon biały na
+           powierzchnia karty. Jedna wartość nie obsłuży obu: welon biały na
            jasnym tle jest niewidoczny. */
     .q-ps__reason {
         padding: var(--q-space-md);
@@ -577,8 +576,7 @@
 
     /* ── kafel kategorii ────────────────────────────────────────────
            Wejście do działu: fotografia w tle, nad nią nadtytuł, nazwa działu,
-           zdanie i akcja. Zastępuje rząd małych kwadratów z samą nazwą — tamten
-           mówi tylko „jest taki dział", ten pokazuje, co w nim stoi.
+           zdanie i akcja: kafel pokazuje, co w dziale stoi.
     
            Dwie orientacje, bo pas bywa składany z różnej liczby kafli: pionowy
            przy czterech i pięciu w rzędzie, poziomy przy dwóch i trzech, gdzie
@@ -710,8 +708,8 @@
     }
 
     /* Na mocniejszej szarości kreska przycisku konturowego ma dokładnie tę samą
-           wartość co tło pasa — obie biorą ten sam stopień skali — więc przycisk
-           znikał. Stopień ciemniejszy przywraca mu kształt. */
+           wartość co tło pasa (obie biorą ten sam stopień skali), więc przycisk
+           znika. Stopień ciemniejszy przywraca mu kształt. */
     .q-ps--stone .q-btn--secondary {
         --btn-border: var(--q-neutral-8);
     }
@@ -747,7 +745,7 @@
         --btn-bg: rgb(255 255 255 / .45);
     }
 
-    /* Tytuł w rzędzie z wyjściem do listy oddaje swój odstęp — niesie go rząd. */
+    /* Tytuł w rzędzie z wyjściem do listy oddaje swój odstęp, niesie go rząd. */
     .q-ps__head .q-section-title {
         margin-block-end: 0;
     }
@@ -835,7 +833,7 @@
     }
 
     /* Siatka sekcji o zadanej liczbie kolumn. Siatka listingu (`q-grid`) liczy
-           kolumny z ustawienia sklepu i z najmniejszej szerokości zajawki — tutaj
+           kolumny z ustawienia sklepu i z najmniejszej szerokości zajawki, a tutaj
            liczba kolumn wynika z treści: dwie kampanie, trzy zestawy, cztery wejścia. */
     .q-home__grid {
         display: grid;

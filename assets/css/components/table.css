@@ -1,12 +1,12 @@
 /* ===================================================================
-   Quince — tabela
+   Quince: tabela
 
    Historia zamówień, szczegóły zamówienia, zwroty, korekty, rabaty ilościowe,
    sklepy stacjonarne. Wszędzie tam dane mają dwa wymiary i lista ich nie zastąpi.
 
    Klasa `.table` obok naszej: szablony PrestaShopa i modułów przychodzą z nazwami
    z Bootstrapa, którego nie wgrywamy. Bez tego mapowania tabela w cudzym module
-   byłaby goła — a nie mamy wpływu na to, co moduł wypisze.
+   byłaby goła, a nie mamy wpływu na to, co moduł wypisze.
 
    Tokeny komponentu (--q-table-*) definiuje tokens.css.
    =================================================================== */
@@ -14,8 +14,8 @@
 @layer quince.components {
 
     /* Wąski ekran: tabela przewija się we własnym pojemniku, a nie rozpycha
-       strony. Cena za to jest jedna — trzeba o tym pojemniku pamiętać
-       w szablonie; bez niego szeroka tabela wypchnie układ na telefonie. */
+       strony. Pojemnik trzeba dodać w szablonie: bez niego szeroka tabela
+       wypchnie układ na telefonie. */
     .q-table-wrap {
         inline-size: 100%;
         overflow-x: auto;
@@ -89,7 +89,7 @@
         border-block-end: 0;
     }
 
-    /* Kwoty i ilości do prawej, cyframi tej samej szerokości — inaczej kolumna
+    /* Kwoty i ilości do prawej, cyframi tej samej szerokości. Inaczej kolumna
        z cenami nie układa się w słupek i porównanie wymaga czytania znak po znaku. */
     .q-table__num {
         text-align: end;
@@ -125,7 +125,7 @@
     }
 
     /* Siatka tej tabeli obejmuje też krawędź zewnętrzną, więc pojemnik nie
-       dokłada drugiej ramki — zostaje mu samo przewijanie na wąskim ekranie.
+       dokłada drugiej ramki: zostaje mu samo przewijanie na wąskim ekranie.
        Przy `.q-table` jest odwrotnie: tam ramkę niesie pojemnik. */
     .q-table-wrap:has(> .q-spectable) {
         border: 0;

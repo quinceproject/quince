@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — komponenty
+   Quince: komponenty
 
    Plik zbiorczy. Każdy komponent ma własny arkusz w components/,
    żeby dało się go znaleźć, zmienić i usunąć bez czytania reszty.
@@ -41,7 +41,7 @@
 
 /* --- strona główna ---
    Slajder nie jedzie przez theme.yml pod kluczem strony głównej, bo moduł może
-   go postawić na dowolnej stronie sklepu — tak samo jak karuzelę zajawek. */
+   go postawić na dowolnej stronie sklepu (tak samo jak karuzelę zajawek). */
 @import url("components/slider.css");
 @import url("components/homepage.css");
 

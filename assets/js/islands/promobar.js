@@ -1,13 +1,13 @@
 /* ===================================================================
-   Quince — zamykanie paska komunikatu
+   Quince: zamykanie paska komunikatu
 
    Wyspa: działa tylko wtedy, gdy sprzedawca włączył zamykanie i pasek jest
-   na stronie. Bez JavaScriptu pasek po prostu zostaje widoczny — to nie jest
+   na stronie. Bez JavaScriptu pasek po prostu zostaje widoczny. To nie jest
    awaria, tylko brak udogodnienia.
 
    Wybór pamiętamy na czas sesji, nie na stałe. Komunikat bywa sezonowy
    i sprzedawca ma prawo, żeby przy kolejnej wizycie klient go zobaczył
-   ponownie — inaczej jednorazowe kliknięcie kasowałoby przekaz na zawsze.
+   ponownie. Inaczej jednorazowe kliknięcie kasowałoby przekaz na zawsze.
    =================================================================== */
 
 (function () {
@@ -21,7 +21,7 @@
             return;
         }
 
-        // Ten sam komunikat zamknięty wcześniej w tej sesji — nie pokazujemy go
+        // Ten sam komunikat zamknięty wcześniej w tej sesji: nie pokazujemy go
         // ponownie. Porównujemy treść, nie sam fakt zamknięcia: sprzedawca mógł
         // w międzyczasie zmienić przekaz i nowy ma prawo się pojawić.
         var text = (bar.textContent || '').trim();
@@ -33,7 +33,7 @@
                 return;
             }
         } catch (e) {
-            // Tryb prywatny bywa blokuje magazyn sesji — wtedy pasek po prostu
+            // Tryb prywatny bywa blokuje magazyn sesji. Wtedy pasek po prostu
             // zostaje widoczny i zamykanie działa do przeładowania strony.
         }
 

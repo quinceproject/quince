@@ -1,20 +1,17 @@
 {**
- * Quince — rząd podkategorii.
+ * Quince: rząd podkategorii.
  *
- * Kafelek jest kwadratem, bo zdjęcie ma być pierwszą rzeczą, a nie dodatkiem
- * do napisu. Kolumn jest dwa razy tyle co w siatce zajawek: kafelek z samą
- * nazwą i ikoną nie potrzebuje tyle miejsca co produkt z ceną i przyciskiem.
+ * Kafelek jest kwadratem. Kolumn jest dwa razy tyle co w siatce zajawek.
  *
- * Trzy włączniki z panelu:
- *   `qImages`  — czy w ogóle pokazujemy zdjęcia,
- *   `qIcons`   — zdjęcie jako maska malowana barwą motywu, dla sklepów,
- *                które mają do kategorii jednobarwne rysunki,
- *   `qHover`   — czy obramowanie zapala się po najechaniu,
- *   `qHook`    — czy wołamy hook `displaySubcategories` (nie na stronie
- *                bez wyników wyszukiwania),
- *   `qCenter`  — rząd wyśrodkowany i zawsze w całości. Na stronie bez wyników
- *                kategorie są jedyną drogą dalej, więc chowanie ich za
- *                przyciskiem „Pokaż wszystkie" odbierałoby klientowi wyjście.
+ * Włączniki z panelu:
+ *   `qImages`: czy w ogóle pokazujemy zdjęcia,
+ *   `qIcons`:  zdjęcie jako maska malowana barwą motywu, dla sklepów,
+ *              które mają do kategorii jednobarwne rysunki,
+ *   `qHover`:  czy obramowanie zapala się po najechaniu,
+ *   `qHook`:   czy wołamy hook `displaySubcategories` (nie na stronie
+ *              bez wyników wyszukiwania),
+ *   `qCenter`: rząd wyśrodkowany i zawsze w całości, bez przycisku
+ *              „Pokaż wszystkie" (strona bez wyników).
  *
  * Hook `displaySubcategories` zostaje: moduł może dopisać własne pozycje albo
  * podstawić cały rząd, nawet gdy kategoria nie ma podkategorii w katalogu.

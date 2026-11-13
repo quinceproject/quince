@@ -3,9 +3,9 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 
-{* Kolumna zamówienia z prototypu checkoutu.
+{* Kolumna zamówienia.
    Zwijana głowa, ciało z pozycjami i kwotami, a kwota do zapłaty POZA
-   ciałem — po zwinięciu klient dalej widzi, ile płaci.
+   ciałem: po zwinięciu klient dalej widzi, ile płaci.
 
    `js-cart` i `data-refresh-url` zostają: rdzeń po tych zaczepach
    przerysowuje kwoty po zmianie przewoźnika. *}

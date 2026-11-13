@@ -1,14 +1,14 @@
 {**
- * Quince — topbar
+ * Quince: topbar
  *
  * Pas informacyjny sklepu: kontakt, godziny, wybór języka, waluty i kraju.
  * Nad nim opcjonalny pasek komunikatu.
  *
- * Wszystko, co widać, przychodzi gotowe w `$quince.topbar` — treści rozwiązane dla
+ * Wszystko, co widać, przychodzi gotowe w `$quince.topbar`: treści rozwiązane dla
  * bieżącego języka, widoczność zamieniona na klasy. W szablonie nie ma obliczeń.
  *
  * Czego tu nie ma: logowania, koszyka, listy życzeń. To pas informacyjny sklepu,
- * nie panel klienta — tamto stoi w headerze.
+ * nie panel klienta. Tamto stoi w headerze.
  *
  * Klasy: assets/css/components/topbar.css
  *}
@@ -48,8 +48,7 @@
         {block name='topbar_contact'}
           <div class="q-topbar__contact">
             {if $topbar.items.phone.visible}
-              {* Numer jako odnośnik `tel:` — na telefonie od razu wybiera połączenie,
-                 a w sprzedaży dla firm to najczęstsza droga kontaktu. *}
+              {* Numer jako odnośnik `tel:`: na telefonie od razu wybiera połączenie. *}
               <a class="q-topbar__item {$topbar.items.phone.classes}"
                  href="tel:{$topbar.items.phone.value|replace:' ':''}">
                 {if $topbar.items.phone.icon}
@@ -88,7 +87,7 @@
 
         {block name='topbar_tools'}
           <div class="q-topbar__tools">
-            {* Selecty dostarczają moduły PrestaShopa — własnych list nie budujemy,
+            {* Selecty dostarczają moduły PrestaShopa. Własnych list nie budujemy,
                żeby nie dublować logiki rdzenia. Wołamy je po nazwie zamiast przez
                hook displayNav2, bo na tym haku siedzą też logowanie i koszyk,
                a te należą do headera, nie do pasa informacyjnego. *}

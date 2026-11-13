@@ -16,7 +16,7 @@
   </div>
 {/block}
 
-{* Jesteśmy już na panelu klienta — link „Wróć do konta" prowadziłby donikąd. *}
+{* Jesteśmy już na panelu klienta, więc link „Wróć do konta" prowadziłby donikąd. *}
 {block name='account_link'}{/block}
 
 {block name='page_content'}
@@ -134,7 +134,7 @@
 
   {if !$configuration.is_catalog && $qAccount.recentOrders|default:[]|count}
     {block name='account_recent_orders'}
-      {* Nagłówek przed kartą, nie w jej pasku — ten sam zabieg co przy
+      {* Nagłówek przed kartą, nie w jej pasku, tak jak przy
          nagłówkach sekcji w danych osobowych. *}
       <div class="q-account-section__header q-account-section__header--standalone">
         <h2 class="q-account-section__title">{l s='Recent orders' d='Shop.Theme.Customeraccount'}</h2>
@@ -145,9 +145,8 @@
       </div>
 
       <div class="q-account-section q-card">
-        {* Ta sama tabela co `customer/history.tpl` — 1:1, desktop i mobile,
-           żeby nie utrzymywać dwóch różnych stylów tej samej listy
-           zamówień. Tylko źródło danych inne: kilka ostatnich zamiast
+        {* Ta sama tabela co `customer/history.tpl` (desktop i mobile). Inne
+           jest tylko źródło danych: kilka ostatnich zamówień zamiast
            wszystkich. *}
         <div class="q-order-table-wrap">
           <table class="q-order-table">

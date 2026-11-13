@@ -3,8 +3,7 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 
-{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu — ten sam standard
-   co `create.tpl`. Otwieranie, wypełnienie i wysyłkę prowadzi w całości
+{* Okno w naszej szufladzie, nie w mechanizmie Vue modułu, jak w `create.tpl`. Otwieranie, wypełnienie i wysyłkę prowadzi w całości
    `assets/js/islands/wishlist-lists.js`. *}
 <div class="wishlist-rename" data-url="{$url}">
   <dialog class="q-modal q-modal--drawer" data-q-wishlist-rename aria-labelledby="q-wishlist-rename-title">

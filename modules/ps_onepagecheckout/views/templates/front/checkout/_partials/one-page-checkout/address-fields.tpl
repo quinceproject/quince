@@ -5,11 +5,11 @@
 
 {**
  * Pola jednej sekcji adresu (dostawa albo faktura), wiersze gotowe z PHP
- * (`AddressFieldRows`) — kolejność i parowanie liczy moduł z formatu adresu
+ * (`AddressFieldRows`): kolejność i parowanie liczy moduł z formatu adresu
  * wybranego kraju, szablon tylko wypisuje.
  *
  * Przełącznik „Kupuję jako" stoi tylko przy WBUDOWANYM formularzu adresu
- * dostawy, nie w oknie modalnym „Dodaj adres" — ten sam plik renderuje
+ * dostawy, nie w oknie modalnym „Dodaj adres". Ten sam plik renderuje
  * oba (`address-modal-fields.tpl` dołącza ten szablon ponownie), a modal
  * zawsze niesie własny `id_prefix`, wbudowany formularz nigdy. Po tym
  * jedynym się rozróżnia: `quince_engine` czyta `quince_buyer` bez
@@ -47,16 +47,16 @@
 {assign var="_postcode_key" value="{$_prefix}postcode"}
 
 {* Panel drugiego adresu (wbudowany, prefiks "invoice_") nigdy nie pyta
-   o NIP ani nazwę firmy — tak samo jak w krokowym, gdzie ten panel jest
-   ręcznie budowanym formularzem bez tych pól w ogóle. Bez tego osoba
-   prywatna, która odznaczy „ten sam adres", widziała VAT number przy
-   własnym adresie do faktury. *}
+   o NIP ani nazwę firmy, tak samo jak w krokowym, gdzie ten panel jest
+   ręcznie budowanym formularzem bez tych pól. Bez tego osoba prywatna,
+   która odznaczy „ten sam adres", widzi VAT number przy własnym adresie
+   do faktury. *}
 {assign var="_hide_company_fields" value=($_prefix === 'invoice_' && $_id_prefix === '')}
 
 {* NIP z nazwą firmy w jednym wierszu, tak jak w krokowym
    (`customer/_partials/address-form.tpl`, para `vat_number => company`).
    PHP modułu (`AddressFieldRows`) tej pary nie łączy, bo liczy wiersze
-   z formatu adresu kraju, który o NIP-ie nic nie wie — łączymy ją tutaj,
+   z formatu adresu kraju, który o NIP-ie nic nie wie. Łączymy ją tutaj,
    w dwóch przejściach: najpierw szukamy pola firmy, potem przy NIP-ie
    renderujemy oba naraz i pole firmy pomijamy w jego własnym miejscu. *}
 {assign var="_vat_key" value="{$_prefix}vat_number"}
@@ -79,7 +79,7 @@
     {* pomijamy, dołączone wyżej do wiersza z NIP-em *}
   {elseif ($_row|count) == 1 && $_company_field && $_row[0].name === $_vat_key}
     {* Nie generyczny `.opc-form-fields-row--2` (pół na pół): pole NIP-u ma
-       w środku przycisk „Fetch details", 50/50 ściskało sam numer. Ten sam
+       w środku przycisk „Fetch details", a 50/50 ściska sam numer. Ten sam
        układ co w krokowym, `.q-checkout2__row--vat_number`: 20rem na NIP
        z przyciskiem, reszta na nazwę firmy. *}
     <div class="q-checkout2__row q-checkout2__row--vat_number">
@@ -87,9 +87,9 @@
       {form_field field=$_company_field}
     </div>
   {elseif ($_row|count) > 1 && $_row[0].name === $_postcode_key}
-    {* Kod pocztowy krótszy niż miasto — ten sam układ co w krokowym,
-       `.q-checkout2__row--postcode`: wąska stała kolumna na kod, reszta
-       na miasto. Generyczny `.opc-form-fields-row--2` dzielił pół na pół. *}
+    {* Kod pocztowy krótszy niż miasto, ten sam układ co w krokowym
+       (`.q-checkout2__row--postcode`): wąska stała kolumna na kod, reszta
+       na miasto. Generyczny `.opc-form-fields-row--2` dzieli pół na pół. *}
     <div class="q-checkout2__row q-checkout2__row--postcode">
       {foreach from=$_row item="_field"}
         {form_field field=$_field}

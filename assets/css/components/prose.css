@@ -2,10 +2,10 @@
     /*
        Treść redakcyjna: opis produktu i wszystko, co sprzedawca wpisuje
        edytorem. Znaczniki przychodzą z edytora, więc styl musi siedzieć na
-       samych elementach, a nie na klasach — sprzedawca wpisze `<h3>`, `<ul>`
+       samych elementach, a nie na klasach: sprzedawca wpisze `<h3>`, `<ul>`
        i `<table>`, i nie doda do nich niczego.
 
-       Przeniesione z makiety strony produktu (`.q-prose`). Bez granicy
+       Źródło: makieta strony produktu (`.q-prose`). Bez granicy
        szerokości wiersza z makiety: o długość wiersza decyduje tu układ strony,
        czyli szerokość strony i podział galeria/panel zakupu ustawiony w panelu,
        a narzucanie własnej granicy zostawiałoby pustą kolumnę po prawej, tak jak

@@ -1,19 +1,18 @@
 {**
- * Quince — pas promocji nad panelem zakupu.
+ * Quince: pas promocji nad panelem zakupu.
  *
  * Pas jest zegarem odliczającym do końca promocji i niczym innym. Stoi
  * wyłącznie wtedy, gdy promocja MA termin: bez terminu nie ma czego odliczać,
  * a to, że trwa promocja, mówi już cena przekreślona, plakietka z procentem
  * i pigułka oszczędności.
  *
- * Próg dni mówi, jak daleko przed końcem pas ma się pojawić. Promocja na pół
- * roku do przodu nie tworzy pilności, tylko zajmuje miejsce nad ceną — sklep
- * ustawia ten próg w panelu, przy elemencie pasa.
+ * Próg dni mówi, jak daleko przed końcem pas ma się pojawić. Sklep ustawia
+ * go w panelu, przy elemencie pasa.
  *
  * Termin bierzemy z ceny promocyjnej produktu, więc ustawia go sklep
  * w katalogu i nic nie trzeba dopisywać osobno.
  *
- * Zmienne: $qDni — próg dni z panelu.
+ * Zmienne: $qDni: próg dni z panelu.
  * Zachowanie licznika: assets/js/islands/buybox.js
  *}
 

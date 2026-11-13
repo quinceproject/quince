@@ -1,12 +1,12 @@
 {**
- * Quince — strona z listą produktów.
+ * Quince: strona z listą produktów.
  *
  * Jeden szablon na siedem stron: kategorię, markę, dostawcę, wyszukiwarkę,
  * nowości, promocje i bestsellery. Wszystkie rozszerzają ten plik i różnią się
  * wyłącznie nagłówkiem, więc układ ustawia się raz, na jednym ekranie panelu.
  *
  * Strefy przychodzą z silnika jako listy identyfikatorów w kolejności. Szablon
- * nie wie, co w nich stoi — od identyfikatora do treści prowadzi wyłącznie
+ * nie wie, co w nich stoi: od identyfikatora do treści prowadzi wyłącznie
  * `catalog/_partials/listing-element.tpl`.
  *
  * Identyfikatory `js-product-list-*` i nazwy bloków Smarty zostają: po nich
@@ -19,14 +19,14 @@
 {/block}
 
 {* Okruszki stoją wewnątrz kontenera listingu, jako element strefy, więc miejsce
-   z układu zostaje puste — inaczej ścieżka renderowałaby się dwa razy. *}
+   z układu zostaje puste. Inaczej ścieżka renderowałaby się dwa razy. *}
 {block name='breadcrumb'}{/block}
 
 {block name='content'}
   {assign var=qList value=$modules.quince_engine.listing}
 
   {* Liczba zawężeń wybranych przez klienta. Rdzeń podaje gotowy HTML pigułek,
-     ale nie ich liczbę — dolicza ją silnik w hooku `filterProductSearch`. *}
+     ale nie ich liczbę; dolicza ją silnik w hooku `filterProductSearch`. *}
   {assign var=qActiveFilters value=$listing.quince_active_filters|default:0}
 
   {* Czy filtry w ogóle są. Bez modułu filtrów nie ma czego stawiać w kolumnie
@@ -34,7 +34,7 @@
      sklep wybrał w panelu. *}
   {assign var=qHasFilters value=(!empty($listing.rendered_facets))}
 
-  {* Smarty nie ma operatora warunkowego w `{assign}` — stąd rozpisany `if`. *}
+  {* Smarty nie ma operatora warunkowego w `{assign}`, stąd rozpisany `if`. *}
   {if $qHasFilters}
     {assign var=qFilters value=$qList.filters}
   {else}
@@ -138,7 +138,7 @@
              znaczników rozjechałyby się przy pierwszej zmianie.
 
              Stoi TAKŻE przy pustej liście. Pusto najczęściej robi się od
-             zawężeń, a to w belce stoją pigułki i „Wyczyść wszystko" — bez niej
+             zawężeń, a to w belce stoją pigułki i „Wyczyść wszystko". Bez niej
              klient, który zawęził za mocno, nie ma czym tego cofnąć. Tak samo
              wygląda lista zawężona bez przeładowania strony: rdzeń odsyła belkę
              niezależnie od tego, czy coś znalazł. *}
@@ -179,7 +179,7 @@
 
   {* Szuflada filtrów. Na wąskim ekranie przyjmuje panel niezależnie od tego,
      który wariant wybrał sklep: kolumna zabiera wtedy pół ekranu, a pas nad
-     listą spycha produkty poniżej krawędzi. Pusta w znacznikach — panel
+     listą spycha produkty poniżej krawędzi. Pusta w znacznikach: panel
      wjeżdża tu przeniesieniem węzła, więc filtry są w kodzie strony raz.
      Tak samo robi to rdzeń z `#_desktop_faceted`. *}
   {if $qHasFilters}
@@ -195,7 +195,7 @@
       {* Przy wariancie „szuflada" panel renderuje się od razu tutaj, bo nie ma
          go gdzie indziej. Przy dwóch pozostałych wariantach to miejsce zostaje
          puste na szerokim ekranie, a poniżej 992 px wjeżdża tu panel z treści
-         — przeniesieniem węzła, nie drugą kopią znaczników. *}
+         przeniesieniem węzła, nie drugą kopią znaczników. *}
       <div class="q-modal__body" data-q-filters-host tabindex="-1" autofocus>
         {if $qFilters == 'drawer'}
           <div class="q-listing__filters" id="q-filters">

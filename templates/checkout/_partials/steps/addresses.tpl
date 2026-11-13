@@ -4,7 +4,7 @@
  *}
 {extends file='checkout/_partials/steps/checkout-step.tpl'}
 
-{* Zdanie liczy silnik (`quince_engine`), z koszyka — stąd szablon kroku go
+{* Zdanie liczy silnik (`quince_engine`), z koszyka, bo stąd szablon kroku go
    nie dosięgnie (`{render}` ma własny, odcięty zakres zmiennych). *}
 {block name='step_summary'}
   {if isset($qAdresStreszczenie)}{$qAdresStreszczenie}{/if}
@@ -21,7 +21,7 @@
       {* Zdanie „ten adres posłuży za oba" i nagłówek „Shipping Address" mają
          sens tylko przy wyborze z ZAPISANYCH adresów (klient widzi, co
          wybrał). Przy świeżym formularzu nagłówek roli stoi już w
-         `address-form.tpl`, zależny od „Kupuję jako" — ten tutaj by go
+         `address-form.tpl`, zależny od „Kupuję jako"; ten tutaj by go
          dublował, złym tekstem dla firmy. *}
       {if !$show_delivery_address_form}
         {if $use_same_address}
@@ -80,8 +80,8 @@
         {* Adres do faktury: tylko przy wyborze z zapisanych adresów. Przy
            świeżym formularzu drugi adres stoi w panelu wewnątrz
            `address-form.tpl` (checkbox „Kupuję jako" / „inny adres"),
-           w tym samym żądaniu co pierwszy — patrz override
-           `CheckoutAddressesStep`. *}
+           w tym samym żądaniu co pierwszy (patrz override
+           `CheckoutAddressesStep`). *}
         {if !$use_same_address}
           <p class="h3 mt-4">{l s='Your Invoice Address' d='Shop.Theme.Checkout'}</p>
 
@@ -124,10 +124,9 @@
          nie tutaj: krok otwiera własny `<form>`, ale PrestaShop zagnieżdża
          w nim drugi (ten w formularzu adresu), a przeglądarka zamyka ZEWNĘTRZNY
          na pierwszym napotkanym `</form>`, czyli na tym wewnętrznym. Przycisk
-         Dalej MUSI więc stać w formularzu adresu, który naprawdę działa —
-         inaczej klik nic by nie wysłał. Przycisk Wstecz nie wysyła formularza,
-         więc dla jego działania nie ma to znaczenia, ale stoi tam razem
-         z Dalej, żeby był z nim w jednym rzędzie, tak jak w prototypie.
+         Dalej MUSI więc stać w formularzu adresu, który naprawdę działa,
+         inaczej klik nic nie wyśle. Przycisk Wstecz nie wysyła formularza,
+         ale stoi tam razem z Dalej, żeby był z nim w jednym rzędzie.
 
          Ten wiersz zostaje tylko dla samodzielnej edycji adresu, gdzie
          formularz nie ma własnego przycisku dalej. *}

@@ -1,5 +1,5 @@
 {**
- * Quince — szuflada „napisz opinię".
+ * Quince: szuflada „napisz opinię".
  *
  * Moduł `productcomments` ma własne okno, ale otwiera je Bootstrapem, którego
  * motyw nie wgrywa. Formularz jest więc nasz, a wysyłka idzie do punktu
@@ -9,7 +9,7 @@
  * Ocena to zwykłe pola wyboru, nie skrypt: bez JavaScriptu klient nadal
  * zaznaczy gwiazdki, a czytnik ekranu ogłosi je jako grupę wyboru.
  *
- * Zmienne: $qKryteria — kryteria oceny z silnika (id i nazwa).
+ * Zmienne: $qKryteria: kryteria oceny z silnika (id i nazwa).
  *}
 
 <dialog class="q-modal q-modal--drawer" data-q-review-form aria-labelledby="q-review-form-title">

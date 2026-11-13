@@ -1,14 +1,14 @@
 /* ===================================================================
-   Quince — lista list życzeń: tworzenie, zmiana nazwy, udostępnianie,
-   usuwanie
+   Quince: lista list życzeń (tworzenie, zmiana nazwy, udostępnianie,
+   usuwanie)
 
    JS modułu dla tej strony jest w kilku miejscach zepsuty: woła złą akcję
    PHP przy tworzeniu nowej listy (`action=getAllWishlist` zamiast
    `action=createNewWishList`), a przy zmianie nazwy/udostępnianiu/usuwaniu
    zamyka swój wewnętrzny stan menu przy każdym kliknięciu w środku, więc
-   ikony znikają zaraz po pierwszym użyciu. Prowadzimy wszystkie cztery
-   działania sami, od zera, naszymi oknami (`.q-modal q-modal--drawer`)
-   i naszym rozwijanym menu (`.q-dropdown`) — moduł zostaje właścicielem
+   ikony znikają zaraz po pierwszym użyciu. Wszystkie cztery działania
+   prowadzi więc ten plik, naszymi oknami (`.q-modal q-modal--drawer`)
+   i naszym rozwijanym menu (`.q-dropdown`). Moduł zostaje właścicielem
    danych (lista list, numery, adresy udostępniania), czytamy je z jego
    własnego stanu Vue (`.wishlist-container`.__vue__.lists), nic nie
    duplikujemy.
@@ -16,7 +16,7 @@
    Zero zapamiętanych referencji do węzłów DOM w zmiennych: Vue montuje się
    też na `.wishlist-rename`/`.wishlist-share`/`.wishlist-delete` i w pewnym
    momencie po starcie strony podmienia te węzły na nowe, równe co do
-   znaczników, ale inne jako obiekty — referencja złapana wcześniej zostaje
+   znaczników, ale inne jako obiekty. Referencja złapana wcześniej zostaje
    odcięta od dokumentu (`.showModal()` na niej wywala
    `InvalidStateError: not in a Document`). Każde okno jest więc odpytywane
    na nowo, dokładnie w chwili użycia, przez delegację zdarzeń na
@@ -31,11 +31,9 @@
     /* Teksty i adresy złapane TERAZ, zanim Vue zdąży podmienić
        `.wishlist-container` (korzeń aplikacji, jedyny element, który
        realnie się tu przebudowuje) i zabrać ze sobą jego atrybuty
-       `data-*` — stąd puste etykiety „Zmień nazwę”/„Udostępnij” w menu,
-       gdy ten odczyt działał się dopiero przy pierwszym kliknięciu
-       kebaba, długo po podmianie. Statyczne okna (`.wishlist-create` itp.)
-       nie są tak ruchliwe, ale łapiemy je tym samym sposobem z tego
-       samego powodu — ostrożność, nie udowodniona konieczność. */
+       `data-*`. Odczyt dopiero przy pierwszym kliknięciu kebaba dałby
+       puste etykiety „Zmień nazwę”/„Udostępnij” w menu. Adresy statycznych
+       okien (`.wishlist-create` itp.) łapiemy tym samym sposobem. */
     var qWishlistKontener = document.querySelector('.wishlist-container');
     var qWishlistTeksty = {
         rename: (qWishlistKontener && qWishlistKontener.dataset.renameText) || '',
@@ -74,7 +72,7 @@
         return (vue && Array.isArray(vue.lists)) ? vue.lists : [];
     }
 
-    /** Numer listy na podstawie miejsca elementu w DOM — ten sam porządek
+    /** Numer listy na podstawie miejsca elementu w DOM: ten sam porządek
      *  co dane Vue, bo rysuje je ten sam `v-for`. */
     function listaDlaElementu(el) {
         var wszystkie = Array.from(document.querySelectorAll('.wishlist-list-item'));
@@ -84,7 +82,7 @@
     }
 
     /* ---- Zamykanie: wspólne dla wszystkich czterech okien, przyciskiem
-       X/Anuluj albo kliknięciem w tło — zero referencji trzymanych między
+       X/Anuluj albo kliknięciem w tło. Zero referencji trzymanych między
        otwarciem a zamknięciem, więc podmiana węzła przez Vue niczego tu
        nie psuje. ---- */
     document.addEventListener('click', function (zdarzenie) {
@@ -247,7 +245,7 @@
             });
     });
 
-    /* ---- Udostępnianie — link jest już znany, bez zapytania do serwera. ---- */
+    /* ---- Udostępnianie: link jest już znany, bez zapytania do serwera. ---- */
     function otworzShare(lista) {
         var okno = document.querySelector('[data-q-wishlist-share]');
         var pole = okno && okno.querySelector('[data-q-wishlist-share-input]');
@@ -278,7 +276,7 @@
 
         if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
             navigator.clipboard.writeText(pole.value).catch(function () {
-                // Pole zostaje zaznaczone — klient skopiuje ręcznie (Ctrl+C).
+                // Pole zostaje zaznaczone, klient skopiuje ręcznie (Ctrl+C).
             });
         }
     });
@@ -336,7 +334,7 @@
     });
 
     /* ---- Menu pod kebabem: nasz `.q-dropdown`, doklejony do `document.body`
-       (nie do wiersza listy) — ten sam powód co z resztą tej strony: węzeł
+       (nie do wiersza listy). Ten sam powód co z resztą tej strony: węzeł
        doklejony do wnętrza karty zniknąłby razem z nią przy kolejnej
        podmianie przez Vue. Jeden, wspólny panel dla wszystkich list na
        stronie, przenoszony pod kliknięty kebab i wypełniany na nowo przy
@@ -407,8 +405,8 @@
         }
 
         // Zatrzymujemy zdarzenie na etapie przechwytywania: własna obsługa
-        // kebaba w module otwierała (i od razu, w tym samym cyklu,
-        // zamykała) swój wewnętrzny stan — stąd znikające ikony po każdym
+        // kebaba w module otwiera (i od razu, w tym samym cyklu,
+        // zamyka) swój wewnętrzny stan, przez co ikony znikają po każdym
         // kliknięciu. Nasze menu nigdy do niej nie dociera.
         zdarzenie.stopImmediatePropagation();
         zdarzenie.preventDefault();

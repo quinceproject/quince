@@ -1,8 +1,8 @@
 /* ===================================================================
-   Quince — pas zapowiedzi
+   Quince: pas zapowiedzi
 
    Wyspa: działa tylko wtedy, gdy slajder jest na stronie. Bez JavaScriptu
-   taśma zostaje zwykłym pasem przewijanym palcem i kółkiem — to nie jest
+   taśma zostaje zwykłym pasem przewijanym palcem i kółkiem. To nie jest
    awaria, tylko brak udogodnienia. Dlatego przechodzenie opiera się na
    przewijaniu kontenera, a nie na przestawianiu elementów: wtedy jedno
    i drugie pokazuje to samo.

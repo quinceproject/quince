@@ -1,11 +1,11 @@
 {**
- * Quince — nadpisanie modułu ps_viewedproduct.
+ * Quince: nadpisanie modułu ps_viewedproduct.
  *
  * Moduł daje listę ostatnio oglądanych produktów, motyw daje jej wygląd: tę
  * samą karuzelę, co akcesoria pod kartą produktu.
  *
  * Na karcie produktu blok stoi tam, gdzie postawi go panel sklepu (element
- * „Recently viewed" w strefie zajawek), a nie na końcu strony — dlatego
+ * „Recently viewed" w strefie zajawek), a nie na końcu strony. Dlatego
  * szablon produktu wyłącza ten moduł ze zbiorczego hooka stopki.
  *
  * Włączniki czytamy z mapy silnika, a nie z parametrów: moduł renderuje się

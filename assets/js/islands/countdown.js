@@ -1,5 +1,5 @@
 /**
- * Quince — licznik do końca promocji.
+ * Quince: licznik do końca promocji.
  *
  * Jeden mechanizm dla wszystkich miejsc, w których stoi zegar: pasa promocji
  * nad panelem zakupu, kafelka produktu na listingu i w karuzeli oraz słupka

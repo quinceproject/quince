@@ -1,11 +1,11 @@
 /* ===================================================================
-   Quince — stronicowanie
+   Quince: stronicowanie
 
-   Przeniesione z makiety kategorii (`.q-strony`).
+   Źródło: makieta kategorii (`.q-strony`).
 
    Jeden rząd pól o równej wysokości: numery, wielokropek w miejscu
-   przeskoku i „Następna" z nazwą. Strona bieżąca ma `aria-current="page"`
-   — sam kolor nie wystarczy, czytnik ekranu musi wiedzieć, gdzie stoi
+   przeskoku i „Następna" z nazwą. Strona bieżąca ma `aria-current="page"`,
+   bo sam kolor nie wystarczy: czytnik ekranu musi wiedzieć, gdzie stoi
    użytkownik.
    =================================================================== */
 

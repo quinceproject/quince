@@ -1,9 +1,9 @@
 {**
- * Quince — treść sekcji pytań i odpowiedzi w akordeonie karty produktu.
+ * Quince: treść sekcji pytań i odpowiedzi w akordeonie karty produktu.
  *
  * Pierwsza porcja wychodzi z serwera, więc widać ją bez JavaScriptu i czyta ją
  * wyszukiwarka. Przycisk dokłada kolejne w tym samym miejscu, a formularz
- * pytania otwiera się szufladą — obsługuje je wyspa `islands/questions.js`.
+ * pytania otwiera się szufladą. Obsługuje je wyspa `islands/questions.js`.
  *
  * Dane przynosi moduł `quince_qa`. Na karcie stoją wyłącznie pytania
  * Z ODPOWIEDZIĄ: pytanie bez niej wygląda jak zignorowany klient.

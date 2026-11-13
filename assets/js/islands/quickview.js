@@ -1,5 +1,5 @@
 /**
- * Quince — szybki podgląd produktu.
+ * Quince: szybki podgląd produktu.
  *
  * Oko na zajawce dociąga z rdzenia treść podglądu (`action=quickview`)
  * i wsuwa ją w szufladę. Szuflada jest jedna na całą stronę i powstaje przy
@@ -123,8 +123,8 @@
 
         /* Adres składamy przez `URL`, a nie doklejeniem znaku zapytania:
            odnośnik zajawki nosi kotwicę wybranej wersji (`#/1-rozmiar-s`),
-           więc doklejone parametry lądowały w kotwicy i rdzeń oddawał zwykłą
-           stronę zamiast odpowiedzi podglądu. */
+           więc doklejone parametry wylądowałyby w kotwicy i rdzeń oddałby
+           zwykłą stronę zamiast odpowiedzi podglądu. */
         var adres = new URL(odnosnik.href, window.location.href);
 
         adres.hash = '';
@@ -164,7 +164,7 @@
                 }
 
                 // Licznik ilości, „Kup teraz", serce i zegar to te same wyspy,
-                // co na karcie produktu — treść przyszła po wczytaniu strony,
+                // co na karcie produktu. Treść przyszła po wczytaniu strony,
                 // więc trzeba je uruchomić na niej ręcznie.
                 Quince.hydrate(okno);
 

@@ -2,7 +2,7 @@
  * Pytania o produkt: doładowanie kolejnych porcji i szuflada z pytaniem.
  *
  * Pierwsza porcja wychodzi z serwera, więc bez tego pliku sekcja nadal pokazuje
- * pytania z odpowiedziami — znika tylko doładowanie i formularz.
+ * pytania z odpowiedziami. Znika tylko doładowanie i formularz.
  *
  * Znaczniki doładowanych pytań przychodzą gotowe z kontrolera modułu, a nie
  * powstają tutaj: gdyby pytanie rysował także JavaScript, dwa zapisy tego samego

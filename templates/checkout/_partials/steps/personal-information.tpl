@@ -20,7 +20,7 @@
   {/if}
 {/block}
 
-{* Krok ukończony: imię, nazwisko i e-mail zamiast pustych pól — dokładnie to,
+{* Krok ukończony: imię, nazwisko i e-mail zamiast pustych pól, czyli dokładnie to,
    co klient wpisał. `$customer` ma te dane bez względu na to, czy zalogował
    się, czy zamawia jako gość: krok 1 zapisuje je od razu po wysłaniu. *}
 {block name='step_summary'}
@@ -32,8 +32,7 @@
 
   {if $customer.is_logged && !$customer.is_guest}
 
-    {* Klient zalogowany: kto zamawia i wyjście do zmiany konta. Nic więcej —
-       dane i adresy wczytają się w kolejnych krokach. *}
+    {* Klient zalogowany: kto zamawia i wyjście do zmiany konta. Dane i adresy wczytają się w kolejnych krokach. *}
     <div class="q-opc__account">
       <span class="q-opc__account-text">
         {l s='Signed in as' d='Shop.Theme.Checkout'}

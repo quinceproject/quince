@@ -2,13 +2,13 @@
  * For the full copyright and license information, please view the
  * LICENSE.md file that was distributed with this source code.
  *}
-{* Zdjęcie zestawu: okładka produktu, a gdy jej nie ma — zastępnik sklepu.
+{* Zdjęcie zestawu: okładka produktu, a gdy jej nie ma, zastępnik sklepu.
    Rozmiary bierzemy skrótami rdzenia (`small`, `medium`), nie nazwami presetów,
    więc motyw nie zależy od tego, jakie typy obrazów ma sklep. *}
 {if $product.default_image}
   {assign var=qZdjecie value=$product.default_image}
 {else}
-  {* Nie `|default:` — PrestaShop oddaje tu `false`, a ten filtr podmienia tylko
+  {* Nie `|default:`: PrestaShop oddaje tu `false`, a ten filtr podmienia tylko
      wartość nieustawioną albo pustą i `false` przepuszcza dalej. *}
   {assign var=qZdjecie value=$urls.no_picture_image}
 {/if}

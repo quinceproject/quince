@@ -1,9 +1,9 @@
 /* ===================================================================
-   Quince — pasek nawigacji
+   Quince: pasek nawigacji
 
    Kategorie i odnośniki własne. Projekt: widok paska nawigacji.
 
-   Kategorie stoją pod jednym przyciskiem; rozwinięcie ma trzy kształty —
+   Kategorie stoją pod jednym przyciskiem; rozwinięcie ma trzy kształty:
    kolumny, kafelki, kaskada. O wyborze decyduje klasa na panelu, więc zmiana
    kształtu nie rusza szablonu.
 
@@ -26,8 +26,8 @@
         inline-size: 100%;
         max-inline-size: var(--q-container);
         margin-inline: auto;
-        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje —
-           patrz ten sam wzorzec w `theme.css` przy `.q-container`. */
+        /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
+           Patrz ten sam wzorzec w `theme.css` przy `.q-container`. */
         padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
     }
 
@@ -85,7 +85,7 @@
 
     /* Przycisk kategorii jest wyróżniony, bo prowadzi do całego katalogu,
        a odnośniki obok do pojedynczych miejsc. Stała szerokość, żeby odnośniki
-       nie przeskakiwały przy zmianie języka — nazwa działu bywa raz krótsza,
+       nie przeskakiwały przy zmianie języka: nazwa działu bywa raz krótsza,
        raz dłuższa. */
     .q-nav__trigger {
         min-inline-size: var(--q-navbar-trigger-w);
@@ -103,7 +103,7 @@
     }
 
     /* Stan pod kursorem wychodzi z barwy przycisku, a nie z barwy marki: przycisk
-       bywa dziś ustawiony na cokolwiek ze skal palety. */
+       może być ustawiony na dowolny stopień ze skal palety. */
     .q-nav__trigger:hover {
         background: var(--q-navbar-solid-hover, var(--q-fill-primary-hover));
         color: var(--q-navbar-on-solid);
@@ -133,21 +133,18 @@
         margin-inline-start: auto;
     }
 
-    /* --- panel z kategoriami ---
-       Rozpięty na szerokość zawartości strony, nie na całą szerokość ekranu:
-       treść panelu ma się zaczynać tam, gdzie zaczyna się treść strony. */
     /* --- zaokrąglenia w rozwiniętej nawigacji ---
-       Panele i kolumny menu NIE biorą promienia z ustawień motywu, niezależnie
-       od tego, co sklep wybrał. Powód jest konstrukcyjny, nie estetyczny:
+       Panele i kolumny menu NIE biorą promienia z ustawień motywu. Powód jest
+       konstrukcyjny, nie estetyczny:
        kolumny dokładają się jedna do drugiej, a dwa zaokrąglone rogi stykające
        się bokami zostawiają między sobą prześwit w kształcie soczewki.
        Panel doklejony do paska ma z tego samego powodu prostą górną krawędź.
 
        Zaokrąglenie zostaje tam, gdzie element stoi sam: tło pozycji pod kursorem
        i kafelki kategorii. */
-    /* Panel ma szerokość strony, nie ekranu: rozciągnięty od krawędzi do krawędzi
-       odrywa się od treści, nad którą stoi, i na szerokim monitorze zamienia się
-       w pas przez cały pulpit. Wyśrodkowany tak samo jak zawartość strony. */
+    /* --- panel z kategoriami ---
+       Panel ma szerokość zawartości strony, nie ekranu, i jest wyśrodkowany tak
+       samo jak ona: treść panelu zaczyna się tam, gdzie zaczyna się treść strony. */
     .q-nav__panel {
         position: absolute;
 
@@ -157,7 +154,7 @@
         z-index: 40;
 
         /* Szerokość liczona jak treść pasa, czyli kontener MINUS jego odstęp
-           wewnętrzny — inaczej panel wystaje poza przycisk, spod którego wyszedł. */
+           wewnętrzny. Inaczej panel wystaje poza przycisk, spod którego wyszedł. */
         inline-size: calc(100% - var(--q-space-md) * 2);
         max-inline-size: calc(var(--q-container) - var(--q-space-md) * 2);
 
@@ -174,7 +171,7 @@
 
     /* Panel otwarty z przyklejonego nagłówka.
 
-       Ten sam element i ta sama treść — zmienia się wyłącznie punkt zaczepienia:
+       Ten sam element i ta sama treść, zmienia się wyłącznie punkt zaczepienia:
        pas menu jest wtedy poza ekranem, więc panel wiesza się na oknie, tuż pod
        nagłówkiem. Drugi panel w kodzie strony podwajałby cały katalog.
 
@@ -188,7 +185,7 @@
         z-index: 41;
     }
 
-    /* Kaskada wisi pod swoim przyciskiem, nie na środku — tak samo jak w pasie
+    /* Kaskada wisi pod swoim przyciskiem, nie na środku, tak samo jak w pasie
        menu. Położenie przycisku wpisuje ta sama wyspa. */
     .q-nav__panel--cascade.is-floating {
         inset-inline-start: var(--q-cats-x, var(--q-space-md));
@@ -208,7 +205,7 @@
         gap: var(--q-space-lg);
     }
 
-    /* Kolumna działów ma własne tło i sięga krawędzi panelu — to osobna część
+    /* Kolumna działów ma własne tło i sięga krawędzi panelu: to osobna część
        panelu, nie lista wciśnięta w jego róg. */
     .q-nav__cats {
         display: flex;
@@ -296,8 +293,8 @@
     }
 
     /* Podział na kolumny robi `column-count` ustawiany przy elemencie, a ten
-       działa wyłącznie na elemencie blokowym — przy `display: grid` był po prostu
-       ignorowany i wszystko szło jedną kolumną. */
+       działa wyłącznie na elemencie blokowym. Przy `display: grid` jest
+       ignorowany i wszystko idzie jedną kolumną. */
     .q-nav__subs {
         display: block;
         column-gap: var(--q-space-lg);
@@ -323,8 +320,8 @@
 
     /* Nagłówek grupy jest odnośnikiem, ale nie WYGLĄDA jak odnośnik: to nazwa działu
        nad listą, a nie jedna z pozycji do klikania. Bez tego bierze globalny kolor
-       odnośnika i przy jasnej marce wychodzi brązowy — bo czytelny tekst w barwie
-       żółtej marki musi być ciemny, a ciemny żółty to brąz. */
+       odnośnika, który przy jasnej marce jest jej przyciemnionym stopniem
+       (przy żółtej marce: brązem). */
     .q-nav__group-title a {
         color: inherit;
         text-decoration: none;
@@ -391,7 +388,7 @@
     /* Opakowanie rozciąga się razem z pasem: bez `display: flex` przycisk w środku
        zachowuje wysokość swojej treści i zostaje pod nim pusty pasek.
 
-       CELOWO bez `position: relative` — panel katalogu ma szerokość całego pasa
+       CELOWO bez `position: relative`: panel katalogu ma szerokość całego pasa
        i musi się pozycjonować względem niego. */
     .q-nav__group {
         display: flex;
@@ -399,7 +396,7 @@
     }
 
     /* Kaskada jest jedynym rozwinięciem, które wychodzi spod swojego przycisku,
-       a nie spod całego pasa — tylko dla niej opakowanie staje się punktem
+       a nie spod całego pasa, więc tylko dla niej opakowanie staje się punktem
        odniesienia. */
     .q-nav__group:has(.q-nav__panel--cascade) {
         position: relative;
@@ -410,8 +407,8 @@
        Trzeci sposob pokazania katalogu: zamiast calego drzewa naraz jedna waska
        kolumna, a kolejne poziomy wysuwaja sie w prawo dopiero po najechaniu.
 
-       Kiedy ma sens: gdy drzewo jest glebokie, a klient wie, czego szuka —
-       czyta kilkanascie nazw zamiast stu i schodzi w dol jedna sciezka.
+       Kiedy ma sens: gdy drzewo jest glebokie, a klient wie, czego szuka.
+       Czyta kilkanascie nazw zamiast stu i schodzi w dol jedna sciezka.
        Kiedy nie: gdy katalog jest plaski, bo wtedy kaskada dokłada krok
        do czegos, co miescilo sie na jednym ekranie. */
     /* Kaskada jest wąska i zaczepiona pod przyciskiem, więc zdejmuje wszystko,
@@ -428,7 +425,7 @@
            się na dwie linie. Kolejne poziomy wysuwają się poza kolumnę i nie
            mają na jej szerokość wpływu.
 
-           Liczymy od grupy, a nie z tokenu: token mówi, ile przycisk ma NAJMNIEJ,
+           Liczone od grupy, a nie z tokenu: token mówi, ile przycisk ma NAJMNIEJ,
            a przycisk bywa szerszy o dopełnienie i o długość swojego napisu. Panel
            węższy od przycisku czyta się jak przesunięty. */
         inline-size: max-content;
@@ -450,7 +447,7 @@
 
     /* CELOWO bez przewijania: element z `overflow` przycina absolutnie
        pozycjonowane dzieci, a wysuwane poziomy są właśnie takimi dziećmi.
-       Przy przewijaniu lądowały przycięte wewnątrz kolumny zamiast wychodzić
+       Przy przewijaniu zostałyby przycięte wewnątrz kolumny zamiast wychodzić
        w bok. Długą listę bierze na siebie wysokość panelu, nie kolumny. */
     .q-nav__level {
         display: flex;
@@ -478,7 +475,7 @@
         color: var(--q-dropdown-option-label);
         text-decoration: none;
 
-        /* Nazwa nie łamie się na dwie linie — zamiast tego poszerza kolumnę,
+        /* Nazwa nie łamie się na dwie linie, zamiast tego poszerza kolumnę,
            której szerokość przycisku jest tylko wartością minimalną. */
         white-space: nowrap;
     }
@@ -535,15 +532,15 @@
 
     /* ==== menu na telefonie ====
        Ten sam katalog, inny układ: lista jedna pod drugą, poziomy rozwijane
-       znacznikiem <details>. Panel wysuwa się od lewej — patrz modal.css.
+       znacznikiem <details>. Panel wysuwa się od lewej (patrz modal.css).
 
        Poziomów jest tyle, ile sklep ustawi w panelu (1–3), więc rysuje je jeden
        komplet reguł, a nie klasa na poziom. Głębokość niesie zmienna
        `--q-navmob-poziom`, którą szablon wypisuje przy każdej pozycji. */
 
     /* Panel katalogu zajmuje CAŁĄ szerokość telefonu, w odróżnieniu od szuflady
-       koszyka. Przy koszyku pasek strony z boku ma sens — widać, do czego się
-       wraca; przy katalogu niczego nie daje, a odbiera miejsce nazwom działów,
+       koszyka. Przy koszyku pasek strony z boku ma sens (widać, do czego się
+       wraca); przy katalogu niczego nie daje, a odbiera miejsce nazwom działów,
        które przy trzech poziomach wcięcia zaczynają się łamać. */
     @media (max-width: 767px) {
         .q-modal--drawer[data-q-navmob] {
@@ -587,8 +584,8 @@
         outline-offset: -2px;
     }
 
-    /* Znacznik rozwijania rysuje przeglądarka i w każdej wygląda inaczej —
-       strzałka po prawej jest nasza i jedna dla wszystkich. */
+    /* Znacznik rozwijania rysuje przeglądarka i w każdej wygląda inaczej.
+       Strzałka po prawej jest nasza i jedna dla wszystkich. */
     .q-navmob__item::-webkit-details-marker,
     .q-navmob__item::marker {
         content: "";
@@ -600,7 +597,7 @@
        zostaje jedynym sygnałem, gdzie jesteśmy. */
     /* ---- wnętrze rozwiniętego działu ----
        Kreska dzieli działy, nie ich zawartość. W środku rozwinięcia pozycje idą
-       ciasno, jedna pod drugą, bez linii — inaczej rozwinięcie jednego działu
+       ciasno, jedna pod drugą, bez linii. Inaczej rozwinięcie jednego działu
        zajmuje trzy ekrany przewijania, a klient gubi się w kreskach. */
     /* Lista idzie od krawędzi do krawędzi: pozycje mają własne dopełnienie
        i własne kreski, więc dopełnienie panelu tylko odsuwałoby je od boku,
@@ -616,7 +613,7 @@
         background: var(--q-surface-sunken);
     }
 
-    /* Drugi poziom: wyraźnie mniejszy od działu i pisany grubo — to tytuł grupy,
+    /* Drugi poziom: wyraźnie mniejszy od działu i pisany grubo: to tytuł grupy,
        a nie kolejna pozycja tej samej rangi. */
     .q-navmob__subs .q-navmob__item {
         min-block-size: 0;
@@ -672,7 +669,7 @@
     }
 
     /* Rozwinięcie zamyka krawędź jasnego tła, a nie kreska: ostatnia grupa
-       w środku ma już własną linię nad sobą, więc kreska pod blokiem rysowała
+       w środku ma już własną linię nad sobą, więc kreska pod blokiem rysowałaby
        się kilka pikseli niżej jako druga. */
     .q-navmob__branch[open] > .q-navmob__subs {
         padding-block-end: 6px;
@@ -686,11 +683,9 @@
         color: var(--q-text-muted);
     }
 
-    /* Strzałka stoi w osobnej kolumnie, oddzielonej pionową kreską — tak jak
-       we Flavorze. Kolumna jest osobnym celem dotykowym: kciuk trafia w nazwę,
-       żeby wejść do działu, albo w strzałkę, żeby go rozwinąć. */
     /* Kolumna rozwijania: własny cel dotykowy przy prawej krawędzi, oddzielony
-       pionową kreską od nazwy działu. */
+       pionową kreską od nazwy działu. Kciuk trafia w nazwę, żeby wejść do
+       działu, albo w strzałkę, żeby go rozwinąć. */
     .q-navmob__expand {
         display: flex;
         align-items: center;
@@ -715,18 +710,17 @@
         transform: rotate(180deg);
     }
 
-    /* Rozwinięty dział zostaje widoczny jako nagłówek tego, co pod nim: jasne
-       tło i kreska oddzielają go od pierwszej podkategorii. Bez kreski nazwa
-       działu i jego pierwsze dziecko czytały się jak dwie równorzędne pozycje. */
-    /* Ikona rozwiniętego działu w barwie marki — jedyny znak „tu jesteś", kiedy
+    /* Ikona rozwiniętego działu w barwie marki: jedyny znak „tu jesteś", kiedy
        nagłówek działu ucieknie za górną krawędź przy przewijaniu. */
     .q-navmob__branch[open] > .q-navmob__item > .q-nav__ico {
         color: var(--q-fill-primary);
         opacity: 1;
     }
 
-    /* Rozwinięta gałąź zmienia TŁO, nie wagę pisma: ta sama pozycja raz gruba,
-       raz cienka sprawia, że lista drga przy każdym dotknięciu. */
+    /* Rozwinięty dział zostaje widoczny jako nagłówek tego, co pod nim: jasne
+       tło i kreska oddzielają go od pierwszej podkategorii. Zmienia się TŁO,
+       nie waga pisma: ta sama pozycja raz gruba, raz cienka sprawia, że lista
+       drga przy każdym dotknięciu. */
     .q-navmob__branch[open] > .q-navmob__item {
         background: var(--q-surface-sunken);
         border-block-end-color: var(--q-border-subtle);
@@ -810,7 +804,7 @@
     }
 
     /* Odmiana: dwie kolumny, obrazek nad nazwą. Dla sklepu o krótkich nazwach
-       działów — pokazuje więcej naraz, ale dłuższą nazwę łamie na dwa wiersze,
+       działów. Pokazuje więcej naraz, ale dłuższą nazwę łamie na dwa wiersze,
        więc nazwa dostaje twarde ograniczenie i kafelki w rzędzie zostają równe. */
     .q-navmob__tiles--grid {
         grid-template-columns: repeat(2, 1fr);
@@ -835,15 +829,13 @@
     }
 
     /* Przerwa przed odnośnikami własnymi to ODSTĘP, nie kreska: każda pozycja
-       ma już własną kreskę pod spodem, więc linia tutaj rysowała się drugi raz
+       ma już własną kreskę pod spodem, więc linia tutaj rysowałaby się drugi raz
        kilka pikseli niżej. */
     .q-navmob__sep {
         block-size: var(--q-space-md);
     }
 
-    /* Logo w nagłówku panelu. Wysokość jak w pasie nagłówka, żeby menu nie
-       zaczynało się od logo w innej skali niż strona pod spodem. */
-    /* W panelu menu nagłówek trzyma logo, a nie wiersz tytułu — przycisk
+    /* W panelu menu nagłówek trzyma logo, a nie wiersz tytułu, więc przycisk
        zamknięcia równa się więc do środka nagłówka, zamiast być podciąganym
        do linii pisma. */
     #q-navmob .q-modal__close {
@@ -864,6 +856,8 @@
         color: inherit;
     }
 
+    /* Logo w nagłówku panelu. Wysokość jak w pasie nagłówka, żeby menu nie
+       zaczynało się od logo w innej skali niż strona pod spodem. */
     .q-navmob__logo img {
         block-size: var(--q-header-logo-h);
         inline-size: auto;

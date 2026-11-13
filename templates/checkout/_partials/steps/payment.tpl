@@ -156,12 +156,12 @@
   {/if}
 
   {* Ostatni krok nie ma „Dalej": ma kwotę i jeden przycisk, który kończy
-     zakup. Powrotu też nie ma — wcześniejsze kroki otwiera się paskiem
-     u góry, a przycisk obok „Zamawiam i płacę" konkurowałby z nim o uwagę. *}
-  {* Zgoda i przycisk kończący zakup stoją w kolumnie zamówienia, przy kwocie
-     — tak ma prototyp. Renderuje je tutaj rdzeń, bo tylko krok płatności zna
-     wybraną metodę i listę zgód; do kolumny przenosi je wyspa `checkout-summary`.
-     Kwoty tu nie powtarzamy — kolumna ma ją u siebie. *}
+     zakup. Powrotu też nie ma: wcześniejsze kroki otwiera się paskiem
+     u góry. *}
+  {* Zgoda i przycisk kończący zakup stoją w kolumnie zamówienia, przy kwocie.
+     Renderuje je tutaj rdzeń, bo tylko krok płatności zna wybraną metodę
+     i listę zgód; do kolumny przenosi je wyspa `checkout-summary`. Kwoty tu
+     nie powtarzamy, kolumna ma ją u siebie. *}
   <div class="q-checkout__order" data-q-pay-source>
     <div id="payment-confirmation" class="js-payment-confirmation">
       <div class="ps-shown-by-js">

@@ -1,8 +1,8 @@
 /* ===================================================================
-   Quince — przycisk otwierający listę w sekcji górnej
+   Quince: przycisk otwierający listę w sekcji górnej
 
    Odmiana bez ramki: stoi w pasku informacyjnym i bierze barwy tej sekcji.
-   Sama lista jest wspólna dla całego motywu — patrz components/dropdown.css.
+   Sama lista jest wspólna dla całego motywu, patrz components/dropdown.css.
 
    Odmiana formularzowa (.q-select__button) jest w components/field.css.
 
@@ -25,7 +25,7 @@
         align-items: center;
         gap: 5px;
 
-        /* Cel dotykowy: 44 px w pionie mimo niskiego paska — realizowane
+        /* Cel dotykowy: 44 px w pionie mimo niskiego paska. Realizowany
            odstępem wewnętrznym, nie wysokością, żeby pasek został wąski. */
         min-block-size: var(--q-touch-target);
         padding-inline: var(--q-space-xs);
@@ -59,7 +59,7 @@
     }
 
     /* Lista wjeżdża na pasek zamiast wisieć pod nim. Na jasnej stronie biała
-       lista stykała się z białym tłem i zostawała po niej sama kreska ramki;
+       lista styka się z białym tłem i zostaje po niej sama kreska ramki;
        zachodząc na ciemny pas, dostaje oparcie. Wartość liczona od przycisku,
        który jest wyższy od paska o cel dotykowy. */
     .q-topbar .q-picker .q-dropdown {
@@ -67,7 +67,7 @@
     }
 
     /* Flaga: kwadrat z obrazkiem kraju. Kod lub nazwa zostaje obok, bo sama
-       flaga nie jest jednoznaczna — ta sama bywa dla kilku wariantów języka. */
+       flaga nie jest jednoznaczna: ta sama bywa dla kilku wariantów języka. */
     .q-flag {
         inline-size: 16px;
         block-size: 12px;

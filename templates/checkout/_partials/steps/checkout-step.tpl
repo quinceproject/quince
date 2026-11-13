@@ -46,8 +46,8 @@
        naraz, chowane atrybutem `hidden`, a nie wycinane Smarty `{if}`-em:
        „Wstecz" przełącza krok wyłącznie w JS (`checkout-nav.js`), bez
        przeładowania strony, więc gdyby wariant nie istniał w HTML-u, JS nie
-       miałby czego odkryć — tak powstał błąd „Change" i brak „Zaloguj się"
-       po powrocie do wcześniejszego kroku. *}
+       miałby czego odkryć (po powrocie do wcześniejszego kroku brakowałoby
+       „Change" i „Zaloguj się"). *}
     <div class="step__title js-step-title q-step__head">
       <p class="page-title-section q-step__title" data-q-step-title-plain{if $step_is_current || $step_is_complete} hidden{/if}>{$step_number}. {$title}</p>
 
@@ -60,7 +60,7 @@
         {$title}
       </p>
 
-      {* Krok ukończony: zamiast czynności przy nazwie stoi „Zmień" — ten sam
+      {* Krok ukończony: zamiast czynności przy nazwie stoi „Zmień". Ten sam
          mechanizm co „Wstecz" (`js-back` + `data-step`), bo robi dokładnie to
          samo, wraca do tego kroku. Dla kroku bieżącego zostaje czynność
          właściwa temu krokowi, np. „Masz już konto? Zaloguj się". *}
@@ -73,7 +73,7 @@
       </span>
     </div>
 
-    {* Krok ukończony pokazuje jedno zdanie zamiast pól — to, co klient już
+    {* Krok ukończony pokazuje jedno zdanie zamiast pól: to, co klient już
        wybrał. Pełny formularz zostaje pod spodem w DOM-ie (kasa go chowa tą
        samą regułą co kroki nieaktualne), więc „Zmień" wraca do wypełnionych
        pól, a nie do pustych. *}

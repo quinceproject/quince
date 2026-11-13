@@ -1,5 +1,5 @@
 /* ===================================================================
-   Quince — akordeon
+   Quince: akordeon
 
    Karta produktu (opis, dane techniczne, dostawa, opinie), stopka na telefonie,
    filtry na listingu, pytania i odpowiedzi. 21 szablonów motywu.
@@ -56,7 +56,7 @@
 
     /* Rozwinięta sekcja ma podświetlony nagłówek. To jedyny znak, po którym
        widać, gdzie zaczyna się otwarta treść, gdy sekcji jest kilka i wszystkie
-       są długie — sam obrócony znaczek gubi się przy prawej krawędzi. */
+       są długie. Sam obrócony znaczek gubi się przy prawej krawędzi. */
     .q-accordion__item[open] > .q-accordion__header {
         background: var(--q-surface-sunken);
     }
@@ -73,10 +73,11 @@
     /* Tytuł sekcji jest nagłówkiem dokumentu (`h2` pod nazwą produktu), a nie
        napisem: czytnik ekranu i wyszukiwarka układają z tego spis treści karty.
        Wielkość pisma bierze z wiersza nagłówka, więc stopień w kodzie nie
-       zmienia wyglądu — o wyglądzie decyduje miejsce, o stopniu treść. */
-    /* Nazwa sekcji czyta się jako etykieta, nie jako nagłówek treści.
+       zmienia wyglądu: o wyglądzie decyduje miejsce, o stopniu treść.
+
+       Nazwa sekcji czyta się jako etykieta, nie jako nagłówek treści.
        Powód: w opisie produktu sprzedawca wpisuje własne śródtytuły, a te
-       przy zdaniowym zapisie tej samej wielkości przykrywały nazwę sekcji,
+       przy zdaniowym zapisie tej samej wielkości przykrywałyby nazwę sekcji,
        w której stoją. Wersaliki z rozstrzeleniem odróżniają ją rodzajem,
        a nie wielkością, więc hierarchia trzyma się bez powiększania czegokolwiek.
 
@@ -94,7 +95,7 @@
         text-transform: uppercase;
     }
 
-    /* Liczba przy tytule — ile opinii, ile filtrów wybrano. Stoi przed znakiem
+    /* Liczba przy tytule: ile opinii, ile filtrów wybrano. Stoi przed znakiem
        rozwinięcia, żeby nie odsuwała go od krawędzi. */
     .q-accordion__count {
         font-weight: var(--q-weight-regular);
@@ -118,14 +119,14 @@
        i wskazuje w drugą stronę, plus o ćwierć i staje się krzyżykiem. To jedyna
        różnica, więc odmiana to jedna reguła, a nie drugi zestaw tokenów.
 
-       Plus mówi „rozwiń", krzyżyk „zwiń" — czytelniej niż strzałka tam, gdzie
+       Plus mówi „rozwiń", krzyżyk „zwiń". Czytelniej niż strzałka tam, gdzie
        sekcje są krótkie i stoją gęsto, na przykład w pytaniach i odpowiedziach. */
     .q-accordion--plus .q-accordion__item[open] > .q-accordion__header .q-accordion__icon {
         transform: rotate(45deg);
     }
 
-    /* Odstęp z każdej strony, także od góry. Bez górnego treść przyklejała się
-       do nagłówka, a odkąd nagłówek rozwiniętej sekcji ma własne tło, stykały
+    /* Odstęp z każdej strony, także od góry. Bez górnego treść przykleja się
+       do nagłówka, a nagłówek rozwiniętej sekcji ma własne tło, więc stykają
        się dwie płaszczyzny. */
     .q-accordion__body {
         padding-block: var(--q-accordion-pad-block);
@@ -140,8 +141,7 @@
 
     /* Tabela w akordeonie musi zostać tabelą. Reguły resetujące wyświetlanie
        elementów w rozwijanej treści potrafią zamienić ją w blok i wtedy
-       szerokości kolumn przestają działać — to była realna pułapka w poprzednim
-       motywie, więc tu deklarujemy to wprost. */
+       szerokości kolumn przestają działać. Dlatego deklarujemy to wprost. */
     .q-accordion__body table {
         display: table;
         inline-size: 100%;
@@ -149,7 +149,7 @@
 
 
     /* --- odmiana bez ramki, z kreską pod nagłówkiem ---
-       Ta sama barwa i te same odstępy co odmiana podstawowa — inne jest tylko
+       Ta sama barwa i te same odstępy co odmiana podstawowa, inne jest tylko
        to, gdzie stoi linia. Dlatego nie ma tu ani jednego nowego tokenu:
        „bez ramki, z kreską" to inne ułożenie tych samych decyzji, a nie nowa
        decyzja o wyglądzie. */
@@ -173,7 +173,7 @@
         padding-inline: 0;
     }
 
-    /* Odmiana bez ramki — stopka na telefonie i filtry, gdzie sekcje stoją
+    /* Odmiana bez ramki: stopka na telefonie i filtry, gdzie sekcje stoją
        jedna pod drugą w kolumnie, która ma już własne obramowanie. */
     .q-accordion--plain {
         border: 0;

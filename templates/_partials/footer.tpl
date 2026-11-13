@@ -1,9 +1,9 @@
 {**
- * Quince — stopka.
+ * Quince: stopka.
  *
  * Cztery kolumny: pierwsza z danymi firmy i kontaktem, pozostałe wypełniają
  * moduły przez hooki przypisane do kolumn w ustawieniach silnika. Kolumna bez
- * treści nie zostaje pusta — wypada, żeby siatka nie miała dziury.
+ * treści nie zostaje pusta. Wypada, żeby siatka nie miała dziury.
  *
  * Klasy: themes/quince/assets/css/components/footer.css
  * Projekt: makieta strony produktu.
@@ -116,7 +116,7 @@
 
 {* Zbiorczy hook PrestaShopa. Moduły wrzucają w niego i treść, i własne szablony
    JavaScriptu, więc gdy sklep nie przypisał go do żadnej kolumny, wypisujemy go
-   tutaj — poza stopką, żeby jej treść została treścią. *}
+   tutaj, poza stopką, żeby jej treść została treścią. *}
 {if !$qf.catchAllInColumn}
   {hook h='displayFooter'}
 {/if}

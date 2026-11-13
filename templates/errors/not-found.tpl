@@ -3,12 +3,11 @@
  * LICENSE.md file that was distributed with this source code.
  *}
 {**
- * Quince — treść strony „nie znaleziono” (404 i 410).
+ * Quince: treść strony „nie znaleziono” (404 i 410).
  *
- * Makieta: prototyp strony 404. Przyciski i ikony wzięte z gotowego
- * zestawu silnika (`modules/quince_engine/views/icons/house.svg`,
- * `headset.svg`), nie wymyślone — pole szukania to ten sam partial co
- * w nagłówku (`_partials/search-form.tpl`).
+ * Makieta: prototyp strony 404. Ikony z zestawu silnika
+ * (`modules/quince_engine/views/icons/house.svg`, `headset.svg`). Pole
+ * szukania to ten sam partial co w nagłówku (`_partials/search-form.tpl`).
  *}
 <section id="content" class="page-content page-content--not-found q-listing__empty">
   {block name='page_content'}

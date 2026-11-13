@@ -11,13 +11,12 @@
 {block "form_field"}
   {* Kasa pyta o to, czego potrzebuje do wysłania zamówienia: e-mail, imię
      i nazwisko. Zwrot grzecznościowy i data urodzenia to dane do profilu
-     klienta, nie do przesyłki — pytamy o nie w koncie, nie przy zakupie.
-     Każde dodatkowe pole w kasie to kolejny powód, żeby jej nie dokończyć. *}
+     klienta, nie do przesyłki, więc pytamy o nie w koncie, nie przy zakupie. *}
   {if in_array($field.name, ['id_gender', 'birthday'])}
 
   {elseif $field.name === 'optin'}
-    {* „Chcę dostawać oferty partnerów" stoi w prototypie PO newsletterze, nie
-       przed nim — moduły dokładają oba pola hookami w odwrotnej kolejności.
+    {* „Chcę dostawać oferty partnerów" stoi PO newsletterze, nie przed nim,
+       a moduły dokładają oba pola hookami w odwrotnej kolejności.
        Przechwytujemy to pole tutaj i oddajemy je dopiero przy polu
        newslettera, zamiast przestawiać kolejność wykonania hooków. *}
     {capture name="qOptin"}{$smarty.block.parent}{/capture}
@@ -29,12 +28,11 @@
 
   {elseif $field.name === 'customer_privacy'}
     {* Notka `ps_dataprivacy` ma stać zawsze bezpośrednio przy zgodzie
-       `psgdpr` — obie mówią o tym samym (przetwarzaniu danych), więc nie mogą
-       rozjechać się po formularzu zależnie od przypadkowej kolejności
+       `psgdpr` (obie mówią o przetwarzaniu danych), niezależnie od kolejności
        wykonania hooków dwóch różnych modułów. Przechwytujemy JEJ TREŚĆ
        i oddajemy dopiero przy polu `psgdpr`, niezależnie od tego, które
-       z nich rdzeń przetworzy jako pierwsze — ale ukryte pole formularza
-       zostaje tutaj, na swoim miejscu: pole jest wymagane, więc bez niego
+       z nich rdzeń przetworzy jako pierwsze. Ukryte pole formularza
+       zostaje jednak tutaj, na swoim miejscu: pole jest wymagane, więc bez niego
        formularz nie przejdzie walidacji serwera. *}
     <input type="hidden" name="{$field.name}" value="1">
     {capture name="qPrywatnoscKlauzula"}{$field.label nofilter}{/capture}
@@ -42,16 +40,15 @@
 
   {elseif $field.name === 'psgdpr'}
     {* Przetworzenie danych z tego formularza jest warunkiem złożenia
-       zamówienia — bez adresu i e-maila nic się nie wyśle. Klient nie ma tu
-       realnego wyboru, więc podstawą nie jest zgoda (wymagająca aktywnego
-       kliknięcia), tylko wykonanie umowy: wystarczy jasna informacja, nie
-       checkbox. Pole jedzie zaznaczone i ukryte — tak samo jak
-       `customer_privacy` wyżej — a klient dostaje samą klauzulę, tę samą,
-       którą zapisuje `GDPRLog` przy zgodach klikanych ręcznie.
+       zamówienia: bez adresu i e-maila nic się nie wyśle. Podstawą nie jest
+       więc zgoda (wymagająca aktywnego kliknięcia), tylko wykonanie umowy:
+       wystarczy jasna informacja, nie checkbox. Pole jedzie zaznaczone
+       i ukryte (tak samo jak `customer_privacy` wyżej), a klient dostaje samą
+       klauzulę, tę samą, którą zapisuje `GDPRLog` przy zgodach klikanych
+       ręcznie.
 
-       Decyzja usera, nie domyślne zachowanie modułu: panel psgdpr nie
-       rozróżnia kasy od rejestracji, więc to rozróżnienie robi ten plik —
-       i tylko ten plik. Standalone `/rejestracja` korzysta z osobnego
+       Panel psgdpr nie rozróżnia kasy od rejestracji, więc to rozróżnienie
+       robi ten plik i tylko ten plik. Standalone `/rejestracja` korzysta z osobnego
        szablonu bez tego nadpisania, więc tam `psgdpr` zostaje prawdziwym,
        klikanym checkboksem. *}
     <input type="hidden" name="{$field.name}" value="1">
@@ -89,7 +86,7 @@
 
 {block "form_buttons"}
   {* Pola strażnika (token, pułapka) bez zapisu: zapis o ochronie stoi osobno,
-     nad stopką strony (`checkout.tpl`) — to nie jest zgoda, więc nie siedzi
+     nad stopką strony (`checkout.tpl`). To nie jest zgoda, więc nie siedzi
      przy polu z checkboxami wyżej. *}
   {include file='_partials/form-guard.tpl' form_id='checkout' notice=false}
 

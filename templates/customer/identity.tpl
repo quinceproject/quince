@@ -4,9 +4,8 @@
  *}
 {extends 'customer/page.tpl'}
 
-{* Własny nagłówek zamiast domyślnego `page-title-section.tpl` — ten sam
-   powód co w pozostałych podstronach konta: makieta stawia link powrotu
-   NAD tytułem. *}
+{* Własny nagłówek zamiast domyślnego `page-title-section.tpl`, jak
+   w pozostałych podstronach konta: makieta stawia link powrotu NAD tytułem. *}
 {block name='page_header_container'}
   <div class="q-order-header">
     <a class="q-order-back" href="{$urls.pages.my_account}">

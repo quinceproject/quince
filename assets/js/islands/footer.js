@@ -1,12 +1,12 @@
 /* ===================================================================
-   Quince — składanie sekcji stopki na wąskich ekranach
+   Quince: składanie sekcji stopki na wąskich ekranach
 
    Cztery kolumny odnośników ustawione jedna pod drugą dają na telefonie
    bardzo długi ogon strony: klient przewija kilka ekranów samych linków,
    zanim dojedzie do końca. Na wąskim ekranie zwijamy więc każdą sekcję do
    samej nazwy i rozwijamy tę, którą klient wskaże.
 
-   Bez JavaScriptu stopka zostaje rozwinięta w całości — dłuższa, ale w pełni
+   Bez JavaScriptu stopka zostaje rozwinięta w całości: dłuższa, ale w pełni
    czytelna i klikalna. Zwijanie jest udogodnieniem, nie warunkiem działania.
 
    Sekcją jest kolumna, jeśli sprzedawca nadał jej nazwę; jeśli nie, sekcją
@@ -68,7 +68,7 @@
         var out = [];
 
         stopka.querySelectorAll('.q-footer__col').forEach(function (kolumna) {
-            // Dane firmy zostają otwarte — po to tu są.
+            // Dane firmy zostają otwarte, po to tu są.
             if (kolumna.classList.contains('q-footer__col--wide')) {
                 return;
             }
@@ -197,8 +197,8 @@
     }
 
     /**
-     * Powrót na górę strony. Przycisk czeka schowany, aż będzie po co wracać —
-     * pokazany od pierwszego piksela przewinięcia zasłaniałby treść bez powodu.
+     * Powrót na górę strony. Przycisk czeka schowany, aż będzie po co wracać.
+     * Pokazany od pierwszego piksela przewinięcia zasłaniałby treść bez powodu.
      */
     function powrot(przycisk) {
         var czeka = false;

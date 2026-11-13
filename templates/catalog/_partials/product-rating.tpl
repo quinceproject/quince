@@ -1,9 +1,8 @@
 {**
- * Quince — ocena produktu pod jego nazwą
+ * Quince: ocena produktu pod jego nazwą
  *
- * Jeden wiersz: gwiazdki, średnia i odnośnik do opinii. Makieta stawia tu
- * wyłącznie ocenę — producent i numer katalogowy zeszły do kolumny opisu,
- * a EAN i MPN do specyfikacji.
+ * Jeden wiersz: gwiazdki, średnia i odnośnik do opinii. Producent i numer
+ * katalogowy stoją w kolumnie opisu, a EAN i MPN w specyfikacji.
  *
  * Bez ani jednej opinii zostaje samo zaproszenie do napisania pierwszej: pusta
  * skala pięciu szarych gwiazdek mówiłaby „oceniony na zero".

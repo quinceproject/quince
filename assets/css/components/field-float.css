@@ -46,7 +46,7 @@
     }
 
     /* Stan spoczynkowy: napis pośrodku pola, w rozmiarze wartości i w barwie
-       zwykłego tekstu. Barwa podpowiedzi nie wchodzi w grę — napis czytałby się
+       zwykłego tekstu. Barwa podpowiedzi nie wchodzi w grę: napis czytałby się
        jak wpisana już wartość, a jej kontrast jest poniżej 4,5:1. */
     .q-float > .q-float__label,
     .q-float > .form-label {
@@ -74,7 +74,7 @@
 
     /* Napis uniesiony. Trzy stany go podnoszą: ognisko, wpisana wartość
        i autouzupełnienie przeglądarki. Bez tego ostatniego napis kładzie się
-       na wartości wstawionej przez przeglądarkę — to najczęstszy błąd wdrożeń
+       na wartości wstawionej przez przeglądarkę. To najczęstszy błąd wdrożeń
        pływającej etykiety. */
     .q-float:has(> .q-float__input:focus) > .q-float__label,
     .q-float:has(> .q-float__input:not(:placeholder-shown)) > .q-float__label,
@@ -134,7 +134,7 @@
     }
 
     /* Pole z błędem: kreska w barwie błędu, ale napis zostaje w barwie tekstu.
-       Dwa czerwone napisy pod rząd — etykieta i komunikat — czytają się jak
+       Dwa czerwone napisy pod rząd (etykieta i komunikat) czytają się jak
        dwa osobne błędy. */
     .q-float.has-error > .q-float__label,
     .q-float.has-error > .form-label {
@@ -187,7 +187,7 @@
     .q-float__eye svg { display: block; }
 
     /* Dwa znaki w jednym przycisku: widoczne jest to, co kliknięcie zrobi.
-       Hasło zasłonięte — oko. Hasło odsłonięte — oko przekreślone. */
+       Hasło zasłonięte: oko. Hasło odsłonięte: oko przekreślone. */
     .q-float__eye .q-float__eye-off { display: none; }
     .q-float__eye--on .q-float__eye-on { display: none; }
     .q-float__eye--on .q-float__eye-off { display: block; }
@@ -199,8 +199,8 @@
        Z prototypu checkoutu: ramka grubsza i w barwie
        błędu, tło lekko podbarwione, a pod polem jedno zdanie mówiące, co
        poprawić. Przeglądarka pokazuje w tym miejscu własny dymek, który
-       znika po chwili i wygląda jak komunikat systemu, a nie strony —
-       dlatego formularze dostają `novalidate`, a sprawdzanie robi wyspa. */
+       znika po chwili i wygląda jak komunikat systemu, a nie strony.
+       Dlatego formularze dostają `novalidate`, a sprawdzanie robi wyspa. */
 
     .q-float.has-error > .form-control,
     .q-float.has-error > .form-select,

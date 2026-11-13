@@ -18,9 +18,8 @@
   {block "form_fields"}
     {if $page.page_name === 'identity'}
       {* Dane osobowe: jeden formularz, jeden zapis (rdzeń zapisuje wszystkie
-         pola naraz — dwa osobne submity ryzykowałyby wyzerowanie reszty
-         danych przy samej zmianie hasła), ale trzy wizualne sekcje jak
-         w makiecie. Każdy przebieg filtruje te same `$formFields`, więc
+         pola naraz; dwa osobne submity ryzykowałyby wyzerowanie reszty
+         danych przy samej zmianie hasła), ale trzy wizualne sekcje. Każdy przebieg filtruje te same `$formFields`, więc
          pole dopisane hookiem (np. zgoda modułu) trafia do „Preferencji"
          bez znajomości jego nazwy z góry. *}
       {assign var=qPodstawowe value=['id_gender', 'firstname', 'lastname', 'email', 'birthday', 'company', 'siret']}
@@ -34,7 +33,7 @@
         <section class="q-account-section q-card q-identity-section">
           <div class="q-identity-fields q-card__body">
             {* E-mail pierwszy: to on decyduje, czy klient ma u nas konto, i na
-               niego idzie potwierdzenie zamówienia — ten sam porządek, co
+               niego idzie potwierdzenie zamówienia. Ten sam porządek, co
                w pozostałych kontekstach tego formularza (niżej). *}
             {foreach from=$formFields item="field"}
               {if $field.name === 'email'}{form_field field=$field}{/if}

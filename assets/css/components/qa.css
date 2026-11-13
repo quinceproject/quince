@@ -4,17 +4,12 @@
 
        Treść przynosi moduł `quince_qa`, wygląd jest tutaj.
 
-       Pytanie i odpowiedź to JEDEN wątek. Makieta miała tu dwa wiersze obok
-       siebie i czytało się je jak dwa osobne wpisy — bez niczego, co mówiłoby,
-       że należą do siebie.
+       Pytanie i odpowiedź to JEDEN wątek. Spinają je trzy rzeczy:
 
-       Spinają je trzy rzeczy, wzięte z tego, jak robią to sklepy z dobrą sekcją
-       opinii i odpowiedzią sprzedawcy pod nią:
-
-       — nagłówek z inicjałami, który otwiera wątek i nazywa pytającego;
-       — odpowiedź w osobnym bloku z własnym tłem i pionową kreską, wciętym pod
+       - nagłówek z inicjałami, który otwiera wątek i nazywa pytającego;
+       - odpowiedź w osobnym bloku z własnym tłem i pionową kreską, wciętym pod
          pytanie, więc widać dwa głosy i widać, że jeden odpowiada drugiemu;
-       — mikropodpis nad tym blokiem, który nazywa go, zanim ktoś go przeczyta.
+       - mikropodpis nad tym blokiem, który nazywa go, zanim ktoś go przeczyta.
     */
 
     .q-qa {
@@ -24,8 +19,7 @@
         --q-qa-indent: calc(var(--q-qa-avatar) + var(--q-space-sm));
     }
 
-    /* Wątek: pytanie i odpowiedź jako jeden obiekt. Wcześniej były to dwa
-       wiersze obok siebie i czytało się je jak dwa osobne wpisy. */
+    /* Wątek: pytanie i odpowiedź jako jeden obiekt. */
     .q-qa__thread + .q-qa__thread {
         margin-block-start: var(--q-space-lg);
         padding-block-start: var(--q-space-lg);
@@ -82,7 +76,7 @@
     }
 
     /* Odpowiedź: własne tło i pionowa kreska po lewej. To ona spina głos sklepu
-       w jeden blok i mówi, że należy do pytania wyżej — bez rysowania ramki
+       w jeden blok i mówi, że należy do pytania wyżej, bez rysowania ramki
        wokół całej pary. */
     .q-qa__answer {
         margin-block-start: var(--q-space-sm);

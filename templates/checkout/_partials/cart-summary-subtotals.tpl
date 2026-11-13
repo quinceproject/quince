@@ -4,8 +4,7 @@
  *}
 
 {* Kwoty składowe. Nazwy bierze się z rdzenia, bo to on wie, czy sklep pokazuje
-   ceny z podatkiem, czy bez — wpisany tu na sztywno napis „netto" kłamałby
-   w sklepie pokazującym ceny brutto.
+   ceny z podatkiem, czy bez.
 
    Koszt dostawy przed wyborem przewoźnika nie jest znany. Zero w tym miejscu
    obiecywałoby darmową przesyłkę, więc zamiast kwoty stoi zdanie, w którym
@@ -13,15 +12,11 @@
 
    Dwa źródła prawdy, bo ten partial renderuje się w obu wariantach kasy:
    `$checkout_steps` istnieje tylko w krokowej (lista kroków z `is_complete`).
-   OPC nie ma kroków w tym sensie — tam sygnałem jest `$delivery_option`,
+   OPC nie ma kroków w tym sensie. Tam sygnałem jest `$delivery_option`,
    który moduł wypełnia, gdy do adresu dostawy jest przypisany przewoźnik
-   (sprawdzone na żywej stronie: pusty dopóki adres nie jest kompletny,
-   niepusty już przy domyślnie podstawionym przewoźniku, nie dopiero po
-   ręcznym kliknięciu innego). Bez `isset()` na $checkout_steps Smarty
-   zgłaszało „Undefined array key" w OPC, bo ta zmienna tam w ogóle nie
-   istnieje — i przy okazji $qDostawaZnana zostawało na sztywno `false`,
-   więc „Shipping" nigdy nie pokazywało prawdziwej kwoty w OPC, nawet po
-   wybraniu przewoźnika. *}
+   (pusty, dopóki adres nie jest kompletny; niepusty już przy domyślnie
+   podstawionym przewoźniku). `isset()` na $checkout_steps jest konieczne:
+   w OPC ta zmienna nie istnieje i Smarty zgłasza „Undefined array key". *}
 {assign var=qDostawaZnana value=false}
 {if isset($checkout_steps)}
   {foreach from=$checkout_steps item="k"}

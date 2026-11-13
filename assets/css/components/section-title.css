@@ -1,10 +1,10 @@
 /* ===================================================================
-   Quince — nagłówek sekcji
+   Quince: nagłówek sekcji
 
    Jeden napis używany w kilku widokach: pasy strony głównej, sekcje pod
-   kartą produktu, zestawy. Stał wcześniej w `bundle.css`, a ten arkusz
-   motyw ładuje tylko na karcie produktu, więc na stronie głównej nagłówek
-   spadał do globalnego `h2` i był o osiem pikseli większy niż w makiecie.
+   kartą produktu, zestawy. Nie może stać w `bundle.css`: ten arkusz motyw
+   ładuje tylko na karcie produktu, więc na stronie głównej nagłówek
+   spadałby do globalnego `h2`.
    =================================================================== */
 
 @layer quince.components {

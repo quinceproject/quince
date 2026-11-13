@@ -1,10 +1,10 @@
 /**
- * Quince — powiadomienia
+ * Quince: powiadomienia
  *
  * Zamykanie i samoznikanie toastów wypisanych przez serwer oraz wspólne wejście
  * dla skryptów: `Quince.toast(tekst, rodzaj)`. Dzięki niemu dodanie do koszyka
  * czy dodanie do ulubionych mówi to samo i tak samo, co komunikat po
- * przekierowaniu — bez powielania znaczników w każdej wyspie.
+ * przekierowaniu, bez powielania znaczników w każdej wyspie.
  *
  * Sukces i informacja znikają same; błąd i ostrzeżenie zostają, dopóki klient
  * ich nie zamknie. Komunikat, przez który coś się nie udało, musi doczekać
@@ -36,7 +36,7 @@
             toast.remove();
 
             // Puste pudełko zostaje w dokumencie, ale bez ani jednego toasta nie
-            // ma czego pokazywać — i tak nie łapie kliknięć.
+            // ma czego pokazywać, a i tak nie łapie kliknięć.
             if (pojemnik && !pojemnik.children.length) {
                 pojemnik.remove();
             }

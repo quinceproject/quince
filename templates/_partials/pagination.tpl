@@ -1,5 +1,5 @@
 {**
- * Quince — stronicowanie.
+ * Quince: stronicowanie.
  *
  * Numery stron, wielokropek w miejscu przeskoku i przycisk „Następna" z nazwą,
  * a nie samą strzałką: strzałka obok numerów niczym się od nich nie różni,
@@ -12,7 +12,7 @@
  * a rząd zaczyna się wtedy od numeru, a nie od pola, które na pierwszej stronie
  * i tak jest martwe.
  *
- * Kontrakt z rdzeniem: `js-pager-link` i `data-ps-data` — po nich podpina się
+ * Kontrakt z rdzeniem: `js-pager-link` i `data-ps-data`. Po nich podpina się
  * przejście między stronami bez przeładowania. Pozycje są odnośnikami, więc
  * bez JavaScriptu działają jak zwykłe przejścia.
  *
