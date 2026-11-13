@@ -77,9 +77,25 @@ The release ZIP is ready to import. Nothing needs to be built.
 2. Upload that folder to the `themes/` directory of the shop, for example by FTP.
 3. In **Design → Theme & Logo** click **Use this theme** under Quince.
 
-**From Quince Engine** *(coming soon)*
+**From Quince Engine**
 
-Quince Engine will install the theme straight from its release.
+With Quince Engine installed, **Quince project → Quince modules** installs and updates
+the theme from the Quince release list. Then click **Use this theme** under Quince in
+**Design → Theme & Logo**.
+
+**With Composer**
+
+A PrestaShop shop ships without a `composer.json` of its own, so Quince packages are
+installed from a separate folder next to the shop. The one-time setup of that folder is
+described in the [Quince Engine README](https://github.com/quinceproject/quince_engine#installation).
+Then, from that folder:
+
+```sh
+composer require "quinceproject/theme:*"
+```
+
+Composer puts the theme in `themes/quince`. Click **Use this theme** under Quince in
+**Design → Theme & Logo**.
 
 > ⚠️ Prefer the release ZIP over the green **Code → Download ZIP** button. That
 > archive has the repository files in a subfolder and also carries the repository's
