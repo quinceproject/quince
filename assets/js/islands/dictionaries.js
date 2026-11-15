@@ -35,8 +35,21 @@
         var liczniki = Array.prototype.slice.call(korzen.querySelectorAll('[data-q-dict-count]'));
         var wzorLicznika = korzen.getAttribute('data-msg-of') || '%name%: %shown% / %total%';
         var wzorPusto = korzen.getAttribute('data-msg-empty') || '';
+        var wyczysc = korzen.querySelector('[data-q-dict-clear]');
+
+        if (wyczysc) {
+            wyczysc.addEventListener('click', function () {
+                pole.value = '';
+                pole.dispatchEvent(new Event('input'));
+                pole.focus();
+            });
+        }
 
         pole.addEventListener('input', function () {
+            if (wyczysc) {
+                wyczysc.hidden = pole.value === '';
+            }
+
             var fraza = pole.value.trim();
             var szukane = bezZnakow(fraza);
             var widoczne = {};

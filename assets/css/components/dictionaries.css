@@ -43,14 +43,47 @@
         white-space: nowrap;
     }
 
-    /* Pole wyszukiwania dłuższej tabeli: zwykłe pole formularza motywu. */
-    .q-dict__search {
+    /* Pole wyszukiwania dłuższej tabeli: zwykłe pole formularza motywu,
+       z miejscem po prawej na krzyżyk czyszczący. */
+    .q-dict__searchbox {
+        position: relative;
         margin-block-end: var(--q-space-sm);
+    }
+
+    .q-dict__search {
+        padding-inline-end: var(--q-touch-target);
+    }
+
+    /* Krzyżyk czyszczący: rysunek, barwy i obrys fokusu jak `q-modal__close`. */
+    .q-dict__clear {
+        position: absolute;
+        inset-block: 0;
+        inset-inline-end: 0;
+        inline-size: var(--q-touch-target);
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 0;
+        border: 0;
+        background: none;
+        color: var(--q-text-muted);
+        cursor: pointer;
+    }
+
+    .q-dict__clear:hover {
+        color: var(--q-text-strong);
+    }
+
+    .q-dict__clear:focus-visible {
+        outline: 2px solid var(--q-focus-ring);
+        outline-offset: -2px;
     }
 
     /* Krzyżyk i ozdobniki, które przeglądarka dokłada do pola `search`, zdjęte
        jak w wyszukiwarce nagłówka (header.css): rysuje je własną barwą,
-       niezależnie od ustawień sklepu. */
+       niezależnie od ustawień sklepu. Czyści nasz `q-dict__clear`. */
     .q-dict__search::-webkit-search-cancel-button,
     .q-dict__search::-webkit-search-decoration,
     .q-dict__search::-webkit-search-results-button {
