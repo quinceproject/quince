@@ -21,4 +21,36 @@
         font-weight: var(--q-weight-semibold);
         color: var(--q-text-strong);
     }
+
+    /* Nazwa roli po lewej, licznik pozycji po prawej, w jednym wierszu nad tabelą. */
+    .q-dict__head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: var(--q-space-md);
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-dict__head .q-dict__title {
+        margin: 0;
+    }
+
+    .q-dict__count {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+        font-variant-numeric: tabular-nums;
+        white-space: nowrap;
+    }
+
+    /* Pole wyszukiwania dłuższej tabeli: zwykłe pole formularza motywu. */
+    .q-dict__search {
+        margin-block-end: var(--q-space-sm);
+    }
+
+    .q-dict__empty {
+        margin: 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
 }

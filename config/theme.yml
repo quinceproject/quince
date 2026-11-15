@@ -565,6 +565,12 @@ assets:
         position: bottom
         priority: 103
 
+      # Słowniki: wyszukiwanie w dłuższej tabeli i licznik pozycji.
+      - id: quince-dictionaries
+        path: assets/js/islands/dictionaries.js
+        position: bottom
+        priority: 103
+
     # Strony z listą produktów. Skrypt przenosi panel filtrów do szuflady na
     # wąskim ekranie, rozwija pas nad listą i przełącza siatkę na listę.
     category: &quince-listing-js
