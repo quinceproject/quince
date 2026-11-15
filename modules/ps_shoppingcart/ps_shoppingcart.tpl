@@ -96,6 +96,15 @@
       </div>
 
       {hook h='displayQuinceCartUpsell'}
+
+      {* Hook z ustawień koszyka w silniku, pod dokupką: ten sam mechanizm co
+         `hook_cart_below_suggest` na stronie koszyka. *}
+      {if $modules.quince_engine.cart.drawerHook|default:''}
+        {capture name='qDrawerHook'}{hook h=$modules.quince_engine.cart.drawerHook}{/capture}
+        {if trim($smarty.capture.qDrawerHook) !== ''}
+          <div class="q-drawer__below-suggest">{$smarty.capture.qDrawerHook nofilter}</div>
+        {/if}
+      {/if}
     {else}
       <div class="q-drawer__empty">
         <svg width="40" height="40" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">

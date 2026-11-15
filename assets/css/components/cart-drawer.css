@@ -217,4 +217,7 @@
         margin-inline: auto;
         margin-block-end: var(--q-space-sm);
     }
+
+    /* Hook z ustawień koszyka pod dokupką. Ten sam odstęp co nad dokupką (`q-upsell`). */
+    .q-drawer__below-suggest { margin-block-start: var(--q-space-md); }
 }

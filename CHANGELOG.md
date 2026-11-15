@@ -4,6 +4,13 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.3] - 2026-11-15
+
+### Added
+
+- The cart drawer shows the hook set in Quince Engine 0.7.2 (**Cart → Hook in the cart
+  drawer**), under the suggested products.
+
 ## [0.1.2] - 2026-11-13
 
 ### Added
