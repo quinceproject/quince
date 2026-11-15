@@ -48,6 +48,15 @@
         margin-block-end: var(--q-space-sm);
     }
 
+    /* Krzyżyk i ozdobniki, które przeglądarka dokłada do pola `search`, zdjęte
+       jak w wyszukiwarce nagłówka (header.css): rysuje je własną barwą,
+       niezależnie od ustawień sklepu. */
+    .q-dict__search::-webkit-search-cancel-button,
+    .q-dict__search::-webkit-search-decoration,
+    .q-dict__search::-webkit-search-results-button {
+        appearance: none;
+    }
+
     .q-dict__empty {
         margin: 0;
         font-size: var(--q-fs-sm);
