@@ -40,8 +40,8 @@
   {** Render structured data from the core. Available since PrestaShop 9.2 **}
   {if !empty($structured_data)}
     {foreach from=$structured_data item="element"}
-      {** 320 in the method parameter means JSON_UNESCAPED_SLASHES (64) + JSON_UNESCAPED_UNICODE (256) **}
-    <script type="application/ld+json">{$element|@json_encode:320 nofilter}</script>
+      {** 257 = JSON_UNESCAPED_UNICODE (256) + JSON_HEX_TAG (1): "<" and ">" in catalogue data become < / >, so a "</script>" inside a description cannot close the tag **}
+    <script type="application/ld+json">{$element|@json_encode:257 nofilter}</script>
     {/foreach}
 
   {** Or render them in a legacy, manual way. This will be removed in future versions of this theme. **}

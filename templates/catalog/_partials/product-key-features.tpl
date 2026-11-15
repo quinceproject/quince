@@ -57,7 +57,7 @@
       {if $smarty.foreach.cechy.iteration <= $qPokazane}
         <div class="q-facts__row">
           <dt class="q-facts__key">{$qCecha.name}</dt>
-          <dd class="q-facts__val">{$qCecha.value|escape:'htmlall'|nl2br nofilter}</dd>
+          <dd class="q-facts__val">{$qCecha.value|htmlspecialchars|nl2br nofilter}</dd>
         </div>
       {/if}
     {/foreach}

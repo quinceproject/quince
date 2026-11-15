@@ -44,7 +44,7 @@
       <p class="q-review__title">{$qOpinia.title}</p>
     {/if}
 
-    <p class="q-review__text">{$qOpinia.content|escape:'html':'UTF-8'|nl2br nofilter}</p>
+    <p class="q-review__text">{$qOpinia.content|htmlspecialchars|nl2br nofilter}</p>
 
     {* Stopka: po lewej informacja, po prawej działanie. Wcześniej jeden przycisk
        robił za jedno i drugie, więc licznik wyglądał na klikalny, a przycisk na

@@ -21,14 +21,14 @@
     <time class="q-qa__date" datetime="{$qPytanie.dateIso}">{$qPytanie.date}</time>
   </header>
 
-  <p class="q-qa__question">{$qPytanie.question|escape:'html':'UTF-8'|nl2br nofilter}</p>
+  <p class="q-qa__question">{$qPytanie.question|htmlspecialchars|nl2br nofilter}</p>
 
   {* Blok odpowiedzi zaczyna się mikropodpisem: to on nazywa, czyj to głos,
      zanim ktokolwiek przeczyta treść. *}
   <div class="q-qa__answer">
     <p class="q-qa__answer-label">{l s='Answer from the shop' d='Shop.Theme.Catalog'}</p>
 
-    <p class="q-qa__answer-text">{$qPytanie.answer|escape:'html':'UTF-8'|nl2br nofilter}</p>
+    <p class="q-qa__answer-text">{$qPytanie.answer|htmlspecialchars|nl2br nofilter}</p>
 
     {if $qPytanie.answerAuthor}
       <p class="q-qa__answer-by">{$qPytanie.answerAuthor}</p>

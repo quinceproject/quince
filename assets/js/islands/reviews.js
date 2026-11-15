@@ -323,10 +323,11 @@
             return '';
         }
 
-        var pojemnik = document.createElement('div');
-        pojemnik.innerHTML = tekst;
+        // DOMParser buduje osobny dokument, w którym nic się nie wykonuje.
+        // `innerHTML` na odłączonym elemencie i tak ładuje obrazki i odpala `onerror`.
+        var dokument = new DOMParser().parseFromString(String(tekst), 'text/html');
 
-        return (pojemnik.textContent || '').trim();
+        return (dokument.body.textContent || '').trim();
     }
 
     /** Adres z doklejonymi parametrami, niezależnie od tego, czy już je miał. */

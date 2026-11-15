@@ -4,6 +4,18 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.4] - 2026-11-15
+
+### Security
+
+- Product reviews, product questions and answers, and feature values are escaped
+  before line breaks are added. On the shop front PrestaShop turns the `escape`
+  modifier off, so these texts went out as raw HTML: a review with a script ran for
+  every visitor of the product page once the review was approved. Update now.
+- Structured data (JSON-LD) escapes `<` and `>`, so a `</script>` in catalogue data
+  cannot close the tag.
+- The reviews island reads error messages through `DOMParser` instead of `innerHTML`.
+
 ## [0.1.3] - 2026-11-15
 
 ### Added

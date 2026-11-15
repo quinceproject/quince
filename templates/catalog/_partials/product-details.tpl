@@ -112,7 +112,7 @@
                 {foreach from=$product.grouped_features item=feature}
                   <tr class="details__item--feature">
                     <th scope="row">{$feature.name}</th>
-                    <td>{$feature.value|escape:'htmlall'|nl2br nofilter}</td>
+                    <td>{$feature.value|htmlspecialchars|nl2br nofilter}</td>
                   </tr>
                 {/foreach}
               {/if}
