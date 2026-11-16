@@ -145,6 +145,78 @@
         <target>Preferencje</target>
       </trans-unit>
 
+      <trans-unit id="quince.8cc3bd8a948f" resname="Customer service messages">
+        <source>Customer service messages</source>
+        <target>Wiadomości z obsługą klienta</target>
+      </trans-unit>
+      <trans-unit id="quince.2b995a6285a6" resname="Here is a list of pending merchandise returns.">
+        <source>Here is a list of pending merchandise returns.</source>
+        <target>Oto lista oczekujących zwrotów.</target>
+      </trans-unit>
+      <trans-unit id="quince.816d1b901619" resname="Manage your addresses for billing and delivery to streamline your future orders.">
+        <source>Manage your addresses for billing and delivery to streamline your future orders.</source>
+        <target>Zarządzaj adresami do faktury i dostawy, aby szybciej składać kolejne zamówienia.</target>
+      </trans-unit>
+      <trans-unit id="quince.a2b9439af1d4" resname="My account navigation sidebar">
+        <source>My account navigation sidebar</source>
+        <target>Menu konta</target>
+      </trans-unit>
+      <trans-unit id="quince.e91e64282a4f" resname="Products details">
+        <source>Products details</source>
+        <target>Szczegóły produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.8d25755e08bc" resname="Returns details">
+        <source>Returns details</source>
+        <target>Szczegóły zwrotu</target>
+      </trans-unit>
+      <trans-unit id="quince.c87aacf5673f" resname="Sign out">
+        <source>Sign out</source>
+        <target>Wyloguj się</target>
+      </trans-unit>
+      <trans-unit id="quince.31d01d882840" resname="Toggle your account links">
+        <source>Toggle your account links</source>
+        <target>Pokaż lub ukryj linki konta</target>
+      </trans-unit>
+      <trans-unit id="quince.2c4217257ec4" resname="Update your personal information to keep your account details up to date.">
+        <source>Update your personal information to keep your account details up to date.</source>
+        <target>Aktualizuj dane osobowe, aby dane konta były zawsze aktualne.</target>
+      </trans-unit>
+      <trans-unit id="quince.db8fa8de3bed" resname="View and manage your available vouchers and discount codes for use on your next purchase.">
+        <source>View and manage your available vouchers and discount codes for use on your next purchase.</source>
+        <target>Przeglądaj dostępne kupony i kody rabatowe do wykorzystania przy kolejnych zakupach.</target>
+      </trans-unit>
+      <trans-unit id="quince.1a6787b6720d" resname="View my account (%customerName%)">
+        <source>View my account (%customerName%)</source>
+        <target>Moje konto (%customerName%)</target>
+      </trans-unit>
+      <trans-unit id="quince.e35e6f21ecca" resname="View order reference">
+        <source>View order reference</source>
+        <target>Zobacz zamówienie</target>
+      </trans-unit>
+      <trans-unit id="quince.dd80be811f20" resname="View return number">
+        <source>View return number</source>
+        <target>Zobacz numer zwrotu</target>
+      </trans-unit>
+      <trans-unit id="quince.f0b7e04bbe27" resname="View returns details">
+        <source>View returns details</source>
+        <target>Zobacz szczegóły zwrotu</target>
+      </trans-unit>
+      <trans-unit id="quince.ebdf0f490b61" resname="Welcome back">
+        <source>Welcome back</source>
+        <target>Witaj ponownie</target>
+      </trans-unit>
+      <trans-unit id="quince.2ae49cd10410" resname="Your password is too weak">
+        <source>Your password is too weak</source>
+        <target>Hasło jest za słabe</target>
+      </trans-unit>
+      <trans-unit id="quince.adabee37688f" resname="Your password is valid">
+        <source>Your password is valid</source>
+        <target>Hasło jest prawidłowe</target>
+      </trans-unit>
+      <trans-unit id="quince.aea83cdff1f4" resname="Your password length is invalid">
+        <source>Your password length is invalid</source>
+        <target>Hasło ma nieprawidłową długość</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

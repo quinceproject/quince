@@ -343,6 +343,50 @@
         <target>wybierzesz w kroku 3</target>
       </trans-unit>
 
+      <trans-unit id="quince.78de86a20eb0" resname="%count% products">
+        <source>%count% products</source>
+        <target>Produkty: %count%</target>
+      </trans-unit>
+      <trans-unit id="quince.5c0842430b00" resname="%product_count% order items">
+        <source>%product_count% order items</source>
+        <target>Pozycje zamówienia: %product_count%</target>
+      </trans-unit>
+      <trans-unit id="quince.a91e54249f6a" resname="%quantity% pcs.">
+        <source>%quantity% pcs.</source>
+        <target>%quantity% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.1cdbfb61fe9d" resname="Calculated at checkout">
+        <source>Calculated at checkout</source>
+        <target>Obliczane przy zamówieniu</target>
+      </trans-unit>
+      <trans-unit id="quince.0ed87ff7fd03" resname="Please make sure you've chosen a [1]payment method[/1] and accepted the required condition(s).">
+        <source>Please make sure you've chosen a [1]payment method[/1] and accepted the required condition(s).</source>
+        <target>Upewnij się, że wybrano [1]metodę płatności[/1] i zaakceptowano wymagane warunki.</target>
+      </trans-unit>
+      <trans-unit id="quince.6cca837b5d9d" resname="Please make sure you've chosen a [1]payment method[/1].">
+        <source>Please make sure you've chosen a [1]payment method[/1].</source>
+        <target>Upewnij się, że wybrano [1]metodę płatności[/1].</target>
+      </trans-unit>
+      <trans-unit id="quince.6354c00dadee" resname="Product added to cart">
+        <source>Product added to cart</source>
+        <target>Produkt dodany do koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.d4da09d07e09" resname="Remove %productName% from cart">
+        <source>Remove %productName% from cart</source>
+        <target>Usuń %productName% z koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.fc1ff8b6c1b5" resname="Remove voucher: %voucherName%">
+        <source>Remove voucher: %voucherName%</source>
+        <target>Usuń kod rabatowy: %voucherName%</target>
+      </trans-unit>
+      <trans-unit id="quince.9aaa7ddbe743" resname="You are %amount% away from free delivery">
+        <source>You are %amount% away from free delivery</source>
+        <target>Do darmowej dostawy brakuje %amount%</target>
+      </trans-unit>
+      <trans-unit id="quince.a2a24f4120a5" resname="Your cart is empty">
+        <source>Your cart is empty</source>
+        <target>Twój koszyk jest pusty</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

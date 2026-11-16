@@ -133,6 +133,54 @@
         <source>Write your comment...</source>
         <target>Napisz swój komentarz...</target>
       </trans-unit>
+      <trans-unit id="quince.1412f7dcbcbe" resname="Address details:">
+        <source>Address details:</source>
+        <target>Dane adresowe:</target>
+      </trans-unit>
+      <trans-unit id="quince.0f2128487e1f" resname="An error occurred while loading addresses. Please try again.">
+        <source>An error occurred while loading addresses. Please try again.</source>
+        <target>Nie udało się wczytać adresów. Spróbuj ponownie.</target>
+      </trans-unit>
+      <trans-unit id="quince.cae1b369089f" resname="Are you sure you want to delete this address?">
+        <source>Are you sure you want to delete this address?</source>
+        <target>Na pewno usunąć ten adres?</target>
+      </trans-unit>
+      <trans-unit id="quince.0f1556b1cbbb" resname="Delete this address?">
+        <source>Delete this address?</source>
+        <target>Usunąć ten adres?</target>
+      </trans-unit>
+      <trans-unit id="quince.0cbf677caf42" resname="Edit billing address">
+        <source>Edit billing address</source>
+        <target>Edytuj adres do faktury</target>
+      </trans-unit>
+      <trans-unit id="quince.8e1572c93c61" resname="Edit delivery address">
+        <source>Edit delivery address</source>
+        <target>Edytuj adres dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.9a1e1ced2c95" resname="Loading addresses...">
+        <source>Loading addresses...</source>
+        <target>Wczytywanie adresów...</target>
+      </trans-unit>
+      <trans-unit id="quince.8cad959f414b" resname="New billing address">
+        <source>New billing address</source>
+        <target>Nowy adres do faktury</target>
+      </trans-unit>
+      <trans-unit id="quince.32c2d21acbef" resname="New delivery address">
+        <source>New delivery address</source>
+        <target>Nowy adres dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.f1e8f49d1d8d" resname="Select address: %alias%">
+        <source>Select address: %alias%</source>
+        <target>Wybierz adres: %alias%</target>
+      </trans-unit>
+      <trans-unit id="quince.beb82bccc349" resname="This action will remove the selected address from your checkout.">
+        <source>This action will remove the selected address from your checkout.</source>
+        <target>Wybrany adres zostanie usunięty z zamówienia.</target>
+      </trans-unit>
+      <trans-unit id="quince.0c7789282e40" resname="Use a different delivery address">
+        <source>Use a different delivery address</source>
+        <target>Użyj innego adresu dostawy</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

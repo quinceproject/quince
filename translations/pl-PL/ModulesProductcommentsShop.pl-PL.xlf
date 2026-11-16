@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+      <trans-unit id="quince.b5d3d3ec1fb0" resname="Rated">
+        <source>Rated</source>
+        <target>Ocena</target>
+      </trans-unit>
+      <trans-unit id="quince.e2a248c84791" resname="not useful review(s). Mark this review as not useful.">
+        <source>not useful review(s). Mark this review as not useful.</source>
+        <target>os. uznało opinię za niepomocną. Oznacz ją jako niepomocną.</target>
+      </trans-unit>
+      <trans-unit id="quince.9056f4871b03" resname="out of 5 stars">
+        <source>out of 5 stars</source>
+        <target>na 5 gwiazdek</target>
+      </trans-unit>
+      <trans-unit id="quince.154d0890d7b9" resname="useful review(s). Mark this review as useful.">
+        <source>useful review(s). Mark this review as useful.</source>
+        <target>os. uznało opinię za pomocną. Oznacz ją jako pomocną.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

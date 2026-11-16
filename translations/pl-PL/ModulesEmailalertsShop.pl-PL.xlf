@@ -16,6 +16,14 @@
         <target>Zarządzaj powiadomieniami e-mail, aby być na bieżąco z dostępnością produktów.</target>
       </trans-unit>
 
+      <trans-unit id="quince.5d4aaa83eb6e" resname="Attributes: %attributes%">
+        <source>Attributes: %attributes%</source>
+        <target>Atrybuty: %attributes%</target>
+      </trans-unit>
+      <trans-unit id="quince.2e5639fea0a4" resname="Delete %productName% mail alert">
+        <source>Delete %productName% mail alert</source>
+        <target>Usuń powiadomienie e-mail o produkcie %productName%</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

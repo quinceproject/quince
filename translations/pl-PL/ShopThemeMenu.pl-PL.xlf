@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+      <trans-unit id="quince.53cf9609c3f0" resname="%s submenu">
+        <source>%s submenu</source>
+        <target>Podmenu: %s</target>
+      </trans-unit>
+      <trans-unit id="quince.a056afaf4998" resname="%s submenu tabs">
+        <source>%s submenu tabs</source>
+        <target>Zakładki podmenu: %s</target>
+      </trans-unit>
+      <trans-unit id="quince.807ef262ee64" resname="Main navigation">
+        <source>Main navigation</source>
+        <target>Główna nawigacja</target>
+      </trans-unit>
+      <trans-unit id="quince.730af6cd5da8" resname="Open %s submenu">
+        <source>Open %s submenu</source>
+        <target>Otwórz podmenu: %s</target>
+      </trans-unit>
+      <trans-unit id="quince.6131ff381b25" resname="Open mobile menu">
+        <source>Open mobile menu</source>
+        <target>Otwórz menu</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -86,6 +86,98 @@
         <source>%label% to</source>
         <target>%label% do</target>
       </trans-unit>
+      <trans-unit id="quince.2859504d8a2d" resname="Call us at: %phone%">
+        <source>Call us at: %phone%</source>
+        <target>Zadzwoń: %phone%</target>
+      </trans-unit>
+      <trans-unit id="quince.268c1f3299f2" resname="Call us: %phone%">
+        <source>Call us: %phone%</source>
+        <target>Zadzwoń: %phone%</target>
+      </trans-unit>
+      <trans-unit id="quince.91d656fbb78e" resname="Change language">
+        <source>Change language</source>
+        <target>Zmień język</target>
+      </trans-unit>
+      <trans-unit id="quince.b0eb68072473" resname="Close message">
+        <source>Close message</source>
+        <target>Zamknij komunikat</target>
+      </trans-unit>
+      <trans-unit id="quince.a462ef1c0490" resname="Close search">
+        <source>Close search</source>
+        <target>Zamknij wyszukiwanie</target>
+      </trans-unit>
+      <trans-unit id="quince.d54d0d430d4b" resname="Delivery option: %carrier_name%">
+        <source>Delivery option: %carrier_name%</source>
+        <target>Sposób dostawy: %carrier_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.c6c5ff1c42ce" resname="Go to slide %slide_index%">
+        <source>Go to slide %slide_index%</source>
+        <target>Przejdź do slajdu %slide_index%</target>
+      </trans-unit>
+      <trans-unit id="quince.b61541208db7" resname="Menu">
+        <source>Menu</source>
+        <target>Menu</target>
+      </trans-unit>
+      <trans-unit id="quince.558ed0bec0be" resname="Next image">
+        <source>Next image</source>
+        <target>Następne zdjęcie</target>
+      </trans-unit>
+      <trans-unit id="quince.0ec8d0a0ae46" resname="No delivery service">
+        <source>No delivery service</source>
+        <target>Bez dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.c49a07c926bf" resname="Photo %number%">
+        <source>Photo %number%</source>
+        <target>Zdjęcie %number%</target>
+      </trans-unit>
+      <trans-unit id="quince.ee34f6ba47ba" resname="Previous image">
+        <source>Previous image</source>
+        <target>Poprzednie zdjęcie</target>
+      </trans-unit>
+      <trans-unit id="quince.8518bbdb18f9" resname="Saved products">
+        <source>Saved products</source>
+        <target>Zapisane produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.46daba3c618d" resname="Send us a fax to: %fax%">
+        <source>Send us a fax to: %fax%</source>
+        <target>Faks: %fax%</target>
+      </trans-unit>
+      <trans-unit id="quince.cc95d7b6b3d4" resname="Send us an email to: %email%">
+        <source>Send us an email to: %email%</source>
+        <target>Napisz do nas: %email%</target>
+      </trans-unit>
+      <trans-unit id="quince.cc367b544fab" resname="Skip to main content">
+        <source>Skip to main content</source>
+        <target>Przejdź do treści</target>
+      </trans-unit>
+      <trans-unit id="quince.3224ef79c527" resname="Toggle %s links">
+        <source>Toggle %s links</source>
+        <target>Pokaż lub ukryj linki: %s</target>
+      </trans-unit>
+      <trans-unit id="quince.a6ca32215702" resname="Toggle store information">
+        <source>Toggle store information</source>
+        <target>Pokaż lub ukryj informacje o sklepie</target>
+      </trans-unit>
+      <trans-unit id="quince.712451d94654" resname="View schedules for %store_name%">
+        <source>View schedules for %store_name%</source>
+        <target>Godziny otwarcia: %store_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.c9b70fb5570b" resname="Virtual product(s)">
+        <source>Virtual product(s)</source>
+        <target>Produkty wirtualne</target>
+      </trans-unit>
+      <trans-unit id="quince.a55071978a20" resname="Virtual product(s): No delivery service">
+        <source>Virtual product(s): No delivery service</source>
+        <target>Produkty wirtualne: bez dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.83218ac34c18" resname="Welcome">
+        <source>Welcome</source>
+        <target>Witaj</target>
+      </trans-unit>
+      <trans-unit id="quince.72027ab6282c" resname="x%quantity%">
+        <source>x%quantity%</source>
+        <target>x%quantity%</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

@@ -4,6 +4,17 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.6] - 2026-11-16
+
+### Fixed
+
+- 219 theme texts had no Polish translation and showed in English on a Polish shop,
+  among them the product page tabs (Reviews, Questions and answers, Product safety),
+  "Full specification", "Buy now", "Write the first review" and the carousel titles.
+- Product gallery: the frame of the selected thumbnail and the hover frame are drawn
+  over the picture. Before, a picture filling the whole thumbnail hid the top and the
+  bottom of the frame.
+
 ## [0.1.5] - 2026-11-16
 
 ### Added

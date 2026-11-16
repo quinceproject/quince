@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+      <trans-unit id="quince.f74a3e1c931c" resname="Enter your email address.">
+        <source>Enter your email address.</source>
+        <target>Wpisz adres e-mail.</target>
+      </trans-unit>
+      <trans-unit id="quince.9c064a2957d3" resname="This is not a valid email address.">
+        <source>This is not a valid email address.</source>
+        <target>To nie jest prawidłowy adres e-mail.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

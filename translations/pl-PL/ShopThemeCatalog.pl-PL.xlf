@@ -79,6 +79,358 @@
         <source>Go back to the full list and narrow it down differently.</source>
         <target>Wróć do pełnej listy i zawęż ją inaczej.</target>
       </trans-unit>
+      <trans-unit id="quince.d87e4047adab" resname="%count% pcs.">
+        <source>%count% pcs.</source>
+        <target>%count% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.b0015c762a20" resname="%count% products in this pack">
+        <source>%count% products in this pack</source>
+        <target>Produkty w pakiecie: %count%</target>
+      </trans-unit>
+      <trans-unit id="quince.b7aed4410787" resname="%count% reviews">
+        <source>%count% reviews</source>
+        <target>Opinie: %count%</target>
+      </trans-unit>
+      <trans-unit id="quince.3b69b43cb5ec" resname="%from% and more">
+        <source>%from% and more</source>
+        <target>%from% i więcej</target>
+      </trans-unit>
+      <trans-unit id="quince.02365d4a3e0f" resname="%from%-%to% pcs.">
+        <source>%from%-%to% pcs.</source>
+        <target>%from%-%to% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.6a6757c10f57" resname="%grade% out of 5">
+        <source>%grade% out of 5</source>
+        <target>%grade% na 5</target>
+      </trans-unit>
+      <trans-unit id="quince.8f7b1d2a4550" resname="%price% per item, see the other thresholds">
+        <source>%price% per item, see the other thresholds</source>
+        <target>%price% za sztukę, zobacz pozostałe progi</target>
+      </trans-unit>
+      <trans-unit id="quince.569b4e36fc2c" resname="%qty% pcs.">
+        <source>%qty% pcs.</source>
+        <target>%qty% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.b926b13c1cf1" resname="1 product in this pack">
+        <source>1 product in this pack</source>
+        <target>1 produkt w pakiecie</target>
+      </trans-unit>
+      <trans-unit id="quince.b4fa07834a11" resname="Accessories and related products">
+        <source>Accessories and related products</source>
+        <target>Akcesoria i produkty powiązane</target>
+      </trans-unit>
+      <trans-unit id="quince.e794ab6636c5" resname="All featured products">
+        <source>All featured products</source>
+        <target>Wszystkie polecane produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.e23a6f60c3a0" resname="Answer from the shop">
+        <source>Answer from the shop</source>
+        <target>Odpowiedź sklepu</target>
+      </trans-unit>
+      <trans-unit id="quince.40ff3a457d7c" resname="Available packs with this product">
+        <source>Available packs with this product</source>
+        <target>Pakiety z tym produktem</target>
+      </trans-unit>
+      <trans-unit id="quince.9ae7041cc2d9" resname="Available quantity to return:">
+        <source>Available quantity to return:</source>
+        <target>Ilość dostępna do zwrotu:</target>
+      </trans-unit>
+      <trans-unit id="quince.121fabbd65c0" resname="Bought separately">
+        <source>Bought separately</source>
+        <target>Kupione osobno</target>
+      </trans-unit>
+      <trans-unit id="quince.c190a408434e" resname="Brand: %brand_name%">
+        <source>Brand: %brand_name%</source>
+        <target>Marka: %brand_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.3118df0a39de" resname="Buy more, pay less">
+        <source>Buy more, pay less</source>
+        <target>Kup więcej, zapłać mniej</target>
+      </trans-unit>
+      <trans-unit id="quince.89738fc42cc7" resname="Carrier: %carrier_name%">
+        <source>Carrier: %carrier_name%</source>
+        <target>Przewoźnik: %carrier_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.9983381c2106" resname="Clear search">
+        <source>Clear search</source>
+        <target>Wyczyść wyszukiwanie</target>
+      </trans-unit>
+      <trans-unit id="quince.7e6d74813b68" resname="Clients also bought">
+        <source>Clients also bought</source>
+        <target>Klienci kupili też</target>
+      </trans-unit>
+      <trans-unit id="quince.c969d68f9b15" resname="Currently unavailable">
+        <source>Currently unavailable</source>
+        <target>Chwilowo niedostępny</target>
+      </trans-unit>
+      <trans-unit id="quince.9644a2d72b5e" resname="Fill in the rating, the title and the review.">
+        <source>Fill in the rating, the title and the review.</source>
+        <target>Wystaw ocenę, wpisz tytuł i treść opinii.</target>
+      </trans-unit>
+      <trans-unit id="quince.0b03509f76f8" resname="Film %number%">
+        <source>Film %number%</source>
+        <target>Film %number%</target>
+      </trans-unit>
+      <trans-unit id="quince.aac06fcbfe81" resname="Fitment and codes">
+        <source>Fitment and codes</source>
+        <target>Dopasowanie i kody</target>
+      </trans-unit>
+      <trans-unit id="quince.10417d949edd" resname="Full specification">
+        <source>Full specification</source>
+        <target>Pełna specyfikacja</target>
+      </trans-unit>
+      <trans-unit id="quince.f0fbb95083ef" resname="Helpful to %count% people">
+        <source>Helpful to %count% people</source>
+        <target>Pomocna dla osób: %count%</target>
+      </trans-unit>
+      <trans-unit id="quince.489ef62b62d7" resname="If this is a recurring problem, please [1]contact us[/1].">
+        <source>If this is a recurring problem, please [1]contact us[/1].</source>
+        <target>Jeśli problem się powtarza, [1]skontaktuj się z nami[/1].</target>
+      </trans-unit>
+      <trans-unit id="quince.c4ab2e8066c7" resname="In pack">
+        <source>In pack</source>
+        <target>W pakiecie</target>
+      </trans-unit>
+      <trans-unit id="quince.bf98238e55d9" resname="No questions about this product yet.">
+        <source>No questions about this product yet.</source>
+        <target>Nikt jeszcze nie zapytał o ten produkt.</target>
+      </trans-unit>
+      <trans-unit id="quince.7a17d452e5a4" resname="Pack contents">
+        <source>Pack contents</source>
+        <target>Zawartość pakietu</target>
+      </trans-unit>
+      <trans-unit id="quince.fe3dc0058b9a" resname="Pack price">
+        <source>Pack price</source>
+        <target>Cena pakietu</target>
+      </trans-unit>
+      <trans-unit id="quince.3a9820ba96f3" resname="Picture %number%">
+        <source>Picture %number%</source>
+        <target>Zdjęcie %number%</target>
+      </trans-unit>
+      <trans-unit id="quince.9a38d31522ba" resname="Price depends on quantity">
+        <source>Price depends on quantity</source>
+        <target>Cena zależy od ilości</target>
+      </trans-unit>
+      <trans-unit id="quince.f2c12ae14393" resname="Price:">
+        <source>Price:</source>
+        <target>Cena:</target>
+      </trans-unit>
+      <trans-unit id="quince.682084614bc1" resname="Price: %price%.">
+        <source>Price: %price%.</source>
+        <target>Cena: %price%.</target>
+      </trans-unit>
+      <trans-unit id="quince.04c06765e76f" resname="Product brand: %brand_name%">
+        <source>Product brand: %brand_name%</source>
+        <target>Marka produktu: %brand_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.54a768812beb" resname="Product film">
+        <source>Product film</source>
+        <target>Film o produkcie</target>
+      </trans-unit>
+      <trans-unit id="quince.2c595b4f6d0c" resname="Product images">
+        <source>Product images</source>
+        <target>Zdjęcia produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.b70a3868321e" resname="Product safety">
+        <source>Product safety</source>
+        <target>Bezpieczeństwo produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.e91e64282a4f" resname="Products details">
+        <source>Products details</source>
+        <target>Szczegóły produktów</target>
+      </trans-unit>
+      <trans-unit id="quince.cd39d0953fe5" resname="Promotion ends in">
+        <source>Promotion ends in</source>
+        <target>Promocja kończy się za</target>
+      </trans-unit>
+      <trans-unit id="quince.c874fc2a4f2e" resname="Quantity inside the pack: %quantity%.">
+        <source>Quantity inside the pack: %quantity%.</source>
+        <target>Ilość w pakiecie: %quantity%.</target>
+      </trans-unit>
+      <trans-unit id="quince.9ea54b1d9546" resname="Questions and answers">
+        <source>Questions and answers</source>
+        <target>Pytania i odpowiedzi</target>
+      </trans-unit>
+      <trans-unit id="quince.309d8cb610fe" resname="Rated %grade% out of 5">
+        <source>Rated %grade% out of 5</source>
+        <target>Ocena %grade% na 5</target>
+      </trans-unit>
+      <trans-unit id="quince.3bf4ed96b193" resname="Recently viewed">
+        <source>Recently viewed</source>
+        <target>Ostatnio oglądane</target>
+      </trans-unit>
+      <trans-unit id="quince.15876a65ebf3" resname="Reference: %reference%">
+        <source>Reference: %reference%</source>
+        <target>Indeks: %reference%</target>
+      </trans-unit>
+      <trans-unit id="quince.e545bb74dcb3" resname="Regular price:">
+        <source>Regular price:</source>
+        <target>Cena regularna:</target>
+      </trans-unit>
+      <trans-unit id="quince.662cf2be1420" resname="Remove %1$s filter: %2$s">
+        <source>Remove %1$s filter: %2$s</source>
+        <target>Usuń filtr %1$s: %2$s</target>
+      </trans-unit>
+      <trans-unit id="quince.f8a0aa69f5ce" resname="Review title">
+        <source>Review title</source>
+        <target>Tytuł opinii</target>
+      </trans-unit>
+      <trans-unit id="quince.34e80a799d14" resname="Reviews">
+        <source>Reviews</source>
+        <target>Opinie</target>
+      </trans-unit>
+      <trans-unit id="quince.6665e3761028" resname="SKU">
+        <source>SKU</source>
+        <target>Indeks</target>
+      </trans-unit>
+      <trans-unit id="quince.5efad24ea067" resname="Search products...">
+        <source>Search products...</source>
+        <target>Szukaj produktów...</target>
+      </trans-unit>
+      <trans-unit id="quince.ee58b5d2d400" resname="See pack details">
+        <source>See pack details</source>
+        <target>Zobacz szczegóły pakietu</target>
+      </trans-unit>
+      <trans-unit id="quince.d96b4c25c8c6" resname="Select all products">
+        <source>Select all products</source>
+        <target>Zaznacz wszystkie produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.1b43324e279c" resname="Select product to return">
+        <source>Select product to return</source>
+        <target>Wybierz produkt do zwrotu</target>
+      </trans-unit>
+      <trans-unit id="quince.a1ab8a671900" resname="Select quantity to return">
+        <source>Select quantity to return</source>
+        <target>Wybierz ilość do zwrotu</target>
+      </trans-unit>
+      <trans-unit id="quince.0422a40acea0" resname="Selected quantity: %qty% pcs., price %price% per item">
+        <source>Selected quantity: %qty% pcs., price %price% per item</source>
+        <target>Wybrana ilość: %qty% szt., cena %price% za sztukę</target>
+      </trans-unit>
+      <trans-unit id="quince.070f3d33a6a9" resname="Selected: %count%">
+        <source>Selected: %count%</source>
+        <target>Zaznaczono: %count%</target>
+      </trans-unit>
+      <trans-unit id="quince.fc8614aeabce" resname="Sign in to ask a question">
+        <source>Sign in to ask a question</source>
+        <target>Zaloguj się, aby zadać pytanie</target>
+      </trans-unit>
+      <trans-unit id="quince.1207aec090b7" resname="Sign in to write a review">
+        <source>Sign in to write a review</source>
+        <target>Zaloguj się, aby napisać opinię</target>
+      </trans-unit>
+      <trans-unit id="quince.2f036820805b" resname="Some products could not be added to the cart.">
+        <source>Some products could not be added to the cart.</source>
+        <target>Nie udało się dodać części produktów do koszyka.</target>
+      </trans-unit>
+      <trans-unit id="quince.79d8da3f44da" resname="Subcategories for %s">
+        <source>Subcategories for %s</source>
+        <target>Podkategorie: %s</target>
+      </trans-unit>
+      <trans-unit id="quince.57ed35599aaf" resname="Thank you for your review">
+        <source>Thank you for your review</source>
+        <target>Dziękujemy za opinię</target>
+      </trans-unit>
+      <trans-unit id="quince.3123a985de4c" resname="The more items in one order, the lower the price per item. Click a threshold to set that quantity.">
+        <source>The more items in one order, the lower the price per item. Click a threshold to set that quantity.</source>
+        <target>Im więcej sztuk w jednym zamówieniu, tym niższa cena za sztukę. Kliknij próg, aby ustawić tę ilość.</target>
+      </trans-unit>
+      <trans-unit id="quince.a9a7cff304a9" resname="The question could not be sent. Please try again in a moment.">
+        <source>The question could not be sent. Please try again in a moment.</source>
+        <target>Nie udało się wysłać pytania. Spróbuj ponownie za chwilę.</target>
+      </trans-unit>
+      <trans-unit id="quince.aada8d08cc21" resname="The question is on its way">
+        <source>The question is on its way</source>
+        <target>Pytanie zostało wysłane</target>
+      </trans-unit>
+      <trans-unit id="quince.8dafc783066b" resname="The review could not be sent. Please try again in a moment.">
+        <source>The review could not be sent. Please try again in a moment.</source>
+        <target>Nie udało się wysłać opinii. Spróbuj ponownie za chwilę.</target>
+      </trans-unit>
+      <trans-unit id="quince.9c064a2957d3" resname="This is not a valid email address.">
+        <source>This is not a valid email address.</source>
+        <target>To nie jest prawidłowy adres e-mail.</target>
+      </trans-unit>
+      <trans-unit id="quince.27a482d100a9" resname="This product">
+        <source>This product</source>
+        <target>Ten produkt</target>
+      </trans-unit>
+      <trans-unit id="quince.f7f700c29e20" resname="This product comes in several versions, so price and availability depend on the one you choose.">
+        <source>This product comes in several versions, so price and availability depend on the one you choose.</source>
+        <target>Ten produkt ma kilka wersji, więc cena i dostępność zależą od wybranej.</target>
+      </trans-unit>
+      <trans-unit id="quince.e36bf5b801b4" resname="This product has no reviews yet.">
+        <source>This product has no reviews yet.</source>
+        <target>Ten produkt nie ma jeszcze opinii.</target>
+      </trans-unit>
+      <trans-unit id="quince.d9d697694800" resname="View product %product_name%">
+        <source>View product %product_name%</source>
+        <target>Zobacz produkt %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.27c58e5a84e0" resname="View product %product_name%, part of the pack.">
+        <source>View product %product_name%, part of the pack.</source>
+        <target>Zobacz produkt %product_name%, część pakietu.</target>
+      </trans-unit>
+      <trans-unit id="quince.5c8b9b385b8d" resname="Watch the film">
+        <source>Watch the film</source>
+        <target>Obejrzyj film</target>
+      </trans-unit>
+      <trans-unit id="quince.28af2ed3c897" resname="We will answer it and publish the answer here.">
+        <source>We will answer it and publish the answer here.</source>
+        <target>Odpowiemy i opublikujemy odpowiedź tutaj.</target>
+      </trans-unit>
+      <trans-unit id="quince.5667aa3d8206" resname="We will answer it as soon as we can.">
+        <source>We will answer it as soon as we can.</source>
+        <target>Odpowiemy najszybciej, jak to możliwe.</target>
+      </trans-unit>
+      <trans-unit id="quince.39f0fed039b4" resname="Write the first review">
+        <source>Write the first review</source>
+        <target>Napisz pierwszą opinię</target>
+      </trans-unit>
+      <trans-unit id="quince.4d933f289737" resname="Write your question first.">
+        <source>Write your question first.</source>
+        <target>Najpierw wpisz pytanie.</target>
+      </trans-unit>
+      <trans-unit id="quince.13be507b7f5e" resname="You have the price from %qty% pcs.">
+        <source>You have the price from %qty% pcs.</source>
+        <target>Masz cenę od %qty% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.6b07434f499f" resname="You save %amount%">
+        <source>You save %amount%</source>
+        <target>Oszczędzasz %amount%</target>
+      </trans-unit>
+      <trans-unit id="quince.198584454b0c" resname="Your email address">
+        <source>Your email address</source>
+        <target>Twój adres e-mail</target>
+      </trans-unit>
+      <trans-unit id="quince.221e705c06e2" resname="Your name">
+        <source>Your name</source>
+        <target>Imię</target>
+      </trans-unit>
+      <trans-unit id="quince.352519cba02e" resname="Your question">
+        <source>Your question</source>
+        <target>Twoje pytanie</target>
+      </trans-unit>
+      <trans-unit id="quince.3421ad009755" resname="Your review">
+        <source>Your review</source>
+        <target>Twoja opinia</target>
+      </trans-unit>
+      <trans-unit id="quince.2abbbf5c2a71" resname="Your review is now visible on this page.">
+        <source>Your review is now visible on this page.</source>
+        <target>Twoja opinia jest już widoczna na tej stronie.</target>
+      </trans-unit>
+      <trans-unit id="quince.68b839492b58" resname="Your review will appear once it has been approved.">
+        <source>Your review will appear once it has been approved.</source>
+        <target>Opinia pojawi się po zatwierdzeniu.</target>
+      </trans-unit>
+      <trans-unit id="quince.0b86a7cf0062" resname="from %qty% pcs.">
+        <source>from %qty% pcs.</source>
+        <target>od %qty% szt.</target>
+      </trans-unit>
+      <trans-unit id="quince.40fa73c9d008" resname="net">
+        <source>net</source>
+        <target>netto</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

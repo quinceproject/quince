@@ -92,6 +92,206 @@
         <source>Change</source>
         <target>Zmień</target>
       </trans-unit>
+      <trans-unit id="quince.8ee84ed07eda" resname="Add selected to cart">
+        <source>Add selected to cart</source>
+        <target>Dodaj zaznaczone do koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.2d96bb66d854" resname="Add to wishlist">
+        <source>Add to wishlist</source>
+        <target>Dodaj do ulubionych</target>
+      </trans-unit>
+      <trans-unit id="quince.1412f7dcbcbe" resname="Address details:">
+        <source>Address details:</source>
+        <target>Dane adresowe:</target>
+      </trans-unit>
+      <trans-unit id="quince.69d9a05e751a" resname="Ask a question">
+        <source>Ask a question</source>
+        <target>Zadaj pytanie</target>
+      </trans-unit>
+      <trans-unit id="quince.0557fa923dce" resname="Back">
+        <source>Back</source>
+        <target>Wstecz</target>
+      </trans-unit>
+      <trans-unit id="quince.c60deb348adf" resname="Back to purchase">
+        <source>Back to purchase</source>
+        <target>Wróć do zakupów</target>
+      </trans-unit>
+      <trans-unit id="quince.31ea758954d8" resname="Browse products">
+        <source>Browse products</source>
+        <target>Przeglądaj produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.eeceac1af4e7" resname="Buy now">
+        <source>Buy now</source>
+        <target>Kup teraz</target>
+      </trans-unit>
+      <trans-unit id="quince.0dcd1e1ba3c9" resname="Buy the pack now">
+        <source>Buy the pack now</source>
+        <target>Kup pakiet teraz</target>
+      </trans-unit>
+      <trans-unit id="quince.b6e218dc266e" resname="Change quantity of %product_name%">
+        <source>Change quantity of %product_name%</source>
+        <target>Zmień ilość: %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.92fbf0e5d97b" resname="Choose a file">
+        <source>Choose a file</source>
+        <target>Wybierz plik</target>
+      </trans-unit>
+      <trans-unit id="quince.8a7329d7322b" resname="Choose options">
+        <source>Choose options</source>
+        <target>Wybierz opcje</target>
+      </trans-unit>
+      <trans-unit id="quince.08a57e276ae2" resname="Decrease quantity of %product_name%">
+        <source>Decrease quantity of %product_name%</source>
+        <target>Zmniejsz ilość: %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.f5ec9a231953" resname="Delete address: %addressAlias%">
+        <source>Delete address: %addressAlias%</source>
+        <target>Usuń adres: %addressAlias%</target>
+      </trans-unit>
+      <trans-unit id="quince.f7f6580f2cda" resname="Delete your delivery address">
+        <source>Delete your delivery address</source>
+        <target>Usuń adres dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.f449bf4f6e9d" resname="Delete your invoice address">
+        <source>Delete your invoice address</source>
+        <target>Usuń adres do faktury</target>
+      </trans-unit>
+      <trans-unit id="quince.24158999b6ae" resname="Download %attachment_name%">
+        <source>Download %attachment_name%</source>
+        <target>Pobierz %attachment_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.014b596eea14" resname="Edit address: %addressAlias%">
+        <source>Edit address: %addressAlias%</source>
+        <target>Edytuj adres: %addressAlias%</target>
+      </trans-unit>
+      <trans-unit id="quince.62f0d8b25f9f" resname="Edit addresses">
+        <source>Edit addresses</source>
+        <target>Edytuj adresy</target>
+      </trans-unit>
+      <trans-unit id="quince.1d180af757ea" resname="Edit your cart">
+        <source>Edit your cart</source>
+        <target>Edytuj koszyk</target>
+      </trans-unit>
+      <trans-unit id="quince.586b0491dd12" resname="Edit your delivery address">
+        <source>Edit your delivery address</source>
+        <target>Edytuj adres dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.7eeb08f11956" resname="Edit your invoice address">
+        <source>Edit your invoice address</source>
+        <target>Edytuj adres do faktury</target>
+      </trans-unit>
+      <trans-unit id="quince.425c2334d644" resname="Edit your shipping method">
+        <source>Edit your shipping method</source>
+        <target>Zmień sposób dostawy</target>
+      </trans-unit>
+      <trans-unit id="quince.b97c83881b37" resname="Fetch details">
+        <source>Fetch details</source>
+        <target>Pobierz dane</target>
+      </trans-unit>
+      <trans-unit id="quince.e720ac5ebae3" resname="Fewer">
+        <source>Fewer</source>
+        <target>Mniej</target>
+      </trans-unit>
+      <trans-unit id="quince.3f5b7abc4738" resname="Hide password">
+        <source>Hide password</source>
+        <target>Ukryj hasło</target>
+      </trans-unit>
+      <trans-unit id="quince.49164786f329" resname="Hide the price and product options">
+        <source>Hide the price and product options</source>
+        <target>Ukryj cenę i opcje produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.22ed8430f636" resname="Increase quantity of %product_name%">
+        <source>Increase quantity of %product_name%</source>
+        <target>Zwiększ ilość: %product_name%</target>
+      </trans-unit>
+      <trans-unit id="quince.d3da97e2d9ae" resname="More">
+        <source>More</source>
+        <target>Więcej</target>
+      </trans-unit>
+      <trans-unit id="quince.5c8e6fb71f98" resname="Notify me">
+        <source>Notify me</source>
+        <target>Powiadom mnie</target>
+      </trans-unit>
+      <trans-unit id="quince.54cb39da611d" resname="Notify when available">
+        <source>Notify when available</source>
+        <target>Powiadom o dostępności</target>
+      </trans-unit>
+      <trans-unit id="quince.d81f55222120" resname="Remove %product_name% from cart">
+        <source>Remove %product_name% from cart</source>
+        <target>Usuń %product_name% z koszyka</target>
+      </trans-unit>
+      <trans-unit id="quince.f4701af4852c" resname="Remove image">
+        <source>Remove image</source>
+        <target>Usuń zdjęcie</target>
+      </trans-unit>
+      <trans-unit id="quince.0af5ebd5f6aa" resname="Save customization">
+        <source>Save customization</source>
+        <target>Zapisz personalizację</target>
+      </trans-unit>
+      <trans-unit id="quince.690c5c4a1c52" resname="See the full product page">
+        <source>See the full product page</source>
+        <target>Zobacz pełną stronę produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.e0626222614b" resname="Select">
+        <source>Select</source>
+        <target>Wybierz</target>
+      </trans-unit>
+      <trans-unit id="quince.083dcf47d525" resname="Select %name%">
+        <source>Select %name%</source>
+        <target>Wybierz: %name%</target>
+      </trans-unit>
+      <trans-unit id="quince.a5e6d898ad3f" resname="Select address: %addressAlias%">
+        <source>Select address: %addressAlias%</source>
+        <target>Wybierz adres: %addressAlias%</target>
+      </trans-unit>
+      <trans-unit id="quince.4c41e0bd9576" resname="Select all">
+        <source>Select all</source>
+        <target>Zaznacz wszystko</target>
+      </trans-unit>
+      <trans-unit id="quince.c566d99a689f" resname="Send review">
+        <source>Send review</source>
+        <target>Wyślij opinię</target>
+      </trans-unit>
+      <trans-unit id="quince.c52077da3abe" resname="Send the question">
+        <source>Send the question</source>
+        <target>Wyślij pytanie</target>
+      </trans-unit>
+      <trans-unit id="quince.af8672125788" resname="Share on %social_share_link_label%">
+        <source>Share on %social_share_link_label%</source>
+        <target>Udostępnij: %social_share_link_label%</target>
+      </trans-unit>
+      <trans-unit id="quince.41530b8f0ffa" resname="Show all questions">
+        <source>Show all questions</source>
+        <target>Pokaż wszystkie pytania</target>
+      </trans-unit>
+      <trans-unit id="quince.5767e0674cc9" resname="Show all reviews">
+        <source>Show all reviews</source>
+        <target>Pokaż wszystkie opinie</target>
+      </trans-unit>
+      <trans-unit id="quince.a1cc7ba89ca3" resname="Show password">
+        <source>Show password</source>
+        <target>Pokaż hasło</target>
+      </trans-unit>
+      <trans-unit id="quince.fd88c62f7458" resname="Show the price and product options">
+        <source>Show the price and product options</source>
+        <target>Pokaż cenę i opcje produktu</target>
+      </trans-unit>
+      <trans-unit id="quince.780625cc5efa" resname="This helped me">
+        <source>This helped me</source>
+        <target>To mi pomogło</target>
+      </trans-unit>
+      <trans-unit id="quince.57c1fee9db05" resname="View cart">
+        <source>View cart</source>
+        <target>Zobacz koszyk</target>
+      </trans-unit>
+      <trans-unit id="quince.c31732fda0c6" resname="Write a review">
+        <source>Write a review</source>
+        <target>Napisz opinię</target>
+      </trans-unit>
+      <trans-unit id="quince.4252b72e6ebc" resname="Zoom">
+        <source>Zoom</source>
+        <target>Powiększ</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

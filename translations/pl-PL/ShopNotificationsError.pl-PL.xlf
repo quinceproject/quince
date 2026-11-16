@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file source-language="en-US" target-language="pl-PL" datatype="plaintext" original="not.available">
+    <body>
+      <trans-unit id="quince.0fb251bd55b9" resname="The request could not be sent. Please try again in a moment.">
+        <source>The request could not be sent. Please try again in a moment.</source>
+        <target>Nie udało się wysłać zgłoszenia. Spróbuj ponownie za chwilę.</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
