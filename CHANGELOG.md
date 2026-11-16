@@ -4,6 +4,18 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.5] - 2026-11-16
+
+### Added
+
+- Product page: spare parts, spare parts for, set items and in sets carousels (Quince
+  Engine 0.9.0 and Quince Cross-selling 0.3.1).
+- Product page carousels use the titles set in **Quince Engine → Product page →
+  Carousels**.
+- Product page dictionaries: number of entries in each dictionary and a search field
+  for tables with more than 10 rows, with the theme's clear button (Quince
+  Dictionaries 0.3.0).
+
 ## [0.1.4] - 2026-11-15
 
 ### Security
