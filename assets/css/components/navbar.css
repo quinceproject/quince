@@ -227,8 +227,12 @@
     /* Kolumna działów sięga obu krawędzi panelu (ujemne marginesy niżej), więc
        dostaje całą wysokość; zawartość działu stoi w odstępie panelu z góry
        i z dołu, więc o te dwa odstępy mniej. Ramka panelu ma 1 px u dołu. */
+    /* Przewijanie wyłącznie w pionie. Samo `overflow-y: auto` włącza
+       przewijanie także w poziomie, a nazwy działów się nie łamią: dłuższa
+       od kolumny dawała poziomy pasek pod listą. */
     .q-nav__panel--columns .q-nav__cats {
         max-block-size: calc(var(--q-nav-panel-max) - 1px);
+        overflow-x: hidden;
         overflow-y: auto;
         overscroll-behavior: contain;
         scrollbar-width: thin;

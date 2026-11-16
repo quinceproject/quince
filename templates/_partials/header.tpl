@@ -159,7 +159,12 @@
                       <a class="q-btn q-btn--secondary q-btn--sm" href="{$urls.actions.logout}">{l s='Sign out' d='Shop.Theme.Actions'}</a>
                     </div>
                   {else}
-                    <div class="q-dropdown__head"><strong>{l s='Welcome' d='Shop.Theme.Global'}!</strong></div>
+                    {* Pod powitaniem jedno zdanie o tym, po co się logować: same
+                       przyciski nie dają klientowi powodu. *}
+                    <div class="q-dropdown__head">
+                      <strong>{l s='Welcome' d='Shop.Theme.Global'}!</strong><br>
+                      {l s='Sign in to track your orders and buy faster.' d='Shop.Theme.Customeraccount'}
+                    </div>
 
                     {* Śledzenie zamówienia bez logowania: klient, który kupił jako gość,
                        szuka swojej przesyłki właśnie tutaj, a nie w formularzu logowania. *}

@@ -4,6 +4,18 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.8] - 2026-11-16
+
+### Changed
+
+- Account menu in the header, for a customer who is not signed in: under "Welcome!"
+  one sentence says why to sign in ("Sign in to track your orders and buy faster").
+
+### Fixed
+
+- Category menu (column layout): the department list scrolls only vertically. A
+  department name longer than the column no longer adds a horizontal scrollbar.
+
 ## [0.1.7] - 2026-11-16
 
 ### Added

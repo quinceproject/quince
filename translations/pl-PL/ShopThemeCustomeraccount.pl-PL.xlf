@@ -253,6 +253,10 @@
         <source>Open an account</source>
         <target>Załóż konto</target>
       </trans-unit>
+      <trans-unit id="quince.auth.header_lead" resname="Sign in to track your orders and buy faster.">
+        <source>Sign in to track your orders and buy faster.</source>
+        <target>Zaloguj się, aby śledzić zamówienia i kupować szybciej.</target>
+      </trans-unit>
       <trans-unit id="quince.auth.register_lead" resname="Create an account to track your orders, save products and buy faster.">
         <source>Create an account to track your orders, save products and buy faster.</source>
         <target>Stwórz konto, aby śledzić zamówienia, zapisywać produkty i kupować szybciej.</target>
