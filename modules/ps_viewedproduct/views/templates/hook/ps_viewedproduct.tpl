@@ -14,10 +14,21 @@
 
 {assign var=qOpcje value=$modules.quince_engine.product.options.recently_viewed|default:[]}
 
+{* Tytuł ustawiony w panelu strony produktu ma pierwszeństwo; pusty zostawia
+   tytuł domyślny. *}
+{* Przez assign, nie capture: capture zakodowałby tekst, a karuzela koduje go
+   jeszcze raz przy wypisaniu. *}
+{if $qOpcje.title[$language.id]|default:'' != ''}
+  {assign var=qTytulOgladanych value=$qOpcje.title[$language.id]}
+{else}
+  {capture name='qTytulOgladanych'}{l s='Recently viewed' d='Shop.Theme.Catalog'}{/capture}
+  {assign var=qTytulOgladanych value=$smarty.capture.qTytulOgladanych}
+{/if}
+
 {include file='catalog/_partials/product-carousel.tpl'
   qProdukty=$products
   qId='viewed'
   qIkona='clock'
   qIle=$qOpcje.count|default:8
   qStrzalki=$qOpcje.nav|default:true
-  qTytul={l s='Recently viewed' d='Shop.Theme.Catalog'}}
+  qTytul=$qTytulOgladanych}

@@ -223,16 +223,29 @@
   {if $accessories}
     {include file='catalog/_partials/product-accessories.tpl'
       qIle=$qEl.options.count|default:8
-      qStrzalki=$qEl.options.nav|default:true}
+      qStrzalki=$qEl.options.nav|default:true
+      qTytulWlasny=$qEl.options.title[$language.id]|default:''}
   {/if}
 
+{elseif $qId == 'spare_parts' || $qId == 'spare_parts_for' || $qId == 'set_items' || $qId == 'in_sets'}
+  {* Części zamienne i elementy zestawu wpisane przy produkcie, w obie strony.
+     Listy prowadzi moduł cross-sellingu (to nie są pakiety ani akcesoria
+     PrestaShop), wygląd, liczbę kart i tytuł ustawia panel strony produktu.
+     Bez modułu hook nie ma nadawcy i element nie renderuje nic. *}
+  {hook h='displayQuinceProductList' product=$product
+    qLista=$qId
+    qIle=$qEl.options.count|default:8
+    qStrzalki=$qEl.options.nav|default:true
+    qTytul=$qEl.options.title[$language.id]|default:''}
+
 {elseif $qId == 'cross_selling'}
-  {* Produkty do dokupienia. Dobór i tytuł należą do modułu cross-sellingu,
-     wygląd i liczbę kart ustawia panel strony produktu. Bez modułu hook nie
+  {* Produkty do dokupienia. Dobór należy do modułu cross-sellingu, wygląd,
+     liczbę kart i tytuł ustawia panel strony produktu. Bez modułu hook nie
      ma nadawcy i element nie renderuje nic. *}
   {hook h='displayQuinceCrossSelling' product=$product
     qIle=$qEl.options.count|default:8
-    qStrzalki=$qEl.options.nav|default:true}
+    qStrzalki=$qEl.options.nav|default:true
+    qTytul=$qEl.options.title[$language.id]|default:''}
 
 {elseif $qId == 'category_products'}
   {* Inne produkty z kategorii prowadzi moduł `ps_categoryproducts`, a motyw daje
