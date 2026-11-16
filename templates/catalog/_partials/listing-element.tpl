@@ -87,19 +87,35 @@
   {/if}
 
 {elseif $qId == 'cover'}
+  {* Zdjęcie kategorii albo logo marki, w kwadratowym bloku jak kafelek
+     podkategorii (makieta kategoria-naglowek-ze-zdjeciem.html, wariant B).
+     Logo dostaje osobną klasę: jest wpasowane w całości, a nie przycięte,
+     bo przycięte logo traci litery. *}
+  {assign var=qObraz value=null}
+  {assign var=qObrazAlt value=''}
+  {assign var=qLogo value=false}
   {if !empty($category.cover.large.url)}
-    <div class="q-listing__cover">
+    {assign var=qObraz value=$category.cover.large}
+    {assign var=qObrazAlt value=$category.cover.legend|default:$category.name}
+  {elseif isset($manufacturer) && !empty($manufacturer.image.large.url)}
+    {assign var=qObraz value=$manufacturer.image.large}
+    {assign var=qObrazAlt value=$manufacturer.name}
+    {assign var=qLogo value=true}
+  {/if}
+
+  {if $qObraz}
+    <div class="q-listing__cover{if $qLogo} q-listing__cover--logo{/if}">
       <picture>
-        {if isset($category.cover.large.sources.avif)}
-          <source srcset="{$category.cover.large.sources.avif}" type="image/avif">
+        {if isset($qObraz.sources.avif)}
+          <source srcset="{$qObraz.sources.avif}" type="image/avif">
         {/if}
-        {if isset($category.cover.large.sources.webp)}
-          <source srcset="{$category.cover.large.sources.webp}" type="image/webp">
+        {if isset($qObraz.sources.webp)}
+          <source srcset="{$qObraz.sources.webp}" type="image/webp">
         {/if}
-        <img src="{$category.cover.large.url}"
-             alt="{$category.cover.legend|default:$category.name}"
-             width="{$category.cover.large.width}"
-             height="{$category.cover.large.height}"
+        <img src="{$qObraz.url}"
+             alt="{$qObrazAlt}"
+             width="{$qObraz.width}"
+             height="{$qObraz.height}"
              fetchpriority="high">
       </picture>
     </div>
@@ -191,11 +207,19 @@
   {/block}
 
 {elseif $qId == 'additional_description'}
-  {if isset($category.additional_description) && $category.additional_description
+  {* Długi opis pod listą: kategoria ma „opis dodatkowy”, marka swój pełny
+     opis (krótki stoi u góry, w elemencie „Opis”). *}
+  {assign var=qOutro value=''}
+  {if isset($category.additional_description) && $category.additional_description}
+    {assign var=qOutro value=$category.additional_description}
+  {elseif isset($manufacturer.description) && $manufacturer.description}
+    {assign var=qOutro value=$manufacturer.description}
+  {/if}
+  {if $qOutro
       && (!$qEl.options.first_page|default:true
           || $listing.pagination.items_shown_from == 1
           || $modules.quince_engine.listing.pagination|default:'pages' == 'more')}
-    <section class="q-listing__outro q-prose rich-text">{$category.additional_description nofilter}</section>
+    <section class="q-listing__outro q-prose rich-text">{$qOutro nofilter}</section>
   {/if}
 
 {elseif $qId == 'hook_footer'}

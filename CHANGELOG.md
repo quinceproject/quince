@@ -4,6 +4,35 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.9] - 2026-11-16
+
+### Added
+
+- Brands page in the Quince design: breadcrumb and title as on a product list,
+  brands as square tiles (the same tiles as subcategories) with the logo, the name
+  and the number of products. A brand without a logo shows the name only.
+- Suppliers page in the same design as the brands page (shown when the shop
+  displays suppliers).
+- Brand page: the cover element shows the brand logo, as a category page shows
+  the category image. The image of a category or a brand sits in a square card.
+- Brand page: the long description of the brand shows at the bottom of the page.
+
+### Fixed
+
+- Product lists with the load-more button: quick view and the wishlist heart work
+  on the products added by the button. Before, only the first page had them.
+- Wishlist heart for a customer who is not signed in: it opens the sign-in page.
+  On some pages it went to `/undefined`.
+- Availability: the coloured dot sits level with the text. On the product page
+  it sat a few pixels lower.
+- Product card: badges on the image stand in one row and wrap only when they do
+  not fit the width of the image. Before, each badge took its own row.
+
+### Changed
+
+- "Ask an expert" drawer: the form checks every field the shop marks as required
+  and sends the phone number (Quince Contacts 0.5.0).
+
 ## [0.1.8] - 2026-11-16
 
 ### Changed

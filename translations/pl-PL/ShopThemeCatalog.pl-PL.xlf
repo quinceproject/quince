@@ -431,6 +431,21 @@
         <source>net</source>
         <target>netto</target>
       </trans-unit>
+
+      <!-- Lista marek: liczba produktów z odmianą. Formę wybiera szablon
+           (miniatures/brand.tpl): 1, końcówka 2-4 (tylko po polsku), reszta. -->
+      <trans-unit id="quince.brands.count_one" resname="%count% product">
+        <source>%count% product</source>
+        <target>%count% produkt</target>
+      </trans-unit>
+      <trans-unit id="quince.brands.count_few" resname="%count% products (a few)">
+        <source>%count% products (a few)</source>
+        <target>%count% produkty</target>
+      </trans-unit>
+      <trans-unit id="quince.brands.count_many" resname="%count% products">
+        <source>%count% products</source>
+        <target>%count% produktów</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

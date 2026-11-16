@@ -124,10 +124,13 @@
         position: absolute;
         inset-block-start: var(--q-space-sm);
         inset-inline-start: var(--q-space-sm);
+        /* Prawa granica: plakietki stają w jednym rzędzie, a do następnego
+           schodzą dopiero te, które nie mieszczą się w szerokości kadru. */
+        inset-inline-end: var(--q-space-sm);
         z-index: 2;
 
         display: flex;
-        flex-direction: column;
+        flex-wrap: wrap;
         align-items: flex-start;
         gap: var(--q-space-xs);
 

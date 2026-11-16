@@ -13,7 +13,28 @@
 (function () {
     'use strict';
 
-    var dane = window.quinceWishlist || {};
+    /**
+     * Dane od silnika (adres działania, adres logowania, napisy), czytane
+     * w chwili użycia, a nie przy wczytaniu pliku. Odczyt przy wczytaniu
+     * zostawiał pusty obiekt, gdy plik wykonał się przed zmiennymi strony,
+     * a wtedy przekierowanie szło na `/undefined`.
+     */
+    function dane() {
+        return window.quinceWishlist || {};
+    }
+
+    /**
+     * Adres logowania: od silnika, a zapasowo z adresów stron rdzenia.
+     * Pusty, gdy nie ma żadnego: wtedy nie przekierowujemy nigdzie.
+     */
+    function adresLogowania() {
+        var zSilnika = dane().logowanie;
+        var zRdzenia = window.prestashop && window.prestashop.urls && window.prestashop.urls.pages
+            ? window.prestashop.urls.pages.authentication
+            : '';
+
+        return typeof zSilnika === 'string' && zSilnika !== '' ? zSilnika : (zRdzenia || '');
+    }
 
     /** Numer listy, na którą zapisujemy. Pobierany raz, przy pierwszym kliknięciu. */
     var idListy = null;
@@ -36,7 +57,7 @@
     }
 
     function wywolaj(akcja, parametry) {
-        var adres = new URL(dane.adres, window.location.origin);
+        var adres = new URL(dane().adres, window.location.origin);
         adres.searchParams.set('action', akcja);
         adres.searchParams.set('ajax', '1');
 
@@ -76,7 +97,11 @@
 
     function ustawStan(przycisk, zapisany) {
         przycisk.setAttribute('aria-pressed', zapisany ? 'true' : 'false');
-        przycisk.setAttribute('aria-label', zapisany ? dane.usun : dane.dodaj);
+        var napis = zapisany ? dane().usun : dane().dodaj;
+
+        if (napis) {
+            przycisk.setAttribute('aria-label', napis);
+        }
     }
 
     function przelacz(przycisk) {
@@ -107,7 +132,13 @@
                     // Odpowiedź „nie jesteś zalogowany" przychodzi tą samą drogą
                     // co każdy inny błąd, więc pytanie o konto stawiamy tutaj,
                     // po kliknięciu, nie przed nim.
-                    window.location.href = dane.logowanie;
+                    var logowanie = adresLogowania();
+
+                    przycisk.removeAttribute('aria-busy');
+
+                    if (logowanie) {
+                        window.location.href = logowanie;
+                    }
 
                     return;
                 }

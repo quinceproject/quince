@@ -60,7 +60,8 @@
     {block name='product_list_header'}
       {assign var=qCover value=false}
       {foreach from=$qList.zones.header item=qEl}
-        {if $qEl.id == 'cover' && !empty($category.cover.large.url)}
+        {if $qEl.id == 'cover' && (!empty($category.cover.large.url)
+            || (isset($manufacturer) && !empty($manufacturer.image.large.url)))}
           {assign var=qCover value=$qEl}
         {/if}
       {/foreach}

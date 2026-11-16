@@ -1,38 +1,36 @@
 {**
- * For the full copyright and license information, please view the
- * LICENSE.md file that was distributed with this source code.
+ * Quince: kafelek dostawcy na liście dostawców.
+ *
+ * Ten sam kafelek co marka (miniatures/brand.tpl): logo, nazwa, liczba
+ * produktów. Dostawca bez wgranego logo pokazuje samą nazwę i liczbę.
  *}
 {block name='supplier_miniature_item'}
-  <li class="supplier">
-    <div class="supplier__image">
-      <picture>
-        {if !empty($supplier.image.bySize.small_default.sources.avif)}<source srcset="{$supplier.image.bySize.small_default.sources.avif}" type="image/avif">{/if}
-        {if !empty($supplier.image.bySize.small_default.sources.webp)}<source srcset="{$supplier.image.bySize.small_default.sources.webp}" type="image/webp">{/if}
-        <img
-          class="supplier__img img-fluid"
-          src="{$supplier.image.bySize.small_default.url}"
-          alt="{if !empty($supplier.image.legend)}{$supplier.image.legend}{else}{$supplier.name}{/if}"
-          width="{$supplier.image.bySize.small_default.width}"
-          height="{$supplier.image.bySize.small_default.height}"
-          loading="lazy"
-        >
-      </picture>
-    </div>
-
-    <div class="supplier__infos">
-      <a class="supplier__title stretched-link" href="{$supplier.url}">
-        {$supplier.name}
-      </a>
-    </div>
-
-    <p class="supplier__products">
-      {if $supplier.nb_products > 1}
-        {l s='%number% products' sprintf=['%number%' => $supplier.nb_products] d='Shop.Theme.Catalog'}
-      {elseif $supplier.nb_products == 1}
-        {l s='%number% product' sprintf=['%number%' => $supplier.nb_products] d='Shop.Theme.Catalog'}
-      {else}
+  {assign var=qLogo value=null}
+  {if $supplier.image && !empty($supplier.image.bySize.small_default.url)}
+    {assign var=qLogo value=$supplier.image.bySize.small_default}
+  {/if}
+  <a class="q-subcats__item" href="{$supplier.url}" title="{$supplier.name}">
+    {if $qLogo}
+      <img class="q-subcats__image" loading="lazy" decoding="async"
+           src="{$qLogo.url}" alt=""
+           width="{$qLogo.width}" height="{$qLogo.height}">
+    {/if}
+    <span class="q-subcats__name">{$supplier.name}</span>
+    {* Odmiana liczby jak w miniatures/brand.tpl (tam opis, dlaczego
+       w szablonie, a nie przez `|` w tłumaczeniu). *}
+    {assign var=qIle value=$supplier.nb_products|intval}
+    {assign var=qJedn value=$qIle % 10}
+    {assign var=qDzies value=$qIle % 100}
+    <span class="q-subcats__count">
+      {if $qIle == 0}
         {l s='No products' d='Shop.Theme.Catalog'}
+      {elseif $qIle == 1}
+        {l s='%count% product' sprintf=['%count%' => $qIle] d='Shop.Theme.Catalog'}
+      {elseif $language.iso_code == 'pl' && $qJedn >= 2 && $qJedn <= 4 && ($qDzies < 12 || $qDzies > 14)}
+        {l s='%count% products (a few)' sprintf=['%count%' => $qIle] d='Shop.Theme.Catalog'}
+      {else}
+        {l s='%count% products' sprintf=['%count%' => $qIle] d='Shop.Theme.Catalog'}
       {/if}
-    </p>
-  </li>
+    </span>
+  </a>
 {/block}

@@ -32,6 +32,7 @@
         var pola = {
             name: okno.querySelector('[data-q-expert-name]'),
             email: okno.querySelector('[data-q-expert-email]'),
+            phone: okno.querySelector('[data-q-expert-phone]'),
             message: okno.querySelector('[data-q-expert-message]'),
             product: okno.querySelector('[data-q-expert-product]')
         };
@@ -76,14 +77,27 @@
          */
         function wypelnione() {
             var email = (pola.email && pola.email.value || '').trim();
-            var tresc = (pola.message && pola.message.value || '').trim();
+            var telefon = (pola.phone && pola.phone.value || '').trim();
 
-            oznacz(pola.email, false);
-            oznacz(pola.message, false);
+            // Obowiązkowe są pola z `data-q-required` (ustawia je moduł według
+            // ekranu Kontakty), a e-mail i wiadomość zawsze, także przy module,
+            // który tego atrybutu jeszcze nie stawia.
+            var wymagane = [pola.email, pola.message];
+            formularz.querySelectorAll('[data-q-required]').forEach(function (pole) {
+                if (wymagane.indexOf(pole) === -1) {
+                    wymagane.push(pole);
+                }
+            });
 
-            if (email === '' || tresc === '') {
-                oznacz(pola.email, email === '');
-                oznacz(pola.message, tresc === '');
+            var puste = wymagane.filter(function (pole) {
+                return pole && (pole.value || '').trim() === '';
+            });
+
+            [pola.name, pola.email, pola.phone, pola.message].forEach(function (pole) {
+                oznacz(pole, puste.indexOf(pole) !== -1);
+            });
+
+            if (puste.length) {
                 pokazPodpowiedz(korzen.getAttribute('data-msg-empty') || '');
 
                 return false;
@@ -92,6 +106,14 @@
             if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
                 oznacz(pola.email, true);
                 pokazPodpowiedz(korzen.getAttribute('data-msg-invalid') || '');
+
+                return false;
+            }
+
+            // Ta sama reguła co Validate::isPhoneNumber() w rdzeniu.
+            if (telefon !== '' && !/^[+0-9. ()\/-]*$/.test(telefon)) {
+                oznacz(pola.phone, true);
+                pokazPodpowiedz(korzen.getAttribute('data-msg-phone') || korzen.getAttribute('data-msg-empty') || '');
 
                 return false;
             }
@@ -163,6 +185,7 @@
             var dane = polaStraznika(new URLSearchParams());
             dane.set('name', (pola.name && pola.name.value || '').trim());
             dane.set('email', (pola.email && pola.email.value || '').trim());
+            dane.set('phone', (pola.phone && pola.phone.value || '').trim());
             dane.set('message', (pola.message && pola.message.value || '').trim());
             dane.set('id_product', (pola.product && pola.product.value) || '0');
 

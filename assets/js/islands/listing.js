@@ -476,6 +476,15 @@
                     while (nowa.firstElementChild) {
                         siatka.appendChild(nowa.firstElementChild);
                     }
+
+                    /* Dołożone zajawki przychodzą bez podpiętych wysp: szybki
+                       podgląd, serce, licznik promocji. Zawężanie filtrami
+                       podpina je przez zdarzenie `updatedProductList`, a to
+                       dołożenie go nie wysyła. `hydrate` pomija zajawki już
+                       obsłużone, więc pierwsze nie dostają zdarzeń drugi raz. */
+                    if (window.Quince && typeof window.Quince.hydrate === 'function') {
+                        window.Quince.hydrate(siatka);
+                    }
                 }
 
                 /* Przycisk stoi w strefie pod listą, a ta nie wraca w odpowiedzi:

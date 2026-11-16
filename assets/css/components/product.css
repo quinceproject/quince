@@ -452,9 +452,12 @@
        Kropka i słowo, oba w barwie stanu. Kropka jest skrótem dla oka, słowo
        niesie tę samą treść bez patrzenia na kolor, więc daltonista czyta to
        samo co reszta. */
+    /* Wyrównanie jak w stock.css: kropka na środku PIERWSZEGO wiersza, przez
+       odstęp od góry. Wyrównanie do środka całości dodawało się do tego
+       odstępu ze stock.css i kropka siadała kilka pikseli pod tekstem. */
     .q-stock {
         display: inline-flex;
-        align-items: center;
+        align-items: flex-start;
         gap: var(--q-space-xs);
         font-weight: var(--q-weight-semibold);
     }
@@ -462,6 +465,7 @@
     .q-stock__dot {
         inline-size: 7px;
         block-size: 7px;
+        margin-block-start: calc((1lh - 7px) / 2);
         border-radius: 50%;
         background: currentColor;
         flex: none;

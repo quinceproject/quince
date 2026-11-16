@@ -86,6 +86,36 @@
         border-radius: var(--q-radius-md);
     }
 
+    /* Blok jak kafelek podkategorii pod spodem (`.q-subcats__item`): to samo
+       tło, obwódka, zaokrąglenie i cień, więc zdjęcie czyta się jako jeden
+       z bloków strony, a nie wklejony obrazek. Zdjęcie wypełnia blok i jest
+       przycięte do kwadratu (wariant B). */
+    .q-listing__cover {
+        aspect-ratio: 1;
+        overflow: hidden;
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-border-subtle);
+        border-radius: var(--q-radius-md);
+        box-shadow: var(--q-shadow-sm);
+    }
+
+    .q-listing__cover picture {
+        display: block;
+        block-size: 100%;
+    }
+
+    .q-listing__cover img {
+        display: block;
+        block-size: 100%;
+        border-radius: 0;
+    }
+
+    /* Logo marki: wpasowane w całości z marginesem, bo przycięte traci litery. */
+    .q-listing__cover--logo img {
+        object-fit: contain;
+        padding: var(--q-space-sm);
+    }
+
     /* Włączniki widoczności. Zgaszone zdjęcie oddaje kolumnę tekstowi, zamiast
        zostawiać po sobie puste pole. */
     @media (min-width: 768px) {
@@ -581,6 +611,19 @@
 
     /* Nazwa łamie się do dwóch wierszy, trzeciego już nie, bo wtedy kafelki
        w rzędzie rosną nierówno. */
+    /* Lista marek: liczba produktów pod nazwą marki. Mniejsze, przygaszone
+       pismo, jak opisy pomocnicze. Makieta: marki-lista.html. */
+    .q-subcats__count {
+        font-size: var(--q-fs-xs);
+        color: var(--q-text-muted);
+    }
+
+    /* Na liście marek pod rzędem nie ma nic więcej: odstęp od tytułu jak
+       pod nagłówkiem listingu i zapas do stopki. */
+    .q-brands {
+        margin-block-end: var(--q-space-xl);
+    }
+
     .q-subcats__name {
         display: -webkit-box;
         -webkit-box-orient: vertical;
