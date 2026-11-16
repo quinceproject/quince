@@ -243,6 +243,11 @@
     .q-lightbox__frame {
         position: relative;
 
+        /* Zawsze środkowa kolumna. Przy jednym zdjęciu strzałki są ukryte
+           i kadr wskakiwał w pierwszą kolumnę, szeroką na treść. Zdjęcie leży
+           w kadrze bezwzględnie, więc kolumna miała 0 px i okno było puste. */
+        grid-column: 2;
+
         /* Kadr bierze całą wysokość sceny, a nie wysokość swojej treści.
            Film leży w nim bezwzględnie, więc bez tego kadr zapada się przy
            przejściu ze zdjęcia na film i strzałki po bokach skaczą w pionie. */
