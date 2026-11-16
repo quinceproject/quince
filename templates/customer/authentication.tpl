@@ -1,39 +1,50 @@
 {**
- * For the full copyright and license information, please view the
- * LICENSE.md file that was distributed with this source code.
+ * Quince: logowanie.
+ *
+ * Projekt: quince/makiety/logowanie.html. Karta z formularzem po lewej,
+ * korzyści z konta po prawej (customer/_partials/auth-side.tpl). Bez bloku
+ * logowania przez Google i Facebook: sklep nie ma takiego modułu.
+ *
+ * Formularz jest formularzem rdzenia: te same pola, ta sama akcja, ten sam
+ * ukryty `back`. Komunikaty strony pokazuje motyw jako dymki
+ * (_partials/notifications.tpl), błąd formularza stoi w karcie.
+ *
+ * Klasy: assets/css/components/auth.css
  *}
-{$componentName = 'login'}
+{extends file=$layout}
 
-{extends file='page.tpl'}
+{* Okruszki idą do środka strony, jak w koszyku. *}
+{block name='breadcrumb'}{/block}
 
-{block name='container_class'}container container--limited-sm{/block}
+{block name='content'}
+  <main class="q-container q-auth">
+    {include file='_partials/breadcrumb.tpl'}
 
-{block name='page_title'}
-  {l s='Sign in' d='Shop.Theme.Customeraccount'}
-{/block}
+    <div class="q-auth__layout">
 
-{block name='page_content'}
-  {block name='login_form_container'}
-    <div class="{$componentName}">
-      <section class="{$componentName}__form-wrapper">
-        {render file='customer/_partials/login-form.tpl' ui=$login_form}
+      <section class="q-auth__card">
+        <header class="q-auth__head">
+          <h1 class="q-section-title q-auth__title">{l s='Sign in' d='Shop.Theme.Customeraccount'}</h1>
+          <p class="q-auth__lead">{l s='Sign in to your account to manage your orders and use everything the shop offers.' d='Shop.Theme.Customeraccount'}</p>
+        </header>
+
+        {block name='login_form_container'}
+          {render file='customer/_partials/auth-login-form.tpl' ui=$login_form}
+        {/block}
+
+        {* Miejsce dla modułów pod formularzem, tak jak w szablonie rdzenia. *}
+        {block name='display_after_login_form'}
+          {hook h='displayCustomerLoginFormAfter'}
+        {/block}
+
+        <footer class="q-auth__foot">
+          {l s='No account yet?' d='Shop.Theme.Customeraccount'}
+          <a href="{$urls.pages.register}" data-link-action="display-register-form">{l s='Sign up' d='Shop.Theme.Customeraccount'}</a>
+        </footer>
       </section>
 
-      <hr>
+      {include file='customer/_partials/auth-side.tpl' qStrona='login'}
 
-      {block name='display_after_login_form'}
-        {hook h='displayCustomerLoginFormAfter'}
-      {/block}
-
-      <div class="{$componentName}__register-prompt">
-        <h2 class="h4">{l s='No account?' d='Shop.Theme.Customeraccount'}</h2>
-
-        <div class="d-grid">
-          <a href="{$urls.pages.register}" class="btn btn-outline-primary" data-link-action="display-register-form">
-            {l s='Create your account' d='Shop.Theme.Actions'}
-          </a>
-        </div>
-      </div>
     </div>
-  {/block}
+  </main>
 {/block}

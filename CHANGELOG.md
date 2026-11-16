@@ -4,6 +4,30 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.7] - 2026-11-16
+
+### Added
+
+- Sign-in and registration pages in the Quince design: the form in a card on the
+  left, account benefits on the right (set in **Quince Engine → Sign-in and
+  registration**, needs Quince Engine 0.10.0). Email and password, first and last
+  name side by side, consents grouped, the button on the right. The forms stay
+  PrestaShop's own: the same fields, action, `back` field and the engine's form
+  guard. The sign-in form in the checkout and the account details form are not
+  changed.
+- Polish translations for the new texts. "Social title" now reads "Zwrot
+  grzecznościowy" instead of the core's "Nazwa kontaktu".
+
+### Fixed
+
+- Category menu: the open panel is as wide as the menu bar and starts under the
+  Categories button. Before, on a screen wider than the page it was narrower and
+  shifted inwards.
+- Category menu (column layout): the panel ends above the bottom of the screen, with
+  a gap, and the department list and the subcategories scroll inside it.
+- Customer Reassurance icons take the theme colour. The module's own icon colour
+  setting (blue by default) no longer shows through.
+
 ## [0.1.6] - 2026-11-16
 
 ### Fixed

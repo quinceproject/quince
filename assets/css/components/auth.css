@@ -1,0 +1,227 @@
+/* ===================================================================
+   Quince: logowanie i rejestracja
+
+   Projekt: quince/makiety/logowanie.html i rejestracja.html. Reguły
+   przepisane z makiety bez zmian, poza blokiem logowania przez dostawców
+   (Google, Facebook), którego sklep nie ma.
+
+   Jeden układ na oba ekrany: karta z formularzem po lewej, blok korzyści
+   po prawej. Nowe jest tu tylko OPAKOWANIE. Pola, etykiety, podpowiedzi
+   błędów, zgody, komunikaty i przyciski to komponenty motywu i nie są tu
+   przerabiane.
+
+   Barwy wyłącznie z palety silnika.
+   =================================================================== */
+
+@layer quince.layout {
+
+    /* Wyściółka i odstęp pod okruszkami jak na listingu: widok ma zaczynać
+       się na tej samej wysokości co każdy inny. */
+    .q-auth {
+        padding-block: var(--q-space-md) var(--q-space-xl);
+    }
+
+    .q-auth .q-breadcrumb {
+        margin-block-end: var(--q-space-md);
+    }
+
+    /* Formularz po lewej, zachęta po prawej. Kolumna zachęty ma stałą
+       szerokość: jej treść nie rośnie razem z formularzem. */
+    .q-auth__layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 24rem;
+        gap: var(--q-space-lg);
+        align-items: start;
+    }
+
+    /* ── karta z formularzem ─────────────────────────────────────────── */
+
+    .q-auth__card {
+        min-inline-size: 0;
+
+        background: var(--q-card-bg);
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+        box-shadow: var(--q-shadow-sm);
+        overflow: hidden;
+    }
+
+    .q-auth__head {
+        padding: var(--q-space-lg) var(--q-space-lg) 0;
+    }
+
+    .q-auth__title {
+        margin: 0 0 var(--q-space-xs);
+    }
+
+    .q-auth__lead {
+        margin: 0;
+        color: var(--q-text-muted);
+    }
+
+    .q-auth__form {
+        display: grid;
+        gap: var(--q-space-md);
+        padding: var(--q-space-lg);
+    }
+
+    /* Komunikat o błędzie całego formularza stoi w siatce jak pole. */
+    .q-auth__form .q-alert {
+        margin-block-end: 0;
+    }
+
+    /* Dwa pola obok siebie tam, gdzie razem tworzą jedną daną: imię
+       i nazwisko. Reszta idzie przez całą szerokość karty. */
+    .q-auth__pair {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--q-space-md);
+    }
+
+    .q-auth__forgot {
+        justify-self: start;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text);
+    }
+
+    .q-auth__forgot:hover { color: var(--q-link-hover); }
+
+    /* Zgody stoją razem, bez odstępu między sobą: to jedna partia decyzji,
+       a nie cztery osobne pytania. */
+    .q-auth__consents {
+        display: grid;
+        gap: var(--q-space-sm);
+        padding-block-start: var(--q-space-sm);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* Przycisk zatwierdzający po prawej, tak jak na każdym formularzu
+       w tym sklepie. */
+    .q-auth__actions {
+        display: flex;
+        justify-content: flex-end;
+        padding-block-start: var(--q-space-sm);
+        border-block-start: 1px solid var(--q-card-border);
+    }
+
+    /* Stopka karty na powierzchni zapadniętej: to wyjście na drugi ekran,
+       a nie kolejna czynność tego. */
+    .q-auth__foot {
+        padding: var(--q-space-md) var(--q-space-lg);
+        background: var(--q-surface-sunken);
+        border-block-start: 1px solid var(--q-card-border);
+
+        text-align: center;
+        font-size: var(--q-fs-sm);
+    }
+
+    .q-auth__foot a {
+        font-weight: var(--q-weight-semibold);
+        color: var(--q-link);
+    }
+
+    .q-auth__foot a:hover { color: var(--q-link-hover); }
+
+    /* ── zachęta po prawej ───────────────────────────────────────────── */
+
+    /* Zachęta leży wprost na stronie, więc jej tło liczy się od tła strony
+       (o odcień ciemniejsze), a nie od karty. Zapasowo wgłębienie od karty,
+       dla silnika sprzed tego koloru. */
+    .q-auth__side {
+        padding: var(--q-space-lg);
+
+        background: var(--q-surface-page-sunken, var(--q-surface-sunken));
+        border: 1px solid var(--q-card-border);
+        border-radius: var(--q-card-radius);
+    }
+
+    .q-auth__side-title {
+        margin: 0 0 var(--q-space-xs);
+        font-size: var(--q-fs-h5);
+        line-height: var(--q-lh-tight);
+    }
+
+    .q-auth__side-lead {
+        margin: 0 0 var(--q-space-lg);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-auth__benefits {
+        display: grid;
+        gap: var(--q-space-md);
+        margin: 0 0 var(--q-space-lg);
+        padding: 0;
+        list-style: none;
+    }
+
+    .q-auth__benefit {
+        display: grid;
+        grid-template-columns: 2.25rem minmax(0, 1fr);
+        gap: var(--q-space-sm);
+        align-items: start;
+    }
+
+    .q-auth__benefit-icon {
+        inline-size: 2.25rem;
+        block-size: 2.25rem;
+        display: grid;
+        place-items: center;
+
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+        border-radius: var(--q-radius-md);
+    }
+
+    .q-auth__benefit-title {
+        display: block;
+        font-weight: var(--q-weight-semibold);
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-strong);
+    }
+
+    .q-auth__benefit-text {
+        margin: 2px 0 0;
+        font-size: var(--q-fs-sm);
+        color: var(--q-text-muted);
+    }
+
+    .q-auth__side .q-btn {
+        inline-size: 100%;
+    }
+
+    /* ── wąski ekran ─────────────────────────────────────────────────── */
+
+    @media (max-width: 991px) {
+        /* Zachęta schodzi POD formularz. Klient, który trafił tu z koszyka,
+           przyszedł się zalogować, a nie czytać, po co mu konto. */
+        .q-auth__layout {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+
+    @media (max-width: 575px) {
+        .q-auth__pair {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-auth__head,
+        .q-auth__form {
+            padding-inline: var(--q-space-md);
+        }
+
+        .q-auth__actions .q-btn {
+            inline-size: 100%;
+        }
+    }
+}
+
+/* Grupy pól motywu niosą własny odstęp pod sobą (`.mb-3` z `field.css`). W siatce
+   formularza odstęp daje `gap`, więc własny by się dodawał. Reguła stoi
+   w warstwie komponentów, bo tam mieszka `.mb-3`; z warstwy układu by przegrała
+   (ten sam zabieg w `checkout.css`). */
+@layer quince.components {
+    .q-auth__form .mb-3 {
+        margin-block-end: 0;
+    }
+}

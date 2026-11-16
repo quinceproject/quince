@@ -153,10 +153,14 @@
         translate: -50% 0;
         z-index: 40;
 
-        /* Szerokość liczona jak treść pasa, czyli kontener MINUS jego odstęp
-           wewnętrzny. Inaczej panel wystaje poza przycisk, spod którego wyszedł. */
-        inline-size: calc(100% - var(--q-space-md) * 2);
-        max-inline-size: calc(var(--q-container) - var(--q-space-md) * 2);
+        /* Szerokość liczona jak treść pasa: kontener minus TEN SAM odstęp
+           wewnętrzny co w `.q-nav__inner`. Odstęp znika, gdy ekran jest szerszy
+           od kontenera, więc stałe odjęcie dwóch odstępów dawało panel węższy od
+           pasa, przesunięty względem przycisku, spod którego wyszedł. */
+        inline-size: calc(
+            min(100%, var(--q-container))
+            - clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md)) * 2
+        );
 
         background: var(--q-dropdown-bg);
         border-inline: 1px solid var(--q-dropdown-border);
@@ -203,6 +207,38 @@
         display: grid;
         grid-template-columns: var(--q-navbar-trigger-w) minmax(0, 1fr);
         gap: var(--q-space-lg);
+    }
+
+    /* Panel kończy się nad dolną krawędzią ekranu, z odstępem: klient widzi jego
+       dół i wie, że pod spodem nic już nie ma. Co się nie mieści, przewija się
+       w swojej kolumnie, a nie razem ze stroną.
+
+       Górną krawędź panelu wpisuje wyspa navbar.js przy otwarciu, bo zależy od
+       tego, jak daleko strona jest przewinięta. Panel z przyklejonego nagłówka
+       wisi zawsze pod nim, więc liczy się od wysokości nagłówka. */
+    .q-nav__panel--columns {
+        --q-nav-panel-max: calc(100dvh - var(--q-nav-panel-top, var(--q-header-h, 64px)) - var(--q-space-xl));
+    }
+
+    .q-nav__panel--columns.is-floating {
+        --q-nav-panel-max: calc(100dvh - var(--q-header-h, 64px) - var(--q-space-xl));
+    }
+
+    /* Kolumna działów sięga obu krawędzi panelu (ujemne marginesy niżej), więc
+       dostaje całą wysokość; zawartość działu stoi w odstępie panelu z góry
+       i z dołu, więc o te dwa odstępy mniej. Ramka panelu ma 1 px u dołu. */
+    .q-nav__panel--columns .q-nav__cats {
+        max-block-size: calc(var(--q-nav-panel-max) - 1px);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+    }
+
+    .q-nav__panel--columns .q-nav__section {
+        max-block-size: calc(var(--q-nav-panel-max) - 1px - var(--q-space-md) * 2);
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
     }
 
     /* Kolumna działów ma własne tło i sięga krawędzi panelu: to osobna część

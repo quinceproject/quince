@@ -10,6 +10,13 @@
         <source>Return notes</source>
         <target>Uwagi do zwrotu</target>
       </trans-unit>
+
+      <!-- Rdzeń tłumaczy „Social title” jako „Nazwa kontaktu”. To pole
+           z wyborem Pan / Pani, więc nazwa z makiety rejestracji. -->
+      <trans-unit id="quince.forms.social_title" resname="Social title">
+        <source>Social title</source>
+        <target>Zwrot grzecznościowy</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

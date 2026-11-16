@@ -217,6 +217,46 @@
         <source>Your password length is invalid</source>
         <target>Hasło ma nieprawidłową długość</target>
       </trans-unit>
+
+      <!-- Logowanie i rejestracja: teksty z makiet logowanie.html i rejestracja.html.
+           „Open an account” zamiast rdzeniowego „Create an account” (rdzeń: „Stwórz
+           konto”), bo makieta mówi „Załóż konto”, a inne miejsca sklepu zostają. -->
+      <trans-unit id="quince.auth.login_lead" resname="Sign in to your account to manage your orders and use everything the shop offers.">
+        <source>Sign in to your account to manage your orders and use everything the shop offers.</source>
+        <target>Zaloguj się na swoje konto, aby zarządzać zamówieniami i korzystać z pełnych możliwości sklepu.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.no_account" resname="No account yet?">
+        <source>No account yet?</source>
+        <target>Nie masz jeszcze konta?</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.sign_up" resname="Sign up">
+        <source>Sign up</source>
+        <target>Zarejestruj się</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.forgot" resname="I forgot my password">
+        <source>I forgot my password</source>
+        <target>Nie pamiętam hasła</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.benefits" resname="Account benefits">
+        <source>Account benefits</source>
+        <target>Korzyści z założenia konta</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.side_login" resname="Join a community of professionals and use everything the shop offers.">
+        <source>Join a community of professionals and use everything the shop offers.</source>
+        <target>Dołącz do grona profesjonalistów i korzystaj z pełnych możliwości sklepu.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.side_register" resname="Sign in to continue shopping and use your saved details.">
+        <source>Sign in to continue shopping and use your saved details.</source>
+        <target>Zaloguj się, aby kontynuować zakupy i korzystać z zapisanych danych.</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.open_account" resname="Open an account">
+        <source>Open an account</source>
+        <target>Załóż konto</target>
+      </trans-unit>
+      <trans-unit id="quince.auth.register_lead" resname="Create an account to track your orders, save products and buy faster.">
+        <source>Create an account to track your orders, save products and buy faster.</source>
+        <target>Stwórz konto, aby śledzić zamówienia, zapisywać produkty i kupować szybciej.</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>

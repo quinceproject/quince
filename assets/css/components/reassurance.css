@@ -78,9 +78,15 @@
         block-size: 18px;
     }
 
-    /* Barwy samej ikony tu nie ma. Moduł wpisuje ją w atrybuty `fill` swoich
-       ścieżek i ma na nią własne ustawienie (`PSR_ICON_COLOR`). Tam się ją
-       zmienia, nie nadpisuje stąd. */
+    /* Ikonę barwi motyw, kolorem kafelka (`color` przy `__image`), a nie moduł.
+       Moduł ma własne ustawienie (`PSR_ICON_COLOR`, domyślnie niebieskie spoza
+       palety) i wpisuje je skryptem w ścieżki SVG: w atrybut `fill` tam, gdzie
+       ścieżka go ma, i w styl przy elemencie tam, gdzie nie ma. Styl przy
+       elemencie przebija tylko `!important`. Ustawienie w module przestaje przez
+       to działać, ale sklep nie musi pilnować barwy w dwóch miejscach. */
+    .blockreassurance .reassurance__image svg path {
+        fill: currentColor !important;
+    }
 
     .blockreassurance--product .reassurance__content {
         display: grid;

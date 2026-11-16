@@ -66,6 +66,21 @@
             }
         }
 
+        /* Górna krawędź otwartego panelu, z której CSS liczy jego największą
+           wysokość (do dołu ekranu minus odstęp). Mierzona po narysowaniu, bo
+           dopiero wtedy panel ma położenie; przy panelu schowanym byłoby zero. */
+        function zmierzGore(panel) {
+            window.requestAnimationFrame(function () {
+                if (!panel.hidden) {
+                    panel.style.setProperty('--q-nav-panel-top', Math.round(panel.getBoundingClientRect().top) + 'px');
+                }
+            });
+        }
+
+        window.addEventListener('resize', function () {
+            nav.querySelectorAll('[data-q-nav-panel]').forEach(zmierzGore);
+        });
+
         grupy.forEach(function (grupa) {
             var button = grupa.querySelector('[data-q-nav-button]');
             var panel = grupa.querySelector('[data-q-nav-panel]');
@@ -84,6 +99,7 @@
                 if (otwieramy) {
                     panel.hidden = false;
                     button.setAttribute('aria-expanded', 'true');
+                    zmierzGore(panel);
                 }
             });
         });
