@@ -115,11 +115,10 @@
        wielolinijkowe i przy samych poziomych liniach oko gubi, gdzie kończy się
        nazwa, a zaczyna wartość.
 
-       Szerokość ograniczona, bo wiersz „SKU: ABC-123" rozciągnięty na całą
-       szerokość karty czyta się gorzej niż ten sam wiersz w kolumnie tekstu. */
+       Na całą szerokość zakładki, bez górnej granicy: tabela ma ten sam
+       odstęp od krawędzi z lewej i z prawej. */
     .q-spectable {
         inline-size: 100%;
-        max-inline-size: 44rem;
         border-collapse: collapse;
         font-size: var(--q-fs-sm);
     }
@@ -154,5 +153,14 @@
 
     .q-spectable td {
         color: var(--q-spectable-value);
+    }
+
+    /* Podtytuł nad tabelą w zakładce „Szczegóły produktu” (Specyfikacja,
+       Informacje o produkcie). Wygląd nagłówka z opisu produktu (`.q-prose h3`),
+       ale bez zerowania marginesów, które `.q-prose` robi pierwszemu
+       i ostatniemu elementowi: podtytuł ma stać z odstępem od tabeli wyżej. */
+    .q-spectable-title {
+        font-size: var(--q-fs-h6);
+        margin-block: var(--q-space-md) var(--q-space-xs);
     }
 }

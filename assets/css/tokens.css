@@ -340,10 +340,11 @@
        i tak mają własny margines wpisany w plik. */
     --q-pcard-media-bg:      var(--q-surface-sunken);
     --q-pcard-media-placeholder: var(--q-neutral-7);
-    /* Zdjęcie wypełnia kadr. Zajawki w rzędzie mają wtedy jednakowe,
-       pełne kadry zamiast obrazków różnej wielkości pływających w pustym
-       polu. Kadr jest kwadratowy, więc zdjęcie traci tylko brzegi. */
-    --q-pcard-media-fit:     cover;
+    /* Zdjęcie mieści się w kadrze w całości, jak w makiecie listingu
+       (kategoria.html). Przycinanie (`cover`) obcinało końce narzędzi na
+       zdjęciach pionowych i poziomych; puste pole po bokach bierze barwę
+       karty, więc go nie widać. */
+    --q-pcard-media-fit:     contain;
 
     /* --- picker --- */
     --q-picker-label:        var(--q-band-topbar-fg-muted);

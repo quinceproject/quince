@@ -24,30 +24,10 @@
        data-msg-moderated="{l s='We will answer it and publish the answer here.' d='Shop.Theme.Catalog'}"
        data-msg-sent="{l s='We will answer it as soon as we can.' d='Shop.Theme.Catalog'}">
 
-    {if $qQa.items}
-      <div class="q-qa__list" data-q-qa-list>
-        {foreach from=$qQa.items item=qPytanie}
-          {include file='catalog/_partials/product-qa-item.tpl' qPytanie=$qPytanie}
-        {/foreach}
-      </div>
-    {else}
-      <div class="q-empty">
-        <p>{l s='No questions about this product yet.' d='Shop.Theme.Catalog'}</p>
-      </div>
-    {/if}
-
-    <div class="q-qa__actions">
-      {* Przycisk doładowania znika, gdy nie ma czego doładować: zostawiony
-         obiecywałby więcej pytań, niż ich jest. *}
-      {if $qQa.hasMore}
-        <button class="q-btn q-btn--ghost q-btn--sm" type="button" data-q-qa-more>
-          {l s='Show all questions' d='Shop.Theme.Actions'}
-        </button>
-      {/if}
-
-      {* Przycisk pytania stoi tylko wtedy, gdy moduł na pewno przyjmie pytanie.
-         Przy wyłączonych pytaniach od gości kończyłby się odmową, więc
-         niezalogowany dostaje w tym miejscu drogę do konta. *}
+    {* Przycisk pytania stoi tylko wtedy, gdy moduł na pewno przyjmie pytanie.
+       Przy wyłączonych pytaniach od gości kończyłby się odmową, więc
+       niezalogowany dostaje w tym miejscu drogę do konta. *}
+    {capture name='qQaAsk'}
       {if $qQa.canAsk}
         <button class="q-btn q-btn--secondary q-btn--sm" type="button" data-q-qa-open>
           {l s='Ask a question' d='Shop.Theme.Actions'}
@@ -58,7 +38,36 @@
           {l s='Sign in to ask a question' d='Shop.Theme.Catalog'}
         </a>
       {/if}
-    </div>
+    {/capture}
+
+    {if $qQa.items}
+      <div class="q-qa__list" data-q-qa-list>
+        {foreach from=$qQa.items item=qPytanie}
+          {include file='catalog/_partials/product-qa-item.tpl' qPytanie=$qPytanie}
+        {/foreach}
+      </div>
+
+      <div class="q-qa__actions">
+        {* Przycisk doładowania znika, gdy nie ma czego doładować: zostawiony
+           obiecywałby więcej pytań, niż ich jest. *}
+        {if $qQa.hasMore}
+          <button class="q-btn q-btn--ghost q-btn--sm" type="button" data-q-qa-more>
+            {l s='Show all questions' d='Shop.Theme.Actions'}
+          </button>
+        {/if}
+
+        {$smarty.capture.qQaAsk nofilter}
+      </div>
+    {else}
+      {* Bez pytań przycisk stoi w pustym stanie, pod zdaniem, tak jak
+         w opiniach (product-reviews.tpl). W osobnym rzędzie akcji odsuwał
+         się od zdania o wcięcie pustego stanu i odstęp rzędu. *}
+      <div class="q-empty">
+        <p>{l s='No questions about this product yet.' d='Shop.Theme.Catalog'}</p>
+
+        {$smarty.capture.qQaAsk nofilter}
+      </div>
+    {/if}
 
     {if $qQa.canAsk}
       {include file='catalog/_partials/product-qa-form.tpl' qIntro=$qQa.intro}

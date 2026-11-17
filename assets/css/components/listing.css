@@ -887,11 +887,12 @@
         min-block-size: 16rem;
     }
 
-    /* Kadr sięga od górnej do dolnej krawędzi rzędu i do lewej, tak samo jak
-       w kafelku, gdzie zdjęcie wypełnia całe pole. Wyśrodkowany w pionie
-       zostawiałby nad sobą i pod sobą pas tła karty. */
+    /* Kadr trzyma kwadrat i nie rozciąga się z treścią, jak w makiecie
+       (kategoria.html, `is-lista`). Stoi na środku wysokości rzędu. Rozciągnięty
+       na wysokość rzędu brał wysokość z pliku: pionowe zdjęcie rozpychało cały
+       rząd. */
     .q-grid--list .q-pcard__media {
-        align-self: stretch;
+        align-self: center;
         display: flex;
         flex-direction: column;
 
@@ -900,40 +901,14 @@
         aspect-ratio: auto;
     }
 
-    /* Zdjęcie wypełnia kadr zamiast się w nim mieścić. Rząd bywa o kilkanaście
-       pikseli wyższy od szerokości kadru, więc przycięcie idzie po bokach i nie
-       rusza tego, co na zdjęciu widać. Przy `contain` w to miejsce wchodziłoby
-       tło i kadr znów nie dotykałby góry ani dołu. */
-    .q-grid--list .q-pcard__media img {
-        object-fit: cover;
-    }
-
-    /* Odnośnik bierze całą wysokość kadru, a kadr całą wysokość rzędu. Stała
-       wysokość zostawiłaby pod zdjęciem pas tła, gdy rząd jest wyższy.
-
-       Odnośnik jest tu pojemnikiem elastycznym, a nie zwykłym blokiem: jego
-       wysokość wynika z flexa, więc `block-size: 100%` na zdjęciu nie miałoby
-       od czego liczyć procentu i zdjęcie zostaje przy swojej naturalnej
-       wysokości, kilka pikseli niższe od kadru. */
+    /* Wysokość kadru niesie odnośnik: stały kwadrat o boku kolumny zdjęcia. */
     .q-grid--list .q-pcard__image-link {
-        flex: 1;
-        display: flex;
-        block-size: auto;
-    }
-
-    /* Między odnośnikiem a zdjęciem stoi `<picture>` z odmianami pliku. Jako
-       zwykły blok przekazuje dalej wysokość własnej zawartości, nie kadru,
-       więc zdjęcie zostaje kilka pikseli niższe. Jako pojemnik elastyczny
-       oddaje zdjęciu całą swoją wysokość. */
-    .q-grid--list .q-pcard__image-link picture {
-        display: flex;
-        inline-size: 100%;
+        block-size: 16rem;
     }
 
     .q-grid--list .q-pcard__image {
-        align-self: stretch;
         inline-size: 100%;
-        block-size: auto;
+        block-size: 100%;
     }
 
     /* Plakietki schodzą ze zdjęcia nad tytuł: kadr ma w rzędzie 256 px, a przy
@@ -1166,6 +1141,10 @@
         .q-grid--list .q-pcard__media {
             inline-size: 12rem;
         }
+
+        .q-grid--list .q-pcard__image-link {
+            block-size: 12rem;
+        }
     }
 
     /* Poniżej 992 px kolumna treści schodzi do ~340 px, więc kolumna zestawienia
@@ -1197,20 +1176,7 @@
             inline-size: 7.5rem;
         }
 
-        /* Tu kadr NIE rozciąga się na wysokość rzędu: słupek zakupu schodzi pod
-           treść, więc rząd jest dwa razy wyższy niż szeroki i rozciągnięte
-           zdjęcie byłoby pionowym paskiem. Zostaje kwadrat przy górnej i lewej
-           krawędzi, a kadr kończy się razem ze zdjęciem. Inaczej narzędzia,
-           które siedzą przy jego dolnej krawędzi, lądują w pustym polu
-           kilkadziesiąt pikseli pod zdjęciem. */
-        .q-grid--list .q-pcard__media {
-            align-self: start;
-        }
-
-        /* `flex: none` jest konieczne, bo w kolumnie elastycznej podstawa
-           z `flex: 1` wygrywa z podaną wysokością. */
         .q-grid--list .q-pcard__image-link {
-            flex: none;
             block-size: 7.5rem;
         }
 

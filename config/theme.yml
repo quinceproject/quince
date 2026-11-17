@@ -1,6 +1,6 @@
 name: quince
 display_name: Quince
-version: 0.1.10
+version: 0.1.11
 author:
   name: "Quince Project"
   email: "quinceproject@proton.me"
@@ -163,30 +163,34 @@ global_settings:
         # Keep existing hooks and append them after
         - ~
 
+  # Zestaw dobrany do miejsc w motywie przy stronie do 1920 px i ekranach
+  # o podwójnej gęstości. Zajawka wybiera z home/medium/large przez srcset,
+  # galeria i powiększenie biorą large. Wszystkie kwadratowe: kadr zajawki
+  # bierze proporcję z home_default.
   image_types:
-    cart_default:
-      width: 125
-      height: 125
-      scope: [products]
-    small_default:
-      width: 98
-      height: 98
-      scope: [products, categories, manufacturers, suppliers]
-    medium_default:
-      width: 452
-      height: 452
-      scope: [products, manufacturers, suppliers]
-    large_default:
-      width: 800
-      height: 800
-      scope: [products, manufacturers, suppliers]
-    home_default:
+    cart_default:      # szuflada koszyka
       width: 250
       height: 250
       scope: [products]
-    category_default:
-      width: 180
-      height: 180
+    small_default:     # miniatury galerii, koszyk, logo marek i dostawców
+      width: 200
+      height: 200
+      scope: [products, categories, manufacturers, suppliers]
+    medium_default:    # zajawki szerokie
+      width: 800
+      height: 800
+      scope: [products, manufacturers, suppliers]
+    large_default:     # galeria produktu i powiększenie
+      width: 1600
+      height: 1600
+      scope: [products, manufacturers, suppliers]
+    home_default:      # zajawki na telefonie i przy 4-5 kartach w rzędzie
+      width: 450
+      height: 450
+      scope: [products]
+    category_default:  # zdjęcie kategorii w nagłówku, kafelki podkategorii
+      width: 300
+      height: 300
       scope: [categories]
     stores_default:
       width: 287

@@ -16,37 +16,46 @@
  * miejsca i strona skacze w trakcie wczytywania.
  *
  * `qSizes` mówi przeglądarce, jak szeroka BĘDZIE zajawka, żeby dobrała plik pod
- * ten rozmiar. Wartość domyślna opisuje zajawkę w siatce listingu: przy pięciu
- * w rzędzie ma ona około 300 px, a nie ćwierć szerokości okna. Miejsce, w którym
- * zajawka jest szersza albo węższa, podaje własną wartość.
+ * ten rozmiar. Wartość domyślna liczy zajawkę w siatce listingu z szerokości
+ * strony i liczby kolumn ustawionych w silniku. Miejsce, w którym zajawka jest
+ * szersza albo węższa, podaje własną wartość.
  *}
 
 {block name='product_miniature_image'}
   {if $product.cover}
     {assign var=cover value=$product.cover.bySize}
 
+    {* Trzy szerokości pliku do wyboru (home 450, medium 800, large 1600 przy
+       zestawie z theme.yml). Przeglądarka bierze najmniejszy plik, który przy
+       gęstości ekranu pokryje szerokość karty. Typ, którego sklep nie ma, po
+       prostu wypada z listy. *}
+    {assign var=qTypy value=['home_default', 'medium_default', 'large_default']}
+    {capture name='qSrcAvif'}{foreach from=$qTypy item=qTyp}{if isset($cover.$qTyp.sources.avif)}{$cover.$qTyp.sources.avif} {$cover.$qTyp.width}w, {/if}{/foreach}{/capture}
+    {capture name='qSrcWebp'}{foreach from=$qTypy item=qTyp}{if isset($cover.$qTyp.sources.webp)}{$cover.$qTyp.sources.webp} {$cover.$qTyp.width}w, {/if}{/foreach}{/capture}
+    {capture name='qSrcBase'}{foreach from=$qTypy item=qTyp}{if isset($cover.$qTyp.url)}{$cover.$qTyp.url} {$cover.$qTyp.width}w, {/if}{/foreach}{/capture}
+
+    {* Szerokość karty w siatce: od 768 px strona dzielona na tyle kolumn, ile
+       ustawiono w panelu (szerokość strony też z panelu, od 960 do 1920 px),
+       od 576 px trzy karty, niżej dwie. Zmierzone na listingu. *}
+    {assign var=qKol value=$modules.quince_engine.listing.columns|default:4}
+    {assign var=qStrona value=$modules.quince_engine.listing.container|default:1200}
+    {capture name='qSizesSiatka'}(min-width: 768px) calc(min(100vw, {$qStrona|intval}px) / {$qKol|intval}), (min-width: 576px) 33vw, 50vw{/capture}
+    {assign var=qRozmiary value=$qSizes|default:$smarty.capture.qSizesSiatka}
+
     <picture>
-      {if isset($cover.medium_default.sources.avif)}
-        <source
-          srcset="{$cover.home_default.sources.avif} {$cover.home_default.width}w,
-                  {$cover.medium_default.sources.avif} {$cover.medium_default.width}w"
-          sizes="{$qSizes|default:'(min-width: 1200px) 300px, (min-width: 992px) 25vw, (min-width: 576px) 50vw, 100vw'}"
-          type="image/avif">
+      {if $smarty.capture.qSrcAvif}
+        <source srcset="{$smarty.capture.qSrcAvif|trim:', '}" sizes="{$qRozmiary}" type="image/avif">
       {/if}
 
-      {if isset($cover.medium_default.sources.webp)}
-        <source
-          srcset="{$cover.home_default.sources.webp} {$cover.home_default.width}w,
-                  {$cover.medium_default.sources.webp} {$cover.medium_default.width}w"
-          sizes="{$qSizes|default:'(min-width: 1200px) 300px, (min-width: 992px) 25vw, (min-width: 576px) 50vw, 100vw'}"
-          type="image/webp">
+      {if $smarty.capture.qSrcWebp}
+        <source srcset="{$smarty.capture.qSrcWebp|trim:', '}" sizes="{$qRozmiary}" type="image/webp">
       {/if}
 
       <img
         class="q-pcard__image"
-        {if isset($cover.medium_default.url)}
-          srcset="{$cover.home_default.url} {$cover.home_default.width}w, {$cover.medium_default.url} {$cover.medium_default.width}w"
-          sizes="{$qSizes|default:'(min-width: 1200px) 300px, (min-width: 992px) 25vw, (min-width: 576px) 50vw, 100vw'}"
+        {if $smarty.capture.qSrcBase}
+          srcset="{$smarty.capture.qSrcBase|trim:', '}"
+          sizes="{$qRozmiary}"
         {/if}
         src="{$cover.home_default.url}"
         width="{$cover.home_default.width}"

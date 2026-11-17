@@ -4,6 +4,38 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.11] - 2026-11-17
+
+### Changed
+
+- Image sizes in `theme.yml` match the places that show them, up to a 1920 px page
+  and double-density screens: small 200, cart 250, home 450, medium 800, large
+  1600, category 300 (all square). They apply to a new install of the theme; an
+  existing shop keeps its sizes until they are changed and the thumbnails are
+  regenerated.
+- Product cards offer the browser three picture widths (home, medium, large) and
+  tell it how wide the card is, from the page width and the number of columns set
+  in Quince Engine (page width needs Quince Engine 0.10.3). Before, the browser assumed a 300 px card on every large screen
+  and could only pick between two small files.
+
+- Product details tab: two tables in one tab. First the features from the catalogue
+  under "Specification", then brand, reference, stock, condition and codes under
+  "Product information". Before, both were mixed in one table.
+- Specification tables run the full width of the tab, with the same margin on the
+  left and on the right. Before, they stopped at 44rem.
+
+### Fixed
+
+- Product cards show the whole picture, as in the category design. Before, the
+  picture was cropped to fill the frame and tall or wide products lost their ends.
+- Product cards, list view: the picture frame keeps its square (16rem, 12rem on
+  a medium screen, 7.5rem on a phone) and sits in the middle of the row. Before,
+  a tall picture stretched the whole row.
+- Product cards: a tall picture no longer runs below the square frame. The frame
+  cut off its bottom.
+- Questions and answers with no questions yet: the button sits right under the
+  sentence, as in reviews. Before, it stood lower, in a separate row.
+
 ## [0.1.10] - 2026-11-16
 
 ### Fixed

@@ -71,6 +71,11 @@
         display: grid;
         place-items: center;
 
+        /* Jedna komórka o rozmiarze kadru. Bez tego wiersz siatki rośnie do
+           wysokości zawartości: pionowe zdjęcie robiło z komórki prostokąt
+           wyższy od kadru, a kadr obcinał mu dół. */
+        grid-template: minmax(0, 1fr) / minmax(0, 1fr);
+
         background: var(--q-pcard-media-bg);
         overflow: hidden;
     }
@@ -78,6 +83,17 @@
     /* Odnośnik wypełnia kadr, ale nim nie jest: kadr musi móc zawierać
        przyciski, a `<a>` nie może ich zawierać. */
     .q-pcard__image-link {
+        display: block;
+        inline-size: 100%;
+        block-size: 100%;
+    }
+
+    /* Między odnośnikiem a zdjęciem stoi `<picture>` z odmianami pliku. Jako
+       zwykły element w linii przekazuje dalej wysokość własnej zawartości, nie
+       kadru: zdjęcie pionowe liczyło wtedy wysokość z pliku, wychodziło poza
+       kwadrat i kadr obcinał mu dół. Jako blok na całą wysokość oddaje
+       zdjęciu dokładnie pole kadru. */
+    .q-pcard__image-link picture {
         display: block;
         inline-size: 100%;
         block-size: 100%;

@@ -446,6 +446,15 @@
         <source>%count% products</source>
         <target>%count% produktów</target>
       </trans-unit>
+      <!-- Szczegóły produktu: podtytuły dwóch tabel w jednej zakładce. -->
+      <trans-unit id="quince.details.specification" resname="Specification">
+        <source>Specification</source>
+        <target>Specyfikacja</target>
+      </trans-unit>
+      <trans-unit id="quince.details.information" resname="Product information">
+        <source>Product information</source>
+        <target>Informacje o produkcie</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
