@@ -21,14 +21,25 @@
  *}
 
 {block name='product_miniature_item'}
+  {* Ustawienia z Quince Engine → Karta produktu, osobno dla kafelka i rzędu.
+     Elementy wspólne obu rodzajów gasi klasa na karcie (`card.classes`), bo
+     widok listy przełącza się bez przeładowania strony. Elementy tylko rzędu
+     szablon po prostu pomija. Bez silnika wszystko zostaje włączone. *}
+  {assign var=qCard value=$modules.quince_engine.card|default:[]}
+  {assign var=qKafel value=$qCard.tile|default:[]}
+  {assign var=qRzad value=$qCard.row|default:[]}
+
   <article
-    class="q-pcard product-miniature js-product-miniature"
+    class="q-pcard product-miniature js-product-miniature{if !empty($qCard.classes)} {$qCard.classes}{/if}"
     data-id-product="{$product.id_product}"
     data-id-product-attribute="{$product.id_product_attribute}"
   >
     {block name='product_miniature_media'}
       <div class="q-pcard__media{if !$product.cover} q-pcard__media--empty{/if}">
-        {include file='catalog/_partials/product-flags.tpl'}
+        {* Plakietki na zdjęciu widać tylko w kafelku, więc decyduje kafelek. *}
+        {if !isset($qKafel.badges) || $qKafel.badges}
+          {include file='catalog/_partials/product-flags.tpl' qHiddenFlags=$qKafel.hidden_flags|default:[]}
+        {/if}
 
 
         {* Odnośnik wypełnia kadr, ale nim nie jest: w kadrze stoją jeszcze
@@ -56,7 +67,9 @@
            obniżkę, bo plakietki niosą też nowość, pakiet i stan towaru, a lista,
            która nie ma czego pokazać, nie renderuje się wcale. *}
         {block name='product_topline'}
-          {include file='catalog/_partials/product-flags.tpl' qBadgesClass='q-pcard__topline'}
+          {if !isset($qRzad.badges) || $qRzad.badges}
+            {include file='catalog/_partials/product-flags.tpl' qBadgesClass='q-pcard__topline' qHiddenFlags=$qRzad.hidden_flags|default:[]}
+          {/if}
         {/block}
 
         {block name='product_brand'}
@@ -88,7 +101,7 @@
 
         {* Opis i cechy: widok listy. W kafelku nie ma na nie miejsca. *}
         {block name='product_description'}
-          {if $product.description_short}
+          {if $product.description_short && (!isset($qRzad.description) || $qRzad.description)}
             <p class="q-pcard__description">{$product.description_short|strip_tags|truncate:260:'…'}</p>
           {/if}
         {/block}
@@ -104,32 +117,41 @@
         {block name='product_facts'}
           {* Jedno zestawienie, złamane na dwie kolumny. Cechy, marka i kody idą
              w nim jednym ciągiem, więc podział wypada w połowie WIERSZY. *}
-          <dl class="q-facts__list q-pcard__fakty">
-            {include file='catalog/_partials/product-key-features.tpl' qWiersze=true qKolejnosc=$product.id_product|qcechy
-              qIle=$modules.quince_engine.listing.options.products.features|default:6}
+          {* Liczba cech z ekranu Karta produktu (rząd). Bez silnika sześć. *}
+          {if isset($qRzad.features)}
+            {assign var=qIleCech value=$qRzad.features|intval}
+          {else}
+            {assign var=qIleCech value=6}
+          {/if}
 
-            {if $product.manufacturer_name}
+          <dl class="q-facts__list q-pcard__fakty">
+            {if $qIleCech > 0}
+              {include file='catalog/_partials/product-key-features.tpl' qWiersze=true qKolejnosc=$product.id_product|qcechy
+                qIle=$qIleCech}
+            {/if}
+
+            {if $product.manufacturer_name && (!isset($qRzad.brand) || $qRzad.brand)}
               <div class="q-facts__row">
                 <dt class="q-facts__key">{l s='Brand' d='Shop.Theme.Catalog'}</dt>
                 <dd class="q-facts__val">{$product.manufacturer_name}</dd>
               </div>
             {/if}
 
-            {if $product.reference}
+            {if $product.reference && (!isset($qRzad.code_reference) || $qRzad.code_reference)}
               <div class="q-facts__row">
                 <dt class="q-facts__key">{l s='Reference' d='Shop.Theme.Catalog'}</dt>
                 <dd class="q-facts__val">{$product.reference}</dd>
               </div>
             {/if}
 
-            {if $product.ean13}
+            {if $product.ean13 && (!isset($qRzad.code_ean) || $qRzad.code_ean)}
               <div class="q-facts__row">
                 <dt class="q-facts__key">{l s='EAN' d='Shop.Theme.Catalog'}</dt>
                 <dd class="q-facts__val">{$product.ean13}</dd>
               </div>
             {/if}
 
-            {if $product.mpn}
+            {if $product.mpn && (!isset($qRzad.code_mpn) || $qRzad.code_mpn)}
               <div class="q-facts__row">
                 <dt class="q-facts__key">{l s='MPN' d='Shop.Theme.Catalog'}</dt>
                 <dd class="q-facts__val">{$product.mpn}</dd>
@@ -181,7 +203,10 @@
            nigdy sama barwa. Nazwy stanów przychodzą z rdzenia, więc mapowanie
            na klasę motywu jest tu takie samo jak tam. *}
         {block name='product_stock'}
-          {if $product.availability_message}
+          {assign var=qPokazStan value=($product.availability_message && (!isset($qRzad.availability) || $qRzad.availability))}
+          {assign var=qPokazWysylke value=($product.delivery_information && (!isset($qRzad.shipping) || $qRzad.shipping))}
+
+          {if $qPokazStan || $qPokazWysylke}
             {assign var=qDostepnosc value=$product.availability|default:''}
 
             {if $qDostepnosc == 'in_stock' || $qDostepnosc == 'available'}
@@ -193,16 +218,18 @@
             {/if}
 
             <dl class="q-facts__list q-pcard__stock">
-              <div class="q-facts__row">
-                <dt class="q-facts__key">{l s='Availability' d='Shop.Theme.Catalog'}</dt>
-                <dd class="q-facts__val">
-                  <span class="q-stock {$qKlasaStanu}">
-                    <span class="q-stock__dot" aria-hidden="true"></span>{$product.availability_message}
-                  </span>
-                </dd>
-              </div>
+              {if $qPokazStan}
+                <div class="q-facts__row">
+                  <dt class="q-facts__key">{l s='Availability' d='Shop.Theme.Catalog'}</dt>
+                  <dd class="q-facts__val">
+                    <span class="q-stock {$qKlasaStanu}">
+                      <span class="q-stock__dot" aria-hidden="true"></span>{$product.availability_message}
+                    </span>
+                  </dd>
+                </div>
+              {/if}
 
-              {if $product.delivery_information}
+              {if $qPokazWysylke}
                 <div class="q-facts__row">
                   <dt class="q-facts__key">{l s='Shipping' d='Shop.Theme.Catalog'}</dt>
                   <dd class="q-facts__val">{$product.delivery_information}</dd>

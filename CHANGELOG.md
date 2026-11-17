@@ -4,6 +4,16 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.12] - 2026-11-17
+
+### Fixed
+
+- Product cards follow **Quince Engine → Product card**: every switch of the tile and
+  the row works (badges and their kinds, quick view, favourites, promotion countdown,
+  brand, rating, lowest price note, and in the row the description, number of
+  features, codes, availability and shipping time). Before, the cards showed
+  everything whatever the screen said. Badge kinds need Quince Engine 0.10.4.
+
 ## [0.1.11] - 2026-11-17
 
 ### Changed

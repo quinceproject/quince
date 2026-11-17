@@ -495,4 +495,29 @@
         display: none;
     }
 
+    /* Elementy wyłączone w Quince Engine → Karta produktu. Klasę
+       `q-pcard--{tile|row}-no-{element}` stawia silnik na każdej karcie.
+       Kafelek to karta poza widokiem listy, rząd to karta w widoku listy;
+       widok przełącza się bez przeładowania, więc decyduje arkusz. */
+    .q-pcard--tile-no-quickview:not(.q-grid--list .q-pcard) .q-pcard__quickview,
+    .q-pcard--tile-no-wishlist:not(.q-grid--list .q-pcard) .q-pcard__wish,
+    .q-pcard--tile-no-countdown:not(.q-grid--list .q-pcard) .q-pcard__countdown,
+    .q-pcard--tile-no-brand:not(.q-grid--list .q-pcard) .q-pcard__brand,
+    .q-pcard--tile-no-rating:not(.q-grid--list .q-pcard) .q-pcard__rating,
+    .q-pcard--tile-no-omnibus:not(.q-grid--list .q-pcard) .q-pcard__omnibus,
+    .q-grid--list .q-pcard--row-no-quickview .q-pcard__quickview,
+    .q-grid--list .q-pcard--row-no-wishlist .q-pcard__wish,
+    .q-grid--list .q-pcard--row-no-countdown .q-pcard__countdown,
+    .q-grid--list .q-pcard--row-no-brand .q-pcard__brand,
+    .q-grid--list .q-pcard--row-no-rating .q-pcard__rating,
+    .q-grid--list .q-pcard--row-no-omnibus .q-pcard__omnibus {
+        display: none;
+    }
+
+    /* Słupek narzędzi bez obu narzędzi znika razem z ramką. */
+    .q-pcard--tile-no-quickview.q-pcard--tile-no-wishlist:not(.q-grid--list .q-pcard) .q-pcard__tools,
+    .q-grid--list .q-pcard--row-no-quickview.q-pcard--row-no-wishlist .q-pcard__tools {
+        display: none;
+    }
+
 }

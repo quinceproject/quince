@@ -20,10 +20,17 @@
 
 {assign var=qBadgesClass value=$qBadgesClass|default:'q-pcard__badges'}
 
-{if !empty($product.flags)}
+{* Typy plakietek wyłączone dla tego miejsca (zajawka: Quince Engine → Karta
+   produktu). Lista bez żadnej widocznej plakietki nie renderuje się wcale. *}
+{assign var=qHiddenFlags value=$qHiddenFlags|default:[]}
+{assign var=qWidoczne value=0}
+{foreach from=$product.flags item=flag}{if !in_array($flag.type, $qHiddenFlags)}{assign var=qWidoczne value=$qWidoczne+1}{/if}{/foreach}
+
+{if $qWidoczne > 0}
   {block name='product_flags'}
     <ul class="{$qBadgesClass|escape:'html':'UTF-8'} js-product-flags">
       {foreach from=$product.flags item=flag}
+        {if in_array($flag.type, $qHiddenFlags)}{continue}{/if}
         {* Stany produktu z PrestaShopa 9.2 dostają wariant neutralny. *}
         {if in_array($flag.type, ['used', 'refurbished', 'open_box', 'damaged', 'new_with_defects'])}
           <li class="q-badge q-badge--condition">{$flag.label nofilter}</li>
