@@ -21,11 +21,16 @@
      pierwszy przycisk w środku, czyli na zamknięcie, i rysuje wokół niego
      pierścień, jakby ktoś doszedł tam klawiaturą. *}
   <dialog class="q-modal q-modal--drawer q-modal--drawer-start" id="q-navmob" data-q-navmob>
-    <div class="q-modal__head">
+    {* Nagłówek panelu w barwach przyklejonego nagłówka strony i z logo w jego
+       wersji: osobny plik logo po przewinięciu, a bez niego ta sama obróbka
+       (`--q-header-logo-stuck-filter`). *}
+    <div class="q-modal__head q-navmob__head">
       {* Logo zamiast napisu: nazwa przycisku, który to menu otworzył, nic tu nie
          wnosi, a logo mówi, w czyim sklepie klient jest. *}
-      <a class="q-navmob__logo" href="{$urls.base_url}">
-        {if $shop.logo_details}
+      <a class="q-navmob__logo{if isset($qh) && $qh.logo_stuck_src} q-navmob__logo--alt{/if}" href="{$urls.base_url}">
+        {if isset($qh) && $qh.logo_stuck_src}
+          <img src="{$qh.logo_stuck_src}" alt="{$shop.name}">
+        {elseif $shop.logo_details}
           <img src="{$shop.logo_details.src}" alt="{$shop.name}"
                width="{$shop.logo_details.width}" height="{$shop.logo_details.height}">
         {else}

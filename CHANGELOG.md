@@ -4,6 +4,25 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.13] - 2026-11-21
+
+### Added
+
+- Product page, dictionaries: a table longer than 100 rows shows the shop pagination
+  under it and loads the next pages without reloading; the search field searches the
+  whole table. Needs Quince Dictionaries 0.3.2.
+
+### Fixed
+
+- Mobile menu: the logo in the panel heading keeps its proportions. A wide logo on a
+  narrow screen was squeezed.
+
+### Changed
+
+- Mobile menu: the panel heading takes the colours of the header after scrolling, and
+  the logo in it the same version as there (the separate logo file, or the same
+  colour treatment).
+
 ## [0.1.12] - 2026-11-17
 
 ### Fixed

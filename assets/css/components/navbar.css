@@ -897,10 +897,37 @@
     }
 
     /* Logo w nagłówku panelu. Wysokość jak w pasie nagłówka, żeby menu nie
-       zaczynało się od logo w innej skali niż strona pod spodem. */
+       zaczynało się od logo w innej skali niż strona pod spodem.
+
+       Szerokie logo dochodzi do limitu szerokości, a wysokość zostaje: bez
+       `object-fit` obrazek się wtedy spłaszczał. `contain` wpisuje go w to pole
+       z zachowaniem proporcji, przy lewej krawędzi. */
     .q-navmob__logo img {
+        display: block;
         block-size: var(--q-header-logo-h);
         inline-size: auto;
         max-inline-size: 60vw;
+        object-fit: contain;
+        object-position: left center;
+    }
+
+    /* Nagłówek panelu w barwach przyklejonego nagłówka strony (ustawienie sklepu
+       „tło po przewinięciu"). Menu otwiera się z nagłówka, który klient ma wtedy
+       przed oczami, więc ma wyglądać jak jego przedłużenie. */
+    .q-navmob__head {
+        background: var(--q-band-header-stuck-bg, var(--q-modal-bg));
+        color: var(--q-band-header-stuck-fg, inherit);
+        border-block-end-color: var(--q-band-header-stuck-border, var(--q-modal-border));
+    }
+
+    .q-navmob__head .q-modal__close,
+    .q-navmob__head .q-modal__close:hover {
+        color: inherit;
+    }
+
+    /* Logo jak w przyklejonym nagłówku: ta sama obróbka pliku. Osobny plik logo
+       po przewinięciu (`--alt`) obróbki nie dostaje, bo jest już gotowy. */
+    .q-navmob__logo:not(.q-navmob__logo--alt) img {
+        filter: var(--q-header-logo-stuck-filter, none);
     }
 }

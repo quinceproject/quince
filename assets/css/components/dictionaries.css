@@ -9,6 +9,27 @@
        w jednym akordeonie czytałyby się jak dwa różne sklepy.
     */
 
+    /* Stronicowanie długiej tabeli: komponent `q-pagination` spod listy produktów.
+       Pozycje są tu przyciskami (strony przychodzą bez przeładowania), więc zdejmujemy
+       wygląd przycisku przeglądarki; tło strony bieżącej zostaje z komponentu. */
+    .q-dict__pages {
+        margin-block-start: var(--q-space-md);
+    }
+
+    .q-dict__pages button {
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .q-dict__pages button:not(.is-active) {
+        background: none;
+    }
+
+    /* Czekamy na kolejną stronę: tabela przygasa, żeby było widać, że coś się dzieje. */
+    .q-dict[aria-busy="true"] [data-q-dict-table] {
+        opacity: .5;
+    }
+
     .q-dict + .q-dict {
         margin-block-start: var(--q-space-lg);
     }
