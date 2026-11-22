@@ -15,9 +15,8 @@
  * Zmienne: $qLink:    włącznik odnośnika „Pełna specyfikacja",
  *          $qIle:     ile wierszy pokazujemy (ustawienie elementu w panelu),
  *          $qWiersze: same wiersze, bez własnego zestawienia i bez odnośnika.
- *                     Zajawka w widoku listy wkłada je do JEDNEGO zestawienia
- *                     razem z marką i kodami, żeby podział na kolumny wypadał
- *                     w połowie wierszy.
+ *                     Zajawka w widoku listy wkłada je do własnego zestawienia
+ *                     w lewej kolumnie; marka i kody stoją w prawej.
  *}
 
 {if $product.grouped_features}

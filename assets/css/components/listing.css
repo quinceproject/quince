@@ -1009,20 +1009,18 @@
         font-size: var(--q-fs-xs);
     }
 
-    /* Cechy i kody: jedno zestawienie złamane na dwie kolumny. Dziesięć wierszy
-       w jednej kolumnie podniosłoby rząd o trzysta pikseli. Po to jest ta
-       szerokość, żeby czytać w poprzek, a nie w dół. */
+    /* Cechy i kody: dwie listy obok siebie, cechy po lewej, marka i kody po
+       prawej. Każda ma stałą kolumnę, więc marka nie wędruje między nimi
+       zależnie od liczby cech. */
     .q-grid--list .q-pcard__fakty {
-        display: block;
-        columns: 2;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         column-gap: var(--q-space-lg);
+        align-items: start;
         margin-block-start: var(--q-space-xs);
     }
 
-    /* Wiersz nie ma prawa pęknąć między kolumnami: nazwa zostałaby na dole
-       pierwszej, a wartość na górze drugiej. */
     .q-grid--list .q-pcard__fakty .q-facts__row {
-        break-inside: avoid;
         padding-block: 2px;
     }
 
@@ -1149,11 +1147,17 @@
 
     /* Poniżej 992 px kolumna treści schodzi do ~340 px, więc kolumna zestawienia
        ma 170 px i wartości łamią się po dwa słowa, nierówno, bo każdy produkt
-       ma inne. Zostają same cechy; kody wracają na szerszym ekranie. Opis
-       rezerwuje tu trzy wiersze zamiast dwóch, bo przy tej szerokości tyle
-       właśnie bierze i bez rezerwacji rzędy różniłyby się o wysokość wiersza. */
+       ma inne. Zostają same cechy, najwyżej cztery, w jednej kolumnie; kody
+       wracają na szerszym ekranie. Opis rezerwuje tu trzy wiersze zamiast
+       dwóch, bo przy tej szerokości tyle właśnie bierze i bez rezerwacji rzędy
+       różniłyby się o wysokość wiersza. */
     @media (max-width: 991px) {
-        .q-grid--list .q-pcard__fakty .q-facts__row:nth-child(n+5) {
+        .q-grid--list .q-pcard__fakty {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-grid--list .q-pcard__fakty-kody,
+        .q-grid--list .q-pcard__fakty-cechy .q-facts__row:nth-child(n+5) {
             display: none;
         }
 

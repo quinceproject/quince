@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.15] - 2026-11-22
+
+### Fixed
+
+- Product lists, list view: features stand in the left column, and brand, reference,
+  EAN and MPN in the right one. Before, one list was split in half by rows, so on a
+  product with few features the brand moved to the left column.
+
 ## [0.1.14] - 2026-11-22
 
 ### Added

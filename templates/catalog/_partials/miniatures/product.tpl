@@ -115,8 +115,9 @@
            Bez odnośnika „Pełna specyfikacja": on prowadzi do sekcji na karcie
            produktu, a stąd do tej karty prowadzi już nazwa. *}
         {block name='product_facts'}
-          {* Jedno zestawienie, złamane na dwie kolumny. Cechy, marka i kody idą
-             w nim jednym ciągiem, więc podział wypada w połowie WIERSZY. *}
+          {* Dwie listy obok siebie: po lewej cechy, po prawej marka i kody.
+             Każda ma swoją kolumnę na stałe, więc marka stoi w tym samym miejscu
+             bez względu na to, ile cech ma produkt. *}
           {* Liczba cech z ekranu Karta produktu (rząd). Bez silnika sześć. *}
           {if isset($qRzad.features)}
             {assign var=qIleCech value=$qRzad.features|intval}
@@ -124,12 +125,15 @@
             {assign var=qIleCech value=6}
           {/if}
 
-          <dl class="q-facts__list q-pcard__fakty">
+          <div class="q-pcard__fakty">
+          <dl class="q-facts__list q-pcard__fakty-cechy">
             {if $qIleCech > 0}
               {include file='catalog/_partials/product-key-features.tpl' qWiersze=true qKolejnosc=$product.id_product|qcechy
                 qIle=$qIleCech}
             {/if}
+          </dl>
 
+          <dl class="q-facts__list q-pcard__fakty-kody">
             {if $product.manufacturer_name && (!isset($qRzad.brand) || $qRzad.brand)}
               <div class="q-facts__row">
                 <dt class="q-facts__key">{l s='Brand' d='Shop.Theme.Catalog'}</dt>
@@ -158,6 +162,7 @@
               </div>
             {/if}
           </dl>
+          </div>
         {/block}
 
         {* Pojemnik decyzji. W kafelku jest PRZEZROCZYSTY (`display: contents`),
