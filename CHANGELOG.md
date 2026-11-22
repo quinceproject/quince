@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.16] - 2026-11-22
+
+### Fixed
+
+- Category menu, cascade layout, opened from the header after scrolling: the panel is
+  as wide as the categories button and the subcategories slide out next to it. Before,
+  it stretched across the whole screen and the subcategories were off the edge.
+
 ## [0.1.15] - 2026-11-22
 
 ### Fixed

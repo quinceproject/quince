@@ -190,9 +190,15 @@
     }
 
     /* Kaskada wisi pod swoim przyciskiem, nie na środku, tak samo jak w pasie
-       menu. Położenie przycisku wpisuje ta sama wyspa. */
+       menu. Położenie przycisku wpisuje ta sama wyspa.
+
+       Panel zaczepiony do okna liczy procenty od okna, więc minimum „100%"
+       z reguły kaskady rozciągałoby kolumnę na cały ekran, a kolejne poziomy
+       wysuwałyby się poza jego krawędź. Minimum to wtedy szerokość przycisku
+       kategorii z pasa menu. */
     .q-nav__panel--cascade.is-floating {
         inset-inline-start: var(--q-cats-x, var(--q-space-md));
+        min-inline-size: var(--q-navbar-trigger-w);
     }
 
     .q-nav__panel-inner {
