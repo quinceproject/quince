@@ -126,6 +126,7 @@
     subcategories=$subcategories|default:[]
     qImages=$qEl.options.images|default:true
     qIcons=$qEl.options.icons|default:false
+    qCoverFallback=$qEl.options.cover_fallback|default:true
     qHover=$qEl.options.hover|default:true}
 
 {elseif $qId == 'hook_header'}

@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.14] - 2026-11-22
+
+### Added
+
+- Subcategory tiles: a subcategory without its own thumbnail shows its category image,
+  as set by the switch in **Quince Engine → Product lists → Subcategories**. The
+  thumbnail still comes first.
+
 ## [0.1.13] - 2026-11-21
 
 ### Added

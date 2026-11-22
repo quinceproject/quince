@@ -7,6 +7,8 @@
  *   `qImages`: czy w ogóle pokazujemy zdjęcia,
  *   `qIcons`:  zdjęcie jako maska malowana barwą motywu, dla sklepów,
  *              które mają do kategorii jednobarwne rysunki,
+ *   `qCoverFallback`: kategoria bez miniatury pokazuje obraz kategorii
+ *              (ten z nagłówka listy); miniatura ma pierwszeństwo,
  *   `qHover`:  czy obramowanie zapala się po najechaniu,
  *   `qHook`:   czy wołamy hook `displaySubcategories` (nie na stronie
  *              bez wyników wyszukiwania),
@@ -47,8 +49,14 @@
 
     {foreach from=$subcategories item="subcategory"}
       <a class="q-subcats__item" href="{$subcategory.url}" title="{$subcategory.name}">
-        {if $qImages|default:true && !empty($subcategory.thumbnail.bySize.category_default.url)}
+        {assign var=qThumb value=null}
+        {if !empty($subcategory.thumbnail.bySize.category_default.url)}
           {assign var=qThumb value=$subcategory.thumbnail.bySize.category_default}
+        {elseif $qCoverFallback|default:true && !empty($subcategory.cover.bySize.category_default.url)}
+          {assign var=qThumb value=$subcategory.cover.bySize.category_default}
+        {/if}
+
+        {if $qImages|default:true && $qThumb}
 
           {* W trybie ikony obrazek jest maską, a nie treścią: barwę nadaje mu
              arkusz, więc element musi mieć adres także w `style`. *}
