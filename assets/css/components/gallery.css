@@ -24,6 +24,10 @@
         border-radius: var(--q-card-radius);
         overflow: hidden;
         cursor: zoom-in;
+
+        /* Pion zostaje przeglądarce (przewijanie strony), poziom odbiera skrypt
+           galerii: przesunięcie palcem zmienia zdjęcie. */
+        touch-action: pan-y;
     }
 
     /* `<picture>` wokół zdjęcia nie tworzy własnego pudełka: kadr, miniatura
@@ -190,9 +194,12 @@
         transform: scale(1.25);
     }
 
+    /* Na telefonie galeria karty produktu zostaje przy pasie miniatur, jak na
+       komputerze: kropki nie mówią, co jest na kolejnym zdjęciu. Kropki zostają
+       tylko w szybkim podglądzie, gdzie pas zająłby połowę szuflady. */
     @media (max-width: 767px) {
-        .q-gallery__thumbs { display: none; }
-        .q-gallery__dots { display: flex; }
+        .q-quickview__thumbnails { display: none; }
+        .q-quickview__dots { display: flex; }
     }
 
     /* --- podgląd na wierzchu ---

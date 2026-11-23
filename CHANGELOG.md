@@ -4,6 +4,34 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.20] - 2026-11-23
+
+### Changed
+
+- Product gallery on a phone: the strip of thumbnails, as on a computer, instead of
+  dots. The dots were too small to tap. Quick view keeps the dots.
+- Product lists on a phone: products always stand as tiles and the grid/list switch is
+  not shown. The list view, chosen by the customer or set as the shop default, comes
+  back on a wider screen.
+- Subcategory tiles on a phone: four in a row (two per column of products), as on a
+  computer. Before, two wide tiles filled the row.
+
+### Added
+
+- Product gallery on a phone: swiping the picture left or right shows the next or the
+  previous one. A vertical swipe scrolls the page, a tap still opens the zoom.
+
+### Fixed
+
+- Subcategory tiles: the folded rows no longer show slivers of the hidden tiles under
+  the first row.
+- Search suggestions on a phone: the list lines up with the page content under the
+  header, with the same margin on both sides. Before, it started at the field, after
+  the menu button, and a long product name pushed it off the right edge of the screen.
+- Product gallery: the chosen thumbnail moves to the middle of the strip, so the next
+  thumbnails come into view. Before, clicking the last visible thumbnail left the
+  strip where it was and it was not clear whether more pictures followed.
+
 ## [0.1.19] - 2026-11-23
 
 ### Changed

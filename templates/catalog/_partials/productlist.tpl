@@ -24,7 +24,12 @@
 {assign var=qSkipped value=($listing.pagination.items_shown_from|default:1) - 1}
 {assign var=qSlots value=$qList.columns|qslots:$qSkipped}
 
-<div class="q-grid products js-product-list-grid{if $qList.view == 'list'} q-grid--list{/if}">
+<div class="q-grid products js-product-list-grid{if $qList.view == 'list'} q-grid--list{/if}"{if $qList.view == 'list'} data-q-list-view{/if}>
+  {* Na telefonie zawsze kafle. Klasę listy zdejmujemy od razu, zanim produkty
+     się narysują: skrypt listingu przychodzi na końcu strony i lista mignęłaby
+     przed nim. `data-q-list-view` zostaje, żeby na szerszym ekranie wrócił
+     widok sklepu. Próg jak w listing.js i w arkuszu. *}
+  {if $qList.view == 'list'}<script>if (window.matchMedia('(max-width: 767px)').matches) { document.currentScript.parentNode.classList.remove('q-grid--list'); }</script>{/if}
 
   {* Miejsce w rzędzie zerowym stoi przed pierwszym produktem. *}
   {if isset($qSlots[0])}

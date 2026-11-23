@@ -590,8 +590,12 @@
         overflow: hidden;
     }
 
+    /* Bez odstępu między wierszami po zwinięciu: zwinięte wiersze mają zero
+       wysokości, ale odstępy między nimi zostawały, a w tych szparach wystawały
+       ucięte kafelki kolejnych wierszy. */
     .q-subcats:not(.is-expanded):not(.is-whole) {
         grid-auto-rows: 0;
+        row-gap: 0;
     }
 
     /* Rząd wyśrodkowany: strona bez wyników wyszukiwania.
@@ -897,6 +901,14 @@
         border: 1px solid var(--q-border-subtle);
         border-radius: var(--q-radius-sm);
         overflow: clip;
+    }
+
+    /* Na telefonie produkty stoją zawsze jako kafle (listing.js), więc
+       przełącznika widoku nie ma. */
+    @media (max-width: 767px) {
+        .q-listing__view {
+            display: none;
+        }
     }
 
     .q-listing__view-btn {
@@ -1432,11 +1444,13 @@
         }
     }
 
-    /* Na telefonie kafelek podkategorii przestaje być kwadratem: przy dwóch
-       kolumnach kwadrat urósłby na pół ekranu. */
+    /* Na telefonie dwa kafelki podkategorii na jedną kolumnę produktów, jak na
+       komputerze: produkty stoją tu w dwóch kolumnach, więc kafelków jest
+       cztery w rzędzie (trzy podkategorie i „Pokaż wszystkie"). Wzór: Flavor.
+       Kafelek przestaje być kwadratem, wysokość bierze z treści. */
     @media (max-width: 767px) {
         .q-subcats {
-            grid-template-columns: repeat(auto-fill, minmax(7rem, 1fr));
+            grid-template-columns: repeat(4, minmax(0, 1fr));
         }
 
         .q-subcats__item,

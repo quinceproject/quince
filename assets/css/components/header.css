@@ -813,6 +813,25 @@
         border-radius: 0;
     }
 
+    /* Podpowiedzi na telefonie: lista rozpięta pod całym pasem, z tym samym
+       marginesem co treść strony pod nagłówkiem (gutter `.q-container` na
+       telefonie), a nie pod samym polem za hamburgerem. Bez szerokości
+       z treści: długa nazwa produktu wypychała listę za prawą krawędź ekranu,
+       a nazwa i tak łamie się do dwóch wierszy. */
+    .q-header__mobile-search {
+        position: relative;
+    }
+
+    .q-header__mobile-search .q-search {
+        position: static;
+    }
+
+    .q-header__mobile-search .q-suggest {
+        inset-inline: var(--q-space-sm);
+        inline-size: auto;
+        min-inline-size: 0;
+    }
+
     .q-header__mobile-search .q-search__input {
         color: var(--q-navbar-label);
         padding-inline-start: 0;

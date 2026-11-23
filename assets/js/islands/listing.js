@@ -32,6 +32,11 @@
     var PROG_WASKI = '(max-width: 991px)';
     var KLUCZ_WIDOKU = 'q-listing-view';
 
+    /* Na telefonie zawsze kafle: rozbudowany wiersz listy nie mieści się na
+       wąskim ekranie. Ten sam próg co w szablonie siatki i w arkuszu, który
+       chowa tam przełącznik widoku. */
+    var PROG_TELEFON = '(max-width: 767px)';
+
     var szuflada = document.getElementById('q-filters-drawer');
     var gniazdo = szuflada && szuflada.querySelector('[data-q-filters-host]');
 
@@ -131,6 +136,22 @@
      * (w oknie prywatnym albo przy zablokowanych danych stron), więc widok ma
      * działać także wtedy, tylko bez pamiętania.
      */
+    /* Widok wybrany przez klienta albo ustawiony przez sklep. Na telefonie
+       siatka i tak pokazuje kafle, a ten wybór wraca na szerszym ekranie. */
+    var wybranyWidok = (function () {
+        var siatka = listing.querySelector('.q-grid');
+
+        return siatka && (siatka.classList.contains('q-grid--list') || siatka.hasAttribute('data-q-list-view')) ? 'list' : 'grid';
+    })();
+
+    function pokazWidok() {
+        var siatka = listing.querySelector('.q-grid');
+
+        if (siatka) {
+            siatka.classList.toggle('q-grid--list', wybranyWidok === 'list' && !window.matchMedia(PROG_TELEFON).matches);
+        }
+    }
+
     function ustawWidok(widok) {
         var siatka = listing.querySelector('.q-grid');
 
@@ -138,7 +159,8 @@
             return;
         }
 
-        siatka.classList.toggle('q-grid--list', widok === 'list');
+        wybranyWidok = widok;
+        pokazWidok();
 
         listing.querySelectorAll('[data-q-view]').forEach(function (przycisk) {
             var aktywny = przycisk.getAttribute('data-q-view') === widok;
@@ -469,10 +491,12 @@
 
     ustawMiejsce();
     przywrocWidok();
+    pokazWidok();
     ustawPodkategorie();
 
     window.addEventListener('resize', function () {
         ustawMiejsce();
+        pokazWidok();
         ustawPodkategorie();
     });
 
@@ -669,6 +693,7 @@
             kotwica = null;
             ustawMiejsce();
             przywrocWidok();
+            pokazWidok();
             ustawPodkategorie();
         });
     }

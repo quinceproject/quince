@@ -264,6 +264,17 @@
             zaznacz(miniatury, teraz);
             zaznacz(kropki, teraz);
 
+            // Bieżąca miniatura staje na środku pasa: za nią widać następne
+            // albo widać, że to koniec. Bez tego kliknięcie ostatniej widocznej
+            // miniatury nie przesuwało pasa i nie było wiadomo, czy są dalsze.
+            // Przy brzegach pasa przewijanie samo się zatrzymuje. Tylko w poziomie:
+            // strona nie może skakać w pionie.
+            if (pas && mini && pas.scrollWidth > pas.clientWidth) {
+                var lewa = mini.offsetLeft - pas.offsetLeft;
+
+                pas.scrollTo({ left: lewa - (pas.clientWidth - mini.offsetWidth) / 2, behavior: 'smooth' });
+            }
+
             if (czyFilm(mini)) {
                 pokazFilm(mini);
             } else {
@@ -303,6 +314,44 @@
                 pokaz(i);
             });
         });
+
+        /* Przesunięcie palcem po kadrze: w lewo następne zdjęcie, w prawo
+           poprzednie. Liczy się tylko ruch wyraźnie poziomy; pionowy to
+           przewijanie strony. Kliknięcie, które przeglądarka wysyła po
+           przesunięciu, nie może otwierać podglądu. */
+        var PROG = 40;
+        var dotykX = null;
+        var dotykY = 0;
+        var poPrzesunieciu = false;
+
+        kadr.addEventListener('touchstart', function (e) {
+            if (e.touches.length !== 1 || miniatury.length < 2) {
+                dotykX = null;
+
+                return;
+            }
+
+            dotykX = e.touches[0].clientX;
+            dotykY = e.touches[0].clientY;
+        }, { passive: true });
+
+        kadr.addEventListener('touchend', function (e) {
+            if (dotykX === null) {
+                return;
+            }
+
+            var dx = e.changedTouches[0].clientX - dotykX;
+            var dy = e.changedTouches[0].clientY - dotykY;
+            dotykX = null;
+
+            if (Math.abs(dx) < PROG || Math.abs(dx) < Math.abs(dy) * 1.5) {
+                return;
+            }
+
+            poPrzesunieciu = true;
+            setTimeout(function () { poPrzesunieciu = false; }, 400);
+            pokaz(teraz + (dx < 0 ? 1 : -1));
+        }, { passive: true });
 
         /* ── podgląd na wierzchu ── */
 
@@ -483,6 +532,10 @@
         }
 
         kadr.addEventListener('click', function () {
+            if (poPrzesunieciu) {
+                return;
+            }
+
             // Przy filmie kadr nie prowadzi do podglądu: kliknięcie w obraz ma
             // włączyć film, a nie otworzyć okno; inaczej jedno z drugim wychodzi
             // naraz. Do okna prowadzi wtedy lupa, tak samo jak przy zdjęciu.
