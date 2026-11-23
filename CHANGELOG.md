@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.22] - 2026-11-23
+
+### Changed
+
+- Search suggestions: the list has the shadow of the category menu panel, which opens
+  from the header over the page in the same way. With the light shadow of an ordinary
+  list it blended into the page under it.
+
 ## [0.1.21] - 2026-11-23
 
 ### Fixed

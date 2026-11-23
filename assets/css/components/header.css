@@ -447,6 +447,15 @@
         /* Lista wychodzi spod pola i ma być nad wszystkim, co pod nią stoi,
            także nad pasem menu, który leży zaraz poniżej nagłówka. */
         z-index: 41;
+
+    }
+
+    /* Cień panelu menu kategorii, który tak samo wychodzi spod nagłówka nad
+       treść strony. Cień zwykłej listy (`--q-shadow-sm`) ginął na jasnym tle
+       i lista zlewała się z kafelkami pod nią. Dwie klasy, bo arkusz list
+       (`.q-dropdown`) wczytuje się później i przy równej wadze wygrywał. */
+    .q-dropdown.q-suggest {
+        box-shadow: var(--q-shadow-md);
     }
 
     .q-suggest__item {
