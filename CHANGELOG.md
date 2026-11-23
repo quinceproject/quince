@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.18] - 2026-11-23
+
+### Fixed
+
+- Product list filters: an open group that ends with "Show more" is closed by the lines
+  of the button only, without the separator of the next group right under them. The
+  lines take the separator colour.
+
 ## [0.1.17] - 2026-11-23
 
 ### Added

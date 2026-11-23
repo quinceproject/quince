@@ -466,12 +466,21 @@
         cursor: pointer;
     }
 
+    /* Kreski w barwie separatora grup: to one zamykają grupę, więc mają
+       wyglądać jak linia, którą zastępują (reguła niżej). */
     .q-filter__more::before,
     .q-filter__more::after {
         content: "";
         flex: 1;
         block-size: 1px;
-        background: var(--q-border-card);
+        background: var(--q-border-hairline);
+    }
+
+    /* Otwarta grupa z „Pokaż więcej” kończy się kreskami przycisku, więc
+       separator następnej grupy byłby drugą linią tuż pod nimi. Zamknięta
+       grupa przycisku nie pokazuje i separator zostaje. */
+    .q-filter[open]:has(> .q-filter__body > .q-filter__more) + .q-filter {
+        border-block-start-color: transparent;
     }
 
     .q-filter__more > span {
