@@ -4,6 +4,26 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.21] - 2026-11-23
+
+### Fixed
+
+- Product gallery: the picture on the page comes from the `medium_default` image type
+  (square, the size of the frame) and only the zoom loads `large_default`. Before, the
+  page used `large_default` too, so with that type keeping the picture's own
+  proportions a tall picture ran out of the square frame.
+- Subcategory tiles: the pictures and names of the folded tiles no longer show over
+  the bottom of the first row.
+- Product lists, list view: the availability label takes only the room it needs, so
+  "Last items in stock" stays on one line. The labels of availability and shipping
+  keep one column.
+
+### Changed
+
+- Product lists, list view: the picture keeps a margin from the frame on every side,
+  the same as the text next to it. Pictures cropped to the product touched the left
+  edge of the card.
+
 ## [0.1.20] - 2026-11-23
 
 ### Changed

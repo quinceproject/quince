@@ -598,6 +598,15 @@
         row-gap: 0;
     }
 
+    /* Kafelek zwiniętego wiersza jest niższy od swojej treści, a treść stoi
+       wyśrodkowana, więc wystawała z niego także do góry, na dół pierwszego
+       wiersza. Kafelek obcina ją do swojego pudełka, a pudełko leży poza
+       blokiem i znika razem z nim. Kafelki pierwszego wiersza mają wysokość
+       z treści, więc nic im nie ubywa. */
+    .q-subcats:not(.is-expanded):not(.is-whole) .q-subcats__item {
+        overflow: hidden;
+    }
+
     /* Rząd wyśrodkowany: strona bez wyników wyszukiwania.
        Tam kategorie nie są dodatkiem do listy, tylko jedyną drogą dalej, więc
        stoją na środku, a nie dosunięte do lewej krawędzi pustej strony.
@@ -974,9 +983,13 @@
         aspect-ratio: auto;
     }
 
-    /* Wysokość kadru niesie odnośnik: stały kwadrat o boku kolumny zdjęcia. */
+    /* Wysokość kadru niesie odnośnik: stały kwadrat o boku kolumny zdjęcia.
+       Zdjęcie odsunięte od ramki z każdej strony o tyle, ile wcięta jest treść
+       obok: zdjęcia przycięte do produktu dotykały lewej krawędzi karty. */
     .q-grid--list .q-pcard__image-link {
         block-size: 16rem;
+        padding: var(--q-space-md);
+        box-sizing: border-box;
     }
 
     .q-grid--list .q-pcard__image {
@@ -1120,13 +1133,24 @@
     /* Zestawienie stanu jest węższe niż to w kolumnie treści, więc nazwa
        dostaje mniej miejsca. Inaczej „zamówienie u producenta, około
        3 tygodni" łamie się na cztery wiersze. */
+    /* Etykieta bierze tyle, ile potrzebuje najdłuższa z nich, wartość resztę
+       słupka. Stały podział (5:7) dawał „Dostępność" za dużo miejsca, a wartość
+       „Ostatnie sztuki w magazynie" łamała się na dwa wiersze. Jedna siatka na
+       całą listę, wiersze rozłożone w niej: etykiety obu wierszy trzymają
+       wspólną kolumnę. */
     .q-grid--list .q-pcard__stock {
-        display: block;
+        display: grid;
+        grid-template-columns: max-content minmax(0, 1fr);
+        column-gap: var(--q-space-sm);
+        align-content: start;
     }
 
     .q-grid--list .q-pcard__stock .q-facts__row {
-        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
-        gap: var(--q-space-sm);
+        display: contents;
+    }
+
+    .q-grid--list .q-pcard__stock .q-facts__key,
+    .q-grid--list .q-pcard__stock .q-facts__val {
         padding-block: 2px;
     }
 

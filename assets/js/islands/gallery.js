@@ -280,10 +280,12 @@
             } else {
                 schowajFilm();
 
+                // Kadr bierze `medium` (kwadrat w rozmiarze kadru); `large`
+                // zostaje dla podglądu na wierzchu.
                 ustawZdjecie(zdjecie, {
-                    duze: mini.getAttribute('data-q-large'),
-                    webp: mini.getAttribute('data-q-large-webp'),
-                    avif: mini.getAttribute('data-q-large-avif'),
+                    duze: mini.getAttribute('data-q-medium'),
+                    webp: mini.getAttribute('data-q-medium-webp'),
+                    avif: mini.getAttribute('data-q-medium-avif'),
                 });
                 zdjecie.setAttribute('width', mini.getAttribute('data-q-width'));
                 zdjecie.setAttribute('height', mini.getAttribute('data-q-height'));
@@ -396,9 +398,10 @@
                 };
             })
             : [{
-                duze: zdjecie.getAttribute('src'),
-                webp: zrodloObrazka(zdjecie, 'image/webp'),
-                avif: zrodloObrazka(zdjecie, 'image/avif'),
+                // Kadr pokazuje `medium`; podgląd bierze `large` z atrybutów kadru.
+                duze: zdjecie.getAttribute('data-q-large') || zdjecie.getAttribute('src'),
+                webp: zdjecie.getAttribute('data-q-large-webp') || zrodloObrazka(zdjecie, 'image/webp'),
+                avif: zdjecie.getAttribute('data-q-large-avif') || zrodloObrazka(zdjecie, 'image/avif'),
                 podpis: (zdjecie.getAttribute('alt') || '').trim(),
                 mala: zdjecie.getAttribute('src'),
             }];

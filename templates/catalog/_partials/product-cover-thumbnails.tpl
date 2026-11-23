@@ -20,21 +20,32 @@
 
   <div class="q-gallery" data-q-gallery>
     <div class="q-gallery__frame" data-q-frame>
-      {* Formaty, które sklep generuje (Wygląd → Ustawienia obrazów), idą jako
+      {* Kadr na stronie bierze `medium`: kwadrat w rozmiarze kadru. `large` jest
+         tylko do powiększenia (adresy w `data-q-large*`), bo ma proporcje
+         oryginału i w kwadratowym kadrze wysokie zdjęcie wychodziło poza ramkę.
+
+         Formaty, które sklep generuje (Wygląd → Ustawienia obrazów), idą jako
          źródła `<picture>`; JPEG zostaje dla przeglądarki, która ich nie zna.
          Przy zmianie zdjęcia skrypt galerii podmienia źródła razem z `src`. *}
+      {* Typ `medium_default` wprost, nie skrót `medium`: skrót to środkowy
+         rozmiar z listy typów sklepu i przy pięciu typach wypada na zajawkę
+         (300 px). Skrót zostaje tylko dla sklepu bez `medium_default`. *}
+      {assign var=qKadr value=$qOkladka.bySize.medium_default|default:$qOkladka.medium}
       <picture class="q-gallery__picture">
-        {if isset($qOkladka.large.sources.avif)}
-          <source type="image/avif" srcset="{$qOkladka.large.sources.avif}">
+        {if isset($qKadr.sources.avif)}
+          <source type="image/avif" srcset="{$qKadr.sources.avif}">
         {/if}
-        {if isset($qOkladka.large.sources.webp)}
-          <source type="image/webp" srcset="{$qOkladka.large.sources.webp}">
+        {if isset($qKadr.sources.webp)}
+          <source type="image/webp" srcset="{$qKadr.sources.webp}">
         {/if}
         <img class="q-gallery__img"
              data-q-photo
-             src="{$qOkladka.large.url}"
-             width="{$qOkladka.large.width}"
-             height="{$qOkladka.large.height}"
+             src="{$qKadr.url}"
+             width="{$qKadr.width}"
+             height="{$qKadr.height}"
+             data-q-large="{$qOkladka.large.url}"
+             {if isset($qOkladka.large.sources.webp)}data-q-large-webp="{$qOkladka.large.sources.webp}"{/if}
+             {if isset($qOkladka.large.sources.avif)}data-q-large-avif="{$qOkladka.large.sources.avif}"{/if}
              alt="{$qOkladka.legend}"
              fetchpriority="high"
              decoding="async">
@@ -99,11 +110,15 @@
           <button class="q-gallery__thumb{if $zdjecie.id_image == $qOkladka.id_image} is-active{/if}"
                   type="button"
                   data-q-thumbnail
+                  {assign var=qKadrMini value=$zdjecie.bySize.medium_default|default:$zdjecie.medium}
+                  data-q-medium="{$qKadrMini.url}"
+                  {if isset($qKadrMini.sources.webp)}data-q-medium-webp="{$qKadrMini.sources.webp}"{/if}
+                  {if isset($qKadrMini.sources.avif)}data-q-medium-avif="{$qKadrMini.sources.avif}"{/if}
+                  data-q-width="{$qKadrMini.width}"
+                  data-q-height="{$qKadrMini.height}"
                   data-q-large="{$zdjecie.large.url}"
                   {if isset($zdjecie.large.sources.webp)}data-q-large-webp="{$zdjecie.large.sources.webp}"{/if}
                   {if isset($zdjecie.large.sources.avif)}data-q-large-avif="{$zdjecie.large.sources.avif}"{/if}
-                  data-q-width="{$zdjecie.large.width}"
-                  data-q-height="{$zdjecie.large.height}"
                   data-q-caption="{$zdjecie.legend}"
                   {if $zdjecie.id_image == $qOkladka.id_image}aria-current="true"{/if}
                   aria-label="{l s='Picture %number%' sprintf=['%number%' => $smarty.foreach.miniatury.iteration] d='Shop.Theme.Catalog'}">
