@@ -20,14 +20,25 @@
 
   <div class="q-gallery" data-q-gallery>
     <div class="q-gallery__frame" data-q-frame>
-      <img class="q-gallery__img"
-           data-q-photo
-           src="{$qOkladka.large.url}"
-           width="{$qOkladka.large.width}"
-           height="{$qOkladka.large.height}"
-           alt="{$qOkladka.legend}"
-           fetchpriority="high"
-           decoding="async">
+      {* Formaty, które sklep generuje (Wygląd → Ustawienia obrazów), idą jako
+         źródła `<picture>`; JPEG zostaje dla przeglądarki, która ich nie zna.
+         Przy zmianie zdjęcia skrypt galerii podmienia źródła razem z `src`. *}
+      <picture class="q-gallery__picture">
+        {if isset($qOkladka.large.sources.avif)}
+          <source type="image/avif" srcset="{$qOkladka.large.sources.avif}">
+        {/if}
+        {if isset($qOkladka.large.sources.webp)}
+          <source type="image/webp" srcset="{$qOkladka.large.sources.webp}">
+        {/if}
+        <img class="q-gallery__img"
+             data-q-photo
+             src="{$qOkladka.large.url}"
+             width="{$qOkladka.large.width}"
+             height="{$qOkladka.large.height}"
+             alt="{$qOkladka.legend}"
+             fetchpriority="high"
+             decoding="async">
+      </picture>
 
       {* Licznik jest ukryty przed czytnikiem ekranu: tę samą informację niosą
          etykiety miniatur i ich stan `aria-current`. *}
@@ -89,15 +100,25 @@
                   type="button"
                   data-q-thumbnail
                   data-q-large="{$zdjecie.large.url}"
+                  {if isset($zdjecie.large.sources.webp)}data-q-large-webp="{$zdjecie.large.sources.webp}"{/if}
+                  {if isset($zdjecie.large.sources.avif)}data-q-large-avif="{$zdjecie.large.sources.avif}"{/if}
                   data-q-width="{$zdjecie.large.width}"
                   data-q-height="{$zdjecie.large.height}"
                   data-q-caption="{$zdjecie.legend}"
                   {if $zdjecie.id_image == $qOkladka.id_image}aria-current="true"{/if}
                   aria-label="{l s='Picture %number%' sprintf=['%number%' => $smarty.foreach.miniatury.iteration] d='Shop.Theme.Catalog'}">
-            <img src="{$zdjecie.small.url}"
-                 width="{$zdjecie.small.width}"
-                 height="{$zdjecie.small.height}"
-                 loading="lazy" decoding="async" alt="">
+            <picture class="q-gallery__picture">
+              {if isset($zdjecie.small.sources.avif)}
+                <source type="image/avif" srcset="{$zdjecie.small.sources.avif}">
+              {/if}
+              {if isset($zdjecie.small.sources.webp)}
+                <source type="image/webp" srcset="{$zdjecie.small.sources.webp}">
+              {/if}
+              <img src="{$zdjecie.small.url}"
+                   width="{$zdjecie.small.width}"
+                   height="{$zdjecie.small.height}"
+                   loading="lazy" decoding="async" alt="">
+            </picture>
           </button>
         {/foreach}
 
@@ -140,7 +161,9 @@
       </button>
 
       <div class="q-lightbox__frame">
-        <img class="q-lightbox__img" data-q-lightbox-img src="" alt="" decoding="async">
+        <picture class="q-gallery__picture">
+          <img class="q-lightbox__img" data-q-lightbox-img src="" alt="" decoding="async">
+        </picture>
 
         {if $qFilmy}
           {* Film w podglądzie na tej samej zasadzie co w kadrze: plakat

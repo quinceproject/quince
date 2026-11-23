@@ -26,6 +26,12 @@
         cursor: zoom-in;
     }
 
+    /* `<picture>` wokół zdjęcia nie tworzy własnego pudełka: kadr, miniatura
+       i podgląd układają samo `<img>`, tak jak przed dodaniem formatów. */
+    .q-gallery__picture {
+        display: contents;
+    }
+
     /* `contain`, nie `cover`: zdjęcie produktu ma być całe. Przycięcie do kadru
        ucina najczęściej to, po co klient je otworzył. */
     .q-gallery__img {

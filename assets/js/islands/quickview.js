@@ -107,6 +107,29 @@
         main.classList.add('is-zmiana');
 
         window.setTimeout(function () {
+            // Źródła `<picture>` budujemy od nowa: przeglądarka bierze pierwsze
+            // pasujące `<source>`, a nie `src`, więc bez tego zostałoby
+            // poprzednie zdjęcie.
+            var oprawa = main.parentNode;
+
+            if (oprawa && oprawa.tagName === 'PICTURE') {
+                [].slice.call(oprawa.querySelectorAll('source')).forEach(function (zrodlo) {
+                    oprawa.removeChild(zrodlo);
+                });
+
+                [['avif', 'image/avif'], ['webp', 'image/webp']].forEach(function (format) {
+                    var srcset = wybor.getAttribute('data-q-quickview-' + format[0]);
+
+                    if (srcset) {
+                        var zrodlo = document.createElement('source');
+
+                        zrodlo.type = format[1];
+                        zrodlo.srcset = srcset;
+                        oprawa.insertBefore(zrodlo, main);
+                    }
+                });
+            }
+
             main.src = adres;
             main.classList.remove('is-zmiana');
         }, 150);

@@ -13,6 +13,51 @@
 (function () {
     'use strict';
 
+    var FORMATY = [['avif', 'image/avif'], ['webp', 'image/webp']];
+
+    /**
+     * Wstawia zdjęcie do `<img>` w `<picture>`: `src` w JPEG i źródło dla
+     * każdego formatu, który sklep wygenerował. Źródła budujemy od nowa, bo
+     * przeglądarka bierze pierwsze pasujące `<source>`, a nie `src`: sama
+     * podmiana `src` zostawiłaby na ekranie poprzednie zdjęcie.
+     *
+     * @param {HTMLImageElement} obraz
+     * @param {{duze: string, webp?: string, avif?: string}} adresy
+     */
+    function ustawZdjecie(obraz, adresy) {
+        var oprawa = obraz.parentNode;
+
+        if (oprawa && oprawa.tagName === 'PICTURE') {
+            [].slice.call(oprawa.querySelectorAll('source')).forEach(function (zrodlo) {
+                oprawa.removeChild(zrodlo);
+            });
+
+            FORMATY.forEach(function (format) {
+                if (!adresy[format[0]]) {
+                    return;
+                }
+
+                var zrodlo = document.createElement('source');
+
+                zrodlo.type = format[1];
+                zrodlo.srcset = adresy[format[0]];
+                oprawa.insertBefore(zrodlo, obraz);
+            });
+        }
+
+        obraz.setAttribute('src', adresy.duze);
+    }
+
+    /** Adres źródła danego formatu w `<picture>` wokół obrazka, albo pusty. */
+    function zrodloObrazka(obraz, typ) {
+        var oprawa = obraz && obraz.parentNode;
+        var zrodlo = oprawa && oprawa.tagName === 'PICTURE'
+            ? oprawa.querySelector('source[type="' + typ + '"]')
+            : null;
+
+        return zrodlo ? zrodlo.getAttribute('srcset') : '';
+    }
+
     Quince.register('[data-q-gallery]', function (galeria) {
         var kadr = galeria.querySelector('[data-q-frame]');
         var zdjecie = galeria.querySelector('[data-q-photo]');
@@ -224,7 +269,11 @@
             } else {
                 schowajFilm();
 
-                zdjecie.setAttribute('src', mini.getAttribute('data-q-large'));
+                ustawZdjecie(zdjecie, {
+                    duze: mini.getAttribute('data-q-large'),
+                    webp: mini.getAttribute('data-q-large-webp'),
+                    avif: mini.getAttribute('data-q-large-avif'),
+                });
                 zdjecie.setAttribute('width', mini.getAttribute('data-q-width'));
                 zdjecie.setAttribute('height', mini.getAttribute('data-q-height'));
                 zdjecie.setAttribute('alt', mini.getAttribute('data-q-caption') || '');
@@ -284,8 +333,11 @@
 
                 return {
                     duze: mini.getAttribute('data-q-large'),
+                    webp: mini.getAttribute('data-q-large-webp'),
+                    avif: mini.getAttribute('data-q-large-avif'),
                     podpis: (mini.getAttribute('data-q-caption') || '').trim(),
                     mala: mala ? mala.getAttribute('src') : '',
+                    malaOprawa: mala && mala.parentNode.tagName === 'PICTURE' ? mala.parentNode : null,
 
                     // Film idzie do podglądu tak samo jak zdjęcie: bez tego
                     // miniatura filmu w pasku podglądu prowadziłaby do pustego
@@ -296,6 +348,8 @@
             })
             : [{
                 duze: zdjecie.getAttribute('src'),
+                webp: zrodloObrazka(zdjecie, 'image/webp'),
+                avif: zrodloObrazka(zdjecie, 'image/avif'),
                 podpis: (zdjecie.getAttribute('alt') || '').trim(),
                 mala: zdjecie.getAttribute('src'),
             }];
@@ -319,13 +373,19 @@
             przycisk.className = 'q-lightbox__thumb';
             przycisk.setAttribute('aria-label', miniatury[i] ? (miniatury[i].getAttribute('aria-label') || '') : '');
 
-            var obraz = document.createElement('img');
+            // Miniatura zdjęcia przychodzi z galerii razem ze swoim `<picture>`,
+            // więc ma te same formaty. Film ma sam obrazek plakatu.
+            if (dane.malaOprawa) {
+                przycisk.appendChild(dane.malaOprawa.cloneNode(true));
+            } else {
+                var obraz = document.createElement('img');
 
-            obraz.src = dane.mala;
-            obraz.alt = '';
-            obraz.loading = 'lazy';
+                obraz.src = dane.mala;
+                obraz.alt = '';
+                obraz.loading = 'lazy';
 
-            przycisk.appendChild(obraz);
+                przycisk.appendChild(obraz);
+            }
             przycisk.addEventListener('click', function () {
                 pokazWPodgladzie(i);
             });
@@ -391,7 +451,7 @@
                 }
             }
 
-            duze.setAttribute('src', dane.duze);
+            ustawZdjecie(duze, dane);
 
             // Bez podpisu zostaje nazwa produktu z kadru: pusty `alt` przy
             // zdjęciu, które jest jedyną treścią okna, nie mówi nic.

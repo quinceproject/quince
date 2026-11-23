@@ -4,6 +4,15 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.19] - 2026-11-23
+
+### Changed
+
+- Product gallery, its zoom window and quick view load the picture formats the shop
+  generates (**Design → Image settings**): WebP, and AVIF when it is on, with JPEG
+  for a browser without them. Before, they always loaded JPEG, two to three times
+  heavier than WebP.
+
 ## [0.1.18] - 2026-11-23
 
 ### Fixed

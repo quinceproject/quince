@@ -22,10 +22,19 @@
   <div class="q-quickview__frame">
     {include file='catalog/_partials/product-flags.tpl' qBadgesClass='q-quickview__badges'}
 
-    <img class="q-quickview__photo" data-q-quickview-main
-         src="{if $product.cover}{$product.cover.bySize.large_default.url}{else}{$urls.no_picture_image.bySize.large_default.url}{/if}"
-         alt="{if $product.cover}{$product.cover.legend}{else}{$product.name}{/if}"
-         width="800" height="800">
+    {* Formaty sklepu jako źródła `<picture>`, jak w galerii karty produktu. *}
+    <picture class="q-gallery__picture">
+      {if $product.cover && isset($product.cover.bySize.large_default.sources.avif)}
+        <source type="image/avif" srcset="{$product.cover.bySize.large_default.sources.avif}">
+      {/if}
+      {if $product.cover && isset($product.cover.bySize.large_default.sources.webp)}
+        <source type="image/webp" srcset="{$product.cover.bySize.large_default.sources.webp}">
+      {/if}
+      <img class="q-quickview__photo" data-q-quickview-main
+           src="{if $product.cover}{$product.cover.bySize.large_default.url}{else}{$urls.no_picture_image.bySize.large_default.url}{/if}"
+           alt="{if $product.cover}{$product.cover.legend}{else}{$product.name}{/if}"
+           width="800" height="800">
+    </picture>
   </div>
 
   {* Pas miniatur: podgląd ma odpowiedzieć na „czy to na pewno to", a przy
@@ -36,8 +45,18 @@
       {foreach from=$product.images item=qFoto name=qFotki}
         <button class="q-gallery__thumb{if $smarty.foreach.qFotki.first} is-active{/if}" type="button"
                 data-q-quickview-photo="{$qFoto.bySize.large_default.url}"
+                {if isset($qFoto.bySize.large_default.sources.webp)}data-q-quickview-webp="{$qFoto.bySize.large_default.sources.webp}"{/if}
+                {if isset($qFoto.bySize.large_default.sources.avif)}data-q-quickview-avif="{$qFoto.bySize.large_default.sources.avif}"{/if}
                 aria-label="{l s='Photo %number%' sprintf=['%number%' => $smarty.foreach.qFotki.iteration] d='Shop.Theme.Global'}">
-          <img src="{$qFoto.bySize.small_default.url}" alt="{$qFoto.legend}" loading="lazy" width="98" height="98">
+          <picture class="q-gallery__picture">
+            {if isset($qFoto.bySize.small_default.sources.avif)}
+              <source type="image/avif" srcset="{$qFoto.bySize.small_default.sources.avif}">
+            {/if}
+            {if isset($qFoto.bySize.small_default.sources.webp)}
+              <source type="image/webp" srcset="{$qFoto.bySize.small_default.sources.webp}">
+            {/if}
+            <img src="{$qFoto.bySize.small_default.url}" alt="{$qFoto.legend}" loading="lazy" width="98" height="98">
+          </picture>
         </button>
       {/foreach}
     </div>
@@ -46,6 +65,8 @@
       {foreach from=$product.images item=qFoto name=qKropki}
         <button class="q-gallery__dot{if $smarty.foreach.qKropki.first} is-active{/if}" type="button"
                 data-q-quickview-photo="{$qFoto.bySize.large_default.url}"
+                {if isset($qFoto.bySize.large_default.sources.webp)}data-q-quickview-webp="{$qFoto.bySize.large_default.sources.webp}"{/if}
+                {if isset($qFoto.bySize.large_default.sources.avif)}data-q-quickview-avif="{$qFoto.bySize.large_default.sources.avif}"{/if}
                 aria-label="{l s='Photo %number%' sprintf=['%number%' => $smarty.foreach.qKropki.iteration] d='Shop.Theme.Global'}"></button>
       {/foreach}
     </div>
