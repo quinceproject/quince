@@ -48,6 +48,32 @@
         });
     });
 
+    /* Liczba kolumn podkategorii w układzie kolumnowym. Kolumna wypełnia się
+       z góry na dół do wysokości listy działów i dopiero wtedy zaczyna się
+       następna, najwyżej tyle, ile ustawił sklep. Samo `column-count` wyrównuje
+       wysokości, więc dwie podkategorie stawały po jednej w kolumnie i czytały
+       się jak wiersz. Liczone po pokazaniu, bo schowany panel nie ma wymiarów. */
+    function ulozKolumny(panel) {
+        var dzialy = panel.querySelector('.q-nav__cats');
+
+        if (!dzialy || panel.hidden) {
+            return;
+        }
+
+        var dol = dzialy.getBoundingClientRect().bottom;
+
+        panel.querySelectorAll('[data-q-nav-subs]:not([hidden]) [data-q-nav-cols]').forEach(function (lista) {
+            var najwiecej = parseInt(lista.getAttribute('data-q-nav-cols'), 10) || 1;
+
+            lista.style.columnCount = 1;
+
+            var miejsce = dol - lista.getBoundingClientRect().top;
+            var potrzeba = miejsce > 0 ? Math.ceil(lista.offsetHeight / miejsce) : najwiecej;
+
+            lista.style.columnCount = Math.max(1, Math.min(najwiecej, potrzeba));
+        });
+    }
+
     Quince.register('[data-q-nav]', function (nav) {
 
         // ── 1. rozwinięcie panelu ─────────────────────────────────────────
@@ -79,6 +105,7 @@
 
         window.addEventListener('resize', function () {
             nav.querySelectorAll('[data-q-nav-panel]').forEach(zmierzGore);
+            nav.querySelectorAll('[data-q-nav-panel]').forEach(ulozKolumny);
         });
 
         grupy.forEach(function (grupa) {
@@ -100,6 +127,7 @@
                     panel.hidden = false;
                     button.setAttribute('aria-expanded', 'true');
                     zmierzGore(panel);
+                    ulozKolumny(panel);
                 }
             });
         });
@@ -134,6 +162,8 @@
                 panel.querySelectorAll('[data-q-nav-subs]').forEach(function (subs) {
                     subs.hidden = subs.getAttribute('data-q-nav-subs') !== wybrany;
                 });
+
+                ulozKolumny(panel);
             });
         });
 
@@ -310,6 +340,7 @@
             panel.hidden = false;
             panel.classList.add('is-floating');
             przycisk.setAttribute('aria-expanded', 'true');
+            ulozKolumny(panel);
         });
 
         // Ten sam panel otwarty z pasa menu wraca na swoje miejsce.

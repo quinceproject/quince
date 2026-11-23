@@ -442,6 +442,58 @@
         font-variant-numeric: tabular-nums;
     }
 
+    /* Długa grupa: wartości ponad próg z Quince Engine czekają na „Pokaż
+       więcej”. Zaznaczona wartość nie dostaje `is-extra`, więc nie znika. */
+    .q-filter__body:not(.is-expanded) > .q-filter__item.is-extra {
+        display: none;
+    }
+
+    /* Przycisk w tym samym rysunku co „Pełna specyfikacja” na karcie
+       produktu: napis między dwiema kreskami. To ten sam gest, „pokaż resztę”. */
+    .q-filter__more {
+        display: flex;
+        align-items: center;
+        gap: var(--q-space-sm);
+        inline-size: 100%;
+
+        margin-block-start: var(--q-space-xs);
+        padding: 0;
+        border: 0;
+        background: none;
+        font: inherit;
+        font-size: var(--q-fs-xs);
+        color: var(--q-link);
+        cursor: pointer;
+    }
+
+    .q-filter__more::before,
+    .q-filter__more::after {
+        content: "";
+        flex: 1;
+        block-size: 1px;
+        background: var(--q-border-card);
+    }
+
+    .q-filter__more > span {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--q-space-xs);
+    }
+
+    .q-filter__more:hover {
+        color: var(--q-link-hover);
+    }
+
+    .q-filter__more-chev {
+        inline-size: 12px;
+        block-size: 12px;
+        flex: none;
+    }
+
+    .q-filter__more[aria-expanded="true"] .q-filter__more-chev {
+        transform: rotate(180deg);
+    }
+
     /* Próbka barwy albo tekstury zamiast samej nazwy: „Grafit" nic nie mówi,
        dopóki się go nie zobaczy. */
     .q-filter__swatch {

@@ -374,6 +374,44 @@
         }
     });
 
+    /* „Pokaż więcej” pod długą grupą filtra. Panel filtrów przychodzi po każdym
+       zawężeniu jako nowy znacznik, zwinięty, więc rozwinięte grupy pamiętamy
+       po nazwie i rozwijamy je znowu. Inaczej klient, który właśnie zaznaczył
+       wartość z dalszej części listy, traciłby jej sąsiadów z oczu. */
+    var rozwinieteGrupy = {};
+
+    function rozwinGrupe(przycisk, rozwin) {
+        var cialo = przycisk.parentNode;
+        var grupa = przycisk.closest('[data-name]');
+
+        cialo.classList.toggle('is-expanded', rozwin);
+        przycisk.setAttribute('aria-expanded', rozwin ? 'true' : 'false');
+        przycisk.querySelector('[data-q-filter-more-show]').hidden = rozwin;
+        przycisk.querySelector('[data-q-filter-more-hide]').hidden = !rozwin;
+
+        if (grupa) {
+            rozwinieteGrupy[grupa.getAttribute('data-name')] = rozwin;
+        }
+    }
+
+    function przywrocRozwiniete() {
+        document.querySelectorAll('[data-q-filter-more]').forEach(function (przycisk) {
+            var grupa = przycisk.closest('[data-name]');
+
+            if (grupa && rozwinieteGrupy[grupa.getAttribute('data-name')]) {
+                rozwinGrupe(przycisk, true);
+            }
+        });
+    }
+
+    document.addEventListener('click', function (zdarzenie) {
+        var przycisk = zdarzenie.target.closest('[data-q-filter-more]');
+
+        if (przycisk) {
+            rozwinGrupe(przycisk, przycisk.getAttribute('aria-expanded') !== 'true');
+        }
+    });
+
     /**
      * Podmiana kawałka strony gotowym znacznikiem z odpowiedzi.
      */
@@ -606,6 +644,7 @@
                są poza nią i trzeba je podmienić osobno. */
             zamien('#search-filters', dane.rendered_facets);
             zamien('#js-active-search-filters', dane.rendered_active_filters);
+            przywrocRozwiniete();
 
             jedenPanel();
             przestawLiczbeWSzufladzie(dane.pagination && dane.pagination.total_items);

@@ -4,6 +4,24 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.17] - 2026-11-23
+
+### Added
+
+- Product list filters: a long filter group shows its first values and a "Show more"
+  button with the number of hidden values; "Show less" folds it again. The number of
+  values is set in **Quince Engine → Product lists → Filters** (10 by default). A
+  selected value always stays in view, and a group that would hide only one or two
+  values shows them all. An opened group stays open after narrowing the list. Needs
+  Quince Engine 0.10.8.
+
+### Changed
+
+- Category menu, columns layout: subcategories fill a column from top to bottom, down
+  to the height of the department list, before the next column starts, up to the
+  number of columns set in Quince Engine. Before, two subcategories stood one per
+  column and read like a row.
+
 ## [0.1.16] - 2026-11-22
 
 ### Fixed

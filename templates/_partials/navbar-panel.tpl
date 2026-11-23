@@ -100,7 +100,9 @@
             <a href="{$branch.url}">{$branch.name}</a>
           </div>
 
-          <div class="q-nav__subs" style="column-count:{$qn.columns}">
+          {* `column-count` to górna granica; navbar.js zmniejsza ją, gdy
+             podkategorie mieszczą się w mniejszej liczbie kolumn. *}
+          <div class="q-nav__subs" style="column-count:{$qn.columns}" data-q-nav-cols="{$qn.columns}">
           {* Podkategoria z własnymi dziećmi jest nagłówkiem grupy i zbiera je pod
              sobą. Bez dzieci jest zwykłą pozycją, bo nagłówek, pod którym nic nie
              stoi, wygląda jak napis, w który nie da się kliknąć. *}

@@ -61,12 +61,33 @@
 
             {if in_array($facet.widgetType, ['radio', 'checkbox'])}
               {block name='facet_item_other'}
+                {* Ile wartości widać przed „Pokaż więcej”: Quince Engine → Listy
+                   produktów → Filtry, 0 to wszystkie. Zaznaczona wartość zostaje
+                   na widoku zawsze. Przycisk staje dopiero, gdy schowałby więcej
+                   niż dwie wartości: pod jedną albo dwiema schowanymi nie ma sensu.
+                   Limit wartości w ustawieniach modułu filtrów do tego się nie
+                   nadaje: wartości ponad niego wypadają z listy na stałe. *}
+                {* Próg przez modyfikator silnika: ten panel powstaje, zanim
+                   szablony dostaną `$modules`. *}
+                {assign var=qLimit value=0|qfacetlimit}
+                {assign var=qWidoczne value=0}
+                {assign var=qPoza value=0}
+                {foreach from=$facet.filters item="qF"}
+                  {if $qF.displayed}
+                    {assign var=qWidoczne value=$qWidoczne+1}
+                    {if $qWidoczne > $qLimit && !$qF.active}{assign var=qPoza value=$qPoza+1}{/if}
+                  {/if}
+                {/foreach}
+                {assign var=qZwin value=($qLimit > 0 && $qPoza > 2)}
+                {assign var=qNr value=0}
+
                 {foreach from=$facet.filters key=filter_key item="filter"}
                   {if !$filter.displayed}
                     {continue}
                   {/if}
+                  {assign var=qNr value=$qNr+1}
 
-                  <label class="q-filter__item{if $filter.active} is-active{/if}"
+                  <label class="q-filter__item{if $filter.active} is-active{/if}{if $qZwin && $qNr > $qLimit && !$filter.active} is-extra{/if}"
                          for="facet_input_{$qFacetId}_{$filter_key}">
                     <input
                       class="q-choice__input"
@@ -92,6 +113,10 @@
                     {/if}
                   </label>
                 {/foreach}
+
+                {if $qZwin}
+                  {include file='catalog/_partials/facet-more.tpl' qPoza=$qPoza}
+                {/if}
               {/block}
 
             {elseif $facet.widgetType == 'dropdown'}

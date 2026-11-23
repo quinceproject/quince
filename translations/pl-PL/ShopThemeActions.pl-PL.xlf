@@ -22,6 +22,11 @@
         <target>Pokaż %product_count% produktów</target>
       </trans-unit>
 
+      <trans-unit id="quince.listing.show_more" resname="Show more">
+        <source>Show more</source>
+        <target>Pokaż więcej</target>
+      </trans-unit>
+
       <trans-unit id="quince.listing.show_less" resname="Show less">
         <source>Show less</source>
         <target>Pokaż mniej</target>
