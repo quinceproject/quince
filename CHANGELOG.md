@@ -4,6 +4,16 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.24] - 2026-11-25
+
+### Fixed
+
+- Password recovery: the three pages (email address, confirmation that the link was
+  sent, new password) have the layout of the sign-in page, a card with the form, the
+  button on the right and the way back to sign-in at the bottom of the card. The new
+  password and its confirmation stand side by side with the show password button in
+  the field. Before, they used classes of the default theme that Quince does not have.
+
 ## [0.1.23] - 2026-11-25
 
 ### Fixed

@@ -1,6 +1,6 @@
 name: quince
 display_name: Quince
-version: 0.1.23
+version: 0.1.24
 author:
   name: "Quince Project"
   email: "quinceproject@proton.me"
@@ -391,7 +391,8 @@ assets:
     contact: *quince-cms-css
 
     # Logowanie i rejestracja: jeden arkusz, jeden układ na oba ekrany.
-    # Śledzenie zamówienia gościa używa tej samej karty z formularzem.
+    # Śledzenie zamówienia gościa i odzyskiwanie hasła używają tej samej
+    # karty z formularzem.
     authentication: &quince-auth-css
       - id: quince-auth
         path: assets/css/components/auth.css
@@ -399,6 +400,7 @@ assets:
         priority: 40
     registration: *quince-auth-css
     guest-tracking: *quince-auth-css
+    password: *quince-auth-css
   js:
     all:
       # Jawny wpis, nie konwencja: bez niego PrestaShop dokłada ten plik do
