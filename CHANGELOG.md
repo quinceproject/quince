@@ -4,6 +4,17 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.27] - 2026-11-25
+
+### Changed
+
+- Bank wire in the checkout: the description under the payment option shows the text
+  for customers set in the module settings, without the "More information" link, which
+  did nothing in Quince.
+- Bank wire on the order confirmation page: the rows are named Amount, Recipient,
+  Account details and Transfer title (the order reference). The bank name row is left
+  out when the shop has not set it, instead of showing a line of underscores.
+
 ## [0.1.26] - 2026-11-25
 
 ### Changed

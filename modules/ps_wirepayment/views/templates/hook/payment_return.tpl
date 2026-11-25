@@ -12,19 +12,26 @@
     {l s='Please send us a bank transfer with following details:' d='Modules.Wirepayment.Shop'}
   </p>
 
+  {* Etykiety modułu („do”, „Proszę podać te dane”) nie mówią, co jest w wierszu,
+     więc wiersze mają własne nazwy. Numer zamówienia stoi w tabeli jako tytuł
+     przelewu, a nie w zdaniu pod nią. Adres banku moduł zastępuje kreskami, gdy
+     sklep go nie podał: wtedy wiersza nie ma. *}
   <dl class="q-checkout2__bank">
     <dt>{l s='Amount' d='Modules.Wirepayment.Shop'}</dt>
     <dd>{$total}</dd>
-    <dt>{l s='Name of account owner' d='Modules.Wirepayment.Shop'}</dt>
+    <dt>{l s='Recipient' d='Shop.Theme.Checkout'}</dt>
     <dd>{$bankwireOwner}</dd>
-    <dt>{l s='Please include these details' d='Modules.Wirepayment.Shop'}</dt>
+    <dt>{l s='Account details' d='Shop.Theme.Checkout'}</dt>
     <dd>{$bankwireDetails nofilter}</dd>
-    <dt>{l s='Bank name' d='Modules.Wirepayment.Shop'}</dt>
-    <dd>{$bankwireAddress nofilter}</dd>
+    {if $bankwireAddress|strip_tags|replace:'_':''|trim}
+      <dt>{l s='Bank name' d='Modules.Wirepayment.Shop'}</dt>
+      <dd>{$bankwireAddress nofilter}</dd>
+    {/if}
+    <dt>{l s='Transfer title' d='Shop.Theme.Checkout'}</dt>
+    <dd>{$reference}</dd>
   </dl>
 
   <p class="q-checkout2__sub">
-    {l s='Please specify your order reference %s in the bankwire description.' sprintf=[$reference] d='Modules.Wirepayment.Shop'}<br aria-hidden="true">
     {l s='We\'ve also sent you this information by e-mail.' d='Modules.Wirepayment.Shop'}<br aria-hidden="true">
     {l s='Your order will be sent as soon as we receive payment.' d='Modules.Wirepayment.Shop'}
   </p>

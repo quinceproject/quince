@@ -387,6 +387,18 @@
         <source>Your cart is empty</source>
         <target>Twój koszyk jest pusty</target>
       </trans-unit>
+      <trans-unit id="quince.5d6103b662f4" resname="Recipient">
+        <source>Recipient</source>
+        <target>Odbiorca</target>
+      </trans-unit>
+      <trans-unit id="quince.8bc212f48680" resname="Account details">
+        <source>Account details</source>
+        <target>Dane konta</target>
+      </trans-unit>
+      <trans-unit id="quince.96f9a607798e" resname="Transfer title">
+        <source>Transfer title</source>
+        <target>Tytuł przelewu</target>
+      </trans-unit>
     </body>
   </file>
 </xliff>
