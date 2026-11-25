@@ -50,7 +50,7 @@
           >
         </div>
 
-        <div class="q-auth__actions">
+        <div class="q-auth__actions q-auth__actions--plain">
           <button id="send-reset-link" class="q-btn q-btn--primary q-btn--lg" name="submit" type="submit" data-ps-action="form-validation-submit">
             {l s='Send reset link' d='Shop.Theme.Actions'}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>

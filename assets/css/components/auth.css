@@ -205,6 +205,13 @@
         grid-column: 5 / span 4;
     }
 
+    /* Odzyskiwanie hasła: przycisk bez linii nad nim. Pozostałe karty
+       zostają z linią. */
+    .q-auth__actions--plain {
+        padding-block-start: 0;
+        border-block-start: 0;
+    }
+
     @media (max-width: 1199px) {
         .q-auth__narrow > .q-auth__card {
             grid-column: 3 / span 8;

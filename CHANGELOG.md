@@ -4,6 +4,12 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.26] - 2026-11-25
+
+### Changed
+
+- Password recovery: no line above the button on the email and new password pages.
+
 ## [0.1.25] - 2026-11-25
 
 ### Changed

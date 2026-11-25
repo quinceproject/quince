@@ -81,7 +81,7 @@
         <input type="hidden" name="id_customer" id="id_customer" value="{$id_customer}">
         <input type="hidden" name="reset_token" id="reset_token" value="{$reset_token}">
 
-        <div class="q-auth__actions">
+        <div class="q-auth__actions q-auth__actions--plain">
           <button class="q-btn q-btn--primary q-btn--lg" type="submit" name="submit" data-ps-action="form-validation-submit">
             {l s='Change Password' d='Shop.Theme.Actions'}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
