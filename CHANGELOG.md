@@ -4,6 +4,15 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.23] - 2026-11-25
+
+### Fixed
+
+- Guest order tracking: the form has the layout of the sign-in page, a card with the
+  order reference and the email side by side and the button on the right. Before, it
+  used classes of the default theme that Quince does not have, so the breadcrumb ran
+  to the edge of the page and the fields had no style.
+
 ## [0.1.22] - 2026-11-23
 
 ### Changed
