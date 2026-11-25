@@ -190,6 +190,39 @@
         inline-size: 100%;
     }
 
+    /* ── karta wąska: gość, odzyskiwanie hasła ─────────────────────────
+       Formularz z jednym, dwoma polami nie potrzebuje szerokości strony.
+       Karta stoi na środku siatki dwunastu kolumn kontenera: na komputerze
+       zajmuje cztery, na tablecie osiem, na telefonie całą szerokość.
+       Szerokość wynika więc z kontenera sklepu, a nie z liczby pikseli. */
+    .q-auth__narrow {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        column-gap: var(--q-space-lg);
+    }
+
+    .q-auth__narrow > .q-auth__card {
+        grid-column: 5 / span 4;
+    }
+
+    @media (max-width: 1199px) {
+        .q-auth__narrow > .q-auth__card {
+            grid-column: 3 / span 8;
+        }
+    }
+
+    /* Na telefonie jedna kolumna: jedenaście odstępów siatki byłoby szersze
+       niż ekran i karta wyszłaby poza niego. */
+    @media (max-width: 767px) {
+        .q-auth__narrow {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .q-auth__narrow > .q-auth__card {
+            grid-column: 1;
+        }
+    }
+
     /* ── wąski ekran ─────────────────────────────────────────────────── */
 
     @media (max-width: 991px) {

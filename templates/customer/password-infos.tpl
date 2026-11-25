@@ -15,6 +15,7 @@
   <main class="q-container q-auth">
     {include file='_partials/breadcrumb.tpl'}
 
+    <div class="q-auth__narrow">
     <section class="q-auth__card">
       <header class="q-auth__head">
         <h1 class="q-section-title q-auth__title">{l s='Forgot your password?' d='Shop.Theme.Customeraccount'}</h1>
@@ -35,5 +36,6 @@
         <a id="back-to-login" href="{$urls.pages.authentication}">{l s='Back to login' d='Shop.Theme.Actions'}</a>
       </footer>
     </section>
+    </div>
   </main>
 {/block}

@@ -4,6 +4,15 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.25] - 2026-11-25
+
+### Changed
+
+- Guest order tracking and password recovery: the card is narrow and centred on a grid
+  of twelve columns of the shop container. It takes four columns on a desktop, eight
+  on a tablet and the full width on a phone, so its width follows the container set
+  in the shop. Sign-in and registration keep their layout.
+
 ## [0.1.24] - 2026-11-25
 
 ### Fixed

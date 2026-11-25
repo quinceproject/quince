@@ -20,6 +20,7 @@
   <main class="q-container q-auth">
     {include file='_partials/breadcrumb.tpl'}
 
+    <div class="q-auth__narrow">
     <section class="q-auth__card">
       <header class="q-auth__head">
         <h1 class="q-section-title q-auth__title">{l s='Guest Order Tracking' d='Shop.Theme.Customeraccount'}</h1>
@@ -73,5 +74,6 @@
         </div>
       </form>
     </section>
+    </div>
   </main>
 {/block}
