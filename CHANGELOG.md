@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.28] - 2026-11-26
+
+### Fixed
+
+- Phones: a product carousel made the whole page 10 px wider than the screen, so the
+  page could be dragged sideways. The carousel strip reached past the page margin,
+  which is narrower on phones than on larger screens.
+
 ## [0.1.27] - 2026-11-25
 
 ### Changed

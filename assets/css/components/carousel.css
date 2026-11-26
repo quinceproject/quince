@@ -171,6 +171,17 @@
         scroll-padding-inline: var(--q-space-md);
     }
 
+    /* Na telefonie pojemnik strony ma wcięcie `--q-space-sm` (theme.css),
+       więc tor cofa się o tyle samo. Z `--q-space-md` wystawał za prawą
+       krawędź ekranu i poszerzał całą stronę: dało się ją przesuwać w bok. */
+    @media (max-width: 767px) {
+        .q-carousel__track {
+            padding-inline: var(--q-space-sm);
+            margin-inline: calc(var(--q-space-sm) * -1);
+            scroll-padding-inline: var(--q-space-sm);
+        }
+    }
+
     .q-carousel__track::-webkit-scrollbar {
         display: none;
     }
