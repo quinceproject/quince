@@ -50,6 +50,15 @@
         padding-block: 0;
     }
 
+    /* Dwa pasy bez tła jeden pod drugim: granicy między nimi nie widać, więc
+       wyściółka dolna pierwszego i górna drugiego sumowały się w pustą dziurę
+       (2 × `--q-ps-pad`). Drugi oddaje górną. Pas z tłem zostaje przy swoich,
+       bo jego treść potrzebuje oddechu od krawędzi barwy. Po pasie od krawędzi
+       do krawędzi (slajder) wyściółki nie ma czym zastąpić, więc zostaje. */
+    .q-ps--none:not(.q-ps--bleed) + .q-ps--none {
+        padding-block-start: 0;
+    }
+
 
     /* Ciche tła sekcji biorą szarości skali neutralnej, nie rozjaśniony żółty.
            Kremowy i piaskowy odcień były barwą marki ściągniętą do tła i przez to
@@ -277,6 +286,17 @@
         margin: 0 0 var(--q-space-sm);
         font-size: var(--q-fs-h2);
         line-height: var(--q-lh-tight);
+    }
+
+    /* Nazwa produktu jest odnośnikiem i bez tego brała barwę linku motywu,
+       a ta na ciemnym pasie (`--ink`) jest barwą tła: napis znikał. Tak jak
+       napis nagłówka sekcji (`.q-ps__title-link`) bierze barwę z nagłówka. */
+    .q-ps__hero-title a {
+        color: inherit;
+    }
+
+    .q-ps__hero-title a:hover {
+        color: var(--q-link-hover);
     }
 
     .q-ps__hero-lead {

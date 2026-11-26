@@ -4,6 +4,20 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.29] - 2026-11-26
+
+### Fixed
+
+- Home page, single product section: on the dark background the product name was
+  black on black. The name is a link and took the link colour, which on this shop
+  is the same as the dark background. It now takes the heading colour, like the
+  section heading link.
+- Home page: two sections without a background one under the other were 120 px
+  apart, because the bottom padding of the first and the top padding of the second
+  added up with no visible border between them. The second one now drops its top
+  padding, so the gap is the same as everywhere else. Sections with a background
+  keep their padding.
+
 ## [0.1.28] - 2026-11-26
 
 ### Fixed
