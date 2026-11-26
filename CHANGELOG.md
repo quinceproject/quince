@@ -4,6 +4,21 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.32] - 2026-11-26
+
+### Added
+
+- Home page, category tiles: under the pointer the photo zooms in slightly and the
+  tile gets a line in the brand colour, the same as a product card. No zoom when
+  the system asks for reduced motion.
+- Home page, category tiles: the photo shade takes the colour set on the column in
+  Quince Engine 0.10.14 ("Photo shade colour"); without it, black as before.
+
+### Changed
+
+- Home page, category tiles: a little more room above the button (15 px instead of
+  5 px on toolexperts-sized spacing), so it no longer sticks to the name.
+
 ## [0.1.31] - 2026-11-26
 
 ### Added

@@ -704,9 +704,49 @@
         padding: var(--q-space-lg);
         overflow: hidden;
 
-        background: var(--q-cat-photo) center / cover no-repeat, var(--q-neutral-12);
+        background: var(--q-neutral-12);
         border-radius: var(--q-ps-radius);
         color: var(--q-neutral-1);
+    }
+
+    /* Zdjęcie na własnej warstwie, nie w tle kafla: tylko tak da się je
+       przybliżyć pod kursorem bez ruszania napisów. Zasłona leży nad nim
+       (`::after`), treść nad zasłoną. */
+    .q-ps__cat::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: var(--q-cat-photo) center / cover no-repeat;
+        transition: transform 300ms ease;
+    }
+
+    /* Pod kursorem jak zajawka produktu: kreska w barwie marki i zdjęcie
+       przybliżone o cztery setne (`.q-pcard:hover` w product-card.css). */
+    /* Kreska rysowana na zasłonie (`::after`), wewnętrznym cieniem: zasłona
+       leży nad zdjęciem, a pod napisami. `border` na kaflu odsłaniał jego
+       ciemne tło wokół zdjęcia, a obrys przykrywały warstwy zdjęcia
+       i zasłony, bo są pozycjonowane. */
+    .q-ps__cat::after {
+        box-shadow: inset 0 0 0 1px transparent;
+        transition: box-shadow 200ms ease-out;
+    }
+
+    .q-ps__cat:hover::after {
+        box-shadow: inset 0 0 0 1px var(--q-fill-primary);
+    }
+
+    .q-ps__cat:hover::before {
+        transform: scale(1.04);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-ps__cat::before {
+            transition: none;
+        }
+
+        .q-ps__cat:hover::before {
+            transform: none;
+        }
     }
 
     /* Pionowy: kafel wyższy niż szerszy, treść przy dolnej krawędzi. */
@@ -726,16 +766,27 @@
         max-inline-size: 22ch;
     }
 
-    .q-ps__cat::before {
+    /* Zasłona: barwę ustawia sklep przy kolumnie („Kolor przyciemnienia
+       zdjęcia”, zmienna `--q-cat-veil`), bez ustawienia zostaje czerń.
+       Przezroczystość ta sama co dotąd: 88% przy treści, 10% dalej. */
+    .q-ps__cat::after {
         content: "";
         position: absolute;
         inset: 0;
-        background: linear-gradient(to top, rgb(0 0 0 / .88) 20%, rgb(0 0 0 / .1) 75%);
+        background: linear-gradient(
+            to top,
+            color-mix(in srgb, var(--q-cat-veil, #000) 88%, transparent) 20%,
+            color-mix(in srgb, var(--q-cat-veil, #000) 10%, transparent) 75%
+        );
     }
 
     /* Poziomy kafel ma treść z boku, więc i zasłona idzie z boku. */
-    .q-ps__cat--landscape::before {
-        background: linear-gradient(to right, rgb(0 0 0 / .88) 25%, rgb(0 0 0 / .1) 85%);
+    .q-ps__cat--landscape::after {
+        background: linear-gradient(
+            to right,
+            color-mix(in srgb, var(--q-cat-veil, #000) 88%, transparent) 25%,
+            color-mix(in srgb, var(--q-cat-veil, #000) 10%, transparent) 85%
+        );
     }
 
     .q-ps__cat > * {
@@ -764,8 +815,11 @@
         color: inherit;
     }
 
+    /* Odstęp nad przyciskiem: sam margines nazwy (`--q-space-xs`) kleił
+       przycisk do napisu, gdy kategoria nie ma opisu. */
     .q-ps__cat .q-btn {
         align-self: flex-start;
+        margin-block-start: var(--q-space-sm);
     }
 
     @media (max-width: 991px) {
