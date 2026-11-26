@@ -1,6 +1,6 @@
 name: quince
 display_name: Quince
-version: 0.1.30
+version: 0.1.31
 author:
   name: "Quince Project"
   email: "quinceproject@proton.me"
@@ -268,6 +268,13 @@ assets:
         path: assets/css/components/blog.css
         media: all
         priority: 40
+      # Zapytanie do specjalisty: przycisk w parze z ofertą i szuflada z kartą
+      # osoby. Globalnie, bo okno zapytania ogólnego (quince_contacts 0.7.0)
+      # otwiera się z przycisku w bloku na dowolnej stronie.
+      - id: quince-expert
+        path: assets/css/components/expert.css
+        media: all
+        priority: 40
 
     # Klucz strony odpowiada polu `php_self` kontrolera. Te dwa arkusze obsługują
     # wyłącznie kartę produktu, więc nie jadą z listingiem ani z kasą.
@@ -285,11 +292,6 @@ assets:
       # tylko tam moduł wstawia swoje znaczniki.
       - id: quince-offer
         path: assets/css/components/offer.css
-        media: all
-        priority: 40
-      # Zapytanie do specjalisty: przycisk w parze z ofertą i szuflada z kartą osoby.
-      - id: quince-expert
-        path: assets/css/components/expert.css
         media: all
         priority: 40
       # Opinie: podsumowanie ocen i lista w akordeonie.
@@ -528,6 +530,14 @@ assets:
         position: bottom
         priority: 104
 
+      # Zapytanie do specjalisty: szuflada z kartą człowieka i formularzem.
+      # Globalnie, bo okno zapytania ogólnego (quince_contacts 0.7.0) otwiera
+      # się z przycisku `data-q-contact-open` w bloku na dowolnej stronie.
+      - id: quince-expert
+        path: assets/js/islands/expert.js
+        position: bottom
+        priority: 103
+
     # Klucz strony odpowiada polu `php_self` kontrolera. Galeria jest potrzebna
     # wyłącznie na karcie produktu i tylko tam się ładuje.
     product:
@@ -554,12 +564,6 @@ assets:
         path: assets/js/islands/notify.js
         position: bottom
         priority: 102
-
-      # Zapytanie do specjalisty: szuflada z kartą człowieka i formularzem.
-      - id: quince-expert
-        path: assets/js/islands/expert.js
-        position: bottom
-        priority: 103
 
       # Oferta PDF: lista ofertowa i wysyłka z szuflady.
       - id: quince-offer

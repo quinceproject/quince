@@ -143,9 +143,135 @@
             }
         }
 
-        korzen.querySelector('[data-q-expert-open]').addEventListener('click', function () {
-            okno.showModal();
-        });
+        // Okno przy produkcie ma własny przycisk. Okno zapytania ogólnego
+        // (quince_contacts 0.7.0, `data-q-contact-root`) go nie ma: otwiera je
+        // każdy przycisk z `data-q-contact-open` w dowolnym miejscu strony.
+        var otworz = korzen.querySelector('[data-q-expert-open]');
+
+        if (otworz) {
+            otworz.addEventListener('click', function () {
+                okno.showModal();
+            });
+        }
+
+        var ogolne = korzen.hasAttribute('data-q-contact-root');
+        var ludzie = {};
+        var temat = '';
+        var osoba = korzen.getAttribute('data-default') || '';
+
+        try {
+            ludzie = JSON.parse(korzen.getAttribute('data-people') || '{}') || {};
+        } catch (blad) {
+            ludzie = {};
+        }
+
+        /** Napis i odnośnik kafla kontaktu; pusty kafel znika. */
+        function kafel(element, adres, tekst) {
+            if (!element) {
+                return;
+            }
+
+            element.hidden = !tekst;
+            element.setAttribute('href', tekst ? adres : '#');
+
+            var napis = element.querySelector('span');
+
+            if (napis) {
+                napis.textContent = tekst || '';
+            }
+        }
+
+        /**
+         * Osoba w oknie według numeru z przycisku. Numer nieznany zostawia
+         * osobę domyślną: tę samą, do której serwer wtedy skieruje wiadomość.
+         */
+        function pokazOsobe(numer) {
+            var dane = ludzie[numer] ? ludzie[numer] : ludzie[korzen.getAttribute('data-default') || ''];
+
+            osoba = ludzie[numer] ? numer : (korzen.getAttribute('data-default') || '');
+
+            if (!dane) {
+                return;
+            }
+
+            var awatar = okno.querySelector('[data-q-expert-person-avatar]');
+
+            if (awatar) {
+                awatar.textContent = '';
+
+                if (dane.photo) {
+                    var obraz = document.createElement('img');
+                    obraz.src = dane.photo;
+                    obraz.alt = '';
+                    obraz.width = 96;
+                    obraz.height = 96;
+                    awatar.appendChild(obraz);
+                } else {
+                    awatar.textContent = awatar.getAttribute('data-label') || '';
+                }
+            }
+
+            var imie = okno.querySelector('[data-q-expert-person-name]');
+            var rola = okno.querySelector('[data-q-expert-person-role]');
+            var gotowe = okno.querySelector('[data-q-expert-person-done]');
+
+            if (imie) {
+                imie.textContent = dane.name || '';
+            }
+
+            if (rola) {
+                rola.textContent = dane.job || '';
+                rola.hidden = !dane.job;
+            }
+
+            if (gotowe) {
+                gotowe.textContent = dane.name || '';
+            }
+
+            kafel(okno.querySelector('[data-q-expert-person-phone]'), 'tel:' + String(dane.phone || '').replace(/\s/g, ''), dane.phone);
+            kafel(okno.querySelector('[data-q-expert-person-email]'), 'mailto:' + (dane.email || ''), dane.email);
+        }
+
+        /** Po wysłanej wiadomości kolejne otwarcie pokazuje znowu formularz. */
+        function odNowa() {
+            if (!potwierdzenie || potwierdzenie.hidden) {
+                return;
+            }
+
+            potwierdzenie.hidden = true;
+
+            if (formularz) {
+                formularz.hidden = false;
+            }
+
+            if (wyslij) {
+                wyslij.hidden = false;
+            }
+
+            if (zamknijPo) {
+                zamknijPo.hidden = true;
+            }
+
+            if (pola.message) {
+                pola.message.value = '';
+            }
+        }
+
+        if (ogolne) {
+            document.addEventListener('click', function (zdarzenie) {
+                var przycisk = zdarzenie.target.closest ? zdarzenie.target.closest('[data-q-contact-open]') : null;
+
+                if (!przycisk) {
+                    return;
+                }
+
+                zdarzenie.preventDefault();
+                odNowa();
+                pokazOsobe((przycisk.getAttribute('data-q-contact-open') || '').trim());
+                temat = (przycisk.getAttribute('data-q-contact-topic') || '').trim();
+                okno.showModal();
+            });
+        }
 
         okno.querySelectorAll('[data-q-expert-close]').forEach(function (przycisk) {
             przycisk.addEventListener('click', function () {
@@ -188,6 +314,14 @@
             dane.set('phone', (pola.phone && pola.phone.value || '').trim());
             dane.set('message', (pola.message && pola.message.value || '').trim());
             dane.set('id_product', (pola.product && pola.product.value) || '0');
+
+            // Zapytanie ogólne: osoba z przycisku, jego temat i strona, z której
+            // klient pisał. Serwer przyjmuje tylko adres tego sklepu.
+            if (ogolne) {
+                dane.set('id_contact', osoba);
+                dane.set('topic', temat);
+                dane.set('page_url', window.location.href.split('#')[0]);
+            }
 
             wyslij.disabled = true;
 

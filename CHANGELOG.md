@@ -4,6 +4,16 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.31] - 2026-11-26
+
+### Added
+
+- "Ask an expert" panel from any page: the panel's script and styles load on every
+  page, not only on the product page, and any button with `data-q-contact-open`
+  opens the enquiry panel that Quince Contacts 0.7.0 adds at the end of the page.
+  The panel shows the person named by the button and sends the button's topic and
+  the page address with the message.
+
 ## [0.1.30] - 2026-11-26
 
 ### Added

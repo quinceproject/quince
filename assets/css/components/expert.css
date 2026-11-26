@@ -111,6 +111,14 @@
         transition: border-color 120ms ease-out;
     }
 
+    /* Okno zapytania ogólnego (quince_contacts 0.7.0) trzyma puste pola osoby
+       ukryte, bo skrypt wypełnia je przy innej osobie. `display` z klasy bije
+       `[hidden]` przeglądarki, więc trzeba wprost. */
+    .q-expert__contact[hidden],
+    .q-expert__role[hidden] {
+        display: none;
+    }
+
     /* Pod kursorem zapala się sama kreska. Napis zostaje atramentowy, bo to
        numer i adres, które mają być czytelne w każdym stanie. */
     .q-expert__contact:hover {
