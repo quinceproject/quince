@@ -54,8 +54,12 @@
        wyściółka dolna pierwszego i górna drugiego sumowały się w pustą dziurę
        (2 × `--q-ps-pad`). Drugi oddaje górną. Pas z tłem zostaje przy swoich,
        bo jego treść potrzebuje oddechu od krawędzi barwy. Po pasie od krawędzi
-       do krawędzi (slajder) wyściółki nie ma czym zastąpić, więc zostaje. */
-    .q-ps--none:not(.q-ps--bleed) + .q-ps--none {
+       do krawędzi (slajder) wyściółki nie ma czym zastąpić, więc zostaje.
+
+       Pas „w ramce” (`--boxed`) też jest przezroczysty: barwę niesie blok
+       w środku, który ma własną wyściółkę. Liczy się więc jak pas bez tła,
+       inaczej nad blokiem w ramce zostawało 120 px pustego tła strony. */
+    :is(.q-ps--none, .q-ps--boxed):not(.q-ps--bleed) + :is(.q-ps--none, .q-ps--boxed) {
         padding-block-start: 0;
     }
 
@@ -304,6 +308,86 @@
         line-height: var(--q-lh-relaxed);
     }
 
+    /* ── bohater „pół na pół” ───────────────────────────────────────────
+           Z makiety `bloki-toolexperts.html`, blok 4 (baner dzielony): zdjęcie
+           i treść w dwóch równych kolumnach tej samej wysokości, zamknięte
+           w jednej ramce karty. Kolumna treści dostaje klasę skóry sekcji
+           (`q-ps--ink`, `--brand`, `--gradient`, `--photo`...), więc barwę,
+           kolor tekstu i odmiany przycisków bierze z tych samych reguł co
+           cały pas. Na wąskim ekranie zdjęcie staje nad treścią. */
+    .q-ps__split {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        background: var(--q-surface-raised);
+        border: var(--q-blok-ramka);
+        border-radius: var(--q-card-radius, var(--q-radius-md));
+        overflow: hidden;
+    }
+
+    @media (min-width: 992px) {
+        .q-ps__split {
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        }
+    }
+
+    /* Sekcja od krawędzi do krawędzi: blok idzie przez całe okno, więc
+       ramka karty i zaokrąglenie stawałyby na krawędzi ekranu. */
+    .q-ps--bleed .q-ps__split {
+        border: 0;
+        border-radius: 0;
+    }
+
+    .q-ps__split-media {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: var(--q-space-lg);
+        background: var(--q-neutral-3);
+    }
+
+    /* Odnośnik wokół zdjęcia jest elementem pasa elastycznego i bez szerokości
+       kurczył się do zera, a zdjęcie razem z nim. */
+    .q-ps__split-media a {
+        display: block;
+        inline-size: 100%;
+        max-inline-size: 520px;
+    }
+
+    .q-ps__split-media img {
+        display: block;
+        inline-size: 100%;
+        block-size: auto;
+        aspect-ratio: 1 / 1;
+        object-fit: contain;
+    }
+
+    /* Skóra „zdjęcie” kładzie zasłonę `::before` na całą kolumnę: treść
+       musi stać nad nią. */
+    .q-ps__split-body {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--q-space-xl) var(--q-space-lg);
+    }
+
+    .q-ps__split-body > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Telefon: wyściółka z makiety (60 / 30 px) zabierała kolumnie prawie
+       jedną piątą szerokości ekranu. */
+    @media (max-width: 767px) {
+        .q-ps__split-body {
+            padding: var(--q-space-lg) var(--q-space-md);
+        }
+    }
+
+    .q-ps__split-body > :last-child {
+        margin-block-end: 0;
+    }
+
     /* Cechy jako pigułki, nie jako tabela: w sekcji reklamowej liczą się trzy
            rzeczy do rzucenia okiem, a nie pełna specyfikacja. */
     .q-ps__specs {
@@ -381,7 +465,8 @@
            Obok siebie mieszczą się w kaflu, gdzie miejsca jest mało i każdy wiersz
            kosztuje; tutaj sekcja jest szeroka, a kwota i wezwanie do zakupu to dwie
            różne rzeczy i nie muszą dzielić linii. */
-    .q-ps__hero .q-ps__buy {
+    .q-ps__hero .q-ps__buy,
+    .q-ps__split .q-ps__buy {
         display: grid;
         justify-items: start;
         gap: var(--q-space-md);

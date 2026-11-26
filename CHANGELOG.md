@@ -4,6 +4,22 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.30] - 2026-11-26
+
+### Added
+
+- Home page: the look of the "Half and half" single product layout from Quince
+  Engine 0.10.13: photo and content in two equal columns of the same height in one
+  card frame, the content column on the section background, the photo above the
+  content on phones, no frame when the section runs edge to edge.
+
+### Fixed
+
+- Home page: a section in the page width ("boxed") under a section without a
+  background left 120 px of empty page background above its coloured block. A
+  boxed section has a transparent band, so it now counts as a section without a
+  background and the gap is 60 px, like between other sections.
+
 ## [0.1.29] - 2026-11-26
 
 ### Fixed
