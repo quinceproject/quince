@@ -4,6 +4,33 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.33] - 2026-11-26
+
+### Added
+
+- Home page, category tiles: shade styles from Quince Engine 0.10.15. The tile takes
+  the shade colour, its strength, the photo visibility, the text colour, the frame
+  colour and, on a brand-colour shade, a dark button.
+- Home page, gradient background with light text (`q-ps--light`): the same label,
+  features, reasons and secondary button as a dark section.
+- Home page, product name on a dark background: on hover it takes the colour given
+  by the engine instead of the grey link colour, which disappeared on dark.
+
+### Changed
+
+- Home page, dark section: the label above the product name is light with dark text.
+  The see-through white was hard to see on ink.
+- Product page, "Download offer" and "Ask an expert": the border is one step darker,
+  and on hover the text and border turn ink instead of the brand colour.
+- Product page, lowest price in the last 30 days: same text size as "Gross" next to
+  the price. At the smallest size it was hard to read.
+
+### Fixed
+
+- Product page: "Download offer" and "Ask an expert" stand side by side again. Since
+  0.1.31 the rule that pairs them loaded before the product page styles and lost to
+  the full-row rule.
+
 ## [0.1.32] - 2026-11-26
 
 ### Added

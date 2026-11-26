@@ -7,13 +7,21 @@
        motywu ma wyglądać jak reszta sklepu, a nie jak wtrącona wyspa.
     */
 
-    /* Para przycisków: „Pobierz ofertę" i „Zapytaj specjalistę" stoją w jednym
-       wierszu, każdy w swoim torze siatki kolumny opisu, więc mają tę samą
-       szerokość i razem wypełniają kolumnę. Na wąskim ekranie tor jest jeden
-       i przyciski układają się jeden pod drugim. */
-    .q-pdp__info > .q-pdp__slot--offer,
-    .q-pdp__info > .q-pdp__slot--ask_expert {
-        grid-column: span 1;
+    /* Para przycisków w jednym wierszu: reguła w product.css, przy siatce
+       kolumny opisu (ten arkusz ładuje się wcześniej i przegrywał). */
+
+    /* Kreska o stopień ciemniejsza niż w zwykłym przycisku cichym
+       (`--q-border-subtle`, neutral-5): na białej kolumnie opisu ginęła.
+       Pod kursorem atrament zamiast barwy marki, która na jasnym tle
+       wyglądała blado. Podwójny selektor, bo `.q-btn--quiet:hover` ma dwie
+       klasy. */
+    .q-btn--quiet:is([data-q-offer-open], [data-q-expert-open]) {
+        --btn-border: var(--q-neutral-6);
+    }
+
+    .q-btn--quiet:is([data-q-offer-open], [data-q-expert-open]):hover {
+        --btn-label: var(--q-neutral-12);
+        --btn-border: var(--q-neutral-12);
     }
 
     /* Metryka dotyczy samych przycisków otwierających, po ich zaczepie, a nie
@@ -25,13 +33,6 @@
         min-block-size: var(--q-touch-target);
         padding: var(--q-space-sm) var(--q-space-md);
         font-size: var(--q-fs-xs);
-    }
-
-    @media (max-width: 575px) {
-        .q-pdp__info > .q-pdp__slot--offer,
-        .q-pdp__info > .q-pdp__slot--ask_expert {
-            grid-column: 1 / -1;
-        }
     }
 
     /* ── człowiek ───────────────────────────────────────────────────────

@@ -334,6 +334,23 @@
         grid-column: 1 / -1;
     }
 
+    /* Para przycisków: „Pobierz ofertę" i „Zapytaj specjalistę" stoją w jednym
+       wierszu, każdy w swoim torze. Reguła stoi tutaj, zaraz po regule slotu,
+       a nie w expert.css: tamten arkusz ładuje się na każdej stronie, więc
+       wcześniej niż ten, i przy tej samej wadze przegrywał z „cały wiersz"
+       powyżej. Na wąskim ekranie przyciski schodzą jeden pod drugi. */
+    .q-pdp__info > .q-pdp__slot--offer,
+    .q-pdp__info > .q-pdp__slot--ask_expert {
+        grid-column: span 1;
+    }
+
+    @media (max-width: 575px) {
+        .q-pdp__info > .q-pdp__slot--offer,
+        .q-pdp__info > .q-pdp__slot--ask_expert {
+            grid-column: 1 / -1;
+        }
+    }
+
     .q-pdp__info > .q-pdp__slot + .q-pdp__slot {
         margin-block-start: 0;
     }
@@ -643,12 +660,14 @@
     /* --- nota o najniższej cenie ---
        Osobny wiersz pod blokiem ceny. Drobny druk w barwie tekstu pomocniczego:
        to informacja wymagana przepisem, a nie argument sprzedażowy. Ma być
-       do przeczytania, a nie do zauważenia przed ceną. */
+       do przeczytania, a nie do zauważenia przed ceną. Stopień pisma ten sam
+       co dopisek „Brutto” przy cenie (`.q-buy__gross-note`): przy `--q-fs-xs`
+       (10 px) nota była nieczytelna. */
     .q-buy__omnibus {
         margin-block-start: var(--q-space-xs);
         margin-block-end: 0;
 
-        font-size: var(--q-fs-xs);
+        font-size: var(--q-fs-sm);
         color: var(--q-meta-color);
     }
 

@@ -159,6 +159,10 @@
         background: linear-gradient(to right, var(--q-slider-veil-strong), var(--q-slider-veil) 55%, var(--q-slider-veil-clear));
     }
 
+    /* Jasny tekst na tle, którego barwę wybiera sprzedawca (gradient). Klasę
+       daje silnik, gdy biel ma z końcami gradientu lepszy kontrast niż
+       atrament; z nią pas bierze też reguły ciemnego pasa niżej (znacznik,
+       cechy, powody, przycisk drugorzędny, nazwa pod kursorem). */
     .q-ps--light,
     .q-ps--light :is(h1, h2, h3, h4, h5, h6) {
         color: var(--q-neutral-1);
@@ -246,8 +250,16 @@
         border-radius: var(--q-radius-sm);
     }
 
-    :is(.q-ps--ink,   .q-ps--photo) .q-ps__over {
+    .q-ps--photo .q-ps__over {
         --q-ps-over-bg: rgb(255 255 255 / .12);
+    }
+
+    /* Na ciemnym pasie znacznik odwrócony: jasne tło, ciemny napis, jak
+       znacznik na jasnym pasie z zamienionymi barwami. Półprzezroczysta
+       biel ginęła na atramencie. */
+    :is(.q-ps--ink, .q-ps--light) .q-ps__over {
+        --q-ps-over-bg: var(--q-neutral-1);
+        --q-ps-over-label: var(--q-neutral-12);
     }
 
     /* ── pojedynczy produkt na całą szerokość ────────────────────────
@@ -301,6 +313,14 @@
 
     .q-ps__hero-title a:hover {
         color: var(--q-link-hover);
+    }
+
+    /* Na ciemnym tle szarość odnośnika ginęła. Barwę podaje silnik
+       (`--q-ps-title-hover`): marka albo marka rozjaśniona do kontrastu 3:1.
+       Gdy żadna barwa nie trzyma kontrastu, zmiennej nie ma i nazwa zostaje
+       w swojej barwie. */
+    :is(.q-ps--ink, .q-ps--photo, .q-ps--light) .q-ps__hero-title a:hover {
+        color: var(--q-ps-title-hover, inherit);
     }
 
     .q-ps__hero-lead {
@@ -411,7 +431,7 @@
         border-radius: var(--q-radius-sm);
     }
 
-    :is(.q-ps--ink,   .q-ps--photo) .q-ps__spec {
+    :is(.q-ps--ink, .q-ps--photo, .q-ps--light) .q-ps__spec {
         --q-ps-spec-bg: rgb(255 255 255 / .1);
     }
 
@@ -667,7 +687,7 @@
         border-radius: var(--q-ps-radius);
     }
 
-    :is(.q-ps--ink, .q-ps--photo) .q-ps__reason {
+    :is(.q-ps--ink, .q-ps--photo, .q-ps--light) .q-ps__reason {
         --q-ps-reason-bg: rgb(255 255 255 / .08);
     }
 
@@ -704,19 +724,23 @@
         padding: var(--q-space-lg);
         overflow: hidden;
 
-        background: var(--q-neutral-12);
+        /* Tło w barwie zasłony: przygaszone zdjęcie przebija przez nie
+           i zabarwia cały kafel. */
+        background: var(--q-cat-veil, var(--q-neutral-12));
         border-radius: var(--q-ps-radius);
-        color: var(--q-neutral-1);
+        color: var(--q-cat-text, var(--q-neutral-1));
     }
 
     /* Zdjęcie na własnej warstwie, nie w tle kafla: tylko tak da się je
        przybliżyć pod kursorem bez ruszania napisów. Zasłona leży nad nim
-       (`::after`), treść nad zasłoną. */
+       (`::after`), treść nad zasłoną. Widoczność zdjęcia ustawia sklep
+       („Widoczność zdjęcia”, `--q-cat-photo-strength`). */
     .q-ps__cat::before {
         content: "";
         position: absolute;
         inset: 0;
         background: var(--q-cat-photo) center / cover no-repeat;
+        opacity: var(--q-cat-photo-strength, 1);
         transition: transform 300ms ease;
     }
 
@@ -732,7 +756,7 @@
     }
 
     .q-ps__cat:hover::after {
-        box-shadow: inset 0 0 0 1px var(--q-fill-primary);
+        box-shadow: inset 0 0 0 1px var(--q-cat-frame, var(--q-fill-primary));
     }
 
     .q-ps__cat:hover::before {
@@ -766,16 +790,16 @@
         max-inline-size: 22ch;
     }
 
-    /* Zasłona: barwę ustawia sklep przy kolumnie („Kolor przyciemnienia
-       zdjęcia”, zmienna `--q-cat-veil`), bez ustawienia zostaje czerń.
-       Przezroczystość ta sama co dotąd: 88% przy treści, 10% dalej. */
+    /* Zasłona: styl przyciemnienia ustawia sklep przy kolumnie, silnik
+       podaje barwę (`--q-cat-veil`) i moc przy treści (`--q-cat-veil-strength`).
+       Dalej od treści krycie zostaje 10%. */
     .q-ps__cat::after {
         content: "";
         position: absolute;
         inset: 0;
         background: linear-gradient(
             to top,
-            color-mix(in srgb, var(--q-cat-veil, #000) 88%, transparent) 20%,
+            color-mix(in srgb, var(--q-cat-veil, #000) var(--q-cat-veil-strength, 88%), transparent) 20%,
             color-mix(in srgb, var(--q-cat-veil, #000) 10%, transparent) 75%
         );
     }
@@ -784,7 +808,7 @@
     .q-ps__cat--landscape::after {
         background: linear-gradient(
             to right,
-            color-mix(in srgb, var(--q-cat-veil, #000) 88%, transparent) 25%,
+            color-mix(in srgb, var(--q-cat-veil, #000) var(--q-cat-veil-strength, 88%), transparent) 25%,
             color-mix(in srgb, var(--q-cat-veil, #000) 10%, transparent) 85%
         );
     }
@@ -796,7 +820,7 @@
 
     /* Napisy na zdjęciu dostają cień; przycisk nie, bo ma własne wypełnienie. */
     .q-ps__cat :is(h1, h2, h3, h4, h5, h6, p, span):not(.q-btn):not(.q-btn *) {
-        text-shadow: var(--q-ps-text-shadow);
+        text-shadow: var(--q-cat-shadow, var(--q-ps-text-shadow));
     }
 
     .q-ps__cat-title {
@@ -875,7 +899,7 @@
 
     /* Na ciemnym tle przycisk konturowy bierze welon i kreskę w barwie napisu:
            pod przyciskiem bywa zdjęcie, więc kreska musi trzymać się sama. */
-    :is(.q-ps--ink,   .q-ps--photo) .q-btn--secondary {
+    :is(.q-ps--ink, .q-ps--photo, .q-ps--light) .q-btn--secondary {
         --btn-bg: var(--q-slider-action-bg);
         --btn-label: var(--q-neutral-1);
         --btn-border: var(--q-slider-action-border);
@@ -902,6 +926,22 @@
 
     .q-ps--brand .q-btn--secondary:hover {
         --btn-bg: rgb(255 255 255 / .45);
+    }
+
+    /* Przycisk na kaflu działu: odwrócony, gdy zasłona ma barwę marki albo
+       barwę zbyt bliską marce. Silnik podaje wtedy `--q-cat-btn-bg` w barwie
+       napisu; bez tej zmiennej przycisk zostaje w barwie marki, także w pasie
+       o skórze marki: stoi na zasłonie kafla, nie na tle pasa. */
+    .q-ps__cats .q-ps__cat .q-btn--primary {
+        --btn-bg: var(--q-cat-btn-bg, var(--q-btn-primary-bg));
+        --btn-label: var(--q-cat-btn-label, var(--q-btn-primary-label));
+        --btn-border: var(--q-cat-btn-bg, var(--q-btn-primary-bg));
+    }
+
+    .q-ps__cats .q-ps__cat .q-btn--primary:hover {
+        --btn-bg: var(--q-cat-btn-bg-hover, var(--q-btn-primary-bg-hover));
+        --btn-label: var(--q-cat-btn-label, var(--q-btn-primary-label-hover));
+        --btn-border: var(--q-cat-btn-bg-hover, var(--q-btn-primary-bg-hover));
     }
 
     /* Tytuł w rzędzie z wyjściem do listy oddaje swój odstęp, niesie go rząd. */
