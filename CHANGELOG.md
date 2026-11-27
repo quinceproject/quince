@@ -4,6 +4,19 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.35] - 2026-11-27
+
+Requires Quince Engine 0.10.17.
+
+### Added
+
+- The large product tile on the homepage takes its own background set in the
+  engine: light grey, grey, dark, brand colour, gradient or photo. On dark and
+  colour backgrounds the brand, name and description take the text colour of the
+  tile.
+- The photo in the large product tile zooms in slightly under the cursor, like the
+  tile on a product list. Off for visitors who ask for reduced motion.
+
 ## [0.1.34] - 2026-11-27
 
 Requires Quince Engine 0.10.16.

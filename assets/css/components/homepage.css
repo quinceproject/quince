@@ -566,6 +566,24 @@
         max-inline-size: 100%;
         max-block-size: 100%;
         object-fit: contain;
+        transition: transform 300ms ease;
+    }
+
+    /* Pod kursorem jak zajawka listingu: zdjęcie przybliżone o cztery setne
+       (`.q-pcard:hover .q-pcard__image` w product-card.css). Kadr ma
+       `overflow: hidden`, więc powiększenie nie wychodzi poza kartę. */
+    .q-ps__big:hover .q-ps__big-media img {
+        transform: scale(1.04);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .q-ps__big-media img {
+            transition: none;
+        }
+
+        .q-ps__big:hover .q-ps__big-media img {
+            transform: none;
+        }
     }
 
     .q-ps__big-body {
@@ -602,6 +620,68 @@
 
     .q-ps__big .q-ps__actions {
         margin-inline-start: 0;
+    }
+
+    /* ── tło dużej zajawki ──────────────────────────────────────────
+       Zajawka ma własne tło, osobne od tła sekcji (silnik daje jej te same
+       klasy skór, co pasowi). Reguły skór pasa stoją wyżej w arkuszu
+       i przegrywały z tłem i barwą tekstu karty przy równej
+       specyficzności, stąd para klas. Kadr zdjęcia zostaje na swoim tle:
+       barwa obejmuje kartę wokół zdjęcia i część z treścią. */
+    .q-ps__big.q-ps--mist {
+        background: var(--q-neutral-4);
+    }
+
+    .q-ps__big.q-ps--stone {
+        background: var(--q-neutral-6);
+    }
+
+    .q-ps__big.q-ps--ink {
+        background: var(--q-neutral-12);
+        color: var(--q-neutral-1);
+    }
+
+    .q-ps__big.q-ps--brand {
+        background: var(--q-fill-primary);
+        color: var(--q-on-fill-primary);
+    }
+
+    .q-ps__big.q-ps--gradient {
+        background: linear-gradient(
+        var(--q-ps-angle, 120deg),
+        var(--q-ps-from, var(--q-neutral-4)),
+        var(--q-ps-to, var(--q-neutral-6))
+        );
+    }
+
+    .q-ps__big.q-ps--photo {
+        position: relative;
+        background: var(--q-ps-photo) center / cover no-repeat;
+        color: var(--q-neutral-1);
+    }
+
+    .q-ps__big.q-ps--light {
+        color: var(--q-neutral-1);
+    }
+
+    /* Zasłona zdjęcia (`::before`) leży na całej karcie: kadr i treść stoją
+       nad nią, jak w kolumnie „pół na pół” (`.q-ps__split-body > *`). */
+    .q-ps__big.q-ps--photo > * {
+        position: relative;
+        z-index: 1;
+    }
+
+    /* Na barwnym tle marka, nazwa i opis biorą barwę tekstu karty, tak jak
+       nazwa i opis bohatera pasa (`.q-ps__hero-title a`, `.q-ps__hero-lead`).
+       Wyciszone szarości z jasnej karty ginęły na ciemnym. */
+    .q-ps__big:is(.q-ps--ink, .q-ps--brand, .q-ps--photo, .q-ps--light) :is(.q-ps__big-brand, .q-ps__big-lead, .q-ps__big-title a) {
+        color: inherit;
+    }
+
+    /* Nazwa pod kursorem: barwa policzona w silniku pod kontrast z tłem
+       zajawki, tak jak nazwa bohatera na ciemnym pasie. */
+    .q-ps__big:is(.q-ps--ink, .q-ps--photo, .q-ps--light) .q-ps__big-title a:hover {
+        color: var(--q-ps-title-hover, inherit);
     }
 
     /* ── rząd: stały blok i przewijana taśma ────────────────────────
