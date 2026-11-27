@@ -4,6 +4,28 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.34] - 2026-11-27
+
+Requires Quince Engine 0.10.16.
+
+### Added
+
+- Filters: values in the order set in Quince Engine (Product lists, Filters), by
+  default from the one with the most products.
+
+### Fixed
+
+- Product list pagination after narrowing with filters: the page numbers stayed those
+  of the whole category (for example 54 pages for 31 products) until the page was
+  reloaded. The numbers sit in the "Below the list" zone, which the shop does not send
+  back after narrowing; they now come in the bottom part of the list
+  (`products-bottom.tpl`) and the listing script puts them in place.
+
+### Changed
+
+- Home page, large product teaser with the photo above the name: square photo frame
+  instead of 16:9, so square product photos are no longer cut at the top and bottom.
+
 ## [0.1.33] - 2026-11-26
 
 ### Added

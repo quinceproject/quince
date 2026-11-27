@@ -203,7 +203,14 @@
     {if $modules.quince_engine.listing.pagination|default:'pages' == 'more'}
       {include file='catalog/_partials/listing-more.tpl' pagination=$listing.pagination}
     {else}
-      {include file='_partials/pagination.tpl' pagination=$listing.pagination}
+      {* Otoczka bez własnego wyglądu (`display: contents`). Po zawężeniu
+         bez przeładowania skrypt listingu wstawia do niej numery stron
+         dla zawężonej listy: rdzeń odsyła je w kawałku „pod listą”
+         (`products-bottom.tpl`), a ten element stoi w strefie, której
+         rdzeń nie odsyła. Bez tego zostawały numery całej kategorii. *}
+      <div class="q-pagination-slot" data-q-pagination>
+        {include file='_partials/pagination.tpl' pagination=$listing.pagination}
+      </div>
     {/if}
   {/block}
 

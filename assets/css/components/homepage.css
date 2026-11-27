@@ -536,8 +536,10 @@
         grid-template-rows: auto auto;
     }
 
+    /* Kwadrat, bo zdjęcia produktów są kwadratowe: kadr 16:9 przycinał je
+       z góry i z dołu, a w wąskiej kolumnie z produktu zostawał środek. */
     .q-ps__big--stack .q-ps__big-media {
-        aspect-ratio: var(--q-big-ratio, 16 / 9);
+        aspect-ratio: var(--q-big-ratio, 1 / 1);
         block-size: auto;
     }
 

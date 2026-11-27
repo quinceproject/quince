@@ -632,6 +632,28 @@
         odnosnik.href = adres.toString();
     }
 
+    /**
+     * Numery stron po zawężeniu bez przeładowania. Stronicowanie stoi
+     * w strefie pod listą, której rdzeń nie odsyła, więc zostawały w nim
+     * numery całej kategorii (54 strony przy 31 produktach). Świeże numery
+     * przychodzą w ukrytym `template` w kawałku „pod listą”
+     * (`products-bottom.tpl`) i trafiają do otoczki w strefie.
+     *
+     * Szablon może być pusty: lista zawężona do jednej strony nie ma numerów,
+     * więc otoczka też się wtedy opróżnia, a przy kolejnym zawężeniu wypełnia.
+     */
+    function odswiezStronicowanie() {
+        var swieze = document.querySelector('#js-product-list-bottom template[data-q-pagination-fresh]');
+
+        if (!swieze) {
+            return;
+        }
+
+        listing.querySelectorAll('[data-q-pagination]').forEach(function (miejsce) {
+            miejsce.replaceChildren(swieze.content.cloneNode(true));
+        });
+    }
+
     listing.addEventListener('click', function (zdarzenie) {
         var odnosnik = zdarzenie.target.closest('[data-q-more-link]');
 
@@ -673,6 +695,7 @@
             jedenPanel();
             przestawLiczbeWSzufladzie(dane.pagination && dane.pagination.total_items);
             odswiezDokladanie(dane);
+            odswiezStronicowanie();
 
             /* Pas nad listą przychodzi z serwera zwinięty, bo o rozwinięciu
                wie tylko przeglądarka. Zamykanie go po każdym zaznaczonym

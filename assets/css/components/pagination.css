@@ -11,6 +11,13 @@
 
 @layer quince.components {
 
+    /* Otoczka, do której skrypt listingu wstawia numery stron po zawężeniu.
+       Sama niczego nie rysuje: stronicowanie stoi w strefie tak, jakby
+       otoczki nie było. */
+    .q-pagination-slot {
+        display: contents;
+    }
+
     .q-pagination {
         display: flex;
         align-items: center;

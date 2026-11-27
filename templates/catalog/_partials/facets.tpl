@@ -72,9 +72,12 @@
             {* Próg przez modyfikator silnika: ten panel powstaje, zanim
                szablony dostaną `$modules`. *}
             {assign var=qLimit value=0|qfacetlimit}
+            {* Kolejność wartości z Quince Engine → Listy produktów → Filtry,
+               domyślnie od największej liczby produktów. *}
+            {assign var=qFiltry value=$facet.filters|qfacetorder}
             {assign var=qWidoczne value=0}
             {assign var=qPoza value=0}
-            {foreach from=$facet.filters item="qF"}
+            {foreach from=$qFiltry item="qF"}
               {if $qF.displayed}
                 {assign var=qWidoczne value=$qWidoczne+1}
                 {if $qWidoczne > $qLimit && !$qF.active}{assign var=qPoza value=$qPoza+1}{/if}
@@ -83,7 +86,7 @@
             {assign var=qZwin value=($qLimit > 0 && $qPoza > 2)}
             {assign var=qNr value=0}
 
-            {foreach from=$facet.filters key=filter_key item="filter"}
+            {foreach from=$qFiltry key=filter_key item="filter"}
               {if !$filter.displayed}
                 {continue}
               {/if}
