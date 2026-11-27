@@ -4,6 +4,15 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.37] - 2026-11-27
+
+### Fixed
+
+- Page content no longer touches the window edges when the window is about as wide
+  as the content width set for the shop. The side gutter now shrinks only as the
+  free space around the content grows, so content always keeps at least the
+  standard gutter from the edge.
+
 ## [0.1.36] - 2026-11-27
 
 Requires Quince Engine 0.10.18. Update the engine first: with an older engine, rows

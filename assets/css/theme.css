@@ -247,17 +247,18 @@
         max-inline-size: var(--q-container-width);
         margin-inline: auto;
 
-        /* Gutter TYLKO, gdy margines z wyśrodkowania jeszcze nic nie daje,
-           czyli gdy okno jest węższe od `--q-container-width` i pojemnik
-           dotyka jego krawędzi (telefon ma już swój gutter niżej, ale tablet
-           i wąski laptop między 768 px a szerokością pojemnika nie mają
-           żadnego bez tej reguły). Gdy okno jest szersze, margines sam
-           odsuwa treść od krawędzi i ten padding musi zejść do zera, inaczej
-           doliczałby się do marginesu, zamiast go zastępować.
+        /* Gutter uzupełnia margines z wyśrodkowania do `--q-space-md`:
+           padding = md minus połowa nadwyżki okna nad pojemnikiem, przycięty
+           do 0…md. Treść ma więc zawsze co najmniej md od krawędzi okna.
+           Węższe okno: margines 0, padding md. Okno szersze o 2×md lub
+           więcej: padding 0, odsuwa sam margines. Pomiędzy padding maleje
+           o tyle, o ile rośnie margines. Poprzednia wersja ucinała padding
+           do zera już przy oknie szerszym o piksel, więc przy oknie równym
+           mniej więcej `--q-container-width` treść kleiła się do krawędzi.
            `--q-container-width` jest ustawieniem sklepu (960–1920 px), więc
            sztywny punkt przełomu w pikselach by się z nim rozjeżdżał.
            Stąd `clamp()` liczony od samego tokenu, nie od stałej. */
-        padding-inline: clamp(0px, calc((var(--q-container-width) - 100%) * 999), var(--q-space-md));
+        padding-inline: clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container-width)) / 2), var(--q-space-md));
     }
 
     /* Oprawa strony przychodząca z rdzenia. Szablony motywu podają ją
