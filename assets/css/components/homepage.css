@@ -752,6 +752,51 @@
         block-size: 100%;
     }
 
+    /* Duże zajawki obok siebie mają wspólną wysokość zdjęcia i wspólną
+       wysokość pola z tekstem. Zajawka z nazwą na trzy wiersze dostaje pole
+       tekstu tak wysokie jak sąsiadka z nazwą na cztery, a zdjęcia kończą się
+       na jednej linii.
+       Rząd staje się siatką z dwoma wierszami (zdjęcie, treść), a kolumna
+       i zajawka biorą je przez `subgrid`. Szerokość kolumny zostaje ta sama:
+       to samo wyrażenie, co w pasie elastycznym, tylko jako `inline-size`,
+       a kolumny siatki mają szerokość swojej treści (`auto`).
+       Tylko rząd bez taśmy: taśma bierze resztę szerokości, a tego siatka
+       z kolumnami `auto` nie umie. Na telefonie kolumny schodzą pod siebie,
+       więc nie ma czego zrównywać. */
+    @media (min-width: 768px) {
+        .q-ps__mix:not(:has(> .q-ps__mix-rail)) {
+            display: grid;
+            grid-auto-flow: column;
+            grid-auto-columns: auto;
+            grid-template-rows: auto auto;
+            align-items: stretch;
+            /* Odstęp tylko między kolumnami: zajawka dziedziczy wiersze rzędu
+               razem z ich odstępem, a ten rozsuwał zdjęcie i tekst. */
+            row-gap: 0;
+        }
+
+        .q-ps__mix:not(:has(> .q-ps__mix-rail)) > .q-ps__mix-fixed {
+            grid-row: span 2;
+            inline-size: var(--q-udzial, calc(var(--q-pole) * var(--q-span) + var(--q-space-md) * (var(--q-span) - 1)));
+        }
+
+        .q-ps__mix:not(:has(> .q-ps__mix-rail)) > .q-ps__mix-fixed:has(> .q-ps__big--stack) {
+            grid-template-rows: subgrid;
+        }
+
+        .q-ps__mix:not(:has(> .q-ps__mix-rail)) > .q-ps__mix-fixed > .q-ps__big--stack {
+            grid-row: span 2;
+            grid-template-rows: subgrid;
+        }
+
+        /* Węższa kolumna (33% obok 34%) ma kadr niższy od wiersza: kadr
+           wypełnia wiersz, a zdjęcie i tak wypełnia kadr (`cover`). */
+        .q-ps__mix:not(:has(> .q-ps__mix-rail)) > .q-ps__mix-fixed > .q-ps__big--stack .q-ps__big-media {
+            align-self: stretch;
+            min-block-size: 0;
+        }
+    }
+
     /* ── trzy argumenty obok produktu ────────────────────────────────── */
     .q-ps__reasons {
         display: grid;

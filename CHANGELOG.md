@@ -4,6 +4,19 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.36] - 2026-11-27
+
+Requires Quince Engine 0.10.18. Update the engine first: with an older engine, rows
+split by percent lose their column widths.
+
+### Changed
+
+- Large product tiles side by side on the homepage share the height of the photo
+  and the height of the text area. A tile with a name on three lines gets a text
+  area as tall as its neighbour with a name on four. Applies to rows of fixed
+  columns from tablet width up; rows with a product carousel and phones work as
+  before.
+
 ## [0.1.35] - 2026-11-27
 
 Requires Quince Engine 0.10.17.
