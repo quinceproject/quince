@@ -42,7 +42,7 @@
         /* Ten sam gutter-tylko-gdy-trzeba co `.q-container` w theme.css.
            Inaczej margines z wyśrodkowania i ten padding doliczałyby się
            do siebie, gdy okno jest szersze od pojemnika. */
-        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        padding-inline: clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container)) / 2), var(--q-space-md));
         padding-block: var(--q-header-pad-block);
     }
 

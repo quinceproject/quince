@@ -37,7 +37,7 @@
         margin-inline: auto;
         /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
            Ten sam wzorzec co `.q-container` w theme.css. */
-        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        padding-inline: clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container)) / 2), var(--q-space-md));
 
         /* Pas jest niski, ale wszystko, co się w nim klika, dostaje pełne 44 px
            przez wewnętrzny odstęp (próg dotykowy wymagany przez WCAG). */
@@ -105,7 +105,7 @@
         margin-inline: auto;
         /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
            Ten sam wzorzec co `.q-container` w theme.css. */
-        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        padding-inline: clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container)) / 2), var(--q-space-md));
         min-block-size: var(--q-promobar-height);
     }
 

@@ -4,6 +4,14 @@ All notable changes to this theme are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the versioning follows
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.38] - 2026-11-27
+
+### Fixed
+
+- The top bar, the header, the menu bar and the slider content keep the side gutter
+  too, when the window is about as wide as the content width. 0.1.37 fixed only the
+  page content below them.
+
 ## [0.1.37] - 2026-11-27
 
 ### Fixed

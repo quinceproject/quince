@@ -28,7 +28,7 @@
         margin-inline: auto;
         /* Gutter tylko, gdy margines z wyśrodkowania jeszcze nic nie daje.
            Patrz ten sam wzorzec w `theme.css` przy `.q-container`. */
-        padding-inline: clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md));
+        padding-inline: clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container)) / 2), var(--q-space-md));
     }
 
     /* --- pozycja paska: kategoria, odnośnik własny, przycisk kategorii --- */
@@ -159,7 +159,7 @@
            pasa, przesunięty względem przycisku, spod którego wyszedł. */
         inline-size: calc(
             min(100%, var(--q-container))
-            - clamp(0px, calc((var(--q-container) - 100%) * 999), var(--q-space-md)) * 2
+            - clamp(0px, calc(var(--q-space-md) - (100% - var(--q-container)) / 2), var(--q-space-md)) * 2
         );
 
         background: var(--q-dropdown-bg);
